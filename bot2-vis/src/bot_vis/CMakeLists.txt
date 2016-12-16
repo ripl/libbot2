@@ -4,9 +4,11 @@ file(GLOB h_files *.h)
 # Keep the GLM library out of the public API
 list(REMOVE_ITEM h_files glm.h)
 
+include_directories(${JPEG_INCLUDE_DIR})
+
 add_library(bot2-vis SHARED ${c_files})
 
-set(REQUIRED_LIBS ${LIBJPEG_LIBRARIES} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})
+set(REQUIRED_LIBS ${JPEG_LIBRARY} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})
 if (APPLE)  
 # note: the following lines will now work on every platform (and
 # really should be included), but they depend on a fix to pods.cmake,
@@ -19,8 +21,8 @@ endif(APPLE)
 
 target_link_libraries(bot2-vis ${REQUIRED_LIBS})
 
-set(REQUIRED_PACAKGES glib-2.0 gtk+-2.0 gdk-pixbuf-2.0 lcm bot2-core libpng gl glu)
-pods_use_pkg_config_packages(bot2-vis ${REQUIRED_PACAKGES})
+set(REQUIRED_PACKAGES glib-2.0 gtk+-2.0 gdk-pixbuf-2.0 lcm bot2-core libpng gl glu gthread-2.0)
+pods_use_pkg_config_packages(bot2-vis ${REQUIRED_PACKAGES})
 
 # set the library API version.  Increment this every time the public API
 # changes.
@@ -32,5 +34,5 @@ pods_install_headers(${h_files} DESTINATION bot_vis)
 
 pods_install_pkg_config_file(${PROJECT_NAME}
     LIBS -lbot2-vis ${REQUIRED_LIBS}
-    REQUIRES ${REQUIRED_PACAKGES}
+    REQUIRES ${REQUIRED_PACKAGES}
     VERSION 0.0.1)
