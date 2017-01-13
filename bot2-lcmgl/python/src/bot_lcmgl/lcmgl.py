@@ -11,7 +11,7 @@ LCMGL_GL_COLOR4F       = 9
 LCMGL_GL_POINTSIZE     = 10
 LCMGL_GL_ENABLE        = 11
 LCMGL_GL_DISABLE       = 12
-LCMGL_BOX              = 13  # nyi
+LCMGL_BOX              = 13
 LCMGL_CIRCLE           = 14
 LCMGL_GL_LINE_WIDTH    = 15
 LCMGL_NOP              = 16
@@ -169,6 +169,8 @@ class lcmgl:
     glNormal3f     = _lcmgl_make_encode_3(LCMGL_GL_NORMAL3F, "fff")
     glMaterialf    = _lcmgl_make_encode_6(LCMGL_GL_MATERIALF, "IIffff")
 
+    # box(x, y, z, width, height, depth)
+    box            = _lcmgl_make_encode_6(LCMGL_BOX, "dddfff")
     # circle(x, y, z, radius)
     circle         = _lcmgl_make_encode_4(LCMGL_CIRCLE, "dddf")
     # disk(x, y, z, r_in, r_out)
