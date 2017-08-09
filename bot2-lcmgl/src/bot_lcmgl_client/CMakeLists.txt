@@ -5,7 +5,7 @@ file(GLOB h_files *.h)
 
 set(libname bot2-lcmgl-client)
 
-add_library(${libname} SHARED ${c_files})
+add_library(${libname} ${c_files})
 
 #set(REQUIRED_LIBS ${LIBJPEG_LIBRARIES} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})    
 target_link_libraries(${libname} ${ZLIB_LIBRARIES})

@@ -12,7 +12,7 @@ if (USE_BOT_VIS)
 endif()
 
 
-add_library(bot2-lcmgl-renderer SHARED ${c_files})
+add_library(bot2-lcmgl-renderer ${c_files})
 
 find_package(OpenGL REQUIRED)
 target_link_libraries(bot2-lcmgl-renderer ${OPENGL_LIBRARIES} lcmtypes_bot2-lcmgl)

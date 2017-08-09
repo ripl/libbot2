@@ -3,7 +3,7 @@ add_definitions(-std=gnu99)
 file(GLOB c_files *.c)
 file(GLOB h_files *.h)
 
-add_library(bot2-core SHARED ${c_files})
+add_library(bot2-core ${c_files})
 
 # set the library API version.  Increment this every time the public API
 # changes.

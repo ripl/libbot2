@@ -21,6 +21,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 # Look for the gdkx.h header to decide whether the local gtk2 install has
 # X11 support or not.

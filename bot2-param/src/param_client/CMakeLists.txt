@@ -1,6 +1,6 @@
 add_definitions(-std=gnu99)
 
-add_library(bot2-param-client SHARED
+add_library(bot2-param-client
     param_internal.c param_util.c)
     
 set(REQUIRED_LIBS lcm bot2-core glib-2.0 gthread-2.0)
