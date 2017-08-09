@@ -1,6 +1,6 @@
 add_definitions(-std=gnu99)
 # Create a shared library libbot2-frames.so with a single source file
-add_library(bot2-frames SHARED  bot_frames.c)
+add_library(bot2-frames bot_frames.c)
 set(REQUIRED_LIBS bot2-core bot2-param-client)
 
 target_link_libraries(bot2-frames lcmtypes_bot2-frames)

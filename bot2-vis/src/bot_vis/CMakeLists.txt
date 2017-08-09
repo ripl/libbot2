@@ -6,7 +6,7 @@ list(REMOVE_ITEM h_files glm.h)
 
 include_directories(${JPEG_INCLUDE_DIR})
 
-add_library(bot2-vis SHARED ${c_files})
+add_library(bot2-vis ${c_files})
 
 set(REQUIRED_LIBS ${JPEG_LIBRARY} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})
 if (APPLE)  
