@@ -1,4 +1,6 @@
-add_definitions(-std=gnu99)
+list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
+find_package(GLib2 REQUIRED COMPONENTS gthread)
+find_package(lcm REQUIRED)
 
 add_executable(bot-procman-deputy
     lcm_util.c
@@ -6,11 +8,7 @@ add_executable(bot-procman-deputy
     procman.c
     procman_deputy.c
     signal_pipe.c)
+set_property(TARGET bot-procman-deputy PROPERTY C_STANDARD 99)
+target_link_libraries(bot-procman-deputy ${LCM_NAMESPACE}lcm GLib2::gthread GLib2::glib util lcmtypes_bot2-procman)
 
-pods_use_pkg_config_packages(bot-procman-deputy
-    glib-2.0
-    gthread-2.0
-    lcm)
-target_link_libraries(bot-procman-deputy util lcmtypes_bot2-procman)
-
-pods_install_executables(bot-procman-deputy)
+pods_install_executables(EXPORT ${POD_NAME} bot-procman-deputy)

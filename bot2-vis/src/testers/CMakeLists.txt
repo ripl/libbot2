@@ -1,5 +1,3 @@
-add_definitions(-std=gnu99)
-
 set(testers 
     gl_drawing_area_tester
     gl_image_area_tester
@@ -7,5 +5,6 @@ set(testers
 
 foreach(tester ${testers})
     add_executable(${tester} "${tester}.c")
-    pods_use_pkg_config_packages(${tester} bot2-vis)  # need headers as well as bot2-vis target
+    target_link_libraries(${tester} bot2-vis GLib2::glib ${GTK2_LIBRARIES} OpenGL::GL OpenGL::GLU)
+    set_property(TARGET ${tester} PROPERTY C_STANDARD 99)
 endforeach()

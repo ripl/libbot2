@@ -4,31 +4,55 @@ file(GLOB h_files *.h)
 # Keep the GLM library out of the public API
 list(REMOVE_ITEM h_files glm.h)
 
-include_directories(${JPEG_INCLUDE_DIR})
+find_package(bot2-core REQUIRED)
+find_package(X11 REQUIRED )
+find_package(ZLIB REQUIRED)
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
 
-add_library(bot2-vis ${c_files})
+set(REQUIRED_LIBS ${JPEG_LIBRARY} -lglut -lz)
 
-set(REQUIRED_LIBS ${JPEG_LIBRARY} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})
-if (APPLE)  
-# note: the following lines will now work on every platform (and
-# really should be included), but they depend on a fix to pods.cmake,
-# which has to be copied around to all dependent pods.  For this reason,
-# I've unfortunately restricted the fix to APPLE for the short term.  - Russ T
-  find_package( X11 REQUIRED )
-  include_directories ( ${X11_INCLUDE_DIR} )
+if(APPLE)
   set(REQUIRED_LIBS ${REQUIRED_LIBS} ${X11_LIBRARIES})
 endif(APPLE)
 
-target_link_libraries(bot2-vis ${REQUIRED_LIBS})
-
+add_library(bot2-vis ${c_files})
+target_link_libraries(bot2-vis
+  PUBLIC
+    libbot::lcmtypes_bot2-core
+    libbot::bot2-core
+    GLib2::glib
+    OpenGL::GL
+    OpenGL::GLU
+    ${GLUT_LIBRARIES}
+    ${GTK2_LIBRARIES}
+    m
+  PRIVATE
+    pthread
+    ${X11_LIBRARIES}
+    ${PNG_LIBRARIES}
+    ${JPEG_LIBRARIES}
+    ${ZLIB_LIBRARIES}
+)
+target_include_directories(${POD_NAME}
+  PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+    $<INSTALL_INTERFACE:include>
+    ${GTK2_INCLUDE_DIRS}
+  PRIVATE
+    ${X11_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIRS}
+    ${JPEG_INCLUDE_DIR}
+)
+set_property(TARGET bot2-vis PROPERTY C_STANDARD 99)
+target_compile_options(bot2-vis PRIVATE ${PNG_DEFINITIONS})
 set(REQUIRED_PACKAGES glib-2.0 gtk+-2.0 gdk-pixbuf-2.0 lcm bot2-core libpng gl glu gthread-2.0)
-pods_use_pkg_config_packages(bot2-vis ${REQUIRED_PACKAGES})
 
 # set the library API version.  Increment this every time the public API
 # changes.
 set_target_properties(bot2-vis PROPERTIES SOVERSION 1)
 
-pods_install_libraries(bot2-vis)
+pods_install_libraries(EXPORT ${POD_NAME} ${POD_NAME})
 
 pods_install_headers(${h_files} DESTINATION bot_vis)
 

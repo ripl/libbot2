@@ -1,29 +1,23 @@
-add_definitions(-std=gnu99)
-
 file(GLOB c_files *.c)
 file(GLOB h_files *.h)
 
 set(libname bot2-lcmgl-client)
 
 add_library(${libname} ${c_files})
-
-#set(REQUIRED_LIBS ${LIBJPEG_LIBRARIES} ${GLUT_LIBRARIES} ${ZLIB_LIBRARIES})    
-target_link_libraries(${libname} ${ZLIB_LIBRARIES})
-    
-set(REQUIRED_PACKAGES glib-2.0 lcm)    
-pods_use_pkg_config_packages(${libname} ${REQUIRED_PACKAGES})
-target_link_libraries(${libname} lcmtypes_bot2-lcmgl)
-list(APPEND REQUIRED_PACKAGES lcmtypes_bot2-lcmgl)        
+target_link_libraries(${libname} PUBLIC ${LCM_NAMESPACE}lcm PRIVATE ${ZLIB_LIBRARIES} lcmtypes_bot2-lcmgl)
+target_include_directories(${libname} PRIVATE ${ZLIB_INCLUDE_DIRS})
+set_property(TARGET ${libname} PROPERTY C_STANDARD 99)
 
 # set the library API version.  Increment this every time the public API
 # changes.
 set_target_properties(${libname} PROPERTIES SOVERSION 1)
 
 # make both the shared library public
-pods_install_libraries(${libname})
+pods_install_libraries(EXPORT ${POD_NAME} ${libname})
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_client)
 
+set(REQUIRED_PACKAGES glib-2.0 lcm lcmtypes_bot2-lcmgl)
 pods_install_pkg_config_file(bot2-lcmgl-client
     LIBS -l${libname}
     REQUIRES ${REQUIRED_PACKAGES}

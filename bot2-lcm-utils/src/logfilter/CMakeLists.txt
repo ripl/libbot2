@@ -1,9 +1,6 @@
-add_definitions(-std=gnu99)
-
 add_executable(bot-lcm-logfilter
     lcm-logfilter.c)
+set_property(TARGET bot-lcm-logfilter PROPERTY C_STANDARD 99)
+target_link_libraries(bot-lcm-logfilter ${LCM_NAMESPACE}lcm GLib2::glib)
 
-pods_use_pkg_config_packages(bot-lcm-logfilter 
-    lcm glib-2.0)
-
-pods_install_executables(bot-lcm-logfilter)
+pods_install_executables(EXPORT ${POD_NAME} bot-lcm-logfilter)
