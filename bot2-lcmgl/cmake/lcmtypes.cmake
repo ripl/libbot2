@@ -163,8 +163,7 @@ function(lcmtypes_build_c)
 
     # aggregate into a static library
     add_library(${libname} STATIC ${_lcmtypes_c_files})
-    set_source_files_properties(${_lcmtypes_c_files} PROPERTIES COMPILE_FLAGS "-fPIC")
-    #    set_target_properties("${libname}-static" PROPERTIES OUTPUT_NAME "${libname}")
+    set_target_properties(${libname} PROPERTIES POSITION_INDEPENDENT_CODE ON)
     set_target_properties(${libname} PROPERTIES PREFIX "lib")
     set_target_properties(${libname} PROPERTIES CLEAN_DIRECT_OUTPUT 1)
     target_link_libraries(${libname} ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm)
@@ -468,7 +467,9 @@ macro(lcmtypes_build)
       message(FATAL_ERROR "lcm-gen not found")
     endif()
     if(TARGET ${LCM_NAMESPACE}lcm-java)
-      get_target_property(LCM_JAR_FILE ${LCM_NAMESPACE}lcm-java IMPORTED_LOCATION)
+      # Note: target property 'IMPORTED_LOCATION' is only available if LCM was
+      # configured with CMake >= 3.9
+      get_target_property(LCM_JAR_FILE ${LCM_NAMESPACE}lcm-java JAR_FILE)
     else()
       message(STATUS "Not building Java LCM type bindings (Can't find lcm-java)")
       set(skip_java_bindings ON)
