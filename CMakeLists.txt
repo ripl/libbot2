@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8.5)
+cmake_minimum_required(VERSION 3.3)
 project(libbot)
 
 # PODs out-of-source build logic
-if (CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
+if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
   find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
-  if (_build_dir)
+  if(_build_dir)
       set(CMAKE_INSTALL_PREFIX "${_build_dir}" CACHE PATH "Install location for project" FORCE)
   else()
     execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/build)
@@ -23,6 +23,13 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
+list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
+
+find_package(lcm REQUIRED)
+find_package(GLib2 REQUIRED)
+find_package(PkgConfig REQUIRED)
+find_package(OpenGL REQUIRED)
+
 # Look for the gdkx.h header to decide whether the local gtk2 install has
 # X11 support or not.
 find_file(GDKX_HEADER gdkx.h PATH_SUFFIXES gtk-2.0/gdk)
@@ -36,19 +43,6 @@ endif()
 
 
 option(WITH_BOT_VIS "Build with bot2-vis" ${bot_vis_default})
-
-
-# call this macro for each project without dependencies so that it will
-# re-check the build in case there are modified files.  In CMake 3.1, you
-# can use the BUILD_ALWAYS flag instead, but this is for support of older
-# version of cmake.
-macro(checkbuild proj)
-  ExternalProject_Add_Step(${proj} forceconfigure
-      COMMAND ${CMAKE_COMMAND} -E echo "Check build of ${proj}"
-      DEPENDEES configure
-      DEPENDERS build
-      ALWAYS 1)
-endmacro()
 
 include(ExternalProject)
 
@@ -65,26 +59,26 @@ set(default_cmake_args
   "-DCMAKE_SHARED_LINKER_FLAGS:STRING=${CMAKE_SHARED_LINKER_FLAGS}"
   "-DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}"
   "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}"
+  "-Dlcm_DIR:PATH=${lcm_DIR}"
   )
 
 
 ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core
-  CMAKE_CACHE_ARGS ${default_cmake_args})
-checkbuild(bot2-core)
+  CMAKE_CACHE_ARGS ${default_cmake_args}
+  BUILD_ALWAYS 1)
 
 ExternalProject_Add(bot2-procman
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-procman
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-procman
-  CMAKE_CACHE_ARGS ${default_cmake_args})
-checkbuild(bot2-procman)
+  CMAKE_CACHE_ARGS ${default_cmake_args}
+  BUILD_ALWAYS 1)
 
 ExternalProject_Add(bot2-lcm-utils
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
   CMAKE_CACHE_ARGS ${default_cmake_args})
-checkbuild(bot2-lcm-utils)
 
 ExternalProject_Add(bot2-param
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
@@ -92,7 +86,7 @@ ExternalProject_Add(bot2-param
   CMAKE_CACHE_ARGS ${default_cmake_args}
   DEPENDS bot2-core)
 
-if (WITH_BOT_VIS)
+if(WITH_BOT_VIS)
 
   message(STATUS "Configuring with bot2-vis, modules requiring gtk+x11 will be built.")
 
@@ -117,12 +111,18 @@ if (WITH_BOT_VIS)
 else()
 
   message(STATUS "Configuring without bot2-vis, modules requiring gtk+x11 will not be built.")
+  find_package(X11 REQUIRED )
+  find_package(ZLIB REQUIRED)
+  find_package(JPEG REQUIRED)
+  find_package(PNG REQUIRED)
+  find_package(GTK2 REQUIRED)
+  find_package(GLUT REQUIRED)
 
   ExternalProject_Add(bot2-lcmgl
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-    CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS})
-  checkbuild(bot2-lcmgl)
+    CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+    BUILD_ALWAYS 1)
 
   ExternalProject_Add(bot2-frames
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
@@ -132,4 +132,7 @@ else()
 
 endif()
 
-install(CODE "message(\"Nothing to do for install.\")")
+configure_file(cmake/libbot-config.cmake.in
+        "${PROJECT_BINARY_DIR}/libbot-config.cmake" @ONLY)
+
+install(FILES "${PROJECT_BINARY_DIR}/libbot-config.cmake" DESTINATION lib/cmake/libbot)

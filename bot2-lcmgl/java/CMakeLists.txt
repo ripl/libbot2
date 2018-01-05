@@ -11,15 +11,6 @@ set(java_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(class_dir ${CMAKE_CURRENT_BINARY_DIR}/java-build)
 set(jar_fname bot2-lcmgl.jar)
 
-# where is lcm.jar?
-execute_process(COMMAND pkg-config --variable=classpath lcm-java 
-    OUTPUT_VARIABLE LCM_JAR_FILE)
-if (NOT LCM_JAR_FILE)
-	message(STATUS "\n\n----- ERROR: lcm-java not found. Not building bot-spy plugins")
-	return()
-endif()
-string(STRIP ${LCM_JAR_FILE} LCM_JAR_FILE)
-
 set(classpath ${java_dir}:${LCM_JAR_FILE})
 
 

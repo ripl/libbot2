@@ -15,19 +15,7 @@ message(STATUS "Found java, building Java LCM-SPY plugins")
 set(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(jar_fname lcmspy_plugins_bot2.jar)
 
-# where is lcm.jar?
-execute_process(COMMAND pkg-config --variable=classpath lcm-java OUTPUT_VARIABLE LCM_JAR)
-if (NOT LCM_JAR)
-	message(STATUS "\n\n----- ERROR: lcm-java not found. Not building bot-spy plugins")
-	return()
-endif()
-
-string(STRIP ${LCM_JAR} LCM_JAR)
-
-# where is lcmtypes_bot2-core.jar?
-#set(bot2_core_jar ${CMAKE_INSTALL_PREFIX}/share/java/lcmtypes_bot2-core.jar)
-
-set(classpath ${src_dir}:${LCM_JAR}:${LCMTYPES_JAR})
+set(classpath ${src_dir}:${LCM_JAR_FILE}:${LCMTYPES_JAR})
 
 
 # =============
@@ -62,5 +50,6 @@ add_custom_command(OUTPUT ${jar_fname} COMMAND
 add_custom_target(jar ALL DEPENDS ${jar_fname})
 add_dependencies(jar lcmtypes_${POD_NAME}_jar) #the jar depends on the lcmtypes being already built.
 
+get_filename_component(target_name ${jar_fname} NAME_WE)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${jar_fname} DESTINATION share/java)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${jar_fname} DESTINATION ${JAVA_INSTALL_SUBDIR})

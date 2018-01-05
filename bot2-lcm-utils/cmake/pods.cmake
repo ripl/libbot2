@@ -13,9 +13,6 @@
 #   pods_install_headers(...)
 #   pods_install_libraries(...)
 #   pods_install_executables(...)
-#   pods_install_pkg_config_file(...)
-#
-#   pods_use_pkg_config_packages(...)
 #
 # Python
 #   pods_install_python_packages(...)
@@ -61,17 +58,22 @@ endfunction(pods_install_headers)
 # pods_install_executables(<executable1> ...)
 #
 # Install a (list) of executables to bin/
-function(pods_install_executables)
-    install(TARGETS ${ARGV} RUNTIME DESTINATION bin)
+function(pods_install_executables _export _export_name)
+    if(NOT "${_export}" STREQUAL "EXPORT")
+        message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
+    endif()
+    install(TARGETS ${ARGN} EXPORT ${_export_name} RUNTIME DESTINATION bin)
 endfunction(pods_install_executables)
 
 # pods_install_libraries(<library1> ...)
 #
 # Install a (list) of libraries to lib/
-function(pods_install_libraries)
-    install(TARGETS ${ARGV} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+function(pods_install_libraries _export _export_name)
+    if(NOT "${_export}" STREQUAL "EXPORT")
+        message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
+    endif()
+    install(TARGETS ${ARGN} EXPORT ${_export_name} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
 endfunction(pods_install_libraries)
-
 
 # pods_install_pkg_config_file(<package-name> 
 #                              [VERSION <version>]
@@ -306,7 +308,6 @@ macro(pods_use_pkg_config_packages target)
         OUTPUT_VARIABLE _pods_pkg_ldflags)
     string(STRIP ${_pods_pkg_ldflags} _pods_pkg_ldflags)
     #    message("ldflags: ${_pods_pkg_ldflags}")
-    include_directories(${_pods_pkg_include_flags})
     
     # make the target depend on libraries that are cmake targets
     if (_pods_pkg_ldflags)
@@ -327,6 +328,30 @@ macro(pods_use_pkg_config_packages target)
     unset(_pods_pkg_ldflags)
 endmacro()
 
+macro(pods_install_cmake_config_files
+    _namespace _namespace_value
+    _export _export_name
+    _export_file _export_file_name
+    _destination _destination_folder
+    _config _config_name)
+  if(NOT "${_namespace}" STREQUAL "NAMESPACE")
+      message(FATAL_ERROR "pods_install_cmake_config_file missing NAMESPACE parameter")
+  endif()
+  if(NOT "${_export}" STREQUAL "EXPORT")
+      message(FATAL_ERROR "pods_install_cmake_config_file missing EXPORT parameter")
+  endif()
+  if(NOT "${_config}" STREQUAL "CONFIG")
+      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
+  endif()
+  if(NOT "${_export_file}" STREQUAL "EXPORT_FILE")
+      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
+  endif()
+  if(NOT "${_destination}" STREQUAL "DESTINATION")
+      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
+  endif()
+  install(FILES ${CMAKE_BINARY_DIR}/${_config_name} DESTINATION lib/cmake/${_export_name})
+  install(EXPORT ${_export_name} FILE ${_export_file_name} DESTINATION ${_destination_folder} NAMESPACE ${_namespace_value})
+endmacro()
 
 # pods_config_search_paths()
 #
@@ -339,22 +364,17 @@ macro(pods_config_search_paths)
 	    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 	    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 	    set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-	    set(PKG_CONFIG_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/pkgconfig)
-		
+      set(PKG_CONFIG_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/pkgconfig)
+
 		#set where files should be installed to
 	    set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib)
 	    set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bin)
 	    set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/include)
-	    set(PKG_CONFIG_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
-
+      set(PKG_CONFIG_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
 
         # add build/lib/pkgconfig to the pkg-config search path
         set(ENV{PKG_CONFIG_PATH} ${PKG_CONFIG_INSTALL_PATH}:$ENV{PKG_CONFIG_PATH})
         set(ENV{PKG_CONFIG_PATH} ${PKG_CONFIG_OUTPUT_PATH}:$ENV{PKG_CONFIG_PATH})
-
-        # add build/include to the compiler include path
-        include_directories(BEFORE ${INCLUDE_OUTPUT_PATH})
-        include_directories(${INCLUDE_INSTALL_PATH})
 
         # add build/lib to the link path
         link_directories(${LIBRARY_OUTPUT_PATH})
