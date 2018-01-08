@@ -163,8 +163,7 @@ function(lcmtypes_build_c)
 
     # aggregate into a static library
     add_library(${libname} STATIC ${_lcmtypes_c_files})
-    set_source_files_properties(${_lcmtypes_c_files} PROPERTIES COMPILE_FLAGS "-fPIC")
-    #    set_target_properties("${libname}-static" PROPERTIES OUTPUT_NAME "${libname}")
+    set_target_properties(${libname} PROPERTIES POSITION_INDEPENDENT_CODE ON)
     set_target_properties(${libname} PROPERTIES PREFIX "lib")
     set_target_properties(${libname} PROPERTIES CLEAN_DIRECT_OUTPUT 1)
     target_link_libraries(${libname} ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm)
