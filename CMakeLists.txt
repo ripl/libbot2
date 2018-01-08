@@ -29,6 +29,7 @@ find_package(lcm REQUIRED)
 find_package(GLib2 REQUIRED)
 find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(PythonInterp REQUIRED)
 
 # Look for the gdkx.h header to decide whether the local gtk2 install has
 # X11 support or not.
