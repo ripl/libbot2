@@ -28,9 +28,7 @@ add_executable(ldpc-wrapper-test
     ldpc/ldpc_wrapper_test.cpp
     ${ldpc_sources}
     )
-
-set_source_files_properties(introspect.c lcm_tunnel_params_t.c ssocket.c signal_pipe.c lcm_util.c
-    PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
+set_target_properties(bot-lcm-tunnel PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
 
 target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib)
 
