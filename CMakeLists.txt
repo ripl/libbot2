@@ -78,7 +78,8 @@ ExternalProject_Add(bot2-procman
 ExternalProject_Add(bot2-lcm-utils
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
-  CMAKE_CACHE_ARGS ${default_cmake_args})
+  CMAKE_CACHE_ARGS ${default_cmake_args}
+  BUILD_ALWAYS 1)
 
 ExternalProject_Add(bot2-param
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
@@ -100,7 +101,7 @@ if(WITH_BOT_VIS)
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
     CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
-    DEPENDS bot2-vis)
+    DEPENDS bot2-core bot2-vis)
 
   ExternalProject_Add(bot2-frames
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
@@ -122,7 +123,7 @@ else()
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
     CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
-    BUILD_ALWAYS 1)
+    DEPENDS bot2-core)
 
   ExternalProject_Add(bot2-frames
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
