@@ -161,19 +161,6 @@ endfunction(pods_install_pkg_config_file)
 #    pods_install_python_script(run-py-module py_pkg.py_module)
 #    pods_install_python_script(run-py-script py_script.py)
 function(pods_install_python_script script_name python_module_or_file)
-    find_package(PythonInterp REQUIRED)
-
-    # which python version?
-    execute_process(COMMAND 
-        ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.version[:3])"
-        OUTPUT_VARIABLE pyversion)
-
-    # where do we install .py files to?
-    set(python_install_dir 
-        ${CMAKE_INSTALL_PREFIX}/lib/python${pyversion}/dist-packages)
-    set(python_old_install_dir #todo: when do we get rid of this? 
-        ${CMAKE_INSTALL_PREFIX}/lib/python${pyversion}/site-packages)
-        
     if (python_module_or_file MATCHES ".+\\.py") #ends with a .py
         get_filename_component(py_file ${python_module_or_file} ABSOLUTE)     
             
@@ -183,7 +170,7 @@ function(pods_install_python_script script_name python_module_or_file)
         
         #get the directory where we'll install the script ${sanitized_POD_NAME}_scripts
         string(REGEX REPLACE "[^a-zA-Z0-9]" "_" __sanitized_pod_name "${POD_NAME}")
-        set(pods_scripts_dir "${python_install_dir}/${__sanitized_pod_name}_scripts")
+        set(pods_scripts_dir "${PYTHON_INSTALL_PATH}/${__sanitized_pod_name}_scripts")
                 
         # install the python script file
         install(FILES ${py_file}  DESTINATION "${pods_scripts_dir}")
@@ -192,14 +179,14 @@ function(pods_install_python_script script_name python_module_or_file)
         # write the bash script file
         file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${script_name} 
             "#!/bin/sh\n"
-            "export PYTHONPATH=${python_install_dir}:${python_old_install_dir}:\${PYTHONPATH}\n"
+            "export PYTHONPATH=${PYTHON_INSTALL_PATH}:\${PYTHONPATH}\n"
             "exec ${PYTHON_EXECUTABLE} ${pods_scripts_dir}/${py_script_name} $*\n")    
     else()
         get_filename_component(py_module ${python_module_or_file} NAME) #todo: check whether module exists?
         # write the bash script file
         file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${script_name} 
             "#!/bin/sh\n"
-            "export PYTHONPATH=${python_install_dir}:${python_old_install_dir}:\${PYTHONPATH}\n"
+            "export PYTHONPATH=${PYTHON_INSTALL_PATH}:\${PYTHONPATH}\n"
             "exec ${PYTHON_EXECUTABLE} -m ${py_module} $*\n")
     endif()
     # install it...
@@ -213,16 +200,6 @@ endfunction()
 # where X.Y refers to the current python version (e.g., 2.6)
 #
 function(_pods_install_python_package py_src_dir py_module_name)
-    find_package(PythonInterp REQUIRED)
-    # which python version?
-    execute_process(COMMAND 
-        ${PYTHON_EXECUTABLE} -c "import sys; sys.stdout.write(sys.version[:3])"
-        OUTPUT_VARIABLE pyversion)
-
-    # where do we install .py files to?
-    set(python_install_dir 
-        ${CMAKE_INSTALL_PREFIX}/lib/python${pyversion}/dist-packages)
-
     if(EXISTS "${py_src_dir}/__init__.py")
         #install the single module
         file(GLOB_RECURSE py_files   ${py_src_dir}/*.py)
@@ -230,7 +207,7 @@ function(_pods_install_python_package py_src_dir py_module_name)
             file(RELATIVE_PATH __tmp_path ${py_src_dir} ${py_file})
             get_filename_component(__tmp_dir ${__tmp_path} PATH)
             install(FILES ${py_file}
-                DESTINATION "${python_install_dir}/${py_module_name}/${__tmp_dir}")
+                DESTINATION "${PYTHON_INSTALL_PATH}/${py_module_name}/${__tmp_dir}")
         endforeach()
     else()
         message(FATAL_ERROR "${py_src_dir} is not a python package!\n")
@@ -364,13 +341,21 @@ macro(pods_config_search_paths)
 	    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 	    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 	    set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
-      set(PKG_CONFIG_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/pkgconfig)
+      set(PKG_CONFIG_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/pkgconfig)
 
 		#set where files should be installed to
 	    set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib)
 	    set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bin)
 	    set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/include)
-      set(PKG_CONFIG_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+      set(PKG_CONFIG_INSTALL_PATH ${LIBRARY_INSTALL_PATH}/pkgconfig)
+
+      find_package(PythonInterp REQUIRED)
+      execute_process(
+        COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
+        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+      set(PYTHON_INSTALL_PATH
+        "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
 
         # add build/lib/pkgconfig to the pkg-config search path
         set(ENV{PKG_CONFIG_PATH} ${PKG_CONFIG_INSTALL_PATH}:$ENV{PKG_CONFIG_PATH})
