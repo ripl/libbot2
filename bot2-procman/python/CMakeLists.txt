@@ -30,3 +30,5 @@ configure_file(bot-procman-sheriff.in bot-procman-sheriff @ONLY)
 
 install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/bot-procman-sheriff"
   DESTINATION "${EXECUTABLE_INSTALL_PATH}")
+
+install(FILES procman-sheriff.glade DESTINATION share/bot_procman)
