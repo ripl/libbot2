@@ -467,7 +467,9 @@ macro(lcmtypes_build)
       message(FATAL_ERROR "lcm-gen not found")
     endif()
     if(TARGET ${LCM_NAMESPACE}lcm-java)
-      get_target_property(LCM_JAR_FILE ${LCM_NAMESPACE}lcm-java IMPORTED_LOCATION)
+      # Note: target property 'IMPORTED_LOCATION' is only available if LCM was
+      # configured with CMake >= 3.9
+      get_target_property(LCM_JAR_FILE ${LCM_NAMESPACE}lcm-java JAR_FILE)
     else()
       message(STATUS "Not building Java LCM type bindings (Can't find lcm-java)")
       set(skip_java_bindings ON)

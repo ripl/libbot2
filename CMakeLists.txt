@@ -1,14 +1,23 @@
 cmake_minimum_required(VERSION 3.3)
 project(libbot)
 
-# PODs out-of-source build logic
-if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
-  find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
-  if(_build_dir)
-      set(CMAKE_INSTALL_PREFIX "${_build_dir}" CACHE PATH "Install location for project" FORCE)
-  else()
-    execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/build)
-    set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/build)
+option(PACKAGE_LIBBOT "Set install prefix to package libbot on linux" OFF)
+if(PACKAGE_LIBBOT)
+  set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install location for project" FORCE)
+  set(INSTALL_CMD INSTALL_COMMAND :)
+  mark_as_advanced(FORCE _build_dir)
+else()
+  # PODs out-of-source build logic
+  if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
+    mark_as_advanced(CLEAR _build_dir)
+    set(INSTALL_CMD)
+    find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
+    if(_build_dir)
+        set(CMAKE_INSTALL_PREFIX "${_build_dir}" CACHE PATH "Install location for project" FORCE)
+    else()
+      execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/build)
+      set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/build)
+    endif()
   endif()
 endif()
 message(STATUS CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
@@ -47,6 +56,18 @@ option(WITH_BOT_VIS "Build with bot2-vis" ${bot_vis_default})
 
 include(ExternalProject)
 
+set(SubprojectBinary_dir
+${CMAKE_PREFIX_PATH}
+${PROJECT_BINARY_DIR}/bot2-core
+${PROJECT_BINARY_DIR}/bot2-procman
+${PROJECT_BINARY_DIR}/bot2-lcm-utils
+${PROJECT_BINARY_DIR}/bot2-param
+${PROJECT_BINARY_DIR}/bot2-vis
+${PROJECT_BINARY_DIR}/bot2-lcmgl
+${PROJECT_BINARY_DIR}/bot2-frames
+)
+string(REPLACE ";" ":::" SubprojectBinary_dir "${SubprojectBinary_dir}")
+
 # pass thru certain cmake variables.
 set(default_cmake_args
   "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}"
@@ -59,7 +80,7 @@ set(default_cmake_args
   "-DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}"
   "-DCMAKE_EXE_LINKER_FLAGS:STRING=${CMAKE_EXE_LINKER_FLAGS}"
   "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
-  "-DCMAKE_PREFIX_PATH:PATH=${CMAKE_INSTALL_PREFIX};${CMAKE_PREFIX_PATH}"
+  "-DCMAKE_PREFIX_PATH:PATH=${SubprojectBinary_dir}"
   "-DCMAKE_SHARED_LINKER_FLAGS:STRING=${CMAKE_SHARED_LINKER_FLAGS}"
   "-DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}"
   "-DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}"
@@ -67,30 +88,41 @@ set(default_cmake_args
   "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
   )
 
-
 ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core
-  CMAKE_CACHE_ARGS ${default_cmake_args}
+  LIST_SEPARATOR ":::"
+  CMAKE_ARGS ${default_cmake_args}
+  ${INSTALL_CMD}
   BUILD_ALWAYS 1)
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-core;bot2core;Unspecified;/")
 
 ExternalProject_Add(bot2-procman
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-procman
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-procman
-  CMAKE_CACHE_ARGS ${default_cmake_args}
+  LIST_SEPARATOR ":::"
+  CMAKE_ARGS ${default_cmake_args}
+  ${INSTALL_CMD}
   BUILD_ALWAYS 1)
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-procman;bot2-procman;ALL;/")
 
 ExternalProject_Add(bot2-lcm-utils
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
-  CMAKE_CACHE_ARGS ${default_cmake_args}
+  LIST_SEPARATOR ":::"
+  CMAKE_ARGS ${default_cmake_args}
+  ${INSTALL_CMD}
   BUILD_ALWAYS 1)
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcm-utils;bot2-lcm-utils;ALL;/")
 
 ExternalProject_Add(bot2-param
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-param
-  CMAKE_CACHE_ARGS ${default_cmake_args}
+  LIST_SEPARATOR ":::"
+  CMAKE_ARGS ${default_cmake_args}
+  ${INSTALL_CMD}
   DEPENDS bot2-core)
+set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-param;bot2-param;ALL;/")
 
 if(WITH_BOT_VIS)
 
@@ -99,20 +131,29 @@ if(WITH_BOT_VIS)
   ExternalProject_Add(bot2-vis
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-vis
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-vis
-    CMAKE_CACHE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${default_cmake_args}
+    LIST_SEPARATOR ":::"
+    ${INSTALL_CMD}
     DEPENDS bot2-core)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-vis;bot2-vis;ALL;/")
 
   ExternalProject_Add(bot2-lcmgl
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-    CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+    LIST_SEPARATOR ":::"
+    CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+    ${INSTALL_CMD}
     DEPENDS bot2-core bot2-vis)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
   ExternalProject_Add(bot2-frames
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
-    CMAKE_CACHE_ARGS ${default_cmake_args}
+    LIST_SEPARATOR ":::"
+    CMAKE_ARGS ${default_cmake_args}
+    ${INSTALL_CMD}
     DEPENDS bot2-core bot2-param bot2-vis bot2-lcmgl)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
 
 else()
 
@@ -127,14 +168,20 @@ else()
   ExternalProject_Add(bot2-lcmgl
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-    CMAKE_CACHE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+    CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+    LIST_SEPARATOR ":::"
+    ${INSTALL_CMD}
     DEPENDS bot2-core)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
   ExternalProject_Add(bot2-frames
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
-    CMAKE_CACHE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${default_cmake_args}
+    LIST_SEPARATOR ":::"
+    ${INSTALL_CMD}
     DEPENDS bot2-core bot2-param bot2-lcmgl)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
 
 endif()
 
@@ -142,3 +189,7 @@ configure_file(cmake/libbot-config.cmake.in
         "${PROJECT_BINARY_DIR}/libbot-config.cmake" @ONLY)
 
 install(FILES "${PROJECT_BINARY_DIR}/libbot-config.cmake" DESTINATION lib/cmake/libbot)
+
+if(PACKAGE_LIBBOT)
+  include(cmake/cpack.cmake)
+endif()
