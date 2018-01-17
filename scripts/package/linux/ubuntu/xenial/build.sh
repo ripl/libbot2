@@ -19,6 +19,9 @@ pushd lcm-build
 # are not "official".
 cmake -DBUILD_SHARED_LIBS:BOOL=ON \
       -DCPACK_PACKAGING_INSTALL_PREFIX:PATH=/usr/local \
+      -DCMAKE_CXX_FLAGS:STRING="$(dpkg-buildflags --get CXXFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
+      -DCMAKE_C_FLAGS:STRING="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
+      -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(dpkg-buildflags --get LDFLAGS)" \
       ../lcm
 make
 cpack -G DEB
@@ -32,6 +35,10 @@ popd
 # Configure, compile, and package libbot2
 mkdir libbot2-build
 cd libbot2-build
-cmake -DPACKAGE_LIBBOT:BOOL=ON ../libbot2
+cmake -DPACKAGE_LIBBOT:BOOL=ON \
+      -DCMAKE_CXX_FLAGS:STRING="$(dpkg-buildflags --get CXXFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
+      -DCMAKE_C_FLAGS:STRING="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
+      -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(dpkg-buildflags --get LDFLAGS)" \
+      ../libbot2
 make
 cpack -G DEB
