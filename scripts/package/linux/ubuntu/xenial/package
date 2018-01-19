@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # This script will start a docker container that contains the requirements to
-# build libbot (except LCM which is built as part of this process). It will
+# build libbot2 (except LCM which is built as part of this process). It will
 # then copy a script in the docker container that has been start, and run that
-# script which builds and packages LCM, builds and packages libbot, and copy
+# script which builds and packages LCM, builds and packages libbot2, and copy
 # the 2 deb archives in the current working directory before stopping and
 # removing the docker container.
 
@@ -14,14 +14,14 @@ docker run -t -d --name libbot2-xenial libbot2-xenial-prereqs
 docker cp $(git rev-parse --show-toplevel) libbot2-xenial:/tmp/libbot2
 docker exec libbot2-xenial /tmp/libbot2/scripts/package/linux/ubuntu/xenial/build.sh
 docker cp libbot2-xenial:/tmp/lcm-build/packages/lcm_1.3.95-1_linux-x86_64.deb .
-docker cp libbot2-xenial:/tmp/libbot2-build/packages/libbot_1.0.0-1_linux-x86_64.deb .
+docker cp libbot2-xenial:/tmp/libbot2-build/packages/libbot2_0.0.1.$(date -u +%Y%m%d)-1_amd64.deb .
 docker stop libbot2-xenial
 docker rm libbot2-xenial
 
 # Test package
 docker run -t -d --name libbot2-test ubuntu:16.04
 docker cp lcm_1.3.95-1_linux-x86_64.deb libbot2-test:/tmp
-docker cp libbot_1.0.0-1_linux-x86_64.deb libbot2-test:/tmp
+docker cp libbot2_0.0.1.$(date -u +%Y%m%d)-1_amd64.deb libbot2-test:/tmp
 docker cp $(git rev-parse --show-toplevel) libbot2-test:/tmp/libbot2
 docker exec libbot2-test /tmp/libbot2/scripts/package/linux/ubuntu/xenial/test.sh
 docker stop libbot2-test

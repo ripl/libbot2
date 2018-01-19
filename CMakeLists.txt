@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.3)
-project(libbot)
 
-option(PACKAGE_LIBBOT "Set install prefix to package libbot on linux" OFF)
-if(PACKAGE_LIBBOT)
-  set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "Install location for project" FORCE)
+string(TIMESTAMP timestamp "%Y%m%d" UTC)
+
+project(libbot2 VERSION 0.0.1.${timestamp})
+
+option(PACKAGE_LIBBOT2 "Set install prefix to package libbot2 on linux" OFF)
+if(PACKAGE_LIBBOT2)
+  set(CMAKE_INSTALL_PREFIX "/opt/${CMAKE_PROJECT_NAME}/${PROJECT_VERSION}" CACHE PATH "Install location for project" FORCE)
   set(INSTALL_CMD INSTALL_COMMAND :)
   mark_as_advanced(FORCE _build_dir)
 else()
@@ -185,11 +188,11 @@ else()
 
 endif()
 
-configure_file(cmake/libbot-config.cmake.in
-        "${PROJECT_BINARY_DIR}/libbot-config.cmake" @ONLY)
+configure_file(cmake/${CMAKE_PROJECT_NAME}-config.cmake.in
+        "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" @ONLY)
 
-install(FILES "${PROJECT_BINARY_DIR}/libbot-config.cmake" DESTINATION lib/cmake/libbot)
+install(FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" DESTINATION lib/cmake/${CMAKE_PROJECT_NAME})
 
-if(PACKAGE_LIBBOT)
+if(PACKAGE_LIBBOT2)
   include(cmake/cpack.cmake)
 endif()

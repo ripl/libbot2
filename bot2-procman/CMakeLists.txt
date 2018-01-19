@@ -20,7 +20,7 @@ macro(configure_import_targets _prop)
 endmacro()
 
 set(POD_NAME bot2-procman)
-set(NAMESPACE libbot::)
+set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
 

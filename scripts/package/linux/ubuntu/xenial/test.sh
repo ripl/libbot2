@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script test libbot's ubuntu package
+# This script test libbot2's ubuntu package
 
 set -euxo pipefail
 
@@ -9,7 +9,7 @@ pushd /tmp
 apt-get update -y
 apt-get install gdebi -y
 gdebi -n lcm_1.3.95-1_linux-x86_64.deb
-gdebi -n libbot_1.0.0-1_linux-x86_64.deb
+gdebi -n libbot2_0.0.1.$(date -u +%Y%m%d)-1_amd64.deb
 # Check that files are installed
 executables=(bot-wavefront-viewer bot-spy bot-rwx-viewer bot-procman-sheriff bot-procman-deputy bot-ppmsgz bot-param-tool bot-param-server bot-param-dump bot-log2mat bot-lcm-who bot-lcm-tunnel bot-lcm-logsplice bot-lcm-logfilter bot-lcmgl-viewer)
 

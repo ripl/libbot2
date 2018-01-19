@@ -20,7 +20,7 @@ macro(configure_import_targets _prop)
 endmacro()
 
 set(POD_NAME bot2-lcmgl)
-set(NAMESPACE libbot::)
+set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)
 
@@ -32,7 +32,7 @@ lcmtypes_build(JAVA_DEST_DIR ${PROJECT_SOURCE_DIR}/java/src
 find_package(bot2-core REQUIRED)
 find_package(ZLIB REQUIRED)
 
-option(USE_BOT_VIS "Build bot2-lcmgl with libbot dependency." ON)
+option(USE_BOT_VIS "Build bot2-lcmgl with libbot2 dependency." ON)
 
 add_subdirectory(src/bot_lcmgl_client)
 add_subdirectory(src/bot_lcmgl_render)

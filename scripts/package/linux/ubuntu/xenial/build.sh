@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # This script is not designed to be run manually. It is used when creating a
-# libbot debian package with the script called `package` which should be in
+# libbot2 debian package with the script called `package` which should be in
 # the same directory.
 # This script clones LCM's git repository, compiles and packages LCM, and
-# compiles and packages libbot.
+# compiles and packages libbot2.
 
 set -euxo pipefail
 
@@ -15,7 +15,7 @@ git clone https://github.com/lcm-proj/lcm
 mkdir lcm-build
 pushd lcm-build
 # Forces the package to be installed in /usr/local
-# to be consistent with libbot and the fact these packages
+# to be consistent with libbot2 and the fact these packages
 # are not "official".
 cmake -DBUILD_SHARED_LIBS:BOOL=ON \
       -DCPACK_PACKAGING_INSTALL_PREFIX:PATH=/usr/local \
@@ -35,7 +35,7 @@ popd
 # Configure, compile, and package libbot2
 mkdir libbot2-build
 cd libbot2-build
-cmake -DPACKAGE_LIBBOT:BOOL=ON \
+cmake -DPACKAGE_LIBBOT2:BOOL=ON \
       -DCMAKE_CXX_FLAGS:STRING="$(dpkg-buildflags --get CXXFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
       -DCMAKE_C_FLAGS:STRING="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
       -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(dpkg-buildflags --get LDFLAGS)" \

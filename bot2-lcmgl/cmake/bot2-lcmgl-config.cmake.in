@@ -47,7 +47,7 @@ else()
   include(CMakeFindDependencyMacro)
 endif()
 
-set(USE_BOT_VIS CACHE INTERNAL "Build bot2-lcmgl with libbot dependency." @USE_BOT_VIS@)
+set(USE_BOT_VIS CACHE INTERNAL "Build bot2-lcmgl with libbot2 dependency." @USE_BOT_VIS@)
 
 find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-core")
 find_dependency(lcm CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")

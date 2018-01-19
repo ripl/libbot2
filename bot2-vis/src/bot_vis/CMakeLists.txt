@@ -19,8 +19,8 @@ endif(APPLE)
 add_library(bot2-vis ${c_files})
 target_link_libraries(bot2-vis
   PUBLIC
-    libbot::lcmtypes_bot2-core
-    libbot::bot2-core
+    libbot2::lcmtypes_bot2-core
+    libbot2::bot2-core
     GLib2::glib
     OpenGL::GL
     OpenGL::GLU
