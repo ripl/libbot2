@@ -47,6 +47,7 @@ do
   missing_libraries $i
 done
 # Test python modules
+export PYTHONPATH=${PYTHONPATH}:/opt/libbot2/0.0.1.$(date -u +%Y%m%d)/lib/python2.7/dist-packages
 python_modules=(lcm bot_procman bot_param bot_log2mat bot_lcmgl bot_frames bot_core)
 for i in ${python_modules[@]}
 do

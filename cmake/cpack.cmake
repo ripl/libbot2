@@ -65,7 +65,7 @@ set(CPACK_SOURCE_STRIP_FILES FALSE)
 # Debian specific
 set(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
-set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE MACHINE_ARCH)
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MACHINE_ARCH})
 set(CPACK_DEBIAN_PACKAGE_RELEASE ${PACKAGE_RELEASE_VERSION})
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "lcm (>=1.3.95), libgl1-mesa-dev, libglu1-mesa, freeglut3, libc6, libglib2.0-0, libpcre3, libgtk2.0-0, libx11-6, libpng16-16, zlib1g, libjpeg-turbo8, libxext6, libstdc++6, libffi6, libpangocairo-1.0-0, libxfixes3, libatk1.0-0, libcairo2, libgdk-pixbuf2.0-0, libpangoft2-1.0-0, libpango-1.0-0, libfontconfig1, libxi6, libxxf86vm1, libxrender1, libxinerama1, libxrandr2, libxcursor1, libxcomposite1, libxdamage1, libxcb1, libfreetype6, libpixman-1-0, libpng12-0, libxcb-shm0, libxcb-render0, libselinux1, libharfbuzz0b, libthai0, libexpat1, libxau6, libxdmcp6, libgraphite2-3, libdatrie1, openjdk-8-jre-headless, python-minimal, libpython2.7, python-gtk2, python-gobject, python-numpy, python-scipy")
 

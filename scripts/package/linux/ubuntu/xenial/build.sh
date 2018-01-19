@@ -18,7 +18,6 @@ pushd lcm-build
 # to be consistent with libbot2 and the fact these packages
 # are not "official".
 cmake -DBUILD_SHARED_LIBS:BOOL=ON \
-      -DCPACK_PACKAGING_INSTALL_PREFIX:PATH=/usr/local \
       -DCMAKE_CXX_FLAGS:STRING="$(dpkg-buildflags --get CXXFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
       -DCMAKE_C_FLAGS:STRING="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
       -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(dpkg-buildflags --get LDFLAGS)" \
