@@ -4,5 +4,5 @@
 # file will be overwritten by the next CMake run. The input file was
 # bot-log2mat.in.
 
-export PYTHONPATH="@PYTHON_INSTALL_PATH@:@LCM_PYTHON_DIR@:${PYTHONPATH}"
+export PYTHONPATH="${PYTHONPATH}:@PYTHON_INSTALL_PATH@:@LCM_PYTHON_DIR@"
 exec "@PYTHON_EXECUTABLE@" -m bot_log2mat.log_to_mat "$@"
