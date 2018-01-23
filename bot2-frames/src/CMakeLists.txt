@@ -3,13 +3,13 @@ add_library(${POD_NAME} bot_frames.c)
 
 target_link_libraries(${POD_NAME}
   PUBLIC
-    libbot::bot2-param-client
-    libbot::bot2-core
+    libbot2::bot2-param-client
+    libbot2::bot2-core
   PRIVATE
     GLib2::glib
     lcmtypes_bot2-frames
-    libbot::lcmtypes_bot2-core
-    libbot::lcmtypes_bot2-param
+    libbot2::lcmtypes_bot2-core
+    libbot2::lcmtypes_bot2-param
     ${OPENGL_LIBRARIES}
 )
 target_include_directories(${POD_NAME}

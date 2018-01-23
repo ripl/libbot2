@@ -17,7 +17,7 @@ macro(configure_import_targets _prop)
 endmacro()
 
 set(POD_NAME bot2-lcm-utils)
-set(NAMESPACE libbot::)
+set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
 

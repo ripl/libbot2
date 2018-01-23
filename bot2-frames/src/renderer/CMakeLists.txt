@@ -5,11 +5,11 @@ set_property(TARGET bot2-frames-renderers PROPERTY C_STANDARD 99)
 target_link_libraries(bot2-frames-renderers
   PUBLIC
     bot2-frames
-    libbot::bot2-vis
+    libbot2::bot2-vis
   PRIVATE
     ${OPENGL_LIBRARIES}
-    libbot::bot2-core
-    libbot::bot2-param-client)
+    libbot2::bot2-core
+    libbot2::bot2-param-client)
 target_include_directories(bot2-frames-renderers
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
@@ -41,6 +41,6 @@ find_package(bot2-lcmgl REQUIRED)
 
 #build the test-viewer
 add_executable(test-viewer test_viewer.c)
-target_link_libraries(test-viewer ${GLUT_LIBRARIES} bot2-frames-renderers libbot::bot2-vis libbot::bot2-lcmgl-renderer)
+target_link_libraries(test-viewer ${GLUT_LIBRARIES} bot2-frames-renderers libbot2::bot2-vis libbot2::bot2-lcmgl-renderer)
 target_include_directories(test-viewer PRIVATE ${GLUT_INCLUDE_DIR} ${GTK2_INCLUDE_DIRS})
 set_property(TARGET test-viewer PROPERTY C_STANDARD 99)

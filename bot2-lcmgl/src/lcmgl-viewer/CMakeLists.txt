@@ -6,7 +6,7 @@ add_executable(bot-lcmgl-viewer
     udp_util.c
     view_menu.c
     )
-target_link_libraries(bot-lcmgl-viewer bot2-lcmgl-renderer libbot::bot2-vis libbot::bot2-core ${GTK2_LIBRARIES})
+target_link_libraries(bot-lcmgl-viewer bot2-lcmgl-renderer libbot2::bot2-vis libbot2::bot2-core ${GTK2_LIBRARIES})
 target_include_directories(bot-lcmgl-viewer PUBLIC ${GTK2_INCLUDE_DIRS})
 set_property(TARGET bot-lcmgl-viewer PROPERTY C_STANDARD 99)
 

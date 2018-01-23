@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3)
 
 set(POD_NAME bot2-vis)
-set(NAMESPACE libbot::)
+set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)
 
