@@ -35,7 +35,6 @@ apt install --no-install-recommends \
   libjpeg8-dev \
   libpng12-dev \
   libxmu-dev \
-  libxt-dev \
   make \
   openjdk-8-jdk \
   pkg-config \

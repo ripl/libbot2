@@ -34,7 +34,7 @@ apt-get install --no-install-recommends \
   libgtk2.0-dev \
   libjpeg8-dev \
   libpng12-dev \
-  libxt-dev \
+  libxmu-dev \
   make \
   openjdk-7-jdk \
   pkg-config \
