@@ -50,7 +50,7 @@ set(CPACK_PACKAGE_DIRECTORY ${CMAKE_BINARY_DIR}/packages)
 # scripts generated at compile-time hardcode paths.
 set(CPACK_PACKAGING_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Set of libraries, tools, and algorithms that are designed to facilitate robotics research")
-set(CPACK_PACKAGE_VENDOR "Kitware Inc.")
+set(CPACK_PACKAGE_VENDOR "Kitware, Inc.")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
@@ -68,8 +68,6 @@ set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MACHINE_ARCH})
 set(CPACK_DEBIAN_PACKAGE_RELEASE ${PACKAGE_RELEASE_VERSION})
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "lcm (>=1.3.95), libgl1-mesa-dev, libglu1-mesa, freeglut3, libc6, libglib2.0-0, libpcre3, libgtk2.0-0, libx11-6, libpng16-16, zlib1g, libjpeg-turbo8, libxext6, libstdc++6, libffi6, libpangocairo-1.0-0, libxfixes3, libatk1.0-0, libcairo2, libgdk-pixbuf2.0-0, libpangoft2-1.0-0, libpango-1.0-0, libfontconfig1, libxi6, libxxf86vm1, libxrender1, libxinerama1, libxrandr2, libxcursor1, libxcomposite1, libxdamage1, libxcb1, libfreetype6, libpixman-1-0, libpng12-0, libxcb-shm0, libxcb-render0, libselinux1, libharfbuzz0b, libthai0, libexpat1, libxau6, libxdmcp6, libgraphite2-3, libdatrie1, openjdk-8-jre-headless, python-minimal, libpython2.7, python-gtk2, python-gobject, python-numpy, python-scipy")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Francois Budin <francois.budin@kitware.com>")
 
-
-	
-set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Francois Budin <francois.budin@kitware.com")
 include(CPack)
