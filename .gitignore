@@ -9,3 +9,4 @@ bot2-procman/python/src/bot_procman/build_prefix.py
 pod-build
 bot2-lcmgl/python/src/bot_lcmgl/__init__.py
 bot2-procman/python/src/bot_procman/__init__.py
+*.deb
