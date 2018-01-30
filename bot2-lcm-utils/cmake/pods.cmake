@@ -357,25 +357,8 @@ macro(pods_config_search_paths)
       set(PYTHON_INSTALL_PATH
         "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
 
-        # add build/lib/pkgconfig to the pkg-config search path
-        set(ENV{PKG_CONFIG_PATH} ${PKG_CONFIG_INSTALL_PATH}:$ENV{PKG_CONFIG_PATH})
-        set(ENV{PKG_CONFIG_PATH} ${PKG_CONFIG_OUTPUT_PATH}:$ENV{PKG_CONFIG_PATH})
-
-        # add build/lib to the link path
-        link_directories(${LIBRARY_OUTPUT_PATH})
-        link_directories(${LIBRARY_INSTALL_PATH})
-        
-
-        # abuse RPATH
-        if(${CMAKE_INSTALL_RPATH})
-            set(CMAKE_INSTALL_RPATH ${LIBRARY_INSTALL_PATH}:${CMAKE_INSTALL_RPATH})
-        else(${CMAKE_INSTALL_RPATH})
-            set(CMAKE_INSTALL_RPATH ${LIBRARY_INSTALL_PATH})
-        endif(${CMAKE_INSTALL_RPATH})
-
-        # for osx, which uses "install name" path rather than rpath
-        #set(CMAKE_INSTALL_NAME_DIR ${LIBRARY_OUTPUT_PATH})
-        set(CMAKE_INSTALL_NAME_DIR ${CMAKE_INSTALL_RPATH})
+      set(CMAKE_INSTALL_RPATH "${LIBRARY_INSTALL_PATH}")
+      set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
         
         # hack to force cmake always create install and clean targets 
         install(FILES DESTINATION)

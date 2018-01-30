@@ -30,6 +30,7 @@ include(cmake/lcmtypes.cmake)
 lcmtypes_build(JAVA_DEST_DIR ${PROJECT_SOURCE_DIR}/java/src
     PY_DEST_DIR ${PROJECT_SOURCE_DIR}/python/src EXPORT ${POD_NAME})
 find_package(bot2-core REQUIRED)
+find_package(lcm REQUIRED)
 find_package(ZLIB REQUIRED)
 
 option(USE_BOT_VIS "Build bot2-lcmgl with libbot2 dependency." ON)

@@ -10,6 +10,7 @@ include(cmake/pods.cmake)
 
 find_package(GLib2 REQUIRED)
 find_package(GTK2 REQUIRED)
+find_package(lcm REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
