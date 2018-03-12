@@ -1,5 +1,3 @@
-    #!/usr/bin/python
-#
 #Converts a LCM log to a "matrix" format that is easier to work with in external
 #tools such as Matlab. The set of messages on a given channel can be represented 
 #as a matrix, where the columns of this matrix are the the fields of the lcm type

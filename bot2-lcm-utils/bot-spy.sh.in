@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 for d in . .. ../.. ../../.. ../../../.. "@CMAKE_INSTALL_PREFIX@"; do
   if [ -d $d/share/java ]; then
     jd=$d/share/java
