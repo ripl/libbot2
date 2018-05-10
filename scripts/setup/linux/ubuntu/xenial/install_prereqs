@@ -22,14 +22,23 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-apt update -qq
-apt install --no-install-recommends \
+apt-get update -qq
+apt-get install --no-install-recommends lsb-release
+
+if [[ "$(lsb_release -sc)" != 'xenial' ]]; then
+  echo 'This script requires Ubuntu 16.04 (Xenial)' >&2
+  exit 2
+fi
+
+apt-get install --no-install-recommends \
   cmake \
   doxygen \
+  dpkg-dev \
+  file \
   freeglut3-dev \
   g++ \
-  git \
   gcc \
+  git \
   libglib2.0-dev \
   libgtk2.0-dev \
   libjpeg8-dev \
