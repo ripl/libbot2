@@ -13,10 +13,9 @@
 # You should have received a copy of the GNU General Public License along with
 # this program. If not, see <https://www.gnu.org/licenses/>.
 
-FROM ubuntu:14.04
+FROM ubuntu:18.04
 COPY ./install_prereqs /tmp/install_prereqs
 ARG DEBIAN_FRONTEND=noninteractive
 RUN yes | /tmp/install_prereqs \
   && rm -rf /var/lib/apt/lists/* \
   && rm -f /tmp/install_prereqs
-ENV PATH /opt/cmake/bin:$PATH

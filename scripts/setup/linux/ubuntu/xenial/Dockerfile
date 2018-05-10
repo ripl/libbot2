@@ -15,6 +15,7 @@
 
 FROM ubuntu:16.04
 COPY ./install_prereqs /tmp/install_prereqs
+ARG DEBIAN_FRONTEND=noninteractive
 RUN yes | /tmp/install_prereqs \
   && rm -rf /var/lib/apt/lists/* \
   && rm -f /tmp/install_prereqs
