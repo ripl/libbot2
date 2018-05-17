@@ -31,7 +31,6 @@ if [[ "$(lsb_release -sc)" != 'trusty' ]]; then
 fi
 
 apt-get install --no-install-recommends \
-  cmake \
   doxygen \
   dpkg-dev \
   file \
@@ -59,10 +58,6 @@ apt-get install --no-install-recommends \
 
 # TODO: Install a compatible version of LCM.
 
-pushd /tmp
-wget -q https://cmake.org/files/v3.5/cmake-3.5.1-Linux-x86_64.tar.gz
-trap 'rm -f cmake-3.5.1-Linux-x86_64.tar.gz' EXIT
-echo 'e8f94a57a95c6a4cbe0fe05b5d16a7b78bf67c77fcec14f0834303a06a6244b0  cmake-3.5.1-Linux-x86_64.tar.gz' | sha256sum -c
-tar -xzf cmake-3.5.1-Linux-x86_64.tar.gz
-mv cmake-3.5.1-Linux-x86_64 /opt/cmake
-popd
+wget https://cmake.org/files/v3.11/cmake-3.11.2-Linux-x86_64.sh && \
+  chmod +x cmake-3.11.2-Linux-x86_64.sh && \
+  ./cmake-3.11.2-Linux-x86_64.sh --skip-license --prefix /
