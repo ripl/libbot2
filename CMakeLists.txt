@@ -4,6 +4,11 @@ string(TIMESTAMP timestamp "%Y%m%d" UTC)
 
 project(libbot2 VERSION 0.0.1.${timestamp})
 
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install" CACHE STRING
+    "Install path prefix, prepended onto install directories" FORCE)
+endif()
+
 option(PACKAGE_LIBBOT2 "Set install prefix to package libbot2 on linux" OFF)
 if(PACKAGE_LIBBOT2)
   set(CMAKE_INSTALL_PREFIX "/opt/${CMAKE_PROJECT_NAME}/${PROJECT_VERSION}" CACHE PATH "Install location for project" FORCE)
@@ -46,16 +51,18 @@ find_package(PythonInterp REQUIRED)
 # Look for the gdkx.h header to decide whether the local gtk2 install has
 # X11 support or not.
 find_file(GDKX_HEADER gdkx.h PATH_SUFFIXES gtk-2.0/gdk)
+
 if(GDKX_HEADER)
-  set(bot_vis_default ON)
-  message(STATUS "gdkx.h found, system appears to have gtk+X11 support")
+  message(STATUS "gdkx.h found, system appears to have GTK+ X11 support")
 else()
-  set(bot_vis_default OFF)
-  message(STATUS "gdkx.h not found, system not appear to have gtk+X11 support")
+  message(STATUS "gdkx.h not found, system does not appear to have GTK+ X11 support")
 endif()
 
+mark_as_advanced(GDKX_HEADER)
 
-option(WITH_BOT_VIS "Build with bot2-vis" ${bot_vis_default})
+include(CMakeDependentOption)
+
+cmake_dependent_option(WITH_BOT_VIS "Build with bot2-vis" ON GDKX_HEADER OFF)
 
 include(ExternalProject)
 
@@ -100,38 +107,53 @@ ExternalProject_Add(bot2-core
   BUILD_ALWAYS 1)
 set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-core;bot2core;Unspecified;/")
 
-ExternalProject_Add(bot2-procman
-  SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-procman
-  BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-procman
-  LIST_SEPARATOR ":::"
-  CMAKE_ARGS ${default_cmake_args}
-  "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
-  ${INSTALL_CMD}
-  BUILD_ALWAYS 1)
-set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-procman;bot2-procman;ALL;/")
+option(WITH_BOT_PROCMAN "Build with bot2-procman" ON)
 
-ExternalProject_Add(bot2-lcm-utils
-  SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
-  BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
-  LIST_SEPARATOR ":::"
-  CMAKE_ARGS ${default_cmake_args}
-  "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
-  ${INSTALL_CMD}
-  BUILD_ALWAYS 1)
-set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcm-utils;bot2-lcm-utils;ALL;/")
+if(WITH_BOT_PROCMAN)
+  ExternalProject_Add(bot2-procman
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-procman
+    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-procman
+    LIST_SEPARATOR ":::"
+    CMAKE_ARGS ${default_cmake_args}
+    "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
+    ${INSTALL_CMD}
+    BUILD_ALWAYS 1)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-procman;bot2-procman;ALL;/")
+endif()
 
-ExternalProject_Add(bot2-param
-  SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
-  BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-param
-  LIST_SEPARATOR ":::"
-  CMAKE_ARGS ${default_cmake_args}
-  ${INSTALL_CMD}
-  DEPENDS bot2-core)
-set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-param;bot2-param;ALL;/")
+option(WITH_BOT_LCM_UTILS "Build with lcm-utils" ON)
+
+if(WITH_BOT_LCM_UTILS)
+  ExternalProject_Add(bot2-lcm-utils
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
+    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
+    LIST_SEPARATOR ":::"
+    CMAKE_ARGS ${default_cmake_args}
+    "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
+    ${INSTALL_CMD}
+    BUILD_ALWAYS 1)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcm-utils;bot2-lcm-utils;ALL;/")
+endif()
+
+option(WITH_BOT_PARAM "Build with bot2-param" ON)
+
+if(WITH_BOT_PARAM)
+  ExternalProject_Add(bot2-param
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
+    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-param
+    LIST_SEPARATOR ":::"
+    CMAKE_ARGS ${default_cmake_args}
+    ${INSTALL_CMD}
+    DEPENDS bot2-core)
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-param;bot2-param;ALL;/")
+endif()
+
+option(WITH_BOT_LCMGL "Build with bot2-lcmgl" ON)
+
+cmake_dependent_option(WITH_BOT_FRAMES "Build with bot2-frames, requires bot2-lcmgl and bot2-param" ON "WITH_BOT_LCMGL AND WITH_BOT_PARAM" OFF)
 
 if(WITH_BOT_VIS)
-
-  message(STATUS "Configuring with bot2-vis, modules requiring gtk+x11 will be built.")
+  message(STATUS "Configuring with bot2-vis, modules requiring GTK+ X11 will be built.")
 
   ExternalProject_Add(bot2-vis
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-vis
@@ -142,52 +164,57 @@ if(WITH_BOT_VIS)
     DEPENDS bot2-core)
   set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-vis;bot2-vis;ALL;/")
 
-  ExternalProject_Add(bot2-lcmgl
-    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
-    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-    LIST_SEPARATOR ":::"
-    CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
-    ${INSTALL_CMD}
-    DEPENDS bot2-core bot2-vis)
-  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
+  if(WITH_BOT_LCMGL)
+    ExternalProject_Add(bot2-lcmgl
+      SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
+      BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
+      LIST_SEPARATOR ":::"
+      CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+      ${INSTALL_CMD}
+      DEPENDS bot2-core bot2-vis)
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
-  ExternalProject_Add(bot2-frames
-    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
-    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
-    LIST_SEPARATOR ":::"
-    CMAKE_ARGS ${default_cmake_args}
-    ${INSTALL_CMD}
-    DEPENDS bot2-core bot2-param bot2-vis bot2-lcmgl)
-  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
-
+    if(WITH_BOT_FRAMES AND WITH_BOT_PARAM)
+      ExternalProject_Add(bot2-frames
+        SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
+        BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
+        LIST_SEPARATOR ":::"
+        CMAKE_ARGS ${default_cmake_args}
+        ${INSTALL_CMD}
+        DEPENDS bot2-core bot2-param bot2-vis bot2-lcmgl)
+      set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
+    endif()
+  endif()
 else()
+  if(WITH_BOT_LCMGL)
+    message(STATUS "Configuring without bot2-vis, modules requiring GTK+ X11 will not be built.")
+    find_package(X11 REQUIRED )
+    find_package(ZLIB REQUIRED)
+    find_package(JPEG REQUIRED)
+    find_package(PNG REQUIRED)
+    find_package(GTK2 REQUIRED)
+    find_package(GLUT REQUIRED)
 
-  message(STATUS "Configuring without bot2-vis, modules requiring gtk+x11 will not be built.")
-  find_package(X11 REQUIRED )
-  find_package(ZLIB REQUIRED)
-  find_package(JPEG REQUIRED)
-  find_package(PNG REQUIRED)
-  find_package(GTK2 REQUIRED)
-  find_package(GLUT REQUIRED)
+    ExternalProject_Add(bot2-lcmgl
+      SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
+      BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
+      CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+      LIST_SEPARATOR ":::"
+      ${INSTALL_CMD}
+      DEPENDS bot2-core)
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
-  ExternalProject_Add(bot2-lcmgl
-    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
-    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-    CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
-    LIST_SEPARATOR ":::"
-    ${INSTALL_CMD}
-    DEPENDS bot2-core)
-  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
-
-  ExternalProject_Add(bot2-frames
-    SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
-    BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
-    CMAKE_ARGS ${default_cmake_args}
-    LIST_SEPARATOR ":::"
-    ${INSTALL_CMD}
-    DEPENDS bot2-core bot2-param bot2-lcmgl)
-  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
-
+    if(WITH_BOT_FRAMES AND WITH_BOT_PARAM)
+      ExternalProject_Add(bot2-frames
+        SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
+        BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
+        CMAKE_ARGS ${default_cmake_args}
+        LIST_SEPARATOR ":::"
+        ${INSTALL_CMD}
+        DEPENDS bot2-core bot2-param bot2-lcmgl)
+      set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
+    endif()
+  endif()
 endif()
 
 configure_file(cmake/${CMAKE_PROJECT_NAME}-config.cmake.in
