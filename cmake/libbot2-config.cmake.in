@@ -47,14 +47,34 @@ else()
   include(CMakeFindDependencyMacro)
 endif()
 
+set(WITH_BOT_FRAMES @WITH_BOT_FRAMES@)
+set(WITH_BOT_LCM_UTILS @WITH_BOT_LCM_UTILS@)
+set(WITH_BOT_LCMGL @WITH_BOT_LCMGL@)
+set(WITH_BOT_PARAM @WITH_BOT_PARAM@)
+set(WITH_BOT_PROCMAN @WITH_BOT_PROCMAN@)
 set(WITH_BOT_VIS @WITH_BOT_VIS@)
 
 find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-core")
-find_dependency(bot2-lcm-utils CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-lcm-utils")
-find_dependency(bot2-param CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-param")
-find_dependency(bot2-procman CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-procman")
-find_dependency(bot2-lcmgl CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-lcmgl")
-find_dependency(bot2-frames CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-frames")
+
+if(WITH_BOT_LCM_UTILS)
+  find_dependency(bot2-lcm-utils CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-lcm-utils")
+endif()
+
+if(WITH_BOT_PARAM)
+  find_dependency(bot2-param CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-param")
+endif()
+
+if(WITH_BOT_PROCMAN)
+  find_dependency(bot2-procman CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-procman")
+endif()
+
+if(WITH_BOT_LCMGL)
+  find_dependency(bot2-lcmgl CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-lcmgl")
+endif()
+
+if(WITH_BOT_FRAMES AND WITH_BOT_LCMGL AND WITH_BOT_PARAM )
+  find_dependency(bot2-frames CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-frames")
+endif()
 
 if(WITH_BOT_VIS)
   find_dependency(bot2-vis CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-vis")
