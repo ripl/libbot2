@@ -2,19 +2,9 @@
 # support only a few flags that might be passed through:
 #   BUILD_PREFIX, BUILD_TYPE, CMAKE_FLAGS*
 CMAKE_FLAGS+=$(strip $(CMAKE_FLAGS1) $(CMAKE_FLAGS2) $(CMAKE_FLAGS3) $(CMAKE_FLAGS4) $(CMAKE_FLAGS5) $(CMAKE_FLAGS6) $(CMAKE_FLAGS7) $(CMAKE_FLAGS8) $(CMAKE_FLAGS9) $(CMAKE_FLAGS10) $(CMAKE_FLAGS11) $(CMAKE_FLAGS12) $(CMAKE_FLAGS13) $(CMAKE_FLAGS14) $(CMAKE_FLAGS15) $(CMAKE_FLAGS16) $(CMAKE_FLAGS17) $(CMAKE_FLAGS18) $(CMAKE_FLAGS19) $(CMAKE_FLAGS20))
-
-# Figure out where to build the software.
-#   Use BUILD_PREFIX if it was passed in.
-#   If not, search up to three parent directories for a 'build' directory.
-#   Otherwise, use ./build.
-ifeq "$(BUILD_PREFIX)" ""
-BUILD_PREFIX=$(shell for pfx in ./ .. ../.. ../../..; do d=`pwd`/$$pfx/build; \
-               if [ -d $$d ]; then echo $$d; exit 0; fi; done; echo `pwd`/build)
+ifneq "$(BUILD_PREFIX)" ""
+  CMAKE_FLAGS+=-DCMAKE_INSTALL_PREFIX="$(BUILD_PREFIX)"
 endif
-
-#ifneq "$(BUILD_PREFIX)" ""
-#  CMAKE_FLAGS+=-DCMAKE_INSTALL_PREFIX="$(BUILD_PREFIX)"
-#endif
 ifeq "$(BUILD_TYPE)" ""
   BUILD_TYPE="Release"
 endif
