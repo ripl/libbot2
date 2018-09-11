@@ -23,14 +23,14 @@ if [[ "${EUID}" -ne 0 ]]; then
 fi
 
 apt-get update -qq
-apt-get install --no-install-recommends lsb-release
+apt-get install -y --no-install-recommends lsb-release
 
 if [[ "$(lsb_release -sc)" != 'xenial' ]]; then
   echo 'This script requires Ubuntu 16.04 (Xenial)' >&2
   exit 2
 fi
 
-apt-get install --no-install-recommends \
+apt-get install -y --no-install-recommends \
   doxygen \
   dpkg-dev \
   file \
@@ -58,6 +58,7 @@ apt-get install --no-install-recommends \
 
 wget https://cmake.org/files/v3.11/cmake-3.11.2-Linux-x86_64.sh && \
   chmod +x cmake-3.11.2-Linux-x86_64.sh && \
-  ./cmake-3.11.2-Linux-x86_64.sh --skip-license --prefix /
+  ./cmake-3.11.2-Linux-x86_64.sh --skip-license --prefix / && \
+  rm ./cmake-3.11.2-Linux-x86_64.sh
 
 # TODO: Install a compatible version of LCM.
