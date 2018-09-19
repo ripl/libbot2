@@ -1,7 +1,7 @@
 FROM afdaniele/lcm:latest
 
 # arguments
-ARG INSTALL_DIR=/root/libbot2/build
+ARG INSTALL_DIR=/usr/local
 
 # environment
 ENV LIBBOT2_INSTALL_DIR $INSTALL_DIR
@@ -18,11 +18,4 @@ RUN /root/libbot2/install_prereqs \
 COPY ./ /root/libbot2/
 
 # build libbot2
-RUN cd /root/libbot2/ && make BUILD_PREFIX=$LIBBOT2_INSTALL_DIR
-
-# publish libbot2
-#   TODO: I'd like to install this globally but it does not work for some reason,
-#   the CMAKE_INSTALL_PREFIX variable always reverts to /root/libbot2/build/.
-ENV PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$LIBBOT2_INSTALL_DIR/lib/pkgconfig/
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LIBBOT2_INSTALL_DIR/lib/
-ENV PATH=$PATH:$LIBBOT2_INSTALL_DIR/bin/
+RUN cd /root/libbot2/ && BUILD_PREFIX=$LIBBOT2_INSTALL_DIR make

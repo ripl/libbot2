@@ -16,7 +16,7 @@ if(PACKAGE_LIBBOT2)
   mark_as_advanced(FORCE _build_dir)
 else()
   # PODs out-of-source build logic
-  if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
+  if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     mark_as_advanced(CLEAR _build_dir)
     set(INSTALL_CMD)
     find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
