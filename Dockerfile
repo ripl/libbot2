@@ -16,7 +16,7 @@ RUN /root/libbot2/install_prereqs \
 
 # copy source code
 COPY ./ /root/libbot2/
-WORKDIR /root/
 
 # build libbot2
+WORKDIR /root
 RUN cd libbot2/ && BUILD_PREFIX=$LIBBOT2_INSTALL_DIR make
