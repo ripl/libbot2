@@ -30,7 +30,7 @@ if [[ "$(lsb_release -sc)" != 'trusty' ]]; then
   exit 2
 fi
 
-apt-get install --no-install-recommends \
+apt-get install -y --no-install-recommends \
   doxygen \
   dpkg-dev \
   file \
