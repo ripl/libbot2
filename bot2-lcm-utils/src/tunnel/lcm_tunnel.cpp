@@ -283,6 +283,7 @@ int LcmTunnel::connectToServer(lcm_t * lcm_, introspect_t *introspect_, GMainLoo
     //subscribe to the channels we want to send out
     //only subscribe if we're doing TCP, since UDP socket hasn't been setup yet
     subscription = lcm_subscribe(lcm, tunnel_params->channels, on_lcm_message, this);
+    lcm_subscription_set_queue_capacity(subscription, 0);
 
   }
   return 1;
@@ -579,6 +580,7 @@ int LcmTunnel::on_tcp_data(GIOChannel * source, GIOCondition cond, void *user_da
         lcm_unsubscribe(self->lcm, self->subscription);
       }
       self->subscription = lcm_subscribe(self->lcm, self->tunnel_params->channels, on_lcm_message, self);
+      lcm_subscription_set_queue_capacity(self->subscription, 0);
 
     }
     break;
@@ -606,6 +608,7 @@ int LcmTunnel::on_tcp_data(GIOChannel * source, GIOCondition cond, void *user_da
       //now we can subscribe to LCM
       fprintf(stderr, "%s subscribed to \"%s\" \n", self->name, self->tunnel_params->channels);
       self->subscription = lcm_subscribe(self->lcm, self->tunnel_params->channels, on_lcm_message, self);
+      lcm_subscription_set_queue_capacity(self->subscription, 0);
 
       //we're done setting up the UDP connection...Disconnect tcp socket
       self->closeTCPSocket();
