@@ -49,10 +49,6 @@ rm -rf lcm-build
 dpkg -i lcm_1.3.95.${timestamp}-1_amd64.deb
 
 # Check if package versions are specified in environment variable
-JRE_VERSION=""
-if [ `echo "$CPACK_OPEN_JRE_VERSION"` != "" ]; then
-  JRE_VERSION="-DCPACK_OPEN_JRE_VERSION:STRING=${CPACK_OPEN_JRE_VERSION}"
-fi
 LIBPNG_VERSION=""
 if [ `echo "$CPACK_LIBPNG_VERSION"` != "" ]; then
   LIBPNG_VERSION="-DCPACK_LIBPNG_VERSION:STRING=${CPACK_LIBPNG_VERSION}"
@@ -70,7 +66,6 @@ cmake -DPACKAGE_LIBBOT2:BOOL=ON \
       -DCMAKE_C_FLAGS:STRING="$(dpkg-buildflags --get CFLAGS) $(dpkg-buildflags --get CPPFLAGS)" \
       -DCMAKE_PREFIX_PATH="/opt/lcm/1.3.95.${timestamp}" \
       -DCMAKE_SHARED_LINKER_FLAGS:STRING="$(dpkg-buildflags --get LDFLAGS)" \
-      $JRE_VERSION \
       $LIBPNG_VERSION \
       $CMAKE_PACKAGE_OPENGL \
       ../libbot2

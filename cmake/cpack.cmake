@@ -62,10 +62,6 @@ set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}-${PAC
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_SOURCE_STRIP_FILES FALSE)
 
-if(NOT DEFINED CPACK_OPEN_JRE_VERSION)
-  set(CPACK_OPEN_JRE_VERSION 8)
-endif()
-
 if(NOT DEFINED CPACK_LIBPNG_VERSION)
   set(CPACK_LIBPNG_VERSION 12-0)
 endif()
@@ -77,7 +73,7 @@ set(CPACK_DEBIAN_PACKAGE_NAME ${CMAKE_PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${MACHINE_ARCH})
 set(CPACK_DEBIAN_PACKAGE_RELEASE ${PACKAGE_RELEASE_VERSION})
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "lcm (>=1.3.95), freeglut3, ${CPACK_OPENGL} libc6, libgcc1, libglib2.0-0, libglu1-mesa, libgtk2.0-0, libice6, libjpeg8, libpng${CPACK_LIBPNG_VERSION}, libsm6, libstdc++6, libx11-6, libxau6, libxcb1, libxdmcp6, libxext6, libxmu6, libxt6, openjdk-${CPACK_OPEN_JRE_VERSION}-jre, python, python-gtk2, python-numpy, python-scipy, zlib1g")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "lcm (>=1.3.95), freeglut3, ${CPACK_OPENGL} libc6, libgcc1, libglib2.0-0, libglu1-mesa, libgtk2.0-0, libice6, libjpeg8, libpng${CPACK_LIBPNG_VERSION}, libsm6, libstdc++6, libx11-6, libxau6, libxcb1, libxdmcp6, libxext6, libxmu6, libxt6, openjdk-8-jre, python, python-gtk2, python-numpy, python-scipy, zlib1g")
 set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://github.com/RobotLocomotion/libbot2")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Francois Budin <francois.budin@kitware.com>")
 

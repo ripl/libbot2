@@ -53,8 +53,8 @@ Requirements
   system:
 
     MacOS or OS X using Homebrew   scripts/setup/mac/install_prereqs
-    Ubuntu 14.04 "Trusty"          scripts/setup/linux/ubuntu/trusty/install_prereqs
     Ubuntu 16.04 "Xenial"          scripts/setup/linux/ubuntu/xenial/install_prereqs
+    Ubuntu 18.04 "Bionic"          scripts/setup/linux/ubuntu/bionic/install_prereqs
 
   Additionally, you'll need to install LCM from https://lcm-proj.github.io/.
 
