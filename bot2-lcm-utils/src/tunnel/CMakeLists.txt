@@ -32,4 +32,4 @@ set_target_properties(bot-lcm-tunnel PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRE
 
 target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcm-tunnel)
+pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-tunnel)

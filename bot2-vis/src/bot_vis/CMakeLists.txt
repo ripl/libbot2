@@ -34,7 +34,7 @@ target_link_libraries(bot2-vis
     ${JPEG_LIBRARIES}
     ${ZLIB_LIBRARIES}
 )
-target_include_directories(${POD_NAME}
+target_include_directories(${PROJECT_NAME}
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
@@ -52,7 +52,7 @@ set(REQUIRED_PACKAGES glib-2.0 gtk+-2.0 gdk-pixbuf-2.0 lcm bot2-core libpng gl g
 # changes.
 set_target_properties(bot2-vis PROPERTIES SOVERSION 1)
 
-pods_install_libraries(EXPORT ${POD_NAME} ${POD_NAME})
+pods_install_libraries(EXPORT ${PROJECT_NAME} ${PROJECT_NAME})
 
 pods_install_headers(${h_files} DESTINATION bot_vis)
 

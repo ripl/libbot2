@@ -48,7 +48,7 @@ add_custom_command(OUTPUT ${jar_fname} COMMAND
     ${JAVA_ARCHIVE} cf ${jar_fname} -C ${class_dir} . 
     DEPENDS ${class_files})
 add_custom_target(jar ALL DEPENDS ${jar_fname})
-add_dependencies(jar lcmtypes_${POD_NAME}_jar) #the jar depends on the lcmtypes being already built.
+add_dependencies(jar lcmtypes_${PROJECT_NAME}_jar) #the jar depends on the lcmtypes being already built.
 
 get_filename_component(target_name ${jar_fname} NAME_WE)
 

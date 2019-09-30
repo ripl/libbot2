@@ -3,5 +3,5 @@ add_executable(bot-lcm-logsplice
 set_property(TARGET bot-lcm-logsplice PROPERTY C_STANDARD 99)
 target_link_libraries(bot-lcm-logsplice ${LCM_NAMESPACE}lcm GLib2::glib)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcm-logsplice)
+pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-logsplice)
 

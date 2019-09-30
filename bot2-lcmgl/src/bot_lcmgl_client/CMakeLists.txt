@@ -13,7 +13,7 @@ set_property(TARGET ${libname} PROPERTY C_STANDARD 99)
 set_target_properties(${libname} PROPERTIES SOVERSION 1)
 
 # make both the shared library public
-pods_install_libraries(EXPORT ${POD_NAME} ${libname})
+pods_install_libraries(EXPORT ${PROJECT_NAME} ${libname})
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_client)
 

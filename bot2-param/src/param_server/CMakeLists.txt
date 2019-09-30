@@ -9,5 +9,5 @@ target_link_libraries(bot-param-tool bot2-param-client ${LCM_NAMESPACE}lcm GLib2
 set_property(TARGET bot-param-tool PROPERTY C_STANDARD 99)
 
 # make executables public
-pods_install_executables(EXPORT ${POD_NAME} bot-param-server bot-param-tool)
+pods_install_executables(EXPORT ${PROJECT_NAME} bot-param-server bot-param-tool)
 

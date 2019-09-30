@@ -1,4 +1,4 @@
-# - Config file for the @POD_NAME@ package
+# - Config file for the @PROJECT_NAME@ package
 
 if(CMAKE_MAJOR_VERSION LESS 3)
   message(FATAL_ERROR "CMake >= 3.0 required")

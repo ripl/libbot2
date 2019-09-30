@@ -24,7 +24,7 @@ set_target_properties(bot2-frames-renderers PROPERTIES SOVERSION 1)
 pods_install_headers(bot_frames_renderers.h DESTINATION bot_frames)
 
 # make the library public
-pods_install_libraries(EXPORT ${POD_NAME} bot2-frames-renderers)
+pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-frames-renderers)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.

@@ -5,23 +5,23 @@ find_package(lcm REQUIRED)
 file(GLOB c_files *.c)
 file(GLOB h_files *.h)
 
-add_library(${POD_NAME} ${c_files})
+add_library(${PROJECT_NAME} ${c_files})
 
 # set the library API version.  Increment this every time the public API
 # changes.
-set_target_properties(${POD_NAME} PROPERTIES SOVERSION 1)
+set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
 
-target_link_libraries(${POD_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm GLib2::glib PRIVATE m)
-target_include_directories(${POD_NAME} PUBLIC
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm GLib2::glib PRIVATE m)
+target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include> )
-set_property(TARGET ${POD_NAME} PROPERTY C_STANDARD 99)
+set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 
-pods_install_libraries(EXPORT ${POD_NAME} ${POD_NAME})
+pods_install_libraries(EXPORT ${PROJECT_NAME} ${PROJECT_NAME})
 
 pods_install_headers(${h_files} DESTINATION bot_core)
 
-set(REQUIRED_LIBS glib-2.0 lcm lcmtypes_${POD_NAME})
+set(REQUIRED_LIBS glib-2.0 lcm lcmtypes_${PROJECT_NAME})
 pods_install_pkg_config_file(${PROJECT_NAME}
     LIBS -lbot2-core -lm
     REQUIRES ${REQUIRED_LIBS}

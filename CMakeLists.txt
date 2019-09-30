@@ -1,7 +1,5 @@
-cmake_minimum_required(VERSION 3.3)
-
+cmake_minimum_required(VERSION 3.5)
 string(TIMESTAMP timestamp "%Y%m%d" UTC)
-
 project(libbot2 VERSION 0.0.1.${timestamp})
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)

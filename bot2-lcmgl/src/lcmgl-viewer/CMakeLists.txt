@@ -10,4 +10,4 @@ target_link_libraries(bot-lcmgl-viewer bot2-lcmgl-renderer libbot2::bot2-vis lib
 target_include_directories(bot-lcmgl-viewer PUBLIC ${GTK2_INCLUDE_DIRS})
 set_property(TARGET bot-lcmgl-viewer PROPERTY C_STANDARD 99)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcmgl-viewer)
+pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcmgl-viewer)

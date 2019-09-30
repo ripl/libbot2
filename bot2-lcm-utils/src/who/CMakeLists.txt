@@ -4,4 +4,4 @@ add_executable(bot-lcm-who
 set_property(TARGET bot-lcm-who PROPERTY C_STANDARD 99)
 target_link_libraries(bot-lcm-who ${LCM_NAMESPACE}lcm GLib2::glib)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcm-who)
+pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-who)

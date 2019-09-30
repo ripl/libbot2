@@ -30,7 +30,7 @@ target_include_directories(bot2-lcmgl-renderer
 # changes.
 set_target_properties(bot2-lcmgl-renderer PROPERTIES SOVERSION 1)
 
-pods_install_libraries(EXPORT ${POD_NAME} bot2-lcmgl-renderer)
+pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-lcmgl-renderer)
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_render)
 

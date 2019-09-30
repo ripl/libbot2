@@ -16,7 +16,7 @@ set_target_properties(bot2-param-client PROPERTIES SOVERSION 1)
 pods_install_headers(param_client.h param_util.h DESTINATION bot_param)
 
 # make the library public
-pods_install_libraries(EXPORT ${POD_NAME} bot2-param-client)
+pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-param-client)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.
