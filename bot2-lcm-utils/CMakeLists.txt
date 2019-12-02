@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(bot2-lcm-utils LANGUAGES C CXX VERSION 0.0.1)
 
 macro(configure_import_targets _prop)

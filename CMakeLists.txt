@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 string(TIMESTAMP timestamp "%Y%m%d" UTC)
 project(libbot2 VERSION 0.0.1.${timestamp})
 

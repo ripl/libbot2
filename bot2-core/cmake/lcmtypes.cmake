@@ -80,7 +80,6 @@
 # File: lcmtypes.cmake
 # Distributed with pods version: 12.09.21
 
-cmake_minimum_required(VERSION 3.0.0)
 
 macro(lcmtypes_get_types msgvar)
     # get a list of all LCM types

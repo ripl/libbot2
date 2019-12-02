@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(bot2-param LANGUAGES C CXX VERSION 0.0.1)
 
 set(JAVA_INSTALL_SUBDIR share/java) # java
