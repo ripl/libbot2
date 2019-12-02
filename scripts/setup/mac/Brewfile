@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+brew 'cmake'
+brew 'doxygen'
+brew 'glib'
+brew 'gtk+'
+brew 'jpeg'
+brew 'lcm'
+brew 'libpng'
+brew 'numpy'
+brew 'pkg-config'
+brew 'pygtk'
+brew 'python'
+brew 'python@2'
+brew 'scipy'
+
+cask 'adoptopenjdk' unless system '/usr/libexec/java_home --failfast &> /dev/null'
+cask 'xquartz' unless File.exist? '/opt/X11/include/X11/Xlib.h'

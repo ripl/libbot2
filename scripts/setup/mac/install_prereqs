@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Copyright (C) 2018 Massachusetts Institute of Technology.
 #
@@ -22,40 +22,8 @@ if [[ "${EUID}" -eq 0 ]]; then
   exit 1
 fi
 
-if ! command -v javac &>/dev/null; then
-  echo 'Java is NOT installed' >&2
-  exit 2
-fi
-
-if [[ ! -f /opt/X11/include/X11/Xlib.h ]]; then
-  echo 'XQuartz is NOT installed' >&2
-  exit 3
-fi
-
 if ! command -v brew &>/dev/null; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
-if [[ ! -f /usr/include/zlib.h ]]; then
-  echo 'Command Line Tools for Xcode are NOT installed' >&2
-  exit 4
-fi
-
-brew tap robotlocomotion/director
-brew update
-brew upgrade
-brew install \
-  cmake \
-  doxygen \
-  glib \
-  gtk+ \
-  jpeg \
-  libpng \
-  numpy \
-  pkg-config \
-  pygtk \
-  python \
-  python3 \
-  scipy
-
-# TODO: Install a compatible version of LCM.
+brew bundle --file="$(dirname ${(%):-%x})/Brewfile"
