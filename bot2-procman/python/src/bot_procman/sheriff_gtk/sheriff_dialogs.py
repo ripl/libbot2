@@ -369,9 +369,7 @@ def do_edit_script_dialog(sheriff, window, script):
     dlg.destroy ()
 
 def do_preferences_dialog(sheriff_gtk, window):
-    print("HERE!")
     dlg = PreferencesDialog(sheriff_gtk, window)
-    print("done with dialog!")
 
     if dlg.run() == Gtk.ResponseType.ACCEPT:
         #sheriff_gtk.cmd_console.set_background_color(dlg.bg_color_bt.get_color())
@@ -386,4 +384,3 @@ def do_preferences_dialog(sheriff_gtk, window):
 #        sheriff_gtk.hosts_tv.set_text_color(dlg.text_color_bt.get_color())
 
     dlg.destroy()
-    print("DONE!")
