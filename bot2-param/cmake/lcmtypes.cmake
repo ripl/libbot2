@@ -299,7 +299,7 @@ function(lcmtypes_build_java)
     endif()
 
     # do we have Java?
-    find_package(Java MODULE)
+    find_package(Java 1.8 MODULE)
     if(JAVA_COMPILE STREQUAL JAVA_COMPILE-NOTFOUND OR
        JAVA_ARCHIVE STREQUAL JAVA_ARCHIVE-NOTFOUND)
         message(STATUS "Not building Java LCM type bindings (Can't find Java)")
