@@ -6,59 +6,49 @@ import java.awt.geom.*;
 import java.io.*;
 import javax.swing.*;
 
-import lcm.spy.ChannelData;
-import lcm.util.ParameterGUI;
-import lcm.util.ParameterListener;
-import lcm.util.ColorMapper;
-import lcm.lcm.LCMDataInputStream;
+import lcm.lcm.*;
+import lcm.spy.*;
+import lcm.util.*;
 
 /** A plugin for viewing bot_core.planar_lidar_t data **/
-public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
-{
+public class PlanarLidarPlugin implements lcm.spy.SpyPlugin {
     boolean filledin = true;
     static final double MAX_ZOOM = 1024;
     static final double MIN_ZOOM = 1;
-//    static final double MAX_RANGE = 75.0;  // ignore returns longer than this (meters)
 
-    public boolean canHandle(long fingerprint)
-    {
+    public boolean canHandle(long fingerprint) {
         return fingerprint == bot_core.planar_lidar_t.LCM_FINGERPRINT;
     }
 
-    class MyAction extends AbstractAction
-    {
+    class MyAction extends AbstractAction {
         ChannelData cd;
         JDesktopPane jdp;
 
-        public MyAction(JDesktopPane jdp, ChannelData cd)
-        {
+        public MyAction(JDesktopPane jdp, ChannelData cd) {
             super("Planar Lidar Viewer");
             this.jdp = jdp;
             this.cd = cd;
         }
 
-        public void actionPerformed(ActionEvent e) 
-        {
+        public void actionPerformed(ActionEvent e) {
             Viewer v = new Viewer(cd);
             jdp.add(v);
             v.toFront();
         }
     }
 
-    public Action getAction(JDesktopPane jdp, ChannelData cd)
-    {
+    public Action getAction(JDesktopPane jdp, ChannelData cd) {
         return new MyAction(jdp, cd);
     }
 
-    class LaserPane extends JPanel implements MouseWheelListener, MouseListener, MouseMotionListener, KeyListener
-    {
+    class LaserPane extends JPanel
+        implements MouseWheelListener, MouseListener, MouseMotionListener, KeyListener {
         bot_core.planar_lidar_t l;
         double tx, ty;
-        AffineTransform T ;
+        AffineTransform T;
         ParameterGUI pg;
 
-        public LaserPane(ParameterGUI pg)
-        {
+        public LaserPane(ParameterGUI pg) {
             this.pg = pg;
 
             addMouseWheelListener(this);
@@ -70,34 +60,32 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             grabFocus();
         }
 
-        public double getScale()
-        {
+        public double getScale() {
             return T.getScaleX();
         }
 
-        public void setData(bot_core.planar_lidar_t l)
-        {
+        public void setData(bot_core.planar_lidar_t l) {
             this.l = l;
             repaint();
         }
 
-        public void paint(Graphics gin)
-        {
+        public void paint(Graphics gin) {
             Graphics2D g = (Graphics2D) gin;
 
             int width = getWidth(), height = getHeight();
 
             if (T == null) {
                 T = new AffineTransform();
-                T.translate(width/2, height);
+                T.translate(width / 2, height);
                 T.scale(8, -8);
             }
 
             g.setColor(Color.black);
-            g.fillRect(0,0,width,height);
+            g.fillRect(0, 0, width, height);
 
-            if (l==null)
+            if (l == null) {
                 return;
+            }
 
             g.transform(T);
             double scale = getScale();
@@ -105,76 +93,50 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             double maxrange = 0;
 
             // draw the filled-in polygon of the laser scan
-            if (pg.gb("volume"))
-            {
+            if (pg.gb("volume")) {
                 g.setColor(new Color(0, 0, 100));
                 GeneralPath p = new GeneralPath();
-                p.moveTo(0,0);
+                p.moveTo(0, 0);
                 for (int i = 0; i < l.nranges; i++) {
-//                    if (l.ranges[i] > MAX_RANGE)
-//                        continue;
-
-                    if (l.ranges[i] < 100)
+                    if (l.ranges[i] < 100) {
                         maxrange = Math.max(maxrange, l.ranges[i]);
-                    double theta = l.rad0+i*l.radstep+Math.PI/2;
-                    double x = l.ranges[i]*Math.cos(theta);
-                    double y = l.ranges[i]*Math.sin(theta);
+                    }
+                    double theta = l.rad0 + i * l.radstep + Math.PI / 2;
+                    double x = l.ranges[i] * Math.cos(theta);
+                    double y = l.ranges[i] * Math.sin(theta);
                     p.lineTo((float) x, (float) y);
                 }
                 p.closePath();
                 g.fill(p);
 
-                g.setStroke(new BasicStroke((float) (2.0/scale)));
+                g.setStroke(new BasicStroke((float) (2.0 / scale)));
 
                 g.setColor(new Color(0, 0, 255));
                 g.draw(p);
             }
 
             // draw the pessimistic polygon of the laser scan
-            if (pg.gb("pessimistic"))
-            {
+            if (pg.gb("pessimistic")) {
                 g.setColor(new Color(100, 0, 0));
                 GeneralPath p = new GeneralPath();
-                p.moveTo(0,0);
+                p.moveTo(0, 0);
                 for (int i = 0; i < l.nranges; i++) {
-//                    if (l.ranges[i] > MAX_RANGE) {
-//                        // count how many ranges are max_range
-//                        int max_count = 1;
-//                        for (int j = i+1; (j < l.nranges) && (l.ranges[j] > MAX_RANGE); j++)
-//                            max_count++;
-//                        // if a person in black was in front of lidar how close could they be?
-//                        double min_pedestrian_width = 0.4;
-//                        // closest a person could get to obscure this many returns
-//                        double myrange = (min_pedestrian_width/2.0)/Math.tan(max_count*l.radstep/2.0);
-//                        if (myrange < 100)
-//                            maxrange = Math.max(maxrange, myrange);
-//                        for (int j=0; j<max_count;j++) {
-//                            double theta = l.rad0+(i+j)*l.radstep+Math.PI/2;
-//                            double x = myrange*Math.cos(theta);
-//                            double y = myrange*Math.sin(theta);
-//                            p.lineTo((float) x, (float) y);
-//                        }
-//                        // skip ahead
-//                        i+=max_count-1;
-//                    }
-//                    else {   
-                        maxrange = Math.max(maxrange, l.ranges[i]);
-                        double theta = l.rad0+i*l.radstep+Math.PI/2;
-                        double x = l.ranges[i]*Math.cos(theta);
-                        double y = l.ranges[i]*Math.sin(theta);
-                        p.lineTo((float) x, (float) y);
-//                    }
+                    maxrange = Math.max(maxrange, l.ranges[i]);
+                    double theta = l.rad0 + i * l.radstep + Math.PI / 2;
+                    double x = l.ranges[i] * Math.cos(theta);
+                    double y = l.ranges[i] * Math.sin(theta);
+                    p.lineTo((float) x, (float) y);
                 }
                 p.closePath();
                 g.fill(p);
 
-                g.setStroke(new BasicStroke((float) (2.0/scale)));
+                g.setStroke(new BasicStroke((float) (2.0 / scale)));
 
                 g.setColor(new Color(255, 0, 0));
                 g.draw(p);
             }
 
-            ///////// draw laser returns as dots 
+            ///////// draw laser returns as dots
 
             // values for sick LMS291-S05
             double min_intensity = 7500, max_intensity = 12000;
@@ -184,93 +146,90 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
                 max_intensity = 1;
             }
 
-            ColorMapper colormap = new ColorMapper(new int[] {0x0000ff, 0x008080, 0x808000, 0xff0000},
-                    min_intensity, max_intensity);
+            ColorMapper colormap = new ColorMapper(
+                new int[] {0x0000ff, 0x008080, 0x808000, 0xff0000}, min_intensity, max_intensity);
 
             {
-                double r = 4.0/scale;
-                if (!filledin)
+                double r = 4.0 / scale;
+                if (!filledin) {
                     r *= 2;
+                }
 
                 for (int i = 0; i < l.nranges; i++) {
-//                    if (l.ranges[i] > MAX_RANGE)
-//                        continue;
-
                     if (!pg.gb("intensity") || l.nintensities != l.nranges) {
                         g.setColor(Color.yellow);
                     } else {
                         g.setColor(new Color(colormap.map(l.intensities[i])));
-                        /*          
-                                    float v = (float) ((l.intensities[i] - min_intensity) / (max_intensity - min_intensity));
-                                    v = Math.min(v, 1);
-                                    v = Math.max(v, 0);
-                                    v = .2f + .8f*v;
-                                    g.setColor(new Color(v,v,v)); */
                     }
 
-                    double theta = l.rad0 + i*l.radstep+Math.PI/2;
-                    double x = l.ranges[i]*Math.cos(theta);
-                    double y = l.ranges[i]*Math.sin(theta);
-                    Ellipse2D e = new Ellipse2D.Double(x-r/2,y-r/2,r,r);
+                    double theta = l.rad0 + i * l.radstep + Math.PI / 2;
+                    double x = l.ranges[i] * Math.cos(theta);
+                    double y = l.ranges[i] * Math.sin(theta);
+                    Ellipse2D e = new Ellipse2D.Double(x - r / 2, y - r / 2, r, r);
                     g.fill(e);
                 }
             }
 
             ///////// draw reference rings
             {
-                g.setStroke(new BasicStroke((float) (1.0/scale))); // 1px
-                g.setFont(g.getFont().deriveFont((float) (12.0/scale)).deriveFont(AffineTransform.getScaleInstance(1, -1)));
+                g.setStroke(new BasicStroke((float) (1.0 / scale))); // 1px
+                g.setFont(g.getFont()
+                              .deriveFont((float) (12.0 / scale))
+                              .deriveFont(AffineTransform.getScaleInstance(1, -1)));
 
-                int maxring = (int) Math.max(maxrange,Math.sqrt(width*width/4 + height*height)/scale);
+                int maxring = (int) Math.max(
+                    maxrange, Math.sqrt(width * width / 4 + height * height) / scale);
 
-                for (int i = 1; i < maxring; i++)
-                {
+                for (int i = 1; i < maxring; i++) {
                     double r = i;
-                    Ellipse2D e = new Ellipse2D.Double(-r,-r, 2*r, 2*r);
-                    if (i%10==0) {
-                        g.setColor(new Color(150,150,150));
-						if (i%20!=0) {
-	                        if (scale <2)
+                    Ellipse2D e = new Ellipse2D.Double(-r, -r, 2 * r, 2 * r);
+                    if (i % 10 == 0) {
+                        g.setColor(new Color(150, 150, 150));
+                        if (i % 20 != 0) {
+                            if (scale < 2) {
+                                continue;
+                            }
+                        }
+                    } else if (i % 5 == 0) {
+                        g.setColor(new Color(100, 100, 100));
+                        if (scale < 3) {
                             continue;
-						}
-                    }
-                    else if (i%5==0) {
-                        g.setColor(new Color(100,100,100));
-                                      if (scale < 3)
-                                      continue;
-                    }
-                    else {
-                        g.setColor(new Color(40,40,40));
-                        if (scale <5)
+                        }
+                    } else {
+                        g.setColor(new Color(40, 40, 40));
+                        if (scale < 5) {
                             continue;
+                        }
                     }
 
                     g.draw(e);
                 }
 
                 // draw ring labels
-                g.setColor(new Color(200,200,200));
-                for (int i = 1; i < maxring; i++)
-                {
+                g.setColor(new Color(200, 200, 200));
+                for (int i = 1; i < maxring; i++) {
                     double r = i;
 
-                    if (i%40==0)
-                        g.drawString(""+i, (float) (r + 2/scale), (float) 0);					
+                    if (i % 40 == 0) {
+                        g.drawString("" + i, (float) (r + 2 / scale), (float) 0);
+                    }
 
-                    if ((i%10==0) && (scale >=3))
-                        g.drawString(""+i, (float) (r + 2/scale), (float) 0);					
-					if ((i%5==0) && (scale >=5))
-                        g.drawString(""+i, (float) (r + 2/scale), (float) 0);
-                }           
-
+                    if ((i % 10 == 0) && (scale >= 3)) {
+                        g.drawString("" + i, (float) (r + 2 / scale), (float) 0);
+                    }
+                    if ((i % 5 == 0) && (scale >= 5)) {
+                        g.drawString("" + i, (float) (r + 2 / scale), (float) 0);
+                    }
+                }
             }
 
             ///////// draw the robot
             {
                 GeneralPath p = new GeneralPath();
-                double b = 10/scale, h = 18/scale; // robot base size and height (a triangle)
-                p.moveTo((float) (-b/2), 0);
-                p.lineTo((float) b/2, 0);
+                double b = 10 / scale,
+                       h = 18 / scale; // robot base size and height (a triangle)
+                p.moveTo((float) (-b / 2), 0);
+                p.lineTo((float) b / 2, 0);
                 p.lineTo(0, (float) h);
                 p.closePath();
                 g.setColor(Color.cyan);
@@ -278,16 +237,12 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             }
         }
 
-        public void keyReleased(KeyEvent e) 
-        {
-        }
+        public void keyReleased(KeyEvent e) {}
 
-        public void keyPressed(KeyEvent e) 
-        {
+        public void keyPressed(KeyEvent e) {
             int amt = 8;
 
-            switch (e.getKeyCode())
-            {
+            switch (e.getKeyCode()) {
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_KP_RIGHT:
                     pan(-amt, 0);
@@ -310,37 +265,28 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             }
         }
 
-        public void keyTyped(KeyEvent e)
-        {
-            switch (e.getKeyChar())
-            {
+        public void keyTyped(KeyEvent e) {
+            switch (e.getKeyChar()) {
                 case 'z':
                 case '-':
-                    zoom(.5, new Point(getWidth()/2, getHeight()/2));
+                    zoom(.5, new Point(getWidth() / 2, getHeight() / 2));
                     break;
 
                 case 'Z':
                 case '+':
-                    zoom(2, new Point(getWidth()/2, getHeight()/2));
+                    zoom(2, new Point(getWidth() / 2, getHeight() / 2));
                     break;
 
                 default:
-                    //          System.out.println("key: "+e.getKeyChar());
             }
 
-            switch (e.getKeyCode())
-            {
-                default:
-                    //          System.out.println("key: "+e.getKeyCode());
-
-            }
+            switch (e.getKeyCode()) { default: }
         }
 
         public void mouseMoved(MouseEvent e) {}
-        public void mouseClicked(MouseEvent e) 
-        {
+        public void mouseClicked(MouseEvent e) {
             // restore default view
-            if (e.getClickCount()==2) {
+            if (e.getClickCount() == 2) {
                 T = null;
 
                 repaint();
@@ -352,8 +298,7 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
         public void mouseExited(MouseEvent e) {}
 
         Point dragBegin = null;
-        public void mouseDragged(MouseEvent e)
-        {
+        public void mouseDragged(MouseEvent e) {
             Point p = e.getPoint();
             if (dragBegin != null) {
                 double tx = p.getX() - dragBegin.getX();
@@ -364,29 +309,26 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             dragBegin = p;
         }
 
-        public void mousePressed(MouseEvent e) 
-        {
+        public void mousePressed(MouseEvent e) {
             dragBegin = e.getPoint();
         }
 
-        public void mouseReleased(MouseEvent e)
-        {
+        public void mouseReleased(MouseEvent e) {
             dragBegin = null;
         }
 
-        void pan(double tx, double ty)
-        {
+        void pan(double tx, double ty) {
             AffineTransform ST = AffineTransform.getTranslateInstance(tx, ty);
             T.preConcatenate(ST); // in pixel space
             repaint();
         }
 
-        void zoom(double dscale, Point p)
-        {
+        void zoom(double dscale, Point p) {
             double newscale = getScale() * dscale;
 
-            if (newscale > MAX_ZOOM || newscale < MIN_ZOOM)
+            if (newscale > MAX_ZOOM || newscale < MIN_ZOOM) {
                 return;
+            }
 
             AffineTransform ST = new AffineTransform();
             ST.translate(p.getX(), p.getY());
@@ -398,56 +340,50 @@ public class PlanarLidarPlugin implements lcm.spy.SpyPlugin
             repaint();
         }
 
-        public void mouseWheelMoved(MouseWheelEvent e)
-        {
-            int amount=e.getWheelRotation();
+        public void mouseWheelMoved(MouseWheelEvent e) {
+            int amount = e.getWheelRotation();
             double dscale = 1;
 
-            if (amount > 0)
+            if (amount > 0) {
                 dscale = 0.5;
-            else
+            } else {
                 dscale = 2;
+            }
 
             zoom(dscale, e.getPoint());
         }
     }
 
-    class Viewer extends JInternalFrame implements lcm.lcm.LCMSubscriber
-    {
+    class Viewer extends JInternalFrame implements lcm.lcm.LCMSubscriber {
         ChannelData cd;
         LaserPane lp;
         ParameterGUI pg;
 
-        public Viewer(ChannelData cd)
-        {
-            super("PlanarLidar: "+cd.name, true, true);
+        public Viewer(ChannelData cd) {
+            super("PlanarLidar: " + cd.name, true, true);
             this.cd = cd;
 
             setLayout(new BorderLayout());
             pg = new ParameterGUI();
-            pg.addCheckBoxes("volume", "Show volume", true,
-                    "pessimistic", "Pessimistic", false,
-                    "normalized_intensities", "Intensity [0,1]", false,
-                    "intensity", "Display intensity", false);
+            pg.addCheckBoxes("volume", "Show volume", true, "pessimistic", "Pessimistic", false,
+                "normalized_intensities", "Intensity [0,1]", false, "intensity",
+                "Display intensity", false);
             lp = new LaserPane(pg);
             add(lp, BorderLayout.CENTER);
 
-
             add(pg.getPanel(), BorderLayout.SOUTH);
-            setSize(500,400);
+            setSize(500, 400);
             setVisible(true);
 
             lcm.lcm.LCM.getSingleton().subscribe(cd.name, this);
         }
 
-        public void messageReceived (lcm.lcm.LCM lc, 
-                String channel, LCMDataInputStream ins)
-        {
+        public void messageReceived(lcm.lcm.LCM lc, String channel, LCMDataInputStream ins) {
             try {
                 bot_core.planar_lidar_t pl = new bot_core.planar_lidar_t(ins);
                 lp.setData(pl);
             } catch (IOException ex) {
-                System.out.println("ex: "+ex);
+                System.out.println("ex: " + ex);
                 return;
             }
         }
