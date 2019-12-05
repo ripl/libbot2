@@ -1,7 +1,7 @@
 #Converts a LCM log to a "matrix" format that is easier to work with in external
-#tools such as Matlab. The set of messages on a given channel can be represented 
+#tools such as Matlab. The set of messages on a given channel can be represented
 #as a matrix, where the columns of this matrix are the the fields of the lcm type
-#with one message per row 
+#with one message per row
 
 import os
 import sys
@@ -11,19 +11,15 @@ import numpy
 import re
 import getopt
 
-# check which version for mio location
-if sys.version_info < (2, 6):
-    import scipy.io.mio
-else:
-    import scipy.io.matlab.mio
+import scipy.io.matlab.mio
 
 from lcm import EventLog
-from scan_for_lcmtypes import *
+from .scan_for_lcmtypes import *
 
 def usage():
     pname, sname = os.path.split(sys.argv[0])
     sys.stderr.write("usage: % s %s < filename > \n" % (sname, str(longOpts)))
-    print """
+    print("""
     -h --help                 print this message
     -p --print                Output log data to stdout instead of to .mat
     -f --format               print the data format to stderr
@@ -35,7 +31,7 @@ def usage():
     -l --lcmtype_pkgs=pkgs    load python modules from comma seperated list of packages [pkgs] defaults to ["botlcm"]
     -v                        Verbose
 
-    """
+    """)
     sys.exit()
 
 flatteners = {}
@@ -51,13 +47,13 @@ def make_obj_accessor(fieldname, func):
     return lambda lst, x: func(lst, getattr(x, fieldname))
 
 def make_obj_list_accessor(fieldname, func):
-    return lambda lst, x: map(lambda item: func(lst, item), getattr(x, fieldname))
+    return lambda lst, x: [func(lst, item) for item in getattr(x, fieldname)]
 #    def list_accessor(lst, msg):
 #        msg_lst = getattr(msg, fieldname)
 #        for elem in msg_lst:
 #            func(lst, elem)
 #    return list_accessor
-#    
+#
 
 
 def make_lcmtype_accessor(msg):
@@ -66,12 +62,11 @@ def make_lcmtype_accessor(msg):
     for fieldname in getattr(msg, '__slots__'):
         m = getattr(msg, fieldname)
 
-        if type(m) in [ types.IntType, types.LongType, types.FloatType,
-                types.BooleanType ]:
+        if isinstance(m, (int, float, bool)):
             # scalar
             accessor = make_simple_accessor(fieldname)
             funcs.append(accessor)
-        elif type(m) in [ types.ListType, types.TupleType ]:
+        elif isinstance(m, (list, tuple)):
             # convert to a numpy array
             arr = numpy.array(m)
 
@@ -84,7 +79,7 @@ def make_lcmtype_accessor(msg):
                 typeAccess = make_lcmtype_accessor(m[0])
                 funcs.append(make_obj_list_accessor(fieldname, typeAccess))
                 #pass
-        elif type(m) in types.StringTypes:
+        elif isinstance(m, str):
             # ignore strings
             pass
         else:
@@ -112,19 +107,19 @@ def make_lcmtype_string(msg, base=True):
     for fieldname in getattr(msg, '__slots__'):
         m = getattr(msg, fieldname)
 
-        if type(m) in [ types.IntType, types.LongType, types.FloatType, types.BooleanType ]:
+        if isinstance(m, (int, float, bool)):
             count = count + 1
             if base:
                 typeStr.append("%d- %s" % (count, fieldname))
             else:
                 typeStr.append(fieldname)
-        elif type(m) in [ types.ListType, types.TupleType ]:
+        elif isinstance(m, (list, tuple)):
             # convert to a numpy array
             arr = numpy.array(m)
             # check the data type of the array
             if arr.dtype.kind in "bif":
                 # numeric data type
-                
+
                 if base:
                     typeStr.append("%d- %s(%d)" % (count + 1, fieldname, len(arr.ravel())))
                 else:
@@ -141,7 +136,7 @@ def make_lcmtype_string(msg, base=True):
                 typeStr.append(subStr)
                 count = count + numSub * subCount
                 #pass
-        elif type(m) in types.StringTypes:
+        elif isinstance(m, str):
             # ignore strings
             pass
         else:
@@ -168,9 +163,9 @@ longOpts = ["help", "print", "format", "separator", "channelsToProcess", "ignore
 
 try:
     opts, args = getopt.gnu_getopt(sys.argv[1:], "hpvfs:c:i:o:l:", longOpts)
-except getopt.GetoptError, err:
+except getopt.GetoptError as err:
     # print help information and exit:
-    print str(err) # will print something like "option -a not recognized"
+    print(str(err)) # will print something like "option -a not recognized"
     usage()
 if len(args) != 1:
     usage()
@@ -241,9 +236,9 @@ statusMsg = ""
 startTime = 0
 
 for e in log:
-    if msgCount == 0: 
+    if msgCount == 0:
         startTime = e.timestamp
-        
+
     if e.channel in ignored_channels:
         continue
     if ((checkIgnore and channelsToIgnore.match(e.channel) and len(channelsToIgnore.match(e.channel).group())==len(e.channel)) \
@@ -268,14 +263,14 @@ for e in log:
         statusMsg = deleteStatusMsg(statusMsg)
         sys.stderr.write("error: couldn't decode msg on channel %s\n" % e.channel)
         continue
-    
+
     msgCount = msgCount + 1
     if (msgCount % 5000) == 0:
         statusMsg = deleteStatusMsg(statusMsg)
         statusMsg = "read % d messages, % d %% done" % (msgCount, log.tell() / float(log.size())*100)
         sys.stderr.write(statusMsg)
         sys.stderr.flush()
-    
+
     if e.channel in flatteners:
         flattener = flatteners[e.channel]
     else:
@@ -286,10 +281,10 @@ for e in log:
             statusMsg = deleteStatusMsg(statusMsg)
             typeStr, fieldCount = make_lcmtype_string(msg)
             typeStr.append("%d- log_timestamp" % (fieldCount + 1))
-            
+
             typeStr = "\n#%s  %s :\n#[\n#%s\n#]\n" % (e.channel, lcmtype, "\n#".join(typeStr))
             sys.stderr.write(typeStr)
-                
+
 
 
     a = flattener(msg)
@@ -309,15 +304,15 @@ for e in log:
         printFile.write("%s%s%s\n" % (e.channel, separator, separator.join([str(k) for k in a])))
     else:
         data[e.channel].append(a)
-        
-       
-    
+
+
+
 
 deleteStatusMsg(statusMsg)
 if not printOutput:
     #need to pad variable length messages with zeros...
     for chan in data:
-        lengths = map(len, data[chan])
+        lengths = list(map(len, data[chan]))
         maxLen = max(lengths)
         minLen = min(lengths)
         if maxLen != minLen:
@@ -327,16 +322,13 @@ if not printOutput:
                 pad = numpy.zeros(maxLen - lengths[count])
                 i.extend(pad)
                 count = count + 1
-            
-            
+
+
     sys.stderr.write("loaded all %d messages, saving to % s\n" % (msgCount, outFname))
 
-    if sys.version_info < (2, 6):
-        scipy.io.mio.savemat(outFname, data)
-    else:
-        scipy.io.matlab.mio.savemat(outFname, data, oned_as='row')
+    scipy.io.matlab.mio.savemat(outFname, data, oned_as='row')
 
-    
+
     mfile = open(dirname + "/" + outBaseName + ".m", "wb")
     loadFunc = """function [d imFnames]=%s()
 full_fname = '%s';
@@ -349,7 +341,7 @@ end
 d = load(filename);
 """ % (outBaseName, outFname, fullPathName)
 
-    
-    
+
+
     mfile.write(loadFunc);
     mfile.close()

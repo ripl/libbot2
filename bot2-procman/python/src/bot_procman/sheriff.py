@@ -1111,7 +1111,7 @@ class Sheriff(object):
         of deputies that don't have any commands.
         """
         for deputy_name, deputy in list(self._deputies.items()):
-            cmds = deputy._commands.values()
+            cmds = list(deputy._commands.values())
             if not deputy._commands or \
                     all([ cmd.scheduled_for_removal for cmd in cmds ]):
                 del self._deputies[deputy_name]
@@ -1148,7 +1148,7 @@ class Sheriff(object):
         """
         cmds = []
         for dep in self._deputies.values():
-            cmds.extend(dep._commands.values())
+            cmds.extend(list(dep._commands.values()))
         return cmds
 
     def get_commands_by_deputy_and_id(self, deputy_name, cmd_id):

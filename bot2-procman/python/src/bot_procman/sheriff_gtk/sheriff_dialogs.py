@@ -90,10 +90,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
         stop_signal_label = Gtk.Label(label="Stop signal")
         stop_signal_label.set_tooltip_text(stop_signal_tt)
         table.attach(stop_signal_label, 0, 1, 5, 6, 0, 0)
-        try:
-            self.stop_signal_c = Gtk.ComboBoxText()
-        except AttributeError:
-            self.stop_signal_c = Gtk.ComboBoxText()
+        self.stop_signal_c = Gtk.ComboBoxText()
         self.stop_signal_entries = [ \
                 (signal.SIGINT, "SIGINT"),
                 (signal.SIGTERM, "SIGTERM"),

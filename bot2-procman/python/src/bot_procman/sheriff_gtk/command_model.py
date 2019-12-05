@@ -15,7 +15,7 @@ COL_CMDS_TV_STATUS_ACTUAL, \
 COL_CMDS_TV_CPU_USAGE, \
 COL_CMDS_TV_MEM_VSIZE, \
 COL_CMDS_TV_AUTO_RESPAWN, \
-NUM_CMDS_ROWS = range(10)
+NUM_CMDS_ROWS = list(range(10))
 
 class SheriffCommandModel(Gtk.TreeStore):
     def __init__(self, _sheriff):
@@ -219,7 +219,7 @@ class SheriffCommandModel(Gtk.TreeStore):
         # reparent rows that are in the wrong group
         for trr, newparent_rr in cmd_rows_to_reparent:
             orig_iter = self.get_iter(trr.get_path ())
-            rowdata = self.get (orig_iter, *range(NUM_CMDS_ROWS))
+            rowdata = self.get(orig_iter, *list(range(NUM_CMDS_ROWS)))
             self.remove (orig_iter)
 
             newparent_iter = None

@@ -16,7 +16,7 @@ class SheriffHostModel(Gtk.ListStore):
     COL_NAME, \
     COL_LAST_UPDATE, \
     COL_LOAD, \
-    NUM_ROWS = range(5)
+    NUM_ROWS = list(range(5))
 
     def __init__(self, _sheriff):
         super(SheriffHostModel, self).__init__(GObject.TYPE_PYOBJECT,

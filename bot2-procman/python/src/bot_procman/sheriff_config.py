@@ -162,8 +162,7 @@ class CommandNode(object):
             lines.append (s + "cmd \"%s\" {" % escape_str(nickname))
         else:
             lines.append (s + "cmd {")
-        pairs = list(self.attributes.items())
-        pairs.sort()
+        pairs = sorted(list(self.attributes.items()))
         for key, val in pairs:
             if not val:
                 continue
@@ -321,7 +320,7 @@ class ConfigNode(object):
 
     def __str__ (self):
         val = self.root_group.to_config_string()
-        scripts = sorted(self.scripts.values(), key=lambda s: s.name.lower())
+        scripts = sorted(list(self.scripts.values()), key=lambda s: s.name.lower())
         val += "\n" + "\n".join([str(script) for script in scripts])
         return val
 

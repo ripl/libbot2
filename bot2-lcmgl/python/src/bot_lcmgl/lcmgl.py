@@ -1,4 +1,4 @@
-import cStringIO as StringIO
+import io as StringIO
 import bot_lcmgl.data_t as data_t
 import struct
 
@@ -101,14 +101,14 @@ GL_EMISSION = 0x1600
 
 for n in range(1, 9):
     args = ", ".join(["a%d" % i for i in range(n)])
-    exec """
+    exec("""
 def _lcmgl_make_encode_%d(cmd, fmt):
     st = struct.Struct(">B%%s" %% fmt)
     def encode(self, %s):
         self.data.write(st.pack(cmd, %s))
         self.datalen += st.size
     return encode
-""" % (n, args, args)
+""" % (n, args, args))
 
 def _lcmgl_make_encode_0(cmd):
     data = struct.pack("B", cmd)
@@ -116,7 +116,7 @@ def _lcmgl_make_encode_0(cmd):
         self.data.write(data)
         self.datalen += 1
     return encode
-    
+
 class lcmgl:
     def __init__(self, name, lcm):
         self.lcm = lcm
@@ -214,7 +214,7 @@ class lcmgl:
 
         return tex_id
 
-    def textureDrawQuad(self, tex_id, 
+    def textureDrawQuad(self, tex_id,
             top_left_xyz, bot_left_xyz,
             bot_right_xyz, top_right_xyz):
 
@@ -222,9 +222,9 @@ class lcmgl:
             raise ValueError("Invalid texture ID")
         self.data.write(struct.pack(">BIdddddddddddd", LCMGL_TEXTURE_DRAW_QUAD,
             tex_id,
-            top_left_xyz[0], top_left_xyz[1], top_left_xyz[2], 
-            bot_left_xyz[0], bot_left_xyz[1], bot_left_xyz[2], 
-            bot_right_xyz[0], bot_right_xyz[1], bot_right_xyz[2], 
+            top_left_xyz[0], top_left_xyz[1], top_left_xyz[2],
+            bot_left_xyz[0], bot_left_xyz[1], bot_left_xyz[2],
+            bot_right_xyz[0], bot_right_xyz[1], bot_right_xyz[2],
             top_right_xyz[0], top_right_xyz[1], top_right_xyz[2]))
 
 
@@ -245,7 +245,7 @@ if __name__ == "__main__":
     print(len(img_data))
     tex_id = g.texture2d(img_data, width, height, LCMGL_LUMINANCE, LCMGL_COMPRESS_NONE)
     g.glColor3f(0, 0, 1)
-    g.textureDrawQuad(tex_id, 
+    g.textureDrawQuad(tex_id,
             (-10, 10, 0),
             (-10, -10, 0),
             (10, -10, 0),
