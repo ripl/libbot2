@@ -8,5 +8,5 @@ struct rigid_transform_t
 
     double quat[4];      		// rotation quaternion component (w,x,y,z)
 
-                               
+
 }

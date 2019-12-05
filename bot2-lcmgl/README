@@ -6,9 +6,9 @@ templates.  The policies and templates can be found at:
 ====
 
 Name:         bot2-lcmgl
-Maintainers:  
+Maintainers:
 Summary:      Transmit OpenGL commands over LCM, and render them elsewhere.
-Description:  
+Description:
   bot2-lcmgl contains a set of client libraries in C, Java, and Python
   for transmitting OpenGL commands over LCM.  It also provides routines
   for receiving and rendering these commands in either a standalone
@@ -23,7 +23,7 @@ Requirements: FILL-ME-IN
 
   LCM
   GTK+ (>= 2.0)
-  OpenGL 
+  OpenGL
   GLUT / FreeGLUT
   Java
   Python

@@ -30,7 +30,7 @@ index 253ab64..52ec648 100644
  set(CPACK_DEBIAN_PACKAGE_SECTION "devel")
 -set(CPACK_DEBIAN_PACKAGE_DEPENDS "libglib2.0-0, libpcre3")
 +set(CPACK_DEBIAN_PACKAGE_DEPENDS "default-jre | java8-runtime, libc6, libgcc1, libglib2.0-0, libpcre3, libstdc++6, python")
- 
+
  message(STATUS "CPack: Packages will be placed under ${CPACK_PACKAGE_DIRECTORY}")
 EOF
 git apply lcm-cmake.patch

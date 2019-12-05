@@ -5,8 +5,8 @@ It was modified by Abraham Bachrach to add a wrapper class. This code is in ldpc
 
 It is licensed with the LGPL:
 =====
-This codec is: 
-  Copyright (c) 2002-2006 INRIA - All rights reserved. 
+This codec is:
+  Copyright (c) 2002-2006 INRIA - All rights reserved.
   Copyright (c) 1995-2003 by Radford M. Neal
 
 It includes large portions of code written by Radford Neal and available here.

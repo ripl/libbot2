@@ -14,7 +14,7 @@ struct planar_lidar_t
 
 	// the angle (in radians) to the first point in nranges,
 	// relative to the laser scanner's own coordinate frame.
-	float    rad0; 
+	float    rad0;
 
 	// the number of radians between each successive sample
 	float    radstep;

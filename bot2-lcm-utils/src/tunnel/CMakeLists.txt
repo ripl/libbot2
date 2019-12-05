@@ -1,4 +1,4 @@
-set(ldpc_sources 
+set(ldpc_sources
     ldpc/getopt.cpp
     ldpc/ldpc_create_pchk.cpp
     ldpc/ldpc_fec.cpp
@@ -19,7 +19,7 @@ add_executable(bot-lcm-tunnel
     ssocket.c
     lcm_tunnel.cpp
     lcm_tunnel_server.cpp
-    signal_pipe.c 
+    signal_pipe.c
     lcm_util.c
     ${ldpc_sources}
     )

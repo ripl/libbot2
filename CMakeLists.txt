@@ -110,7 +110,6 @@ set(default_cmake_args
   )
 
 
-
 ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core

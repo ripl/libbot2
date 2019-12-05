@@ -6,13 +6,13 @@ templates.  The policies and templates can be found at:
 ====
 
 Name:         bot2-frames
-Maintainers:  
+Maintainers:
 Summary:      A library that manages a set of coordinate frames.
-Description:  
+Description:
   bot2-frames reads the coordinate frame setup information from a parameter file stored by bot2-param
 
 =================
-Requirements: 
+Requirements:
     GLib (>= 2.0)
     LCM  (http://lcm.googlecode.com)
     bot2-core

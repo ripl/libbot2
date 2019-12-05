@@ -8,7 +8,7 @@ struct pose_t
     double vel[3];              // velocity in m/s, expressed in local frame,
                                 // _NOT_ body frame
 
-    double orientation[4];      // rotate vector in body coordinate frame 
+    double orientation[4];      // rotate vector in body coordinate frame
                                 // (X-forward, Z-up) by this to get that vector
                                 // in local frame
 

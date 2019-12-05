@@ -7,5 +7,5 @@ struct data_t
     int32_t    sequence;       // message number in this buffer
 
     int32_t    datalen;        // raw data goes here
-    byte       data[datalen]; 
+    byte       data[datalen];
 }

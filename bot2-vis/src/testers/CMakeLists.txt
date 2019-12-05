@@ -1,4 +1,4 @@
-set(testers 
+set(testers
     gl_drawing_area_tester
     gl_image_area_tester
     param_widget_tester)

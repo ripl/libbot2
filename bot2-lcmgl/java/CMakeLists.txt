@@ -32,13 +32,13 @@ if(NOT IS_DIRECTORY ${class_dir})
 endif()
 
 # add a rule to build the .class files from from the .java files
-add_custom_command(OUTPUT ${class_files} COMMAND 
-    ${JAVA_COMPILE} -cp ${classpath} -d ${class_dir} ${java_files} 
+add_custom_command(OUTPUT ${class_files} COMMAND
+    ${JAVA_COMPILE} -cp ${classpath} -d ${class_dir} ${java_files}
     DEPENDS ${java_files} VERBATIM)
 
 # add a rule to build a .jar file from the .class files
 add_custom_command(OUTPUT ${jar_fname} COMMAND
-    ${JAVA_ARCHIVE} cf ${jar_fname} -C ${class_dir} . 
+    ${JAVA_ARCHIVE} cf ${jar_fname} -C ${class_dir} .
     DEPENDS ${class_files} VERBATIM)
 add_custom_target(jar ALL DEPENDS ${jar_fname})
 

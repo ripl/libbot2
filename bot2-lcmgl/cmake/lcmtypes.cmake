@@ -287,7 +287,6 @@ function(lcmtypes_build_cpp)
     unset(__agg_hpp_fname)
 
 
-
     lcmtypes_add_clean_dir("${PROJECT_SOURCE_DIR}/lcmtypes/cpp")
 endfunction()
 
