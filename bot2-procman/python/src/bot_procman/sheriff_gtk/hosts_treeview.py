@@ -1,5 +1,8 @@
 import time
 
+import gi
+gi.require_version("Gtk", "3.0")
+
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -73,7 +76,7 @@ class SheriffHostTreeView(Gtk.TreeView):
         self.append_column (col)
 
         last_update_tr = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn ("Last update", last_update_tr, text=SheriffHostModel.COL_LAST_UPDATE)
+        col = Gtk.TreeViewColumn("Last update", last_update_tr, text=SheriffHostModel.COL_LAST_UPDATE)
 #        col.set_sort_column_id (2) # XXX this triggers really weird bugs...
         col.set_resizable (True)
         col.set_cell_data_func(last_update_tr, self._deputy_last_update_cell_data_func)
@@ -89,7 +92,7 @@ class SheriffHostTreeView(Gtk.TreeView):
         # hosts treeview context menu
         self.hosts_ctxt_menu = Gtk.Menu ()
 
-        self.cleanup_hosts_ctxt_mi = Gtk.MenuItem ("_Cleanup")
+        self.cleanup_hosts_ctxt_mi = Gtk.MenuItem(label="_Cleanup")
         self.hosts_ctxt_menu.append (self.cleanup_hosts_ctxt_mi)
         self.cleanup_hosts_ctxt_mi.connect ("activate",
                 self._cleanup_hosts)

@@ -10,10 +10,10 @@ import signal
 import pickle
 
 import gi
-gi.require_version('Gtk', '3.0')
+gi.require_version("Gtk", "3.0")
+
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import GObject
 from gi.repository import Pango
 
 from lcm import LCM
@@ -89,13 +89,14 @@ class SheriffGtk(object):
         self.sheriff.script_removed.connect(self._on_script_removed)
 
         # update very soon
-        GObject.timeout_add(100, lambda *s: self.hosts_ts.update() and False)
-        GObject.timeout_add(100, lambda *s: self._schedule_cmds_update() and False)
+        GLib.timeout_add(100, lambda *s: self.hosts_ts.update() and False)
+        GLib.timeout_add(100,
+                         lambda *s: self._schedule_cmds_update() and False)
 
         # and then periodically
-        GObject.timeout_add (1000, self._maybe_send_orders)
-        GObject.timeout_add (1000,
-                lambda *s: self._schedule_cmds_update () or True)
+        GLib.timeout_add(1000, self._maybe_send_orders)
+        GLib.timeout_add(1000,
+                         lambda *s: self._schedule_cmds_update() or True)
 
         self.lc.subscribe ("PMD_ORDERS", self.on_procman_orders)
 
@@ -161,7 +162,7 @@ class SheriffGtk(object):
         view_menu = self.builder.get_object("view_menu")
         for col in self.cmds_tv.get_columns():
             name = col.get_title ()
-            col_cmi = Gtk.CheckMenuItem(name)
+            col_cmi = Gtk.CheckMenuItem(label=name)
             col_cmi.set_active(col.get_visible())
             def on_activate(cmi, col_):
                 should_be_visible = cmi.get_active()
@@ -186,7 +187,7 @@ class SheriffGtk(object):
         hpane.pack2 (sw, resize = False)
         sw.add (self.hosts_tv)
 
-        GObject.timeout_add (1000, lambda *s: self.hosts_ts.update() or True)
+        GLib.timeout_add(1000, lambda *s: self.hosts_ts.update() or True)
 
         # stdout textview
         self.cmd_console = cc.SheriffCommandConsole(self.sheriff, self.lc)
@@ -269,7 +270,7 @@ class SheriffGtk(object):
 
     def _schedule_cmds_update(self, *unused):
         if not self.cmds_update_scheduled:
-            GObject.timeout_add(100, self._do_repopulate)
+            GLib.timeout_add(100, self._do_repopulate)
         return True
 
     def _terminate_spawned_deputy(self):
@@ -300,8 +301,11 @@ class SheriffGtk(object):
         self.terminate_spawned_deputy_mi.set_sensitive(False)
         self.spawned_deputy = None
 
-        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR,
-                Gtk.ButtonsType.OK, "Spawned deputy exited prematurely: %s" % msg)
+        dialog = Gtk.MessageDialog(
+            parent=self.window,
+            message_type=Gtk.MessageType.ERROR,
+            buttons=Gtk.ButtonsType.OK,
+            text="Spawned deputy exited prematurely: %s" % msg)
         dialog.run()
         dialog.destroy()
 
@@ -320,10 +324,13 @@ class SheriffGtk(object):
         self.script_done_action = script_done_action
         errors = self.sheriff.execute_script(script)
         if errors:
-            msgdlg = Gtk.MessageDialog (self.window,
-                    Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                    Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                    "Script failed to run.  Errors detected:\n" + \
+            msgdlg = Gtk.MessageDialog(
+                parent=self.window,
+                modal=True,
+                destroy_with_parent=True,
+                message_type=Gtk.MessageType.ERROR,
+                buttons=Gtk.ButtonsType.CLOSE,
+                text="Script failed to run.  Errors detected:\n" + \
                     "\n".join(errors))
             msgdlg.run ()
             msgdlg.destroy ()
@@ -349,8 +356,11 @@ class SheriffGtk(object):
         self.statusbar_context_script_msg = self.statusbar.push(cid, \
                 "Script %s: finished" % script.name)
         def _remove_msg_func(msg_id):
-            return lambda *s: msg_id == self.statusbar_context_script_msg and self.statusbar.pop(cid)
-        GObject.timeout_add(6000, _remove_msg_func(self.statusbar_context_script_msg))
+            return (lambda *s: msg_id == self.statusbar_context_script_msg
+                    and self.statusbar.pop(cid))
+
+        GLib.timeout_add(
+            6000, _remove_msg_func(self.statusbar_context_script_msg))
         if self.script_done_action == "exit":
             Gtk.main_quit()
         elif self.script_done_action == "observe":
@@ -379,7 +389,7 @@ class SheriffGtk(object):
                 if other_script.name < script.name:
                     insert_point += 1
             if create:
-                mi = Gtk.MenuItem(partname, use_underline=False)
+                mi = Gtk.MenuItem(label=partname, use_underline=False)
                 mi.sheriff_script = script
                 menu.insert(mi, insert_point)
                 mi.show()
@@ -397,7 +407,7 @@ class SheriffGtk(object):
                     insert_point = i
 
             if create:
-                smi = Gtk.MenuItem(partname)
+                smi = Gtk.MenuItem(label=partname)
                 submenu = Gtk.Menu()
                 smi.set_submenu(submenu)
                 smi.sheriff_script_submenu = True
@@ -463,9 +473,12 @@ class SheriffGtk(object):
     # GTK signal handlers
     def on_load_cfg_mi_activate(self, *args):
         if not self.load_dlg:
-            self.load_dlg = Gtk.FileChooserDialog ("Load Config", self.window,
-                    buttons = (Gtk.STOCK_OPEN, Gtk.ResponseType.ACCEPT,
-                        Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
+            self.load_dlg = Gtk.FileChooserDialog(title="Load Config",
+                                                  parent=self.window)
+            self.load_dlg.add_buttons(Gtk.STOCK_OPEN,
+                                      Gtk.ResponseType.ACCEPT,
+                                      Gtk.STOCK_CANCEL,
+                                      Gtk.ResponseType.REJECT)
         if self.load_save_dir:
             self.load_dlg.set_current_folder(self.load_save_dir)
         if Gtk.ResponseType.ACCEPT == self.load_dlg.run ():
@@ -474,10 +487,11 @@ class SheriffGtk(object):
             try:
                 cfg = sheriff_config.config_from_filename (self.config_filename)
             except Exception:
-                msgdlg = Gtk.MessageDialog (self.window,
-                        Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                        Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                        traceback.format_exc ())
+                msgdlg = Gtk.MessageDialog(parent=self.window, modal=True,
+                                           destroy_with_parent=True,
+                                           message_type=Gtk.MessageType.ERROR,
+                                           buttons=Gtk.ButtonsType.CLOSE,
+                                           text=traceback.format_exc())
                 msgdlg.run ()
                 msgdlg.destroy ()
             else:
@@ -488,10 +502,14 @@ class SheriffGtk(object):
 
     def on_save_cfg_mi_activate(self, *args):
         if not self.save_dlg:
-            self.save_dlg = Gtk.FileChooserDialog ("Save Config", self.window,
-                    action = Gtk.FileChooserAction.SAVE,
-                    buttons = (Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT,
-                        Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
+            self.save_dlg = Gtk.FileChooserDialog(
+                title="Save Config",
+                parent=self.window,
+                action=Gtk.FileChooserAction.SAVE)
+            self.save_dlg.add_buttons(Gtk.STOCK_SAVE,
+                                      Gtk.ResponseType.ACCEPT,
+                                      Gtk.STOCK_CANCEL,
+                                      Gtk.ResponseType.REJECT)
         if self.load_save_dir:
             self.save_dlg.set_current_folder(self.load_save_dir)
         if self.config_filename is not None:
@@ -502,9 +520,11 @@ class SheriffGtk(object):
             try:
                 self.sheriff.save_config (open (self.config_filename, "w"))
             except IOError as e:
-                msgdlg = Gtk.MessageDialog (self.window,
-                        Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                        Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, str (e))
+                msgdlg = Gtk.MessageDialog(parent=self.window, modal=True,
+                                           destroy_with_parent=True,
+                                           message_type=Gtk.MessageType.ERROR,
+                                           buttons=Gtk.ButtonsType.CLOSE,
+                                           text=str(e))
                 msgdlg.run ()
                 msgdlg.destroy ()
         self.save_dlg.hide ()
@@ -575,8 +595,8 @@ class SheriffGtk(object):
 
             self.statusbar.push (self.statusbar.get_context_id ("main"),
                     "WARNING: multiple sheriffs detected!  Switching to observer mode");
-            GObject.timeout_add (6000,
-                    lambda *s: self.statusbar.pop (self.statusbar.get_context_id ("main")))
+            GLib.timeout_add(6000, lambda *s: self.statusbar.pop(
+                    self.statusbar.get_context_id("main")))
 
 class SheriffHeadless(object):
     def __init__(self, lc, config, spawn_deputy, script_name, script_done_action):
@@ -675,12 +695,12 @@ class SheriffHeadless(object):
             self.sheriff.script_finished.connect(self._on_script_finished)
 
             # delay script execution by 200 ms.
-            GObject.timeout_add(200, self._start_script)
+            GLib.timeout_add(200, self._start_script)
 
         signal.signal(signal.SIGINT, lambda *s: mainloop.quit())
         signal.signal(signal.SIGTERM, lambda *s: mainloop.quit())
         signal.signal(signal.SIGHUP, lambda *s: mainloop.quit())
-        GObject.timeout_add(1000, self._maybe_send_orders)
+        GLib.timeout_add(1000, self._maybe_send_orders)
 
         try:
             self.mainloop.run()
@@ -782,7 +802,8 @@ def main():
         except Exception:
             traceback.print_exc()
         return True
-    GObject.io_add_watch(lc, GObject.IO_IN, handle)
+
+    GLib.io_add_watch(lc, GLib.IO_IN, handle)
 
     if use_gui:
         gui = SheriffGtk(lc)
@@ -806,7 +827,9 @@ def main():
                 print("\n    ".join(errors))
                 gui._terminate_spawned_deputy()
                 sys.exit(1)
-            GObject.timeout_add(200, lambda *s: gui.run_script(None, script, script_done_action))
+            GLib.timeout_add(
+                200,
+                lambda *s: gui.run_script(None, script, script_done_action))
 
         signal.signal(signal.SIGINT, lambda *s: Gtk.main_quit())
         signal.signal(signal.SIGTERM, lambda *s: Gtk.main_quit())

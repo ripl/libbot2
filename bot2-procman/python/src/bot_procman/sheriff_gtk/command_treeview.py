@@ -1,3 +1,6 @@
+import gi
+gi.require_version("Gtk", "3.0")
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -58,33 +61,33 @@ class SheriffCommandTreeView(Gtk.TreeView):
         # commands treeview context menu
         self.cmd_ctxt_menu = Gtk.Menu ()
 
-        self.start_cmd_ctxt_mi = Gtk.MenuItem ("_Start")
+        self.start_cmd_ctxt_mi = Gtk.MenuItem(label="_Start")
         self.cmd_ctxt_menu.append (self.start_cmd_ctxt_mi)
         self.start_cmd_ctxt_mi.connect ("activate",
                 self._start_selected_commands)
 
-        self.stop_cmd_ctxt_mi = Gtk.MenuItem ("_Stop")
+        self.stop_cmd_ctxt_mi = Gtk.MenuItem(label="_Stop")
         self.cmd_ctxt_menu.append (self.stop_cmd_ctxt_mi)
         self.stop_cmd_ctxt_mi.connect ("activate", self._stop_selected_commands)
 
-        self.restart_cmd_ctxt_mi = Gtk.MenuItem ("R_estart")
+        self.restart_cmd_ctxt_mi = Gtk.MenuItem(label="R_estart")
         self.cmd_ctxt_menu.append (self.restart_cmd_ctxt_mi)
         self.restart_cmd_ctxt_mi.connect ("activate",
                 self._restart_selected_commands)
 
-        self.remove_cmd_ctxt_mi = Gtk.MenuItem ("_Remove")
+        self.remove_cmd_ctxt_mi = Gtk.MenuItem(label="_Remove")
         self.cmd_ctxt_menu.append (self.remove_cmd_ctxt_mi)
         self.remove_cmd_ctxt_mi.connect ("activate",
                 self._remove_selected_commands)
 
         self.cmd_ctxt_menu.append (Gtk.SeparatorMenuItem ())
 
-        self.edit_cmd_ctxt_mi = Gtk.MenuItem ("_Edit")
+        self.edit_cmd_ctxt_mi = Gtk.MenuItem(label="_Edit")
         self.cmd_ctxt_menu.append (self.edit_cmd_ctxt_mi)
         self.edit_cmd_ctxt_mi.connect ("activate",
                 self._edit_selected_command)
 
-        self.new_cmd_ctxt_mi = Gtk.MenuItem ("_New Command")
+        self.new_cmd_ctxt_mi = Gtk.MenuItem(label="_New Command")
         self.cmd_ctxt_menu.append (self.new_cmd_ctxt_mi)
         self.new_cmd_ctxt_mi.connect ("activate",
                 lambda *s: sd.do_add_command_dialog(self.sheriff, self.cmds_ts, self.get_toplevel()))
@@ -369,9 +372,10 @@ class SheriffCommandTreeView(Gtk.TreeView):
                 if not errmsg:
                     continue
 
-                errdlg = Gtk.MessageDialog(dlg,
-                        Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                        Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE)
+                errdlg = Gtk.MessageDialog(parent=dlg, modal=True,
+                                           destroy_with_parent=True,
+                                           message_type=Gtk.MessageType.ERROR,
+                                           buttons=Gtk.ButtonsType.CLOSE)
                 errdlg.set_markup("Error!\n<span font_family=\"monospace\">%s</span>" % errmsg)
                 errdlg.run()
                 errdlg.destroy()
