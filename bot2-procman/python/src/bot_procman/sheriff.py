@@ -9,7 +9,10 @@ import time
 import random
 import signal
 
-from gi.repository import GObject
+import gi
+gi.require_version("Gtk", "3.0")
+
+from gi.repository import GLib
 
 import lcm
 from bot_procman.info_t import info_t
@@ -519,16 +522,17 @@ class Sheriff(object):
     example usage:
     \code
     import bot_procman
-    from gi.repository import GObject
+    from gi.repository import GLib
 
     lc = lcm.LCM()
     sheriff = bot_procman.Sheriff(lc)
 
     # add commands or load a config file
 
-    mainloop = GObject.MainLoop()
-    GObject.io_add_watch(lc, GObject.IO_IN, lambda *s: lc.handle() or True)
-    GObject.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
+    mainloop = GLib.MainLoop()
+    GLib.io_add_watch(
+        lc, GLib.IO_IN, lambda *s: lc.handle() or True)
+    GLib.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
     mainloop.run()
     \endcode
 
@@ -1107,7 +1111,7 @@ class Sheriff(object):
         of deputies that don't have any commands.
         """
         for deputy_name, deputy in list(self._deputies.items()):
-            cmds = deputy._commands.values()
+            cmds = list(deputy._commands.values())
             if not deputy._commands or \
                     all([ cmd.scheduled_for_removal for cmd in cmds ]):
                 del self._deputies[deputy_name]
@@ -1144,7 +1148,7 @@ class Sheriff(object):
         """
         cmds = []
         for dep in self._deputies.values():
-            cmds.extend(dep._commands.values())
+            cmds.extend(list(dep._commands.values()))
         return cmds
 
     def get_commands_by_deputy_and_id(self, deputy_name, cmd_id):
@@ -1350,7 +1354,7 @@ class Sheriff(object):
         # all commands passed the status check.  schedule the next action
         self._waiting_on_commands = []
         self._waiting_for_status = None
-        GObject.timeout_add(0, self._execute_next_script_action)
+        GLib.timeout_add(0, self._execute_next_script_action)
 
     def _execute_next_script_action(self):
         # make sure there's an active script
@@ -1371,8 +1375,8 @@ class Sheriff(object):
         # fixed time wait -- just set a GObject timer to call this function
         # again
         if action.action_type == "wait_ms":
-            GObject.timeout_add(action.delay_ms,
-                    self._execute_next_script_action)
+            GLib.timeout_add(action.delay_ms,
+                             self._execute_next_script_action)
             return False
 
         # find the commands that we're operating on
@@ -1399,7 +1403,7 @@ class Sheriff(object):
             self._check_wait_action_status()
         else:
             # no.  Just move on
-            GObject.timeout_add(0, self._execute_next_script_action)
+            GLib.timeout_add(0, self._execute_next_script_action)
 
         return False
 
@@ -1566,9 +1570,10 @@ def main():
     sheriff.deputy_info_received.connect(\
             lambda s, dep: sys.stdout.write("deputy info received from %s\n" %
                 dep.name))
-    mainloop = GObject.MainLoop()
-    GObject.io_add_watch(comms, GObject.IO_IN, lambda *s: comms.handle() or True)
-    GObject.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
+    mainloop = GLib.MainLoop()
+    GLib.io_add_watch(comms, GLib.IO_IN,
+                      lambda *s: comms.handle() or True)
+    GLib.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
     mainloop.run()
 
 if __name__ == "__main__":

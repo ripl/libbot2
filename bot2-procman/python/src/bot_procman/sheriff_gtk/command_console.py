@@ -1,7 +1,10 @@
 import time
 
+import gi
+gi.require_version("Gtk", "3.0")
+
 from gi.repository import Gdk
-from gi.repository import GObject
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -72,7 +75,7 @@ class SheriffCommandConsole(Gtk.ScrolledWindow):
         self.set_text_color(self.text_color)
 
         # stdout rate limit maintenance events
-        GObject.timeout_add (500, self._stdout_rate_limit_upkeep)
+        GLib.timeout_add(500, self._stdout_rate_limit_upkeep)
 
         self.sheriff.command_added.connect(self._on_sheriff_command_added)
         self.sheriff.command_removed.connect(self._on_sheriff_command_removed)
@@ -196,7 +199,7 @@ class SheriffCommandConsole(Gtk.ScrolledWindow):
         sep = Gtk.SeparatorMenuItem()
         menu.append (sep)
         sep.show()
-        mi = Gtk.MenuItem ("_Clear")
+        mi = Gtk.MenuItem(label="_Clear")
         menu.append(mi)
         mi.connect ("activate", self._tb_clear)
         mi.show()

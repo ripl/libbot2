@@ -8,7 +8,7 @@ def find_lcmtypes():
     valid_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_")
     lcmtypes = []
     regex = re.compile("_get_packed_fingerprint")
-    
+
     dirs_to_check = sys.path
 
     for dir_name in dirs_to_check:
@@ -21,7 +21,7 @@ def find_lcmtypes():
             for fname in files:
                 if not fname.endswith(".py"):
                     continue
-                
+
                 mod_basename = fname[:-3]
                 valid_modname = True
                 for c in mod_basename:
@@ -33,18 +33,18 @@ def find_lcmtypes():
                 if not valid_modname:
                     continue
 
-                # quick regex test -- check if the file contains the 
+                # quick regex test -- check if the file contains the
                 # word "_get_packed_fingerprint"
                 full_fname = os.path.join(root, fname)
-		try: 
-                contents = open(full_fname, "rb").read()
-		except IOError:
+                try:
+                    contents = open(full_fname, "rb").read()
+                except IOError:
                     continue
                 if not regex.search(contents):
                     continue
-                
+
                 # More thorough check to see if the file corresponds to a
-                # LCM type module genereated by lcm-gen.  Parse the 
+                # LCM type module genereated by lcm-gen.  Parse the
                 # file using pyclbr, and check if it contains a class
                 # with the right name and methods
                 if python_package:
@@ -62,7 +62,7 @@ def find_lcmtypes():
                 except KeyError:
                     continue
 
-            # only recurse into subdirectories that correspond to python 
+            # only recurse into subdirectories that correspond to python
             # packages (i.e., they contain a file named "__init__.py")
             subdirs_to_traverse = [ subdir_name for subdir_name in dirs \
                     if os.path.exists(os.path.join(root, subdir_name, "__init__.py")) ]
@@ -73,12 +73,12 @@ def find_lcmtypes():
 def make_lcmtype_dictionary():
     """Create a dictionary of LCM types keyed by fingerprint.
 
-    Searches the specified python package directories for modules 
+    Searches the specified python package directories for modules
     corresponding to LCM types, imports all the discovered types into the
     global namespace, and returns a dictionary mapping packed fingerprints
     to LCM type classes.
 
-    The primary use for this dictionary is to automatically identify and 
+    The primary use for this dictionary is to automatically identify and
     decode an LCM message.
 
     """
@@ -98,7 +98,7 @@ def make_lcmtype_dictionary():
         except:
             print("Error importing %s" % lcmtype_name)
     return result
- 
+
 if __name__ == "__main__":
     import binascii
     print("Searching for LCM types...")

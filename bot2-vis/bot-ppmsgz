@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import sys
 import os
@@ -49,7 +49,7 @@ FORMAT_OPTIONS:
        bot-ppmsgz input.ppms.gz mpeg4 10M 30 output.mp4
 
          Compress at 10 megabits / second, 30 fps.
-  
+
   msmpeg4v2 <bitrate> <framerate> <output.avi>
     Convert the .ppms.gz file into a .AVI file using the msmpeg4v2 codec.  This
     format is primarily useful because Windows XP has the codec built in.  bitrate
@@ -117,7 +117,7 @@ def main(args):
             outf.write(data)
             outf.close()
             count += 1
-            print fname
+            print(fname)
     elif fmt_name == "mpeg4":
         if len(args) < 3:
             print("Insufficient arguments for mpeg4.  Run bot-ppmsgz -h for usage instructions.")
@@ -126,8 +126,8 @@ def main(args):
         bitrate = args[0]
         framerate = args[1]
         output_fname = args[2]
-        ffmpeg_execute(["-r", framerate, "-y", "-vcodec", "ppm", 
-            "-f", "image2pipe", "-i", "-", "-vcodec", "mpeg4", 
+        ffmpeg_execute(["-r", framerate, "-y", "-vcodec", "ppm",
+            "-f", "image2pipe", "-i", "-", "-vcodec", "mpeg4",
             "-b", bitrate, "-f", "mp4", output_fname], gzfile)
     elif fmt_name == "msmpeg4v2":
         if len(args) < 3:
@@ -137,8 +137,8 @@ def main(args):
         bitrate = args[0]
         framerate = args[1]
         output_fname = args[2]
-        ffmpeg_execute(["-r", framerate, "-y", "-vcodec", "ppm", 
-            "-f", "image2pipe", "-i", "-", "-vcodec", "msmpeg4v2", 
+        ffmpeg_execute(["-r", framerate, "-y", "-vcodec", "ppm",
+            "-f", "image2pipe", "-i", "-", "-vcodec", "msmpeg4v2",
             "-b", bitrate, "-f", "avi", output_fname], gzfile)
     else:
         usage()

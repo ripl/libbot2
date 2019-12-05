@@ -2,6 +2,9 @@ from io import StringIO
 import traceback
 import signal
 
+import gi
+gi.require_version("Gtk", "3.0")
+
 from gi.repository import Gtk
 
 from bot_procman.sheriff_config import Parser, ScriptNode
@@ -15,14 +18,14 @@ class AddModifyCommandDialog (Gtk.Dialog):
             initial_stop_signal=DEFAULT_STOP_SIGNAL,
             initial_stop_time_allowed=DEFAULT_STOP_TIME_ALLOWED):
         # add command dialog
-        Gtk.Dialog.__init__ (self, "Add/Modify Command", parent,
-                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
-                 Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
-        table = Gtk.Table(7, 2)
+        Gtk.Dialog.__init__(self, title="Add/Modify Command", parent=parent,
+                            modal=True, destroy_with_parent=True)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
+                         Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT)
+        table = Gtk.Table(n_rows=7, n_columns=2)
 
         # deputy
-        table.attach (Gtk.Label ("Deputy"), 0, 1, 0, 1, 0, 0)
+        table.attach(Gtk.Label(label="Deputy"), 0, 1, 0, 1, 0, 0)
         self.host_cb = Gtk.ComboBoxText.new_with_entry()
 
         dep_ind = 0
@@ -39,7 +42,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
         self.deputies = deputies
 
         # command name
-        table.attach (Gtk.Label ("Command"), 0, 1, 1, 2, 0, 0)
+        table.attach(Gtk.Label(label="Command"), 0, 1, 1, 2, 0, 0)
         self.name_te = Gtk.Entry ()
         self.name_te.set_text (initial_cmd)
         self.name_te.set_width_chars (60)
@@ -49,7 +52,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
         self.name_te.grab_focus ()
 
         # command id
-        table.attach (Gtk.Label ("Id"), 0, 1, 2, 3, 0, 0)
+        table.attach(Gtk.Label(label="Id"), 0, 1, 2, 3, 0, 0)
         self.cmd_id_te = Gtk.Entry ()
         self.cmd_id_te.set_text (initial_cmd_id)
         self.cmd_id_te.set_width_chars (60)
@@ -58,7 +61,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
                 lambda e: self.response (Gtk.ResponseType.ACCEPT))
 
         # group
-        table.attach (Gtk.Label ("Group"), 0, 1, 3, 4, 0, 0)
+        table.attach(Gtk.Label(label="Group"), 0, 1, 3, 4, 0, 0)
         self.group_cbe = Gtk.ComboBoxText.new_with_entry()
 #        groups = groups[:]
         groups = sorted(groups)
@@ -71,7 +74,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
 
         # auto respawn
         auto_restart_tt = "If the command terminates while running, should the deputy automatically restart it?"
-        auto_restart_label = Gtk.Label ("Auto-restart")
+        auto_restart_label = Gtk.Label(label="Auto-restart")
         auto_restart_label.set_tooltip_text(auto_restart_tt)
         table.attach(auto_restart_label, 0, 1, 4, 5, 0, 0)
         self.auto_respawn_cb = Gtk.CheckButton ()
@@ -84,13 +87,10 @@ class AddModifyCommandDialog (Gtk.Dialog):
 
         # stop signal
         stop_signal_tt = "When stopping a signal, what OS signal to initially send to request a clean exit"
-        stop_signal_label = Gtk.Label("Stop signal")
+        stop_signal_label = Gtk.Label(label="Stop signal")
         stop_signal_label.set_tooltip_text(stop_signal_tt)
         table.attach(stop_signal_label, 0, 1, 5, 6, 0, 0)
-        try:
-            self.stop_signal_c = Gtk.ComboBoxText()
-        except AttributeError:
-            self.stop_signal_c = Gtk.ComboBoxText()
+        self.stop_signal_c = Gtk.ComboBoxText()
         self.stop_signal_entries = [ \
                 (signal.SIGINT, "SIGINT"),
                 (signal.SIGTERM, "SIGTERM"),
@@ -105,7 +105,7 @@ class AddModifyCommandDialog (Gtk.Dialog):
 
         # stop time allowed
         stop_time_allowed_tt = "When stopping a running command, how long to wait between sending the stop signal and a SIGKILL if the command doesn't stop."
-        stop_time_allowed_label = Gtk.Label("Time allowed when stopping")
+        stop_time_allowed_label = Gtk.Label(label="Time allowed when stopping")
         stop_time_allowed_label.set_tooltip_text(stop_time_allowed_tt)
         table.attach(stop_time_allowed_label, 0, 1, 6, 7, 0, 0)
         self.stop_time_allowed_sb = Gtk.SpinButton()
@@ -151,14 +151,15 @@ class AddModifyCommandDialog (Gtk.Dialog):
 class PreferencesDialog(Gtk.Dialog):
     def __init__ (self, sheriff_gtk, parent):
         # add command dialog
-        Gtk.Dialog.__init__ (self, "Preferences", parent,
-                Gtk.ResponseType.REJECT | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
-                 Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
-        table = Gtk.Table(4, 2)
+        Gtk.Dialog.__init__(self, title="Preferences", parent=parent,
+                            modal=True, destroy_with_parent=True)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
+                         Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT)
+        table = Gtk.Table(n_rows=4, n_columns=2)
 
         # console rate limit
-        table.attach(Gtk.Label("Console rate limit (kB/s)"), 0, 1, 0, 1, 0, 0)
+        table.attach(Gtk.Label(label="Console rate limit (kB/s)"),
+                     0, 1, 0, 1, 0, 0)
         self.rate_limit_sb = Gtk.SpinButton()
         self.rate_limit_sb.set_digits(0)
         self.rate_limit_sb.set_increments(1, 1000)
@@ -168,17 +169,17 @@ class PreferencesDialog(Gtk.Dialog):
         table.attach(self.rate_limit_sb, 1, 2, 0, 1)
 
         # background color
-        #table.attach(Gtk.Label("Console background color"), 0, 1, 1, 2, 0, 0)
-        #self.bg_color_bt = Gtk.ColorButton(sheriff_gtk.cmd_console.get_background_color())
+        #table.attach(Gtk.Label(label="Console background color"), 0, 1, 1, 2, 0, 0)
+        #self.bg_color_bt = Gtk.ColorButton(color=sheriff_gtk.cmd_console.get_background_color())
         #table.attach(self.bg_color_bt, 1, 2, 1, 2)
 
         # foreground color
-        #table.attach(Gtk.Label("Console text color"), 0, 1, 2, 3, 0, 0)
-        #self.text_color_bt = Gtk.ColorButton(sheriff_gtk.cmd_console.get_text_color())
+        #table.attach(Gtk.Label(label="Console text color"), 0, 1, 2, 3, 0, 0)
+        #self.text_color_bt = Gtk.ColorButton(color=sheriff_gtk.cmd_console.get_text_color())
         #table.attach(self.text_color_bt, 1, 2, 2, 3)
 
         # font
-        table.attach(Gtk.Label("Console font"), 0, 1, 3, 4, 0, 0)
+        table.attach(Gtk.Label(label="Console font"), 0, 1, 3, 4, 0, 0)
         self.font_bt = Gtk.FontButton(sheriff_gtk.cmd_console.get_font())
         table.attach(self.font_bt, 1, 2, 3, 4)
 
@@ -188,10 +189,13 @@ class PreferencesDialog(Gtk.Dialog):
 def do_add_command_dialog(sheriff, cmds_ts, window):
     deputies = sheriff.get_deputies ()
     if not deputies:
-        msgdlg = Gtk.MessageDialog (window,
-                Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                "Can't add a command without an active deputy")
+        msgdlg = Gtk.MessageDialog(
+            parent=window,
+            modal=True,
+            destroy_with_parent=True,
+            message_type=Gtk.MessageType.ERROR,
+            buttons=Gtk.ButtonsType.CLOSE,
+            text="Can't add a command without an active deputy")
         msgdlg.run ()
         msgdlg.destroy ()
         return
@@ -223,9 +227,11 @@ def do_add_command_dialog(sheriff, cmds_ts, window):
             sheriff.add_command(spec)
             break
         except ValueError as xcp:
-            msgdlg = Gtk.MessageDialog(window,
-                    Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                    Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, str(xcp))
+            msgdlg = Gtk.MessageDialog(parent=window, modal=True,
+                                       destroy_with_parent=True,
+                                       message_type=Gtk.MessageType.ERROR,
+                                       buttons=Gtk.ButtonsType.CLOSE,
+                                       text=str(xcp))
             msgdlg.run()
             msgdlg.destroy()
     dlg.destroy()
@@ -236,10 +242,10 @@ class AddModifyScriptDialog (Gtk.Dialog):
         title = "Edit script"
         if script is None:
             title = "New script"
-        Gtk.Dialog.__init__ (self, title, parent,
-                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
-                 Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT))
+        Gtk.Dialog.__init__(self, title=title, parent=parent, modal=True,
+                            destroy_with_parent=True)
+        self.add_buttons(Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT,
+                         Gtk.STOCK_CANCEL, Gtk.ResponseType.REJECT)
 
         self.set_default_size(800, 400)
 
@@ -294,9 +300,10 @@ class AddModifyScriptDialog (Gtk.Dialog):
         return buf.get_text(buf.get_start_iter(), buf.get_end_iter(), True)
 
 def _do_err_dialog(window, msg):
-    msgdlg = Gtk.MessageDialog (window,
-            Gtk.DialogFlags.MODAL|Gtk.DialogFlags.DESTROY_WITH_PARENT,
-            Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE)
+    msgdlg = Gtk.MessageDialog(parent=window, modal=True,
+                               destroy_with_parent=True,
+                               message_type=Gtk.MessageType.ERROR,
+                               buttons=Gtk.ButtonsType.CLOSE)
     msgdlg.set_markup("<span font_family=\"monospace\">%s</span>" % msg)
     msgdlg.run ()
     msgdlg.destroy ()
