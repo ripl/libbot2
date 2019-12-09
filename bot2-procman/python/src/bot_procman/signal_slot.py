@@ -24,7 +24,7 @@ class Signal(object):
     License: MIT
 
     Sample usage:
-    \code
+    @code
     class Model(object):
         def __init__(self, value):
             self.__value = value
@@ -69,9 +69,8 @@ class Signal(object):
 
     model.changed.connect(bar)
     model.set_value(50)
-    \endcode
+    @endcode
     """
-
     def __init__(self):
         """Initialize a new signal"""
         self._functions = WeakSet()
@@ -89,7 +88,9 @@ class Signal(object):
                 func(obj, *args, **kargs)
 
     def connect(self, slot):
-        """Connects a slot to the signal so that when the signal is emitted, the slot is called."""
+        """Connects a slot to the signal so that when the signal is
+        emitted, the slot is called.
+        """
         if inspect.ismethod(slot):
             if slot.__self__ not in self._methods:
                 self._methods[slot.__self__] = set()
