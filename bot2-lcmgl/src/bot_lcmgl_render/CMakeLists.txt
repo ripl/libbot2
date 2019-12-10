@@ -25,6 +25,9 @@ target_include_directories(bot2-lcmgl-renderer
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+if(APPLE)
+  target_compile_definitions(bot2-lcmgl-renderer PRIVATE GL_SILENCE_DEPRECATION=1)
+endif()
 
 # set the library API version.  Increment this every time the public API
 # changes.

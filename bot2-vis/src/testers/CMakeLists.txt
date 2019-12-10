@@ -6,5 +6,8 @@ set(testers
 foreach(tester ${testers})
     add_executable(${tester} "${tester}.c")
     target_link_libraries(${tester} bot2-vis GLib2::glib ${GTK3_LIBRARIES} OpenGL::GL OpenGL::GLU)
+    if(APPLE)
+        target_compile_definitions(${tester} PRIVATE GL_SILENCE_DEPRECATION=1)
+    endif()
     set_property(TARGET ${tester} PROPERTY C_STANDARD 99)
 endforeach()
