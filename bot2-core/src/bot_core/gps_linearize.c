@@ -46,7 +46,7 @@ int bot_gps_linearize_to_xy(BotGPSLinearize *gl, const double ll_deg[2], double 
 
     xy[0] = sin(dlon) * gl->radius_ew * cos(TO_RAD(gl->lat0_deg));
     xy[1] = sin(dlat) * gl->radius_ns;
-    
+
     return 0;
 }
 

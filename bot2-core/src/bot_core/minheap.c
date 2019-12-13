@@ -6,26 +6,26 @@
 
 #include "minheap.h"
 
-struct _BotMinheapNode 
+struct _BotMinheapNode
 {
     int index;
     void *ptr;
     double score;
 };
 
-struct _BotMinheap 
+struct _BotMinheap
 {
     GPtrArray *nodes;
 };
 
 #define _get_node(mh, ind) ((BotMinheapNode*) g_ptr_array_index(mh->nodes,ind))
 
-static inline void 
+static inline void
 _swap_nodes (BotMinheap *mh, int a, int b)
 {
     BotMinheapNode *nodea = _get_node (mh, a);
     BotMinheapNode *nodeb = _get_node (mh, b);
-    
+
     g_ptr_array_index (mh->nodes, a) = nodeb;
     g_ptr_array_index (mh->nodes, b) = nodea;
 
@@ -33,7 +33,7 @@ _swap_nodes (BotMinheap *mh, int a, int b)
     nodea->index = b;
 }
 
-static void 
+static void
 fixup (BotMinheap *mh, int parent_ind)
 {
     if (parent_ind >= mh->nodes->len) return;
@@ -67,12 +67,12 @@ fixup (BotMinheap *mh, int parent_ind)
     BotMinheapNode *node_right = _get_node (mh, right_ind);
     assert (node_left->index == left_ind);
     assert (node_right->index == right_ind);
-    
+
     // if parent is the minimum, we're done.
     if (node_parent->score < node_left->score &&
         node_parent->score < node_right->score)
         return;
-    
+
     // parent is greater than either the left, right, or both
     // children
     if (node_left->score < node_right->score)  {
@@ -134,7 +134,7 @@ void *
 bot_minheap_remove_min (BotMinheap *mh, double *score)
 {
     if (!mh->nodes->len) return NULL;
-    BotMinheapNode *root = 
+    BotMinheapNode *root =
         (BotMinheapNode*) g_ptr_array_remove_index_fast (mh->nodes, 0);
     void *result = root->ptr;
     if (score) *score = root->score;
@@ -149,7 +149,7 @@ bot_minheap_remove_min (BotMinheap *mh, double *score)
     return result;
 }
 
-void 
+void
 bot_minheap_decrease_score (BotMinheap *mh, BotMinheapNode *node, double score)
 {
     if (score > node->score) {
@@ -165,7 +165,7 @@ bot_minheap_decrease_score (BotMinheap *mh, BotMinheapNode *node, double score)
     } while (node_ind);
 }
 
-gboolean 
+gboolean
 bot_minheap_is_empty (BotMinheap *mh)
 {
     return mh->nodes->len == 0;

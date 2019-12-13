@@ -13,9 +13,9 @@ struct _BotDefaultViewHandler
     BotEventHandler ehandler;
     BotViewHandler  vhandler;
     BotViewer* viewer;
-    
+
     //goal view
-    double goal_eye[3];  
+    double goal_eye[3];
     double goal_lookat[3];
     double goal_up[3];
 
@@ -36,7 +36,7 @@ struct _BotDefaultViewHandler
     double last_mouse_y;
 
     int projection_type;
- 
+
     // these three variables determine the position and orientation of
     // the camera.
     double lookat[3];
@@ -51,10 +51,10 @@ struct _BotDefaultViewHandler
 
     // should be recomputed whenever look/eye/up is modified.  must be
     // kept in-sync with look/eye/up
-    double model_matrix[16]; 
+    double model_matrix[16];
 
     // should be recomputed whenever camera is modified.
-    double projection_matrix[16]; 
+    double projection_matrix[16];
 
     int viewport[4];
 

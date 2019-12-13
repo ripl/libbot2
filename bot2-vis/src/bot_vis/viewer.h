@@ -60,17 +60,17 @@ struct _BotViewHandler
 {
     void (*update_gl_matrices)  (BotViewer *viewer, BotViewHandler *vhandler);
 
-    void (*get_eye_look)        (BotViewHandler *vhandler, double eye[3], 
+    void (*get_eye_look)        (BotViewHandler *vhandler, double eye[3],
                                  double lookat[3], double up[3]);
 
-    void (*update_follow_target)(BotViewHandler *vhandler, const double pos[3], 
+    void (*update_follow_target)(BotViewHandler *vhandler, const double pos[3],
                                  const double quat[4]);
-  
+
   void (*set_look_at_smooth) (BotViewHandler *vhandler, const double eye[3], const double lookat[3], const double up[3], double duration_ms);
-   
-    void (*set_look_at)         (BotViewHandler *vhandler, const double eye[3], 
+
+    void (*set_look_at)         (BotViewHandler *vhandler, const double eye[3],
                                  const double lookat[3], const double up[3]);
-    
+
     void (*set_camera_perspective) (BotViewHandler *vhandler, double fov_degrees);
 
     void (*set_camera_orthographic) (BotViewHandler *vhandler);
@@ -81,7 +81,7 @@ struct _BotViewHandler
   * Results undefined when the camera is in orthographic mode.
   */
     double (*get_perspective_fov)(BotViewHandler *vhandler);
-    
+
     void (*destroy)             (BotViewHandler *vhandler);
 
     int  follow_mode;
@@ -90,7 +90,7 @@ struct _BotViewHandler
 
 /**
  * BotEventHandler:
- * @name: a name used in the menu 
+ * @name: a name used in the menu
  * @enabled: Completely enable/disable the event handler.
  * @priority: Higher priority handlers are updated first. Do not set this
  * directly; only via set_priority.
@@ -104,7 +104,7 @@ struct _BotViewHandler
  * compete for the sequence of events that follow. The BotEventHandler that
  * returns the smallest distance will receive a pick_notify event.  Return < 0
  * if the renderer has no object to pick.
- * @hover_query: can usually be the same function pointer as pick_query. 
+ * @hover_query: can usually be the same function pointer as pick_query.
  * @mouse_press: Event handling methods. Return non-zero if the event was
  * consumed by this handler (and further processing should stop).
  * @mouse_release: If you register a pick_query handler, you should almost
@@ -127,7 +127,7 @@ struct _BotViewHandler
  * when the mouse is merely moved, and does not affect the routing
  * of events. This allows a renderer to display an object
  * differently, so that the user knows the object can be clicked
- * on (thus causing the object to be "picked"). 
+ * on (thus causing the object to be "picked").
  *
  * Both "picking" and "hovering" call a query function; it should
  * return the distance from the click to an object. The event
@@ -148,11 +148,11 @@ struct _BotViewHandler
  * If no one is picking, and the event is mouse_motion, the
  * hover_query methods are called, and the winning event handler
  * has its "hovering" flag set.
- * 
+ *
  * Finally, we find an event handler to consume the event. The
  * picking event handler, if any, gets first dibs. All other
  * handlers are then called in order of decreasing priority.
- * 
+ *
  * Only one handler "consumes" an event: if an event handler
  * returns TRUE, it ends the event processing.
  */
@@ -164,32 +164,32 @@ struct _BotEventHandler
     int picking;
     int hovering;
 
-    double (*pick_query)(BotViewer *viewer, BotEventHandler *ehandler, 
+    double (*pick_query)(BotViewer *viewer, BotEventHandler *ehandler,
             const double ray_start[3], const double ray_dir[3]);
 
-    double (*hover_query)(BotViewer *viewer, BotEventHandler *ehandler, 
+    double (*hover_query)(BotViewer *viewer, BotEventHandler *ehandler,
             const double ray_start[3], const double ray_dir[3]);
 
     int (*mouse_press)   (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
+                          const double ray_start[3], const double ray_dir[3],
                           const GdkEventButton *event);
 
     int (*mouse_release) (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
+                          const double ray_start[3], const double ray_dir[3],
                           const GdkEventButton *event);
 
     int (*mouse_motion)  (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
+                          const double ray_start[3], const double ray_dir[3],
                           const GdkEventMotion *event);
 
     int (*mouse_scroll)  (BotViewer *viewer, BotEventHandler *ehandler,
                           const double ray_start[3], const double ray_dir[3],
                           const GdkEventScroll *event);
 
-    int  (*key_press)     (BotViewer *viewer, BotEventHandler *ehandler, 
+    int  (*key_press)     (BotViewer *viewer, BotEventHandler *ehandler,
             const GdkEventKey  *event);
 
-    int  (*key_release)     (BotViewer *viewer, BotEventHandler *ehandler, 
+    int  (*key_release)     (BotViewer *viewer, BotEventHandler *ehandler,
             const GdkEventKey  *event);
 
     void (*destroy)       (BotEventHandler *ehandler);
@@ -328,9 +328,9 @@ struct _BotViewer {
 
     BotEventHandler      *picking_handler;
 
-    GPtrArray         *renderers;      
+    GPtrArray         *renderers;
 
-    GPtrArray         *renderers_sorted; 
+    GPtrArray         *renderers_sorted;
 
     GPtrArray         *renderers_sorted_with_controls;
 
@@ -424,7 +424,7 @@ void bot_viewer_add_renderer_on_side (BotViewer *viewer, BotRenderer *plugin, in
  * @priority: The priority to assign the new renderer.
  *
  * Adds a renderer to the viewer.  BotRenderers are called at render time, in the
- * order in which they were added to the viewer. 
+ * order in which they were added to the viewer.
  * Defaults to right hand side (control_box=1) - the default
  */
 void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priority);
@@ -456,7 +456,7 @@ void bot_viewer_set_view_handler(BotViewer *viewer, BotViewHandler *vhandler);
  * bot_viewer_add_event_handler:
  * If you want key/mouse events, you need to add an event handler.
  */
-void bot_viewer_add_event_handler (BotViewer *viewer, BotEventHandler *ehandler, 
+void bot_viewer_add_event_handler (BotViewer *viewer, BotEventHandler *ehandler,
         int priority);
 void bot_viewer_remove_event_handler(BotViewer *viewer, BotEventHandler *ehandler);
 
@@ -470,7 +470,7 @@ void bot_viewer_remove_event_handler(BotViewer *viewer, BotEventHandler *ehandle
  * other event handler). The event handler can thus temporarily
  * increase its priority.
  */
-void bot_viewer_event_handler_set_priority (BotViewer *viewer, BotEventHandler *ehandler, 
+void bot_viewer_event_handler_set_priority (BotViewer *viewer, BotEventHandler *ehandler,
         int priority);
 
 void bot_viewer_set_status_bar_message (BotViewer *viewer, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
@@ -484,7 +484,7 @@ int bot_viewer_picking(BotViewer *viewer);
 
 /**
  * bot_viewer_request_pick:
- * If a event handler wants to begin a pick operation, it can request it. 
+ * If a event handler wants to begin a pick operation, it can request it.
  *
  * Returns: Non-zero if the request fails.
  */

@@ -54,7 +54,7 @@ static void look_at_to_matrix(const double eye[3], const double lookat[3], const
     R[9] = -f[1];
     R[10] = -f[2];
     R[15] = 1;
-    
+
     double T[16];
     memset(T, 0, sizeof(T));
     T[0] = 1;
@@ -86,17 +86,17 @@ static void build_pan_jacobian(BotDefaultViewHandler *dvh, double dq[3], double 
     double eps = 0.00001;
 
     double PM_dq[3];
-    gluProject(dq[0], dq[1], dq[2], 
+    gluProject(dq[0], dq[1], dq[2],
                dvh->model_matrix, dvh->projection_matrix, dvh->viewport,
                &PM_dq[0], &PM_dq[1], &PM_dq[2]);
 
     double PM_dq_up[3];
-    gluProject(dq[0] + up[0]*eps, dq[1] + up[1]*eps, dq[2] + up[2]*eps, 
+    gluProject(dq[0] + up[0]*eps, dq[1] + up[1]*eps, dq[2] + up[2]*eps,
                dvh->model_matrix, dvh->projection_matrix, dvh->viewport,
                &PM_dq_up[0], &PM_dq_up[1], &PM_dq_up[2]);
 
     double PM_dq_left[3];
-    gluProject(dq[0] + left[0]*eps, dq[1] + left[1]*eps, dq[2] + left[2]*eps, 
+    gluProject(dq[0] + left[0]*eps, dq[1] + left[1]*eps, dq[2] + left[2]*eps,
                dvh->model_matrix, dvh->projection_matrix, dvh->viewport,
                &PM_dq_left[0], &PM_dq_left[1], &PM_dq_left[2]);
 
@@ -131,7 +131,7 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
         bot_vector_subtract_3d(dvh->lookat, dvh->eye, look_vector);
         bot_vector_normalize_3d(look_vector);
         bot_vector_cross_3d(dvh->up, look_vector, left);
-        
+
         memcpy(up, dvh->up, 3 * sizeof(double));
     } else {
         // abuse the left and up vectors: change them to xhat, yhat... this ensures
@@ -163,15 +163,15 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
 
     memcpy(motionleft, left, 3 * sizeof(double));
     bot_vector_scale_3d(motionleft, sol[1]);
-   
+
     bot_vector_add_3d(motionup, motionleft, motion);
-    
+
 
     double magnitude = bot_vector_magnitude_3d(motion);
     double new_magnitude = fmax(fmin(magnitude,MAX_MOTION_MAGNITUDE),MIN_MOTION_MAGNITUDE);
     //bot_vector_normalize_3d(motion); // if magnitude is zero it will return nan's
     bot_vector_scale_3d(motion,new_magnitude/fmax(magnitude,MIN_MOTION_MAGNITUDE));
-    
+
     double neweye[3], newlookat[3];
     bot_vector_subtract_3d(dvh->eye, motion, neweye);
     bot_vector_subtract_3d(dvh->lookat, motion, newlookat);
@@ -188,21 +188,21 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
     double detNew = A[0]*A[3] - A[1]*A[2];
     //printf(" %15f %15f\n", detOriginal, detNew);
     //if (fabs(detNew) < 0.01 && fabs(detNew) <= fabs(detOriginal)) {
-    if ((fabs(detNew) < 25 )||(fabs(detOriginal) < 25 )) { 
+    if ((fabs(detNew) < 25 )||(fabs(detOriginal) < 25 )) {
         memcpy(dvh->eye, orig_eye, 3 * sizeof(double));
         memcpy(dvh->lookat, orig_lookat, 3 * sizeof(double));
         look_at_changed(dvh);
         printf("skipping pan: %15f %15f\n", detOriginal, detNew);
     }
-    
-    
+
+
 }
 
-static int mouse_press   (BotViewer *viewer, BotEventHandler *ehandler, 
+static int mouse_press   (BotViewer *viewer, BotEventHandler *ehandler,
                            const double ray_start[3], const double ray_dir[3], const GdkEventButton *event)
 {
     BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) ehandler->user;
-    
+
     dvh->last_mouse_x = event->x;
     dvh->last_mouse_y = event->y;
 
@@ -222,7 +222,7 @@ static int mouse_release (BotViewer *viewer, BotEventHandler *ehandler,
     return 1;
 }
 
-static int mouse_motion  (BotViewer *viewer, BotEventHandler *ehandler, 
+static int mouse_motion  (BotViewer *viewer, BotEventHandler *ehandler,
                           const double ray_start[3], const double ray_dir[3], const GdkEventMotion *event)
 {
     BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) ehandler->user;
@@ -250,7 +250,7 @@ static int mouse_motion  (BotViewer *viewer, BotEventHandler *ehandler,
 
         double q[4];
         bot_angle_axis_to_quat(-delevation, left, q);
-        double newlook[3]; 
+        double newlook[3];
         memcpy (newlook, look, sizeof (newlook));
         bot_quat_rotate (q, newlook);
 
@@ -269,11 +269,11 @@ static int mouse_motion  (BotViewer *viewer, BotEventHandler *ehandler,
 
         double ded = pow (10, dy * 0.01);
         double eye_dist = init_eye_dist * ded;
-        if (eye_dist > EYE_MAX_DIST) 
+        if (eye_dist > EYE_MAX_DIST)
             eye_dist = EYE_MAX_DIST;
-        else if (eye_dist < EYE_MIN_DIST) 
+        else if (eye_dist < EYE_MIN_DIST)
             eye_dist = EYE_MIN_DIST;
-        
+
         double le[3];
         memcpy (le, look, sizeof (le));
         bot_vector_normalize_3d (le);
@@ -314,31 +314,31 @@ static void zoom_ratio(BotDefaultViewHandler *dvh, double ratio)
     look_at_changed(dvh);
 }
 
-static int mouse_scroll  (BotViewer *viewer, BotEventHandler *ehandler, 
+static int mouse_scroll  (BotViewer *viewer, BotEventHandler *ehandler,
                           const double ray_start[3], const double ray_dir[3], const GdkEventScroll *event)
 {
     BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) ehandler->user;
- 
+
     // scrolling = zoom in and out
     if ( event->direction == GDK_SCROLL_UP) {
         zoom_ratio (dvh, 0.9);
     } else if (event->direction == GDK_SCROLL_DOWN) {
         zoom_ratio (dvh, 1.1);
     }
-    
+
     // how far from XY plane?
     double dist = (ray_start[2] - dvh->lastpos[2]) / ray_dir[2];
-    
+
     double dq[] = {ray_start[0] - ray_dir[0]*dist,
                    ray_start[1] - ray_dir[1]*dist,
                    ray_start[2] - ray_dir[2]*dist,
                    1 };
-    
+
     double PM_dq[3];
-    gluProject(dq[0], dq[1], dq[2], 
+    gluProject(dq[0], dq[1], dq[2],
                dvh->model_matrix, dvh->projection_matrix, dvh->viewport,
                &PM_dq[0], &PM_dq[1], &PM_dq[2]);
-    
+
     window_space_pan(dvh, dq, event->x - PM_dq[0], -((dvh->viewport[3] - event->y) - PM_dq[1]), 1);
 
     bot_viewer_request_redraw(viewer);
@@ -364,7 +364,7 @@ static int key_press     (BotViewer *viewer, BotEventHandler *ehandler, const Gd
         default:
             result = FALSE;
             break;
-    } 
+    }
 
     bot_viewer_request_redraw(viewer);
     return result;
@@ -422,7 +422,7 @@ static void update_gl_matrices(BotViewer *viewer, BotViewHandler *vhandler)
     } else {
         gluPerspective (dvh->fov_degrees, dvh->aspect_ratio, 0.1, EYE_MAX_DIST * 2);
     }
-    
+
     glGetDoublev(GL_PROJECTION_MATRIX, dvh->projection_matrix);
 
     glMatrixMode (GL_MODELVIEW);
@@ -450,21 +450,21 @@ static void set_look_at (BotViewHandler *vhandler, const double eye[3], const do
     look_at_changed(dvh);
 }
 
-static gboolean 
+static gboolean
 set_look_at_smooth_func (BotViewHandler *vhandler)
 {
-    BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) vhandler->user;  
+    BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) vhandler->user;
 
     gboolean end_timeout = TRUE;
-    
+
     double elapsed_ms = (bot_timestamp_now() - dvh->viewpath_timer_start) * 1e-3;
     double time_param = elapsed_ms / dvh->viewpath_duration_ms;
-    
+
     if (time_param >= 1) {
       time_param = 1;
       end_timeout = FALSE;
     }
-    
+
     for (int i=0; i<3; i++) {
       dvh->eye[i]    = dvh->origin_eye[i]    + time_param * (dvh->goal_eye[i]    - dvh->origin_eye[i]);
       dvh->lookat[i] = dvh->origin_lookat[i] + time_param * (dvh->goal_lookat[i] - dvh->origin_lookat[i]);
@@ -495,9 +495,9 @@ static void set_look_at_smooth (BotViewHandler *vhandler, const double eye[3], c
 //    memcpy(dvh->goal_up, up, 3 * sizeof(double));
 
     // periodically update the viewpoint until the goal viewpoint is reached
-    g_timeout_add(30, (GSourceFunc)set_look_at_smooth_func, vhandler); 
+    g_timeout_add(30, (GSourceFunc)set_look_at_smooth_func, vhandler);
 }
-   
+
 static void update_follow_target(BotViewHandler *vhandler, const double pos[3], const double quat[4])
 {
     BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) vhandler->user;
@@ -539,7 +539,7 @@ static void update_follow_target(BotViewHandler *vhandler, const double pos[3], 
         double dpos[3];
         for (int i = 0; i < 3; i++)
             dpos[i] = pos[i] - dvh->lastpos[i];
-        
+
         for (int i = 0; i < 3; i++) {
             dvh->eye[i] += dpos[i];
             dvh->lookat[i] += dpos[i];
@@ -571,7 +571,7 @@ static void update_follow_target(BotViewHandler *vhandler, const double pos[3], 
 
 BotDefaultViewHandler *bot_default_view_handler_new(BotViewer *viewer)
 {
-    BotDefaultViewHandler *dvh = 
+    BotDefaultViewHandler *dvh =
         (BotDefaultViewHandler*) calloc(1, sizeof(BotDefaultViewHandler));
 
     dvh->fov_degrees = 60;
@@ -613,9 +613,9 @@ BotDefaultViewHandler *bot_default_view_handler_new(BotViewer *viewer)
     dvh->ehandler.user = dvh;
 
     dvh->viewer = viewer;
-    
+
     bot_viewer_set_view_handler(viewer, &dvh->vhandler);
     bot_viewer_add_event_handler(viewer, &dvh->ehandler, -10000);
-    
+
     return dvh;
 }

@@ -43,7 +43,7 @@ typedef struct _BotCTransLink BotCTransLink;
  * bot_ctrans_new:
  *
  * Constructor.
- * Returns: a newly allocated BotCTrans.  
+ * Returns: a newly allocated BotCTrans.
  */
 BotCTrans * bot_ctrans_new(void);
 
@@ -102,16 +102,16 @@ int bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
  * @to_frame: destination coordinate frame
  * @timestamp: output parameter
  *
- * Retrieves the timestamp of the most recent rigid body transformation 
+ * Retrieves the timestamp of the most recent rigid body transformation
  * relating two coordinate frames.
  *
- * Since there may be many links relating two coordinate frames, this 
+ * Since there may be many links relating two coordinate frames, this
  * retrieves the timestamp of the most recently updated link.  For information
  * about a specific link, use bot_ctrans_link_get_nth_trans()
- * 
+ *
  * Returns: 1 on success, 0 on failure.
  */
-int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans, 
+int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
         const char *from_frame, const char *to_frame, int64_t *timestamp);
 
 /**
@@ -125,8 +125,8 @@ int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
  * %from_frame_id to %to_frame_id, or NULL if either of the coordinate frames
  * is invalid.
  */
-BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans, 
-        const char *from_frame_id, const char *to_frame_id, 
+BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans,
+        const char *from_frame_id, const char *to_frame_id,
         int history_maxlen);
 
 /**
@@ -150,7 +150,7 @@ BotCTransLink * bot_ctrans_get_link(BotCTrans * ctrans,
  * bot_ctrans_link_update:
  * @link: The link to update
  * @transformation: The rigid body transformation describing the link
- * @timestamp:  timestamp of the transformation. 
+ * @timestamp:  timestamp of the transformation.
  *
  * Updates the link between two coordinate frames.  If the specified timestamp
  * is older than the timestamp for any previous update, then the entire
@@ -172,7 +172,7 @@ int bot_ctrans_link_get_n_trans(const BotCTransLink * link);
  *         to older transformations.
  * @transformation: Output parameter.  If not NULL, the desired transformation
  *                  will be stored here.
- * @timestamp: Output parameter.  If not NULL, the timestamp corresponding to 
+ * @timestamp: Output parameter.  If not NULL, the timestamp corresponding to
  *             the desired transformattion will be stored here.
  *
  * Retrieves the nth most recent transformation for this link.

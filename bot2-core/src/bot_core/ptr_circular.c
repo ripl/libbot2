@@ -13,13 +13,13 @@ BotPtrCircular *bot_ptr_circular_new(unsigned int capacity, BotPtrCircularDestro
         circ->p = (void**) calloc(capacity, sizeof(void*));
     else
         circ->p = NULL;
-    
+
     circ->size = 0;
     circ->next = 0;
     circ->capacity = capacity;
     circ->handler = handler;
     circ->user = user;
-    
+
     return circ;
 }
 
@@ -81,7 +81,7 @@ void bot_ptr_circular_resize(BotPtrCircular *circ, unsigned int new_capacity)
     // nothing to do?
     if (new_capacity == circ->capacity)
         return;
-    
+
     // strategy: create a new circular buffer that contains the required data,
     // then swap out our internal representation. We have to be careful
     // about freeing any unneeded data.
@@ -107,7 +107,7 @@ void bot_ptr_circular_resize(BotPtrCircular *circ, unsigned int new_capacity)
     if (circ->p)
         free(circ->p);
     memcpy(circ, newcirc, sizeof(BotPtrCircular));
-    
+
     // free the new circ container, but not its storage
     free(newcirc);
 }

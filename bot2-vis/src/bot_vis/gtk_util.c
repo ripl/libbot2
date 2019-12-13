@@ -29,7 +29,7 @@ typedef struct _signal_pipe {
 static signal_pipe_t g_sp;
 static int g_sp_initialized = 0;
 
-static int 
+static int
 signal_pipe_init()
 {
     if( g_sp_initialized ) {
@@ -51,7 +51,7 @@ signal_pipe_init()
     return 0;
 }
 
-static int 
+static int
 signal_pipe_cleanup()
 {
     if( g_sp_initialized ) {
@@ -83,7 +83,7 @@ signal_handler_glib( GIOChannel *source, GIOCondition condition, void *ud )
     status = read( g_sp.fds[0], &signal, sizeof(int) );
 
     if( status != sizeof(int) ) {
-        fprintf(stderr, "wtf!? signal_handler_glib is confused (%s:%d)\n", 
+        fprintf(stderr, "wtf!? signal_handler_glib is confused (%s:%d)\n",
                 __FILE__, __LINE__ );
         return TRUE;
     }
@@ -95,7 +95,7 @@ signal_handler_glib( GIOChannel *source, GIOCondition condition, void *ud )
     return TRUE;
 }
 
-static void 
+static void
 signal_pipe_add_signal( int sig )
 {
     // TODO use sigaction instead of signal()
@@ -118,7 +118,7 @@ signal_pipe_add_signal( int sig )
     return;
 }
 
-static int 
+static int
 signal_pipe_attach_glib( signal_pipe_glib_handler_t func, gpointer user_data )
 {
     if( ! g_sp_initialized ) return -1;
@@ -126,9 +126,9 @@ signal_pipe_attach_glib( signal_pipe_glib_handler_t func, gpointer user_data )
     if( g_sp.ioc ) return -1;
 
     g_sp.ioc = g_io_channel_unix_new( g_sp.fds[0] );
-    g_io_channel_set_flags( g_sp.ioc, 
+    g_io_channel_set_flags( g_sp.ioc,
             g_io_channel_get_flags( g_sp.ioc ) | G_IO_FLAG_NONBLOCK, NULL );
-    g_sp.ios = g_io_add_watch( g_sp.ioc, G_IO_IN | G_IO_PRI, 
+    g_sp.ios = g_io_add_watch( g_sp.ioc, G_IO_IN | G_IO_PRI,
             (GIOFunc) signal_handler_glib, NULL );
 
     g_sp.userfunc = func;

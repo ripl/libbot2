@@ -2,7 +2,7 @@
 #define __bot_fasttrig_h__
 
 /**
- * @defgroup BotCoreFastTrig Fast Trigonometry 
+ * @defgroup BotCoreFastTrig Fast Trigonometry
  * @ingroup BotCoreMathGeom
  * @brief Very fast, but approximate trigonometry
  * @include: bot_core/bot_core.h

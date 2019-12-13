@@ -8,7 +8,7 @@
 #include <bot_core/fasttrig.h>
 #include "gl_util.h"
 
-void 
+void
 bot_gl_draw_cube ()
 {
     glBegin (GL_QUADS);
@@ -204,7 +204,7 @@ void
 bot_gl_build_circle( GLuint id)
 {
     glNewList(id, GL_COMPILE);
-    
+
     GLfloat cosine, sine;
     int i;
     glBegin(GL_LINE_LOOP);
@@ -214,11 +214,11 @@ bot_gl_build_circle( GLuint id)
         glVertex2f(cosine,sine);
     }
     glEnd();
-    
-    glEndList();  
+
+    glEndList();
 }
 
-void 
+void
 bot_gl_draw_circle (double r)
 {
     glPushMatrix ();
@@ -235,7 +235,7 @@ bot_gl_draw_circle (double r)
     glPopMatrix ();
 }
 
-void 
+void
 bot_gl_draw_disk(double r)
 {
     GLUquadricObj *q = gluNewQuadric();
@@ -243,7 +243,7 @@ bot_gl_draw_disk(double r)
     gluDeleteQuadric(q);
 }
 
-void 
+void
 bot_gl_draw_ellipse (double a, double b, double angle, int steps)
 {
     // from: http://en.wikipedia.org/wiki/Ellipse
@@ -255,7 +255,7 @@ bot_gl_draw_ellipse (double a, double b, double angle, int steps)
     glBegin (GL_LINE_LOOP);
     for (int i=0; i<360; i+= 360/steps) {
         double cosalpha = _circle_points[i][0];
-        double sinalpha = _circle_points[i][1]; 
+        double sinalpha = _circle_points[i][1];
 
         double x = b * cosalpha * cosbeta - a * sinalpha * sinbeta;
         double y = b * cosalpha * sinbeta + a * sinalpha * cosbeta;
@@ -324,9 +324,9 @@ bot_gl_draw_ortho_circles_3d()
 //    glPopMatrix();
 //    glMatrixMode(GL_MODELVIEW);
 //    glPopMatrix();
-//} 
+//}
 
-void 
+void
 bot_gl_draw_arrow_2d (double length, double head_width, double head_length,
         double body_width, int fill)
 {
@@ -448,13 +448,13 @@ bot_glutBitmapString(void* font, const unsigned char* text)
             x = 0.0f;
         }
         else { /* Not an EOL, draw the bitmap character */
-            
+
             glutBitmapCharacter (font, c);
-            
+
             // Add to the known width of the current line
             x += ( float )( glutBitmapWidth (font, c) );
         }
-    
+
     glPopClientAttrib( );
 #endif
 }
@@ -466,7 +466,7 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
     GLint viewport[4];
 
     if (font == NULL) {
-        if (flags & BOT_GL_DRAW_TEXT_MONOSPACED) 
+        if (flags & BOT_GL_DRAW_TEXT_MONOSPACED)
             font = GLUT_BITMAP_8_BY_13;
         else
             font = GLUT_BITMAP_HELVETICA_12;
@@ -477,7 +477,7 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
     glGetIntegerv(GL_VIEWPORT, viewport);
 
     double winxy[2];
-    
+
     // compute pixel coordinates corresponding to xyz input
     if (flags & BOT_GL_DRAW_TEXT_NORMALIZED_SCREEN_COORDINATES) {
         winxy[0] = xyz[0] * viewport[2];
@@ -485,8 +485,8 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
     } else {
         // xyz is in modelview space
         double bogus;
-        if (!gluProject(xyz[0], xyz[1], xyz[2], 
-                        model_matrix, proj_matrix, viewport, 
+        if (!gluProject(xyz[0], xyz[1], xyz[2],
+                        model_matrix, proj_matrix, viewport,
                         &winxy[0], &winxy[1], &bogus)) {
             printf("GluProject failure\n");
             return;
@@ -526,7 +526,7 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
             start = i+1;
         }
     }
-    
+
     // compute the bounding dimensions of this text.
     int line_height = bot_glutBitmapHeight(font);
     int height = line_height * text_lines->len;
@@ -602,20 +602,20 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
 
     for (int i = 0; i < text_lines->len; i++)
         free(g_ptr_array_index(text_lines, i));
-    
+
     g_ptr_array_free(text_lines, TRUE);
 }
 
-int 
+int
 _bot_gl_check_errors(const char *file, int line)
 {
     int errCount = 0;
     GLenum errCode = glGetError();
-    
+
     while (errCode != GL_NO_ERROR) {
         errCount++;
         const char *errStr = (char*)gluErrorString(errCode);
-        fprintf(stderr, "[%s:%d] OpenGL Error: '%s' (%d)\n", file, line, 
+        fprintf(stderr, "[%s:%d] OpenGL Error: '%s' (%d)\n", file, line,
                 errStr ? errStr : "unknown", errCode);
         errCode = glGetError();
     }
@@ -661,13 +661,13 @@ bot_gl_print_current_matrix(void)
     glGetDoublev(matrix_get_name, mtx_val);
 
     printf("%s (%d)\n", matrix_name, stack_depth);
-    printf("  %8.3f %8.3f %8.3f %8.3f\n", 
+    printf("  %8.3f %8.3f %8.3f %8.3f\n",
            mtx_val[0], mtx_val[4], mtx_val[8], mtx_val[12]);
-    printf("  %8.3f %8.3f %8.3f %8.3f\n", 
+    printf("  %8.3f %8.3f %8.3f %8.3f\n",
            mtx_val[1], mtx_val[5], mtx_val[9], mtx_val[13]);
-    printf("  %8.3f %8.3f %8.3f %8.3f\n", 
+    printf("  %8.3f %8.3f %8.3f %8.3f\n",
            mtx_val[2], mtx_val[6], mtx_val[10], mtx_val[14]);
-    printf("  %8.3f %8.3f %8.3f %8.3f\n", 
+    printf("  %8.3f %8.3f %8.3f %8.3f\n",
            mtx_val[3], mtx_val[7], mtx_val[11], mtx_val[15]);
 }
 

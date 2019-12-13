@@ -40,7 +40,7 @@ bot_glib_mainloop_attach_lcm (lcm_t *lcm)
 }
 
 int
-bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm, 
+bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm,
         gboolean quit_on_lcm_fail)
 {
     g_static_mutex_lock (&lcm_glib_sources_mutex);
@@ -55,14 +55,14 @@ bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm,
         return -1;
     }
 
-    glib_attached_lcm_t *galcm = 
+    glib_attached_lcm_t *galcm =
         (glib_attached_lcm_t*) calloc (1, sizeof (glib_attached_lcm_t));
 
     galcm->lcm = lcm;
     galcm->quit_on_lcm_fail = quit_on_lcm_fail;
     galcm->mainloop = mainloop;
     galcm->ioc = g_io_channel_unix_new (lcm_get_fileno (lcm));
-    galcm->sid = g_io_add_watch (galcm->ioc, G_IO_IN, 
+    galcm->sid = g_io_add_watch (galcm->ioc, G_IO_IN,
             (GIOFunc) lcm_message_ready, galcm);
 
     dbg ("inserted lcm %p into glib mainloop\n", lcm);
@@ -82,7 +82,7 @@ bot_glib_mainloop_detach_lcm (lcm_t *lcm)
         return -1;
     }
 
-    glib_attached_lcm_t *galcm = 
+    glib_attached_lcm_t *galcm =
         (glib_attached_lcm_t*) g_hash_table_lookup (lcm_glib_sources, lcm);
 
     if (!galcm) {

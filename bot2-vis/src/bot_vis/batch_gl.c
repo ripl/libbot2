@@ -11,7 +11,7 @@ struct _BotBatchGl_command {
     void (*destroy) (bot_bgl_command_t *);
 };
 
-struct _BotBatchGl 
+struct _BotBatchGl
 {
     GPtrArray *front_buffer;
     GPtrArray *back_buffer;

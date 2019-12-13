@@ -1,5 +1,5 @@
 /* $Id: ldpc_scheme.cpp,v 1.13 2006/09/06 14:55:39 roca Exp $ */
-/* 
+/*
  *  LDPC/LDGM FEC Scheme.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
@@ -8,7 +8,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 #include "ldpc_fec.h"
 #include "macros.h"
 #include "ldpc_scheme.h"
@@ -38,8 +38,8 @@ LDPCFecScheme::LDPCFecScheme()
 {
 	memset(this, 0, sizeof(*this));
 }
- 
- 
+
+
 /******************************************************************************
  * LDPCFecScheme Destructor.
  */
@@ -59,7 +59,7 @@ LDPCFecScheme::~LDPCFecScheme()
 /******************************************************************************
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 				    int		pktSize,
 				    int		*symbolSize,
@@ -140,7 +140,7 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
  *
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::InitScheme  (int	symbolSize,
 			    int	pktSize)
 {
@@ -205,7 +205,7 @@ LDPCFecScheme::InitScheme  (int	symbolSize,
  *
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::BuildPkt (int	pktIdx,
 			 void**	pktBuffer,
 			 void*	symbol_canvas[],
@@ -260,7 +260,7 @@ LDPCFecScheme::BuildPkt (int	pktIdx,
 			}
 		}
 	}
-	if (this->m_verbosity >= 1) 
+	if (this->m_verbosity >= 1)
 		printf("LDPCFecScheme::BuildPkt: Packet %i build, with ESI %i as first symbol\n",
 			pktIdx, *ESIofFirstSymbol);
 	return LDPC_OK;
@@ -271,7 +271,7 @@ LDPCFecScheme::BuildPkt (int	pktIdx,
  *
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 			     int	ESIofFirstSymbol,
 			     void**	GeneratedSymbols[],
@@ -283,7 +283,7 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 
 	*ESIofSymbols = (int*) calloc(m_nbSymbolsPerPkt, sizeof(int));
 	*GeneratedSymbols = (void**) calloc(m_nbSymbolsPerPkt, sizeof(void*));
- 
+
 	if (m_nbSymbolsPerPkt == 1) {
 		/*
 		 * simple case, one symbol per packet
@@ -300,10 +300,10 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 				(*ESIofSymbols)[j] = (ESIofFirstSymbol + j) % m_nbSourceSymbols;
 				(*GeneratedSymbols)[j] = ((char*)pktBuffer) + j * m_symbolSize;
 			}
-		} else { 
+		} else {
 			/* parity packet */
 			for (j = 0; j < m_nbSymbolsPerPkt; j++) {	
-				(*ESIofSymbols)[j] = m_nbSourceSymbols 
+				(*ESIofSymbols)[j] = m_nbSourceSymbols
 						+ m_txseqToESI[(j + m_ESItoTxseq[ESIofFirstSymbol
 								- m_nbSourceSymbols]) % m_nbParitySymbols];
 				(*GeneratedSymbols)[j] = ((char*)pktBuffer) + j * m_symbolSize;
@@ -318,7 +318,7 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
  *
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 				    void*	pktBuffer,
 				    int		ESIofFirstSymbol)
@@ -332,7 +332,7 @@ LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
  *
  * => See header file for more informations.
  */
-ldpc_error_status 
+ldpc_error_status
 LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 				    void*	pktBuffer,
 				    int		ESIofFirstSymbol,
@@ -361,7 +361,7 @@ LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 	}
 	if (generatedSymbols != NULL)
 		free(generatedSymbols);
-	if (ESIofSymbols != NULL) 
+	if (ESIofSymbols != NULL)
 		free(ESIofSymbols);	
 	return LDPC_OK;
 

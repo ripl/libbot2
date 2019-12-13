@@ -23,7 +23,7 @@
 #include "tokenize.h"
 #include "rwx.h"
 
-static void 
+static void
 parse_error(tokenize_t *t, const char *fmt, ...)
 {
     va_list ap;
@@ -47,7 +47,7 @@ parse_error(tokenize_t *t, const char *fmt, ...)
     _exit(0);
 }
 
-static int 
+static int
 parse_int(tokenize_t *t, int *d, int radix)
 {
     char *endptr = NULL;
@@ -59,8 +59,8 @@ parse_int(tokenize_t *t, int *d, int radix)
     return 0;
 }
 
-static int 
-parse_double(tokenize_t *t, double *f) 
+static int
+parse_double(tokenize_t *t, double *f)
 {
     char *endptr = NULL;
     *f = strtod(t->token, &endptr);
@@ -71,15 +71,15 @@ parse_double(tokenize_t *t, double *f)
     return 0;
 }
 
-static void 
+static void
 parse_require(tokenize_t *t, char *tok)
 {
     int res = tokenize_next(t);
-    if (res == EOF || strcmp(t->token, tok)) 
+    if (res == EOF || strcmp(t->token, tok))
         parse_error(t, "expected token %s", tok);
 }
 
-static int 
+static int
 parse_vertex( tokenize_t *tok, BotRwxVertex *v )
 {
     tokenize_next( tok );
@@ -115,7 +115,7 @@ parse_vertex( tokenize_t *tok, BotRwxVertex *v )
     return 0;
 }
 
-static int 
+static int
 parse_triangle( tokenize_t *tok, BotRwxTriangle *t )
 {
     tokenize_next( tok );
@@ -126,7 +126,7 @@ parse_triangle( tokenize_t *tok, BotRwxTriangle *t )
     return 0;
 }
 
-static int 
+static int
 parse_clump( BotRwxClump *clump, tokenize_t *tok )
 {
     // get clump name
@@ -188,10 +188,10 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
             parse_vertex( tok, vbuf + clump->nvertices );
 
             if( vbuf[clump->nvertices].id != clump->nvertices ) {
-                parse_error( tok, "expected vertex %d (got %d)!\n", 
+                parse_error( tok, "expected vertex %d (got %d)!\n",
                         clump->nvertices, vbuf[clump->nvertices].id );
             }
-            
+
             clump->nvertices++;
 
             if( clump->nvertices >= nvbuf ) {
@@ -207,13 +207,13 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
         }
     }
 
-    clump->vertices = 
+    clump->vertices =
         (BotRwxVertex*)malloc(clump->nvertices*sizeof(BotRwxVertex));
     memcpy( clump->vertices, vbuf, clump->nvertices*sizeof(BotRwxVertex) );
     free( vbuf );
 
     int ntbuf = 20000;
-    BotRwxTriangle *tbuf = 
+    BotRwxTriangle *tbuf =
         (BotRwxTriangle*)calloc(1, ntbuf*sizeof(BotRwxTriangle));
 
     // parse the list of triangles
@@ -226,7 +226,7 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
 
             if( clump->ntriangles >= ntbuf ) {
                 ntbuf += 10000;
-                tbuf = (BotRwxTriangle*)realloc(tbuf, 
+                tbuf = (BotRwxTriangle*)realloc(tbuf,
                         ntbuf*sizeof(BotRwxTriangle));
             }
         } else if( ! strcmp( tok->token, "ClumpEnd" ) ) {
@@ -234,7 +234,7 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
         }
     }
 
-    clump->triangles = 
+    clump->triangles =
         (BotRwxTriangle*)malloc(clump->ntriangles*sizeof(BotRwxTriangle));
     memcpy( clump->triangles, tbuf, clump->ntriangles*sizeof(BotRwxTriangle) );
     free( tbuf );
@@ -242,10 +242,10 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
     return 0;
 }
 
-BotRwxModel* 
+BotRwxModel*
 bot_rwx_model_create( const char *fname )
 {
-    BotRwxModel *model = calloc(1, sizeof(BotRwxModel)); 
+    BotRwxModel *model = calloc(1, sizeof(BotRwxModel));
 
     tokenize_t *tok = tokenize_create( fname );
     int status;
@@ -325,18 +325,18 @@ bot_rwx_model_get_extrema (BotRwxModel * model, double minv[3], double maxv[3])
 static inline void
 _matrix_vector_multiply_4x4_3d2 (const double m[16], const double v[3],
                                double result[3]) {
-    
+
     result[0] = m[0]*v[0] + m[1]*v[1] + m[2]*v[2] + m[3];
     result[1] = m[4]*v[0] + m[5]*v[1] + m[6]*v[2] + m[7];
     result[2] = m[8]*v[0] + m[9]*v[1] + m[10]*v[2] + m[11];
-    
+
     double result3   = m[12]*v[0] + m[13]*v[1] + m[14]*v[2] + m[15];
     if (result3) {
         result[0]/=result3;
         result[1]/=result3;
         result[2]/=result3;
     }
-}    
+}
 
 void
 bot_rwx_model_apply_transform (BotRwxModel * model, double m[16])
@@ -355,7 +355,7 @@ bot_rwx_model_apply_transform (BotRwxModel * model, double m[16])
 
 
 void
-bot_rwx_model_gl_draw( BotRwxModel *model ) 
+bot_rwx_model_gl_draw( BotRwxModel *model )
 {
     GList *citer;
 
@@ -509,15 +509,15 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
 #endif
 
             // render the triangle
-            glNormal3d( normals[vid1*3+ 0], 
+            glNormal3d( normals[vid1*3+ 0],
                     normals[vid1*3 + 1],
                     normals[vid1*3 + 2]);
             glVertex3f( v1->pos[0], v1->pos[1], v1->pos[2] );
-            glNormal3d( normals[vid2*3+ 0], 
+            glNormal3d( normals[vid2*3+ 0],
                     normals[vid2*3 + 1],
                     normals[vid2*3 + 2]);
             glVertex3f( v2->pos[0], v2->pos[1], v2->pos[2] );
-            glNormal3d( normals[vid3*3 + 0], 
+            glNormal3d( normals[vid3*3 + 0],
                     normals[vid3*3 + 1],
                     normals[vid3*3 + 2]);
             glVertex3f( v3->pos[0], v3->pos[1], v3->pos[2] );
@@ -532,7 +532,7 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
             maxv[2] - minv[2]);
     printf ("min %f %f %f\n", minv[0], minv[1], minv[2]);
 #endif
-    
+
 #if 0
     glLineWidth( 4.0 );
     glBegin( GL_LINES );

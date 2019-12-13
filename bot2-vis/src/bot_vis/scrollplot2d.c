@@ -63,10 +63,10 @@ static void
 __get_all_vals_helper (gpointer key, gpointer value, gpointer user_data)
 {
     GPtrArray *vals = (GPtrArray*) user_data;
-    g_ptr_array_add(vals, value);    
+    g_ptr_array_add(vals, value);
 }
 
-static GPtrArray * 
+static GPtrArray *
 __hash_table_get_vals (GHashTable *hash_table)
 {
     GPtrArray *vals = g_ptr_array_sized_new(g_hash_table_size(hash_table));
@@ -101,7 +101,7 @@ _plot2d_free (_plot2d_t *self)
     g_slice_free (_plot2d_t, self);
 }
 
-BotGlScrollPlot2d * 
+BotGlScrollPlot2d *
 bot_gl_scrollplot2d_new ()
 {
     BotGlScrollPlot2d *self = g_slice_new0 (BotGlScrollPlot2d);
@@ -144,7 +144,7 @@ bot_gl_scrollplot2d_free (BotGlScrollPlot2d *self)
     g_slice_free (BotGlScrollPlot2d, self);
 }
 
-int 
+int
 bot_gl_scrollplot2d_set_title (BotGlScrollPlot2d *self, const char *title)
 {
     if (self->title) free (self->title);
@@ -158,7 +158,7 @@ bot_gl_scrollplot2d_set_show_title (BotGlScrollPlot2d *self, int val)
     self->show_title = val;
 }
 
-int 
+int
 bot_gl_scrollplot2d_add_plot (BotGlScrollPlot2d *self, const char *name,
         int max_points)
 {
@@ -179,7 +179,7 @@ bot_gl_scrollplot2d_add_plot (BotGlScrollPlot2d *self, const char *name,
     return 0;
 }
 
-int 
+int
 bot_gl_scrollplot2d_remove_plot (BotGlScrollPlot2d *self, const char *name)
 {
     gboolean result = g_hash_table_remove (self->plots, name);
@@ -195,7 +195,7 @@ bot_gl_scrollplot2d_add_point (BotGlScrollPlot2d *self, const char *name,
     if (!plot) return -1;
 
     while (! g_queue_is_empty (plot->points)) {
-        _plot2d_point_t *last_pt = 
+        _plot2d_point_t *last_pt =
             (_plot2d_point_t*) g_queue_peek_tail (plot->points);
         if (last_pt->x > x) {
             g_slice_free (_plot2d_point_t, last_pt);
@@ -214,8 +214,8 @@ bot_gl_scrollplot2d_add_point (BotGlScrollPlot2d *self, const char *name,
     return 0;
 }
 
-int 
-bot_gl_scrollplot2d_set_color (BotGlScrollPlot2d *self, const char *name, 
+int
+bot_gl_scrollplot2d_set_color (BotGlScrollPlot2d *self, const char *name,
         double r, double g, double b, double a)
 {
     _plot2d_t *plot = g_hash_table_lookup (self->plots, name);
@@ -223,19 +223,19 @@ bot_gl_scrollplot2d_set_color (BotGlScrollPlot2d *self, const char *name,
     return _set_color (plot->rgba, r, g, b, a);
 }
 
-int bot_gl_scrollplot2d_set_text_color (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_text_color (BotGlScrollPlot2d *self,
         double r, double g, double b, double a)
 { return _set_color (self->text_rgba, r, g, b, a); }
 
-int bot_gl_scrollplot2d_set_bgcolor (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_bgcolor (BotGlScrollPlot2d *self,
         double r, double g, double b, double a)
 { return _set_color (self->bg_rgba, r, g, b, a); }
 
-int bot_gl_scrollplot2d_set_border_color (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_border_color (BotGlScrollPlot2d *self,
         double r, double g, double b, double a)
 { return _set_color (self->border_rgba, r, g, b, a); }
 
-int 
+int
 bot_gl_scrollplot2d_set_show_legend (BotGlScrollPlot2d *self,
         BotGlScrollPlot2dLegendLocation where)
 { self->show_legend = where; return 0; }
@@ -282,7 +282,7 @@ _plot2d_render_window (void *key, void *value, void *user_data)
 
     // remove all points that aren't visible
     while (! g_queue_is_empty (plot->points)) {
-        _plot2d_point_t *pt = 
+        _plot2d_point_t *pt =
             (_plot2d_point_t*)g_queue_peek_head (plot->points);
         if (pt->x < sp->x_min) {
             g_queue_pop_head (plot->points);
@@ -331,9 +331,9 @@ draw_title (BotGlScrollPlot2d *self, int x, int y, int width, int height)
     if (!self->title || !self->show_title) return;
 
     _gl_setcolor (self->text_rgba);
-    int title_width_pixels = glutBitmapLength(self->text_font, 
+    int title_width_pixels = glutBitmapLength(self->text_font,
             (unsigned char *) self->title);
-    glRasterPos2f(x + width / 2 - title_width_pixels / 2, 
+    glRasterPos2f(x + width / 2 - title_width_pixels / 2,
             y + self->text_height - 1);
     _draw_text (self, self->title);
 }
@@ -364,7 +364,7 @@ draw_legend (BotGlScrollPlot2d *self, int x, int y, int width, int height)
     GPtrArray * all_plots = __hash_table_get_vals (self->plots);
     for (int i=0; i<all_plots->len; i++) {
         _plot2d_t *plot = (_plot2d_t*) g_ptr_array_index (all_plots, i);
-        int label_width = glutBitmapLength (self->text_font, 
+        int label_width = glutBitmapLength (self->text_font,
                 (unsigned char*) plot->name);
         if (label_width > max_label_width) max_label_width = label_width;
     }
@@ -397,7 +397,7 @@ draw_legend (BotGlScrollPlot2d *self, int x, int y, int width, int height)
             legend_y = y + height - legend_height;
             break;
         default:
-            g_warning ("BotGlScrollPlot2d: invalid legend location %d\n", 
+            g_warning ("BotGlScrollPlot2d: invalid legend location %d\n",
                     self->show_legend);
             goto done;
     }
@@ -419,7 +419,7 @@ draw_legend (BotGlScrollPlot2d *self, int x, int y, int width, int height)
         glEnd ();
 
         _gl_setcolor (plot->rgba);
-        glRasterPos2f (row_x + smallbox_width + sb_label_padding, 
+        glRasterPos2f (row_x + smallbox_width + sb_label_padding,
                 row_y + self->text_height - 1);
         _draw_text (self, plot->name);
         row_y += row_height;
@@ -437,7 +437,7 @@ done:
     g_ptr_array_free (all_plots, TRUE);
 }
 
-void 
+void
 bot_gl_scrollplot2d_gl_render_at_window_pos (BotGlScrollPlot2d *self,
         int x, int y, int width, int height)
 {
@@ -471,20 +471,20 @@ bot_gl_scrollplot2d_gl_render_at_window_pos (BotGlScrollPlot2d *self,
     glScalef (width, height, 1);
 
     // draw background
-    glColor4f (self->bg_rgba[0], self->bg_rgba[1], self->bg_rgba[2], 
+    glColor4f (self->bg_rgba[0], self->bg_rgba[1], self->bg_rgba[2],
             self->bg_rgba[3]);
     glBegin(GL_QUADS);
     glVertex2f (0, 0);
     glVertex2f (1, 0);
     glVertex2f (1, 1);
     glVertex2f (0, 1);
-    glEnd();        
+    glEnd();
 
     // draw plots
     g_hash_table_foreach (self->plots, _plot2d_render_window, self);
 
     // draw border
-    glColor4f (self->border_rgba[0], self->border_rgba[1], 
+    glColor4f (self->border_rgba[0], self->border_rgba[1],
             self->border_rgba[2], self->border_rgba[3]);
     glBegin (GL_LINE_LOOP);
     glVertex2f (0, 0);

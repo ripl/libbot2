@@ -23,7 +23,7 @@ typedef struct _bot_signal_pipe {
 static bot_signal_pipe_t g_sp;
 static int g_sp_initialized = 0;
 
-int 
+int
 bot_signal_pipe_init()
 {
     if (g_sp_initialized) {
@@ -45,7 +45,7 @@ bot_signal_pipe_init()
     return 0;
 }
 
-int 
+int
 bot_signal_pipe_cleanup()
 {
     if (g_sp_initialized) {
@@ -77,7 +77,7 @@ bot_signal_handler_glib (GIOChannel *source, GIOCondition condition, void *ud)
     status = read (g_sp.fds[0], &signal, sizeof(int));
 
     if (status != sizeof(int)) {
-        fprintf(stderr, "wtf!? bot_signal_handler_glib is confused (%s:%d)\n", 
+        fprintf(stderr, "wtf!? bot_signal_handler_glib is confused (%s:%d)\n",
                 __FILE__, __LINE__);
         return TRUE;
     }
@@ -89,7 +89,7 @@ bot_signal_handler_glib (GIOChannel *source, GIOCondition condition, void *ud)
     return TRUE;
 }
 
-void 
+void
 bot_signal_pipe_add_signal (int sig)
 {
     // TODO use sigaction instead of signal()
@@ -112,7 +112,7 @@ bot_signal_pipe_add_signal (int sig)
     return;
 }
 
-int 
+int
 bot_signal_pipe_attach_glib (bot_signal_pipe_glib_handler_t func, gpointer user_data)
 {
     if (! g_sp_initialized) return -1;
@@ -120,9 +120,9 @@ bot_signal_pipe_attach_glib (bot_signal_pipe_glib_handler_t func, gpointer user_
     if (g_sp.ioc) return -1;
 
     g_sp.ioc = g_io_channel_unix_new (g_sp.fds[0]);
-    g_io_channel_set_flags (g_sp.ioc, 
+    g_io_channel_set_flags (g_sp.ioc,
             g_io_channel_get_flags (g_sp.ioc) | G_IO_FLAG_NONBLOCK, NULL);
-    g_sp.ios = g_io_add_watch (g_sp.ioc, G_IO_IN | G_IO_PRI, 
+    g_sp.ios = g_io_add_watch (g_sp.ioc, G_IO_IN | G_IO_PRI,
             (GIOFunc) bot_signal_handler_glib, NULL);
 
     g_sp.userfunc = func;
@@ -140,7 +140,7 @@ spgqok_handler (int signal, void *user)
     bot_signal_pipe_cleanup();
 }
 
-int 
+int
 bot_signal_pipe_glib_quit_on_kill (GMainLoop *mainloop)
 {
     if (0 != bot_signal_pipe_init()) return -1;

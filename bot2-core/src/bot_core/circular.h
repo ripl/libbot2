@@ -7,7 +7,7 @@ extern "C" {
 
 /**
  * @defgroup BotCoreCircular Circular Array
- * @brief Fixed-capacity circular array 
+ * @brief Fixed-capacity circular array
  * @ingroup BotCoreDataStructures
  * @include: bot_core/bot_core.h
  *

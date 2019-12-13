@@ -783,12 +783,12 @@ BotParam * bot_param_new_from_named_server (lcm_t * lcm, const char * server_nam
 {
   BotParam * param = _bot_param_new();
 
-  const char *param_prefix = server_name; 
+  const char *param_prefix = server_name;
   if (!param_prefix) param_prefix = getenv ("BOT_PARAM_SERVER_NAME");
-  gchar *update_channel = update_channel = g_strconcat (param_prefix ? : "", 
-          BOT_PARAM_UPDATE_CHANNEL, NULL); 
-  gchar *request_channel = request_channel = g_strconcat (param_prefix ? : "", 
-          BOT_PARAM_REQUEST_CHANNEL, NULL); 
+  gchar *update_channel = update_channel = g_strconcat (param_prefix ? : "",
+          BOT_PARAM_UPDATE_CHANNEL, NULL);
+  gchar *request_channel = request_channel = g_strconcat (param_prefix ? : "",
+          BOT_PARAM_REQUEST_CHANNEL, NULL);
 
   bot_param_update_t_subscription_t * sub = bot_param_update_t_subscribe(lcm, update_channel, _on_param_update,
       (void *) param);
@@ -892,7 +892,7 @@ BotParam * bot_param_new_from_file (const char *filename)
             child_filename = g_build_filename (param_dir, *child, NULL);
 
         if (!g_file_test (child_filename, G_FILE_TEST_EXISTS)) {
-            fprintf (stderr, "%s: can't include [%s], file does not exist\n", 
+            fprintf (stderr, "%s: can't include [%s], file does not exist\n",
                      __func__, child_filename);
             abort ();
         }

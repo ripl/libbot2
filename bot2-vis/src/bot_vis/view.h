@@ -28,9 +28,9 @@ void bot_gl_view_setup_camera(BotGlView *self);
 void bot_gl_view_look_at(BotGlView *self,
         const double eye[3], const double lookAt[3], const double up[3]);
 
-void bot_gl_view_follow(BotGlView *self, 
-        double lastPos[3], double lastQuat[4], 
-        double newPos[3], double newQuat[4], 
+void bot_gl_view_follow(BotGlView *self,
+        double lastPos[3], double lastQuat[4],
+        double newPos[3], double newQuat[4],
         gboolean followYaw);
 
 // 1.0 for full perspective, 0.0 for orthographic. Interpolated otherwise.
@@ -59,7 +59,7 @@ void bot_gl_view_get_modelview_matrix(const BotGlView *self, double m[16]);
  */
 void bot_gl_view_get_viewport(const BotGlView *self, int viewport[4]);
 
-void bot_gl_view_get_look_at(const BotGlView *self, double eye[3], 
+void bot_gl_view_get_look_at(const BotGlView *self, double eye[3],
         double lookAt[3], double up[3]);
 
 #ifdef __cplusplus

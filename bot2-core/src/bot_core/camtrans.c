@@ -13,13 +13,13 @@
 #define ERR(...) do { fprintf(stderr, "[%s:%d] ", __FILE__, __LINE__);	\
         fprintf(stderr, __VA_ARGS__); fflush(stderr); } while(0)
 #else
-#define ERR(...) 
+#define ERR(...)
 #endif
 
 #if 1
 #define DBG(...) do { fprintf(stdout, __VA_ARGS__); fflush(stdout); } while(0)
 #else
-#define DBG(...) 
+#define DBG(...)
 #endif
 
 #define CAMERA_EPSILON 1e-10
@@ -130,7 +130,7 @@ angular_lookup_undistort_func(const void *data, const double x, const double y,
     double r_in = sqrt(x*x + y*y);
     double theta_in = bot_fasttrig_atan2(r_in, 1);
     if (fabs(theta_in) > dist->dist_max) return -1;
-    
+
     // TODO
     return 0;
 }
@@ -454,7 +454,7 @@ bot_camtrans_new (const char *name,
     BotCamTrans *self = (BotCamTrans*)calloc(1, sizeof(BotCamTrans));
     assert (NULL != self);
 
-    if(name) 
+    if(name)
         self->name = strdup(name);
     self->width = width;
     self->height = height;
@@ -469,17 +469,17 @@ bot_camtrans_new (const char *name,
 
     // Create distortion/undistortion objects
     self->obj = distortion_obj;
-    
+
     return self;
 }
 
-static void 
+static void
 bot_camtrans_compute_matrices (BotCamTrans *self)
 {
     double pinhole[] = {
         self->fx, self->skew, self->cx,
         0,        self->fy,   self->cy,
-        0,        0,          1 
+        0,        0,          1
     };
     memcpy(self->matx, pinhole, 9*sizeof(double));
     int status = bot_matrix_inverse_3x3d (self->matx, self->inv_matx);
@@ -493,7 +493,7 @@ bot_camtrans_compute_matrices (BotCamTrans *self)
 /*            self->inv_matx[0], self->inv_matx[1], self->inv_matx[2], */
 /*            self->inv_matx[3], self->inv_matx[4], self->inv_matx[5], */
 /*            self->inv_matx[6], self->inv_matx[7], self->inv_matx[8]); */
-           
+
 }
 
 
@@ -566,7 +566,7 @@ bot_camtrans_get_height (const BotCamTrans *self)
 }
 
 int
-bot_camtrans_unproject_pixel(const BotCamTrans *self, double im_x, double im_y, 
+bot_camtrans_unproject_pixel(const BotCamTrans *self, double im_x, double im_y,
                              double ray[3])
 {
     double temp[3];

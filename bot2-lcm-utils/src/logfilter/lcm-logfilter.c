@@ -12,7 +12,7 @@
 
 #include <lcm/lcm.h>
 
-static void 
+static void
 usage()
 {
     printf("usage: bot-lcm-logfilter [OPTIONS] <source_logfile> <dest_logfile>\n"
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
         printf("=====\n");
         printf("Events written: %d\n", nwritten);
     }
-    
+
     regfree(&preg);
     lcm_eventlog_destroy(src_log);
     lcm_eventlog_destroy(dst_log);

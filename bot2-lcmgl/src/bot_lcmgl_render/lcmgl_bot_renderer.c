@@ -149,7 +149,7 @@ static void on_clear_button(GtkWidget *button, BotLcmglRenderer *self)
     bot_viewer_request_redraw(self->viewer);
 }
 
-void 
+void
 bot_lcmgl_add_renderer_to_viewer(BotViewer* viewer, lcm_t* lcm, int priority)
 {
     BotLcmglRenderer *self =

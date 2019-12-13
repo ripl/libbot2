@@ -676,7 +676,7 @@ void bot_lcmgl_decode(uint8_t *data, int datalen)
 
             if(id <= ntextures) {
                 _lcmgl_texture_t *tex = textures[id - 1];
-                bot_gl_texture_draw_coords(tex->tex, 
+                bot_gl_texture_draw_coords(tex->tex,
                         x_top_left, y_top_left, z_top_left,
                         x_top_right, y_top_right, z_top_right,
                         x_bot_right, y_bot_right, z_bot_right,

@@ -5,7 +5,7 @@
  * If a client is spamming an LCM network when it should not be, this utility
  * can be used to determine the source IP address and port of the offender.
  *
- * 
+ *
  *
  */
 #include <stdio.h>
@@ -105,14 +105,14 @@ host_destroy(host_t *host)
     g_slice_free(host_t, host);
 }
 
-static sender_t * 
+static sender_t *
 host_get_sender(host_t *host, uint16_t port)
 {
     int kv = (int)port;
     return g_hash_table_lookup(host->senders, &kv);
 }
 
-static sender_t * 
+static sender_t *
 host_add_new_sender(host_t *host, uint16_t port)
 {
     sender_t *sender  = host_get_sender(host, port);
@@ -150,7 +150,7 @@ lcm_parse_url(const char * url, struct in_addr *mc_addr, uint16_t *mc_port)
         g_strfreev (provider_networkargs);
         return -1;
     }
-    
+
     if(strcmp(provider_networkargs[0], "udpm")) {
         fprintf(stderr, "%s only works with udpm provider\n", PROGNAME);
         return -1;
@@ -203,7 +203,7 @@ setup_socket(state_t *app)
     // allow other applications on the local machine to also bind to this
     // multicast address and port
     int opt=1;
-    if (setsockopt(app->recvfd, SOL_SOCKET, SO_REUSEADDR, 
+    if (setsockopt(app->recvfd, SOL_SOCKET, SO_REUSEADDR,
             (char*)&opt, sizeof (opt)) < 0) {
         perror ("setsockopt (SOL_SOCKET, SO_REUSEADDR)");
         return -1;
@@ -213,7 +213,7 @@ setup_socket(state_t *app)
     /* Mac OS and FreeBSD require the REUSEPORT option in addition
      * to REUSEADDR or it won't let multiple processes bind to the
      * same port, even if they are using multicast. */
-    if (setsockopt(app->recvfd, SOL_SOCKET, SO_REUSEPORT, 
+    if (setsockopt(app->recvfd, SOL_SOCKET, SO_REUSEPORT,
             (char*)&opt, sizeof (opt)) < 0) {
         perror ("setsockopt (SOL_SOCKET, SO_REUSEPORT)");
         return -1;
@@ -254,7 +254,7 @@ on_message_ready(GIOChannel *source, GIOCondition cond, void *user_data)
     struct sockaddr_in from;
     socklen_t fromlen = sizeof(struct sockaddr);
 
-    int sz = recvfrom(app->recvfd, buf, 65536, 0, 
+    int sz = recvfrom(app->recvfd, buf, 65536, 0,
                        (struct sockaddr*) &from, &fromlen);
 
     if (sz < 0) {
@@ -329,13 +329,13 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    app->hosts = g_hash_table_new_full(g_int_hash, g_int_equal, NULL, 
+    app->hosts = g_hash_table_new_full(g_int_hash, g_int_equal, NULL,
             (GDestroyNotify)host_destroy);
 
     app->mainloop = g_main_loop_new(NULL, FALSE);
 
     app->ioc = g_io_channel_unix_new(app->recvfd);
-    app->sid = g_io_add_watch(app->ioc, G_IO_IN, (GIOFunc)on_message_ready, 
+    app->sid = g_io_add_watch(app->ioc, G_IO_IN, (GIOFunc)on_message_ready,
             app);
 
     g_timeout_add(100, on_timer, app);

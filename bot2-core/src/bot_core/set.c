@@ -10,13 +10,13 @@ struct _BotSet {
     GDestroyNotify element_destroy_func;
 };
 
-BotSet * 
+BotSet *
 bot_set_new (GHashFunc hash_func, GEqualFunc equal_func)
 {
     return bot_set_new_full (hash_func, equal_func, NULL);
 }
 
-BotSet * 
+BotSet *
 bot_set_new_full (GHashFunc hash_func, GEqualFunc equal_func,
         GDestroyNotify element_destroy_func)
 {
@@ -29,7 +29,7 @@ bot_set_new_full (GHashFunc hash_func, GEqualFunc equal_func,
     return set;
 }
 
-static void 
+static void
 _new_union_add (gpointer key, gpointer value, void *user_data)
 {
     BotSet *set = user_data;
@@ -103,12 +103,12 @@ _new_copy_add (gpointer key, gpointer element, gpointer user_data)
     g_hash_table_insert ((GHashTable*) user_data, key, element);
 }
 
-BotSet * 
+BotSet *
 bot_set_new_copy (const BotSet *set)
 {
     BotSet *result = bot_set_new_full (set->hash_func, set->equal_func,
             set->element_destroy_func);
-    g_hash_table_foreach ((GHashTable*)set->hash_table, _new_copy_add, 
+    g_hash_table_foreach ((GHashTable*)set->hash_table, _new_copy_add,
             result->hash_table);
     return result;
 }
@@ -127,33 +127,33 @@ bot_set_subtract (BotSet *set1, const BotSet *set2)
     bot_set_foreach ((BotSet*) set2, _maybe_remove_from_set1, set1);
 }
 
-void 
+void
 bot_set_destroy (BotSet *set)
 {
     g_hash_table_destroy (set->hash_table);
     g_slice_free (BotSet, set);
 }
 
-void 
+void
 bot_set_add (BotSet *set, gpointer element)
 {
     g_hash_table_insert (set->hash_table, element, element);
 }
 
-void 
+void
 bot_set_add_list (BotSet *set, GList *list)
 {
     for (GList *iter=list; iter; iter=iter->next)
         bot_set_add (set, iter->data);
 }
 
-void 
+void
 bot_set_remove (BotSet *set, gpointer element)
 {
     g_hash_table_remove (set->hash_table, element);
 }
 
-void 
+void
 bot_set_remove_all (BotSet *set)
 {
     g_hash_table_remove_all (set->hash_table);
@@ -165,7 +165,7 @@ bot_set_size (const BotSet *set)
     return g_hash_table_size (set->hash_table);
 }
 
-gboolean 
+gboolean
 bot_set_contains (const BotSet *set, gpointer element)
 {
     return g_hash_table_lookup (set->hash_table, element) == element;
@@ -183,7 +183,7 @@ _foreach_func (gpointer key, gpointer value, gpointer user_data)
     d->func (key, d->user_data);
 }
 
-void 
+void
 bot_set_foreach (BotSet *set, BotSetForeachFunc func, gpointer user_data)
 {
     struct _foreach_data d = { func, user_data };
@@ -199,7 +199,7 @@ _get_elements_foreach (gpointer key, gpointer value, gpointer user_data)
 GPtrArray *
 bot_set_get_elements (BotSet *set)
 {
-    GPtrArray *result = 
+    GPtrArray *result =
         g_ptr_array_sized_new (g_hash_table_size (set->hash_table));
     g_hash_table_foreach (set->hash_table, _get_elements_foreach, result);
     return result;

@@ -1,28 +1,28 @@
 /* ldpc_matrix.h - Interface to module for handling sparse mod2 matrices. */
 /*
- * The contents of this directory and its sub-directories are 
+ * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
- * 
+ *
  * Permission is granted for anyone to copy, use, modify, or distribute these
  * programs and accompanying documents for any purpose, provided this copyright
- * notice is retained and prominently displayed, along with a note saying 
- * that the original programs are available from Radford Neal's web page, and 
- * note is made of any changes made to these programs.  These programs and 
+ * notice is retained and prominently displayed, along with a note saying
+ * that the original programs are available from Radford Neal's web page, and
+ * note is made of any changes made to these programs.  These programs and
  * documents are distributed without any warranty, express or implied.  As the
- * programs were written for research purposes only, they have not been tested 
+ * programs were written for research purposes only, they have not been tested
  * to the degree that would be advisable in any important application.  All use
  * of these programs is entirely at the user's own risk.
  */
 
 
-/* This module implements operations on sparse matrices of mod2 elements 
-   (bits, with addition and multiplication being done modulo 2).  
-  
-   All procedures in this module display an error message on standard 
+/* This module implements operations on sparse matrices of mod2 elements
+   (bits, with addition and multiplication being done modulo 2).
+
+   All procedures in this module display an error message on standard
    error and terminate the program if passed an invalid argument (indicative
-   of a programming error), or if memory cannot be allocated.  Errors from 
-   invalid contents of a file result in an error code being returned to the 
-   caller, with no message being printed by this module. 
+   of a programming error), or if memory cannot be allocated.  Errors from
+   invalid contents of a file result in an error code being returned to the
+   caller, with no message being printed by this module.
 */
 
 
@@ -30,13 +30,13 @@
    are represented by nodes that are doubly-linked both by row and by column,
    with the headers for these lists being kept in arrays.  Nodes are allocated
    in blocks to reduce time and space overhead.  Freed nodes are kept for
-   reuse in the same matrix, rather than being freed for other uses, except 
+   reuse in the same matrix, rather than being freed for other uses, except
    that they are all freed when the matrix is cleared to all zeros by the
-   mod2sparse_clear procedure, or copied into by mod2sparse_copy. 
+   mod2sparse_clear procedure, or copied into by mod2sparse_copy.
 
    Direct access to these structures should be avoided except in low-level
    routines.  Use the macros and procedures defined below instead. */
-   
+
 #ifndef LDPC_MATRIX_SPARSE__
 #define LDPC_MATRIX_SPARSE__
 
@@ -98,7 +98,7 @@ typedef struct mod2block
  * Representation of a sparse matrix.
  */
 typedef struct mod2sparse
-{ 
+{
 	int n_rows;		  /* Number of rows in the matrix */
 	int n_cols;		  /* Number of columns in the matrix */
 
@@ -113,7 +113,7 @@ typedef struct mod2sparse
 /* MACROS TO GET AT ELEMENTS OF A SPARSE MATRIX.  The 'first', 'last', 'next',
    and 'prev' macros traverse the elements in a row or column.  Moving past
    the first/last element gets one to a header element, which can be identified
-   using the 'at_end' macro.  Macros also exist for finding out the row 
+   using the 'at_end' macro.  Macros also exist for finding out the row
    and column of an entry, and for finding out the dimensions of a matrix. */
 
 #define mod2sparse_first_in_row(m,i) ((m)->rows[i].right) /* Find the first   */
@@ -127,7 +127,7 @@ typedef struct mod2sparse
 #define mod2sparse_next_in_col(e) ((e)->down)   /* another in any of the three */
 #define mod2sparse_prev_in_row(e) ((e)->left)   /* possible directions        */
 #ifndef SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
-#define mod2sparse_prev_in_col(e) ((e)->up) 
+#define mod2sparse_prev_in_col(e) ((e)->up)
 #endif
 
 #define mod2sparse_at_end(e) ((e)->row<0) /* See if we've reached the end     */
@@ -144,8 +144,8 @@ typedef struct mod2sparse
 /* POSSIBLE LU DECOMPOSITION STRATEGIES.  For use with mod2sparse_decomp. */
 
 typedef enum mod2sparse_strategy_enum
-{ Mod2sparse_first, 
-  Mod2sparse_mincol, 
+{ Mod2sparse_first,
+  Mod2sparse_mincol,
   Mod2sparse_minprod
 } mod2sparse_strategy;
 #endif // #if 0
@@ -188,7 +188,7 @@ int mod2sparse_count_col (mod2sparse *, int);
 void mod2sparse_add_row (mod2sparse *, int, mod2sparse *, int);
 void mod2sparse_add_col (mod2sparse *, int, mod2sparse *, int);
 
-int mod2sparse_decomp (mod2sparse *, int, mod2sparse *, mod2sparse *, 
+int mod2sparse_decomp (mod2sparse *, int, mod2sparse *, mod2sparse *,
                        int *, int *, mod2sparse_strategy, int, int);
 
 int mod2sparse_tunnel_sub  (mod2sparse *, int *, char *, char *);

@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-int bot_ppm_read (FILE *fp, uint8_t **pixels, 
+int bot_ppm_read (FILE *fp, uint8_t **pixels,
         int *width, int *height, int *rowstride);
 
 int bot_ppm_read_fname(const char* fname, uint8_t** pixels,

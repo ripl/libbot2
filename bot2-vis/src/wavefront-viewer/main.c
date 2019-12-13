@@ -5,7 +5,7 @@
 
 #include <bot_vis/bot_vis.h>
 
-void setup_renderer_wavefront(BotViewer *viewer, int render_priority, 
+void setup_renderer_wavefront(BotViewer *viewer, int render_priority,
                               const char *wavefront_fname);
 
 int main(int argc, char *argv[])
@@ -14,17 +14,17 @@ int main(int argc, char *argv[])
     glutInit(&argc, argv);
 
     if(argc < 2) {
-        fprintf(stderr, "usage: %s <obj_filename>\n", 
+        fprintf(stderr, "usage: %s <obj_filename>\n",
                 g_path_get_basename(argv[0]));
         exit(1);
     }
 
     const char *wavefront_fname = argv[1];
-    
+
     BotViewer* viewer = bot_viewer_new("Wavefront OBJ Viewer");
 
     char *fname = g_build_filename(g_get_user_config_dir(), ".wavefront-viewerrc", NULL);
-    
+
     bot_viewer_load_preferences(viewer, fname);
 
     // setup renderers

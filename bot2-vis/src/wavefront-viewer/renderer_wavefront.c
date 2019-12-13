@@ -68,7 +68,7 @@ compile_display_list (RendererWavefront * self, char * prefix, BotWavefrontModel
     return dl;
 }
 
-static void 
+static void
 _renderer_draw (BotViewer *viewer, BotRenderer *super)
 {
     RendererWavefront *self = (RendererWavefront*) super->user;
@@ -85,7 +85,7 @@ _renderer_draw (BotViewer *viewer, BotRenderer *super)
 
     double scale = bot_gtk_param_widget_get_double(self->pw, PARAM_SCALE);
     glScalef (scale, scale, scale);
-    
+
     double rot_x = bot_gtk_param_widget_get_double(self->pw, PARAM_ROT_X);
     double rot_y = bot_gtk_param_widget_get_double(self->pw, PARAM_ROT_Y);
     double rot_z = bot_gtk_param_widget_get_double(self->pw, PARAM_ROT_Z);
@@ -112,7 +112,7 @@ on_param_widget_changed (BotGtkParamWidget *pw, const char *name, void *user)
 }
 
 void setup_renderer_wavefront(BotViewer *viewer, int render_priority, const char *wavefront_fname);
-void 
+void
 setup_renderer_wavefront(BotViewer *viewer, int render_priority, const char *wavefront_fname)
 {
     RendererWavefront *self = (RendererWavefront*) calloc (1, sizeof (RendererWavefront));
@@ -157,33 +157,33 @@ setup_renderer_wavefront(BotViewer *viewer, int render_priority, const char *wav
         default_dy = 0.0;
         default_dz = 0.0;
 
-        printf("WAVEFRONT extrema: [%f, %f, %f] [%f, %f, %f]\n", 
+        printf("WAVEFRONT extrema: [%f, %f, %f] [%f, %f, %f]\n",
                 minv[0], minv[1], minv[2],
                 maxv[0], maxv[1], maxv[2]);
         printf("WAVEFRONT initial scale: %f\n", default_scale);
         printf("WAVEFRONT initial offsets: [%f, %f, %f]\n", default_dx, default_dy, default_dz);
     }
 
-    bot_gtk_param_widget_add_double(self->pw, PARAM_SCALE, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_SCALE,
             BOT_GTK_PARAM_WIDGET_SPINBOX, 0, 99999999999, 0.00000001, default_scale);
 
-    bot_gtk_param_widget_add_double(self->pw, PARAM_DX, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_DX,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -9999999999, 99999999999, 0.01, default_dx);
-    bot_gtk_param_widget_add_double(self->pw, PARAM_DY, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_DY,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -9999999999, 99999999999, 0.01, default_dy);
-    bot_gtk_param_widget_add_double(self->pw, PARAM_DZ, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_DZ,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -9999999999, 99999999999, 0.01, default_dz);
 
-    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_X, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_X,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -180, 180, 0.1, default_rot_x);
-    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_Y, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_Y,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -180, 180, 0.1, default_rot_y);
-    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_Z, 
+    bot_gtk_param_widget_add_double(self->pw, PARAM_ROT_Z,
             BOT_GTK_PARAM_WIDGET_SPINBOX, -180, 180, 0.1, default_rot_z);
 
     gtk_widget_show_all(renderer->widget);
 
-    g_signal_connect (G_OBJECT (self->pw), "changed", 
+    g_signal_connect (G_OBJECT (self->pw), "changed",
                       G_CALLBACK (on_param_widget_changed), self);
 
     bot_viewer_add_renderer(viewer, &self->renderer, render_priority);

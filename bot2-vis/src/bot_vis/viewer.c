@@ -28,7 +28,7 @@
 #include "default_view_handler.h"
 
 //#define dbg(args...) fprintf (stderr, args)
-#define dbg(args...) 
+#define dbg(args...)
 #define err(args...) fprintf (stderr, args)
 
 #define TYPE_BOT_VIEWER  bot_viewer_get_type()
@@ -86,21 +86,21 @@ static gboolean
 on_render_timer (BotViewer * self)
 {
     BotViewerPriv *priv = BOT_VIEWER_GET_PRIVATE(self);
-    // this timer is called more often than we actually want to render.  
+    // this timer is called more often than we actually want to render.
     // check if we want to render.
     int64_t now = bot_timestamp_now();
     if(priv->next_render_utime < now) {
         self->movie_draw_pending = 1;
         bot_viewer_request_redraw(self);
 
-        while(priv->next_render_utime < now) 
+        while(priv->next_render_utime < now)
             priv->next_render_utime += priv->render_interval_usec;
     }
 
     return TRUE;
 }
 
-void 
+void
 bot_viewer_start_recording (BotViewer *self)
 {
     if (self->is_recording) {
@@ -133,14 +133,14 @@ bot_viewer_start_recording (BotViewer *self)
     gtk_window_set_resizable(GTK_WINDOW(self->window), FALSE);
 */
 
-    self->movie_path = bot_fileutils_get_unique_filename(NULL, "viewer", 1, 
+    self->movie_path = bot_fileutils_get_unique_filename(NULL, "viewer", 1,
             "ppms.gz");
     self->movie_gzf = gzopen(self->movie_path, "w");
     gzsetparams(self->movie_gzf, Z_BEST_SPEED, Z_DEFAULT_STRATEGY);
 
     if (self->movie_gzf == NULL)
         goto abort_recording;
-    
+
     bot_viewer_set_status_bar_message (self, "Recording to: %s", self->movie_path);
 
     BotViewerPriv *priv = BOT_VIEWER_GET_PRIVATE(self);
@@ -163,7 +163,7 @@ abort_recording:
     free (self->mov_bgr_buf);
 }
 
-void 
+void
 bot_viewer_stop_recording (BotViewer *self)
 {
     free(self->movie_buffer);
@@ -188,7 +188,7 @@ bot_viewer_stop_recording (BotViewer *self)
 static void update_status_bar(BotViewer *viewer)
 {
     char buf[1024];
-    
+
     if (viewer->picking_handler && !viewer->picking_handler->picking)
         viewer->picking_handler = NULL;
 
@@ -200,13 +200,13 @@ static void update_status_bar(BotViewer *viewer)
     int width = vp[2], height = vp[3];
 
     if (viewer->picking_handler)
-        snprintf(buf, sizeof (buf), "%d x %d [%s]  %s", width, height, 
+        snprintf(buf, sizeof (buf), "%d x %d [%s]  %s", width, height,
                  viewer->picking_handler->name,  viewer->status_bar_message);
     else
         snprintf(buf, sizeof (buf), "%d x %d [Idle] %s", width, height,
                  viewer->status_bar_message);
 
-    gtk_statusbar_push(GTK_STATUSBAR(viewer->status_bar), 
+    gtk_statusbar_push(GTK_STATUSBAR(viewer->status_bar),
                        gtk_statusbar_get_context_id(
                            GTK_STATUSBAR(viewer->status_bar),"info"), buf);
 }
@@ -241,7 +241,7 @@ bot_viewer_load_preferences (BotViewer *viewer, const char *fname)
 
     if (!loaded) goto done;
     dbg ("loading viewer settings from %s\n", fname);
-        
+
     for (int ridx = 0; ridx < viewer->renderers->len; ridx++) {
         BotRenderer *renderer = g_ptr_array_index (viewer->renderers, ridx);
         GtkCheckMenuItem *cmi = GTK_CHECK_MENU_ITEM (renderer->cmi);
@@ -258,29 +258,29 @@ bot_viewer_load_preferences (BotViewer *viewer, const char *fname)
         }
 
         if (renderer->widget) {
-            if (g_key_file_has_key (preferences, "__libviewer_show_renderers", 
+            if (g_key_file_has_key (preferences, "__libviewer_show_renderers",
                         renderer->name, NULL)) {
-                renderer->expanded = g_key_file_get_boolean (preferences, 
+                renderer->expanded = g_key_file_get_boolean (preferences,
                         "__libviewer_show_renderers", renderer->name, NULL);
                 gtk_expander_set_expanded (GTK_EXPANDER (renderer->expander),
                         renderer->expanded);
             }
         }
     }
-    
+
     // load bookmarks to preferences
     if(g_key_file_has_group(preferences, "__libviewer_bookmarks"))
     {
         for (int bm_indx=0; bm_indx < priv->num_bookmarks; bm_indx++) {
             GError *err = NULL;
-            char *str_key;   
+            char *str_key;
             str_key = g_strdup_printf("bookmark_%d", bm_indx);
 
-            int bmlist_len = 11;      
+            int bmlist_len = 11;
             if(!g_key_file_has_key(preferences, "__libviewer_bookmarks", str_key, NULL))
                 break;
-            double* pointtolist = 
-                g_key_file_get_double_list(preferences, "__libviewer_bookmarks", 
+            double* pointtolist =
+                g_key_file_get_double_list(preferences, "__libviewer_bookmarks",
                         str_key, (gsize*) &bmlist_len, &err);
             if(err) {
                 g_error_free(err);
@@ -326,9 +326,9 @@ bot_viewer_save_preferences (BotViewer *viewer, const char *fname)
     // save bookmarks to prefs
     int bmlist_len = 11;
     char *str_key;
-    for (int bm_indx=0; bm_indx < priv->num_bookmarks; bm_indx++) { 
+    for (int bm_indx=0; bm_indx < priv->num_bookmarks; bm_indx++) {
         str_key = g_strdup_printf("bookmark_%d", bm_indx);
-        double bmlist[bmlist_len]; 
+        double bmlist[bmlist_len];
         for(int i=0; i<3; i++) {
             bmlist[i] = priv->bookmarks[bm_indx].eye[i];
             bmlist[i+3] = priv->bookmarks[bm_indx].lookat[i];
@@ -346,7 +346,7 @@ bot_viewer_save_preferences (BotViewer *viewer, const char *fname)
         return;
     }
 
-    g_signal_emit (G_OBJECT (viewer), bot_viewer_signals[SAVE_PREFERENCES_SIGNAL], 
+    g_signal_emit (G_OBJECT (viewer), bot_viewer_signals[SAVE_PREFERENCES_SIGNAL],
             0, preferences);
 
     gsize len = 0;
@@ -379,11 +379,11 @@ static gboolean on_redraw_timer(void *user_data)
     return FALSE; // this is a one-shot event.
 }
 
-static void 
+static void
 check_gl_errors (const char *label) {
     GLenum errCode = glGetError ();
     const GLubyte *errStr;
-    
+
     while (errCode != GL_NO_ERROR) {
         errStr = gluErrorString(errCode);
         fprintf (stderr, "OpenGL Error on draw #%d (%s)\n", g_draws, label);
@@ -396,7 +396,7 @@ static void
 render_scene (BotViewer *self)
 {
 //    glClearColor (0.0, 0.0, 0.0, 1.0);
-    glClearColor(self->backgroundColor[0], self->backgroundColor[1], 
+    glClearColor(self->backgroundColor[0], self->backgroundColor[1],
                  self->backgroundColor[2], self->backgroundColor[3]);
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -428,8 +428,8 @@ render_scene (BotViewer *self)
         BotRenderer *renderer = g_ptr_array_index(self->renderers, ridx);
 
         if (renderer->enabled) {
-            
-            glPushAttrib(GL_ENABLE_BIT | GL_POINT_BIT | GL_POLYGON_STIPPLE_BIT | 
+
+            glPushAttrib(GL_ENABLE_BIT | GL_POINT_BIT | GL_POLYGON_STIPPLE_BIT |
                          GL_POLYGON_BIT | GL_LINE_BIT | GL_FOG_BIT | GL_LIGHTING_BIT );
             glPushMatrix();
 
@@ -482,23 +482,23 @@ on_gl_expose (GtkWidget *widget, GdkEventExpose *event, void *user_data)
             exit(0);
         }
     }
-    
+
     // we're going to actually draw.
-    
+
     bot_gtk_gl_drawing_area_set_context (self->gl_area);
     g_signal_emit(G_OBJECT(self), bot_viewer_signals[RENDER_BEGIN_SIGNAL], 0);
     render_scene (self);
     g_signal_emit(G_OBJECT(self), bot_viewer_signals[RENDER_END_SIGNAL], 0);
     bot_gtk_gl_drawing_area_swap_buffers (self->gl_area);
-    
+
     // write a movie frame?
     if (self->movie_draw_pending) {
         assert(self->movie_gzf);
 
-        glReadPixels (0, 0, self->movie_width, self->movie_height, GL_RGB, GL_UNSIGNED_BYTE, self->movie_buffer); 
-        
+        glReadPixels (0, 0, self->movie_width, self->movie_height, GL_RGB, GL_UNSIGNED_BYTE, self->movie_buffer);
+
         gzprintf(self->movie_gzf, "P6 %d %d %d\n", self->movie_width, self->movie_height, 255);
-        
+
         for (int h = self->movie_height - 1; h >= 0; h--) {
             int offset = self->movie_stride * h;
             gzwrite(self->movie_gzf, &self->movie_buffer[offset], self->movie_stride);
@@ -566,15 +566,15 @@ _window_coord_to_ray (double x, double y, double ray_start[3], double ray_dir[3]
     glGetIntegerv (GL_VIEWPORT, viewport);
 
     if (mygluUnProject (x, y, 0,
-                      model_matrix, proj_matrix, viewport, 
-                      &ray_start[0], &ray_start[1], &ray_start[2]) == GL_FALSE) 
+                      model_matrix, proj_matrix, viewport,
+                      &ray_start[0], &ray_start[1], &ray_start[2]) == GL_FALSE)
         return -1;
 
     double ray_end[3];
 
     if (mygluUnProject (x, y, 1,
-                      model_matrix, proj_matrix, viewport, 
-                      &ray_end[0], &ray_end[1], &ray_end[2]) == GL_FALSE) 
+                      model_matrix, proj_matrix, viewport,
+                      &ray_end[0], &ray_end[1], &ray_end[2]) == GL_FALSE)
         return -1;
 
     ray_dir[0] = ray_end[0] - ray_start[0];
@@ -586,7 +586,7 @@ _window_coord_to_ray (double x, double y, double ray_start[3], double ray_dir[3]
     return 0;
 }
 
-static gboolean 
+static gboolean
 on_button_press (GtkWidget *widget, GdkEventButton *event, void *user_data)
 {
     BotViewer *self = (BotViewer*) user_data;
@@ -605,7 +605,7 @@ on_button_press (GtkWidget *widget, GdkEventButton *event, void *user_data)
     if (self->picking_handler == NULL || self->picking_handler->picking==0) {
         for (unsigned int eidx = 0; eidx < self->event_handlers->len; eidx++) {
             BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-            
+
             if (handler->enabled && handler->pick_query) {
                 double this_distance = handler->pick_query(self, handler, ray_start, ray_dir);
                 if (this_distance < best_distance && this_distance >= 0) {
@@ -630,10 +630,10 @@ on_button_press (GtkWidget *widget, GdkEventButton *event, void *user_data)
     }
 
     // try all the other handlers in order of priority
-    for (unsigned int eidx = 0; 
+    for (unsigned int eidx = 0;
             !consumed && eidx < self->event_handlers->len; eidx++) {
         BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-        
+
         if (handler != self->picking_handler && handler->enabled && handler->mouse_press)
             if (handler->mouse_press(self, handler, ray_start, ray_dir, event))
                 break;
@@ -675,7 +675,7 @@ on_button_release (GtkWidget *widget, GdkEventButton *event, void *user_data)
     return TRUE;
 }
 
-static gboolean 
+static gboolean
 on_motion_notify (GtkWidget *widget, GdkEventMotion *event, void *user_data)
 {
     BotViewer *self = (BotViewer*) user_data;
@@ -727,7 +727,7 @@ on_motion_notify (GtkWidget *widget, GdkEventMotion *event, void *user_data)
     // try all the other handlers in order of priority
     for (unsigned int eidx = 0; !consumed && eidx < self->event_handlers->len; eidx++) {
         BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-        
+
         if (handler != self->picking_handler && handler->enabled && handler->mouse_motion)
             if (handler->mouse_motion(self, handler, ray_start, ray_dir, event))
                 break;
@@ -736,7 +736,7 @@ on_motion_notify (GtkWidget *widget, GdkEventMotion *event, void *user_data)
     return TRUE;
 }
 
-static gboolean 
+static gboolean
 on_scroll_notify (GtkWidget *widget, GdkEventScroll *event, void *user_data)
 {
     BotViewer *self = (BotViewer*) user_data;
@@ -760,7 +760,7 @@ on_scroll_notify (GtkWidget *widget, GdkEventScroll *event, void *user_data)
     // try all the other handlers in order of priority
     for (unsigned int eidx = 0; !consumed && eidx < self->event_handlers->len; eidx++) {
         BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-        
+
         if (handler != self->picking_handler && handler->enabled && handler->mouse_scroll)
             if (handler->mouse_scroll(self, handler, ray_start, ray_dir, event))
                 break;
@@ -769,8 +769,8 @@ on_scroll_notify (GtkWidget *widget, GdkEventScroll *event, void *user_data)
     return TRUE;
 }
 
-static gint 
-on_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, 
+static gint
+on_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event,
                                 void *user)
 {
     BotViewer *self = (BotViewer*) user;
@@ -786,7 +786,7 @@ on_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event,
     // try all the other handlers in order of priority
     for (unsigned int eidx = 0; !consumed && eidx < self->event_handlers->len; eidx++) {
         BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-        
+
         if (handler != self->picking_handler && handler->enabled && handler->key_press) {
             consumed = handler->key_press(self, handler, event);
             if (consumed)
@@ -797,8 +797,8 @@ on_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event,
     return consumed;
 }
 
-static gint 
-on_main_window_key_release_event (GtkWidget *widget, GdkEventKey *event, 
+static gint
+on_main_window_key_release_event (GtkWidget *widget, GdkEventKey *event,
                                 void *user)
 {
     BotViewer *self = (BotViewer*) user;
@@ -814,7 +814,7 @@ on_main_window_key_release_event (GtkWidget *widget, GdkEventKey *event,
     // try all the other handlers in order of priority
     for (unsigned int eidx = 0; !consumed && eidx < self->event_handlers->len; eidx++) {
         BotEventHandler *handler = g_ptr_array_index(self->event_handlers, eidx);
-        
+
         if (handler != self->picking_handler && handler->enabled && handler->key_release) {
             consumed = handler->key_release(self, handler, event);
             if (consumed)
@@ -825,7 +825,7 @@ on_main_window_key_release_event (GtkWidget *widget, GdkEventKey *event,
     return consumed;
 }
 
-static int 
+static int
 _pixel_convert_8u_bgra_to_8u_rgb(uint8_t *dest, int dstride, int dwidth,
         int dheight, const uint8_t *src, int sstride)
 {
@@ -855,7 +855,7 @@ take_screenshot (void *user_data, char *fname)
     int h = alloc.height;
     uint8_t *bgra = (uint8_t*)malloc (w*h*4);
     uint8_t *rgb = (uint8_t*)malloc (w*h*3);
-    glReadPixels (0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bgra); 
+    glReadPixels (0, 0, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bgra);
     FILE *fp = fopen (fname, "wb");
     if (! fp) {
         perror ("fopen");
@@ -911,12 +911,12 @@ static void
 on_renderer_enabled_toggled (GtkCheckMenuItem *cmi, void *user_data)
 {
     BotViewer *self = (BotViewer*) user_data;
-    BotRenderer *r = (BotRenderer*) g_object_get_data (G_OBJECT (cmi), 
+    BotRenderer *r = (BotRenderer*) g_object_get_data (G_OBJECT (cmi),
                                                  "BotViewer:plugin");
     r->enabled = gtk_check_menu_item_get_active (cmi);
 
     if (r->widget) {
-        GtkWidget *frame = g_object_get_data (G_OBJECT (r->widget), 
+        GtkWidget *frame = g_object_get_data (G_OBJECT (r->widget),
                                               "BotViewer:frame");
         if (frame) {
             if (r->enabled) {
@@ -991,11 +991,11 @@ on_select_no_renderers_activate (GtkMenuItem *mi, void *user_data)
 }
 
 static void
-on_renderer_widget_expander_notify (GObject *object, GParamSpec *param_spec, 
+on_renderer_widget_expander_notify (GObject *object, GParamSpec *param_spec,
         void *user_data)
 {
     GtkExpander *expander = GTK_EXPANDER (object);
-    BotRenderer *renderer = 
+    BotRenderer *renderer =
         (BotRenderer*) g_object_get_data (G_OBJECT (expander), "BotViewer:plugin");
 
     renderer->expanded = gtk_expander_get_expanded (expander);
@@ -1013,7 +1013,7 @@ static void on_select_bookmark_save_view(GtkMenuItem *mi, void *user)
 
   BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) vhandler->user;
 
-  // figure out projection mode  
+  // figure out projection mode
   views->projection_mode = vhandler->get_projection_mode(vhandler);
 
   views->saved = 1;
@@ -1026,7 +1026,7 @@ static void on_select_bookmark_save_view(GtkMenuItem *mi, void *user)
 
 static void on_select_bookmark_load_view(GtkMenuItem *mi, void *user)
 {
- 
+
   bookmark_persp_t *views = user;
   BotViewer* viewer = views->viewer;
   BotViewHandler *vhandler = viewer->view_handler;
@@ -1105,9 +1105,9 @@ void bot_viewer_add_renderer_on_side (BotViewer *self, BotRenderer *renderer, in
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (renderer->cmi), renderer->enabled);
 
     g_object_set_data (G_OBJECT (renderer->cmi), "BotViewer:plugin", renderer);
-    g_signal_connect (G_OBJECT (renderer->cmi), "toggled", 
+    g_signal_connect (G_OBJECT (renderer->cmi), "toggled",
                       G_CALLBACK (on_renderer_enabled_toggled), self);
-    
+
     g_ptr_array_add(self->renderers, renderer);
     g_ptr_array_add(self->renderers_sorted, renderer);
     g_ptr_array_sort(self->renderers_sorted, renderer_name_compare_function);
@@ -1129,16 +1129,16 @@ void bot_viewer_add_renderer_on_side (BotViewer *self, BotRenderer *renderer, in
         renderer->expander = gtk_expander_new (renderer->name);
         gtk_expander_set_expanded (GTK_EXPANDER (renderer->expander), TRUE);
         renderer->control_frame = gtk_frame_new (NULL);
-        
+
         if (renderer->enabled) {
             gtk_widget_show (renderer->control_frame);
         } else {
             gtk_widget_hide (renderer->control_frame);
         }
-        
+
         gtk_frame_set_label_widget (GTK_FRAME (renderer->control_frame), renderer->expander);
         gtk_container_add (GTK_CONTAINER (renderer->control_frame), renderer->widget);
-        
+
 #ifdef CONTROLS_BOX_LEFT_ENABLED
         if (which_side==0){
            gtk_box_pack_start (GTK_BOX (self->controls_box_left), renderer->control_frame,
@@ -1161,14 +1161,14 @@ void bot_viewer_add_renderer_on_side (BotViewer *self, BotRenderer *renderer, in
 
         gtk_widget_show (renderer->expander);
         gtk_widget_show (renderer->widget);
-        
+
         g_signal_connect (G_OBJECT (renderer->expander), "notify::expanded",
                           G_CALLBACK (on_renderer_widget_expander_notify), self);
-        g_object_set_data (G_OBJECT (renderer->expander), 
+        g_object_set_data (G_OBJECT (renderer->expander),
                            "BotViewer:plugin", renderer);
-        g_object_set_data (G_OBJECT (renderer->widget), 
+        g_object_set_data (G_OBJECT (renderer->widget),
                            "BotViewer:expander", renderer->expander);
-        g_object_set_data (G_OBJECT (renderer->widget), 
+        g_object_set_data (G_OBJECT (renderer->widget),
                            "BotViewer:frame", renderer->control_frame);
     }
 
@@ -1198,7 +1198,7 @@ destroy_plugins (BotViewer *self)
 }
 */
 
-static void 
+static void
 make_menus(BotViewer *viewer, GtkWidget *parent)
 {
     BotViewerPriv* priv = BOT_VIEWER_GET_PRIVATE(viewer);
@@ -1207,7 +1207,7 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
     viewer->menu_bar = menubar;
 
     gtk_box_pack_start(GTK_BOX(parent), menubar, FALSE, FALSE, 0);
- 
+
     GtkWidget *file_menuitem = gtk_menu_item_new_with_mnemonic("_File");
     gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file_menuitem);
 
@@ -1238,11 +1238,11 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
         gtk_widget_show (select_all_mi);
 
         // remove all item
-        GtkWidget *select_none_mi = 
+        GtkWidget *select_none_mi =
             gtk_menu_item_new_with_mnemonic ("Select _None");
         gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), select_none_mi);
         gtk_widget_show (select_none_mi);
-        g_signal_connect (G_OBJECT (select_all_mi), "activate", 
+        g_signal_connect (G_OBJECT (select_all_mi), "activate",
                           G_CALLBACK (on_select_all_renderers_activate), viewer);
         g_signal_connect (G_OBJECT (select_none_mi), "activate",
                           G_CALLBACK (on_select_no_renderers_activate), viewer);
@@ -1272,11 +1272,11 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
         gtk_widget_show (select_all_mi);
 
         // remove all item
-        GtkWidget *select_none_mi = 
+        GtkWidget *select_none_mi =
             gtk_menu_item_new_with_mnemonic ("Select _None");
         gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), select_none_mi);
         gtk_widget_show (select_none_mi);
-        g_signal_connect (G_OBJECT (select_all_mi), "activate", 
+        g_signal_connect (G_OBJECT (select_all_mi), "activate",
                           G_CALLBACK (on_select_all_event_handlers_activate), viewer);
         g_signal_connect (G_OBJECT (select_none_mi), "activate",
                           G_CALLBACK (on_select_no_event_handlers_activate), viewer);
@@ -1323,9 +1323,9 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
       GtkWidget* load_smi = gtk_menu_item_new_with_label("Load");
       gtk_menu_shell_append(GTK_MENU_SHELL(submenu), save_smi);
       gtk_menu_shell_append(GTK_MENU_SHELL(submenu), load_smi);
-      g_signal_connect(G_OBJECT(save_smi), "activate", 
+      g_signal_connect(G_OBJECT(save_smi), "activate",
               G_CALLBACK(on_select_bookmark_save_view), &priv->bookmarks[i]);
-      g_signal_connect(G_OBJECT(load_smi), "activate", 
+      g_signal_connect(G_OBJECT(load_smi), "activate",
               G_CALLBACK(on_select_bookmark_load_view), &priv->bookmarks[i]);
 
       gtk_widget_add_accelerator(save_smi, "activate", priv->key_accel_group,
@@ -1339,7 +1339,7 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
 
 }
 
-static void 
+static void
 make_toolbar(BotViewer *viewer, GtkWidget *parent)
 {
     GtkWidget *toolbar = gtk_toolbar_new();
@@ -1348,15 +1348,15 @@ make_toolbar(BotViewer *viewer, GtkWidget *parent)
     // add a recording button to the toolbar
     viewer->record_button = GTK_WIDGET(
         gtk_toggle_tool_button_new_from_stock (GTK_STOCK_MEDIA_RECORD));
-    gtk_tool_item_set_is_important (GTK_TOOL_ITEM (viewer->record_button), 
+    gtk_tool_item_set_is_important (GTK_TOOL_ITEM (viewer->record_button),
             TRUE);
-    gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM (viewer->record_button), 
+    gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM (viewer->record_button),
             "Record an AVI of the viewport, saved in the current directory");
 
-    gtk_toolbar_insert (GTK_TOOLBAR (toolbar), 
+    gtk_toolbar_insert (GTK_TOOLBAR (toolbar),
             GTK_TOOL_ITEM (viewer->record_button), 0);
     gtk_widget_show (viewer->record_button);
-    g_signal_connect (G_OBJECT (viewer->record_button), "toggled", 
+    g_signal_connect (G_OBJECT (viewer->record_button), "toggled",
             G_CALLBACK (on_record_toggled), viewer);
 
     // screenshot button
@@ -1367,7 +1367,7 @@ make_toolbar(BotViewer *viewer, GtkWidget *parent)
             "Save a PPM screenshot of the viewport to the current directory");
     gtk_toolbar_insert (GTK_TOOLBAR (toolbar), ssbt, 1);
     gtk_widget_show (GTK_WIDGET (ssbt));
-    g_signal_connect (G_OBJECT (ssbt), "clicked", 
+    g_signal_connect (G_OBJECT (ssbt), "clicked",
             G_CALLBACK (on_screenshot_clicked), viewer);
 
     // quit button
@@ -1491,7 +1491,7 @@ bot_viewer_init (BotViewer *viewer)
 
     // allocate memory for saved bookmarks
     priv->num_bookmarks = 6;
-    priv->bookmarks = (bookmark_persp_t*) calloc(priv->num_bookmarks, 
+    priv->bookmarks = (bookmark_persp_t*) calloc(priv->num_bookmarks,
             sizeof(bookmark_persp_t));
     for(int bk_ind=0; bk_ind<priv->num_bookmarks; bk_ind++) {
         priv->bookmarks[bk_ind].viewer = viewer;
@@ -1504,7 +1504,7 @@ bot_viewer_init (BotViewer *viewer)
         // }
     }
 
-    viewer->prettier_flag = (getenv("BOT_VIEWER_PRETTIER") != NULL && 
+    viewer->prettier_flag = (getenv("BOT_VIEWER_PRETTIER") != NULL &&
                              atoi(getenv("BOT_VIEWER_PRETTIER"))>0);;
     printf("BOT_VIEWER_PRETTIER: %d\n", viewer->prettier_flag);
 
@@ -1601,10 +1601,10 @@ bot_viewer_init (BotViewer *viewer)
 
     // create the aspect area to maintain a 1:1 aspect ratio
     viewer->gl_area = BOT_GTK_GL_DRAWING_AREA (bot_gtk_gl_drawing_area_new (FALSE));
-    gtk_widget_set_events (GTK_WIDGET (viewer->gl_area), 
+    gtk_widget_set_events (GTK_WIDGET (viewer->gl_area),
             GDK_LEAVE_NOTIFY_MASK |
-            GDK_BUTTON_PRESS_MASK | 
-            GDK_BUTTON_RELEASE_MASK | 
+            GDK_BUTTON_PRESS_MASK |
+            GDK_BUTTON_RELEASE_MASK |
             GDK_POINTER_MOTION_MASK);
 
     gtk_container_add (GTK_CONTAINER (gl_box), GTK_WIDGET (viewer->gl_area));
@@ -1642,7 +1642,7 @@ bot_viewer_init (BotViewer *viewer)
 
 
     // plugins will be inserted here as add_plugin is called
- 
+
     gtk_widget_show_all(viewer->window);
 
     BotDefaultViewHandler *dvh = bot_default_view_handler_new(viewer);
@@ -1743,7 +1743,7 @@ int bot_viewer_request_pick(BotViewer *viewer, BotEventHandler *ehandler)
 
 void bot_viewer_add_stock_renderer_grid(BotViewer* viewer, int priority);
 
-void 
+void
 bot_viewer_add_stock_renderer(BotViewer* viewer, int stock_renderer_id, int priority)
 {
     switch(stock_renderer_id) {

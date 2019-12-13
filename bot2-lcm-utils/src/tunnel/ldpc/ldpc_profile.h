@@ -1,5 +1,5 @@
 /* $Id: ldpc_profile.h,v 1.11 2006/09/06 14:36:49 roca Exp $ */
-/* 
+/*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
@@ -10,7 +10,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -57,7 +57,7 @@
  * This define reduces significantly the memory consumption of sparse matrices
  * (the matrix size is decreased by 1/6). See ldpc_matrix_sparse.h|cpp files.
  *
- * But there is a drawback... With LDPC-Triangle, the initialization time 
+ * But there is a drawback... With LDPC-Triangle, the initialization time
  * becomes quite important when activating this option!!!
  * In all other cases (LDGM and LDPC-Staircase) we did not noticed any impact
  * on init/encoding/decoding times. So use it unless you are interested in the

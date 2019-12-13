@@ -16,7 +16,7 @@ int bot_matrix_inverse_4x4d (const double m[16], double inv[16])
         m[12]*m[1]*m[7]*m[10]+m[12]*m[5]*m[2]*m[11]-
         m[12]*m[5]*m[3]*m[10]-m[12]*m[9]*m[2]*m[7]+
         m[12]*m[9]*m[3]*m[6];
-    
+
     if (det == 0)
         return -1;
 
@@ -43,8 +43,8 @@ int bot_matrix_inverse_4x4d (const double m[16], double inv[16])
     return 0;
 }
 
-int 
-bot_linear_least_squares_3d (const double *A, int m, const double b[3], 
+int
+bot_linear_least_squares_3d (const double *A, int m, const double b[3],
         double x[3])
 {
     double AtA[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -107,7 +107,7 @@ bot_matrix_mean_cov_3d (const double *X, int n, double mean[3], double cov[9])
     cov[7] = cov[5];
 }
 
-void 
+void
 bot_matrix_mean_cov_2d (const double *X, int n, double mean[2], double cov[4])
 {
     mean[0] = mean[1] = 0;

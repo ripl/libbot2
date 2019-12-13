@@ -5,7 +5,7 @@
 
 #include "glib_util.h"
 
-void 
+void
 bot_g_list_free_with_func (GList *list, GDestroyNotify functor)
 {
     GList *iter;
@@ -15,7 +15,7 @@ bot_g_list_free_with_func (GList *list, GDestroyNotify functor)
     g_list_free (list);
 }
 
-void 
+void
 bot_g_queue_free_with_func (GQueue *queue, GDestroyNotify func)
 {
     while (! g_queue_is_empty (queue)) {
@@ -42,7 +42,7 @@ GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a)
     return result;
 }
 
-int 
+int
 bot_g_time_val_compare (const GTimeVal *time1, const GTimeVal *time2)
 {
     if (time1->tv_sec > time2->tv_sec) return 1;
@@ -89,7 +89,7 @@ get_all_vals_array_helper (gpointer key, gpointer value, gpointer user_data)
     g_ptr_array_add(vals, value);
 }
 
-GPtrArray * 
+GPtrArray *
 bot_g_hash_table_get_vals_array (GHashTable *hash_table)
 {
     GPtrArray * result = g_ptr_array_sized_new(g_hash_table_size(hash_table));

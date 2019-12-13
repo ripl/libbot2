@@ -68,7 +68,7 @@ int bot_gl_scrollplot2d_set_title (BotGlScrollPlot2d *self, const char *title);
  *
  * Color values should be in the range [0, 1]
  */
-int bot_gl_scrollplot2d_set_text_color (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_text_color (BotGlScrollPlot2d *self,
         double r, double g, double b, double a);
 
 /**
@@ -87,7 +87,7 @@ void bot_gl_scrollplot2d_set_show_title (BotGlScrollPlot2d *self, int val);
  *
  * Color values should be in the range [0, 1]
  */
-int bot_gl_scrollplot2d_set_bgcolor (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_bgcolor (BotGlScrollPlot2d *self,
         double r, double g, double b, double alpha);
 
 /**
@@ -99,7 +99,7 @@ int bot_gl_scrollplot2d_set_bgcolor (BotGlScrollPlot2d *self,
  *
  * Color values should be in the range [0, 1]
  */
-int bot_gl_scrollplot2d_set_border_color (BotGlScrollPlot2d *self, 
+int bot_gl_scrollplot2d_set_border_color (BotGlScrollPlot2d *self,
         double r, double g, double b, double alpha);
 
 /**
@@ -111,13 +111,13 @@ int bot_gl_scrollplot2d_set_show_legend (BotGlScrollPlot2d *self,
 /**
  * Sets the x-axis limits.
  */
-int bot_gl_scrollplot2d_set_xlim (BotGlScrollPlot2d *self, double xmin, 
+int bot_gl_scrollplot2d_set_xlim (BotGlScrollPlot2d *self, double xmin,
         double xmax);
 
 /**
  * Sets the y-axis limits.
  */
-int bot_gl_scrollplot2d_set_ylim (BotGlScrollPlot2d *self, double ymin, 
+int bot_gl_scrollplot2d_set_ylim (BotGlScrollPlot2d *self, double ymin,
         double ymax);
 
 /**
@@ -146,7 +146,7 @@ int bot_gl_scrollplot2d_remove_plot (BotGlScrollPlot2d *self, const char *name);
  *
  * Color values should be in the range [0, 1]
  */
-int bot_gl_scrollplot2d_set_color (BotGlScrollPlot2d *self, const char *name, 
+int bot_gl_scrollplot2d_set_color (BotGlScrollPlot2d *self, const char *name,
         double r, double g, double b, double alpha);
 
 /**

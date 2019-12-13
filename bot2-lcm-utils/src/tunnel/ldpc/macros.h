@@ -9,7 +9,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public

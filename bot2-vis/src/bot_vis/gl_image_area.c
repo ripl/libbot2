@@ -21,9 +21,9 @@ static void bot_gtk_gl_image_area_finalize (GObject *obj);
 
 G_DEFINE_TYPE (BotGtkGlImageArea, bot_gtk_gl_image_area, BOT_GTK_TYPE_GL_DRAWING_AREA);
 
-static gboolean on_gl_expose (GtkWidget * widget, GdkEventExpose * event, 
+static gboolean on_gl_expose (GtkWidget * widget, GdkEventExpose * event,
         void* user_data);
-static gboolean on_gl_expose_after (GtkWidget * widget, GdkEventExpose * event, 
+static gboolean on_gl_expose_after (GtkWidget * widget, GdkEventExpose * event,
         void* user_data);
 
 static void
@@ -78,7 +78,7 @@ bot_gtk_gl_image_area_new ()
     return GTK_WIDGET (g_object_new (BOT_GTK_TYPE_GL_IMAGE_AREA, NULL));
 }
 
-static gboolean 
+static gboolean
 on_gl_expose (GtkWidget * widget, GdkEventExpose * event, void* user_data)
 {
     BotGtkGlImageArea *self = BOT_GTK_GL_IMAGE_AREA (user_data);
@@ -117,7 +117,7 @@ on_gl_expose (GtkWidget * widget, GdkEventExpose * event, void* user_data)
     return FALSE;
 }
 
-static gboolean 
+static gboolean
 on_gl_expose_after (GtkWidget * widget, GdkEventExpose * event, void* user_data)
 {
     BotGtkGlImageArea *self = BOT_GTK_GL_IMAGE_AREA (user_data);
@@ -151,10 +151,10 @@ int
 bot_gtk_gl_image_area_set_image_format (BotGtkGlImageArea *self,
         int width, int height, GLenum format)
 {
-    if (format != GL_LUMINANCE && 
-        format != GL_RGB && 
-        format != GL_BGR && 
-        format != GL_RGBA && 
+    if (format != GL_LUMINANCE &&
+        format != GL_RGB &&
+        format != GL_BGR &&
+        format != GL_RGBA &&
         format != GL_BGRA)
     {
         errl ("Error: BotGtkGlImageArea does not support GL format %s\n",
@@ -214,7 +214,7 @@ bot_gtk_gl_image_area_set_image_format (BotGtkGlImageArea *self,
         }
         glGenBuffersARB (1, &self->pbo);
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, self->pbo);
-        glBufferDataARB (GL_PIXEL_UNPACK_BUFFER_ARB, self->max_data_size, NULL, 
+        glBufferDataARB (GL_PIXEL_UNPACK_BUFFER_ARB, self->max_data_size, NULL,
                 GL_STREAM_DRAW);
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, 0);
     }
@@ -230,7 +230,7 @@ bot_gtk_gl_image_area_upload_image (BotGtkGlImageArea * self,
 {
     if (self->use_pbo && (row_stride * self->height) > self->max_data_size) {
         fprintf (stderr, "Error: gl_texture buffer (%d bytes) too small for "
-                "texture (%d bytes)\n", self->max_data_size, 
+                "texture (%d bytes)\n", self->max_data_size,
                 row_stride * self->height);
         return -1;
     }
@@ -253,7 +253,7 @@ bot_gtk_gl_image_area_upload_image (BotGtkGlImageArea * self,
         glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
     }
 
-    glPixelStorei (GL_UNPACK_ROW_LENGTH, 
+    glPixelStorei (GL_UNPACK_ROW_LENGTH,
             row_stride * 8 / _pixel_format_bpp (self->format));
     if (self->use_pbo) {
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, self->pbo);
@@ -262,20 +262,20 @@ bot_gtk_gl_image_area_upload_image (BotGtkGlImageArea * self,
          * from the buffer object.  This can be useful to re-upload with
          * different PixelTransfer settings. */
         if (data) {
-            uint8_t *buffer_data = 
+            uint8_t *buffer_data =
                 (uint8_t*) glMapBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB,
                         GL_WRITE_ONLY);
             memcpy (buffer_data, data, row_stride * self->height);
             glUnmapBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB);
         }
 
-        glTexImage2D (self->target, 0, self->int_format, 
+        glTexImage2D (self->target, 0, self->int_format,
                 self->width, self->height, 0,
                 self->format, type, 0);
 
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, 0);
     } else {
-        glTexImage2D (self->target, 0, self->int_format, 
+        glTexImage2D (self->target, 0, self->int_format,
                 self->width, self->height, 0,
                 self->format, type, data);
     }

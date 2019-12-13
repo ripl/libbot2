@@ -10,7 +10,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -82,7 +82,7 @@ LDPCFecSession::InitSession (	int nbSourceSymbols,
 	// symbolSize is not necessarily a multiple of 8, but >> 3 will divide
 	// it by 8 and keep the integral part automatically.
 	m_symbolSize64	= symbolSize >> 3;
-#endif 
+#endif
 	m_symbolSize32	= symbolSize >> 2;
 	m_symbolSize32rem = symbolSize % 4;	// Remaining bytes when the symbol
 						// size is not multiple of 32 bits.
@@ -113,10 +113,10 @@ LDPCFecSession::InitSession (	int nbSourceSymbols,
 			printf("Initializing LDPC STAIRCASE FEC Session...\n - Source symbols = %d\n - Parity symbols = %d\n - Symbol size = %d\n - Edges per source symbols = %d\n", m_nbSourceSymbols, m_nbCheck, m_symbolSize, m_leftDegree = leftDegree);
 		} else if (m_sessionType == TypeTRIANGLE) {
 			printf("Initializing LDPC TRIANGLE FEC Session...\n - Source symbols = %d\n - Parity symbols = %d\n - Symbol size = %d\n - Edges per source symbols = %d\n", m_nbSourceSymbols, m_nbCheck, m_symbolSize, m_leftDegree = leftDegree);
-		} 
+		}
 	}
 
-	// generate parity check matrix... 
+	// generate parity check matrix...
 	if (this->m_verbosity >= 1) {
 		printf("Generating Parity Check Matrix (H)...");
 	}
@@ -411,7 +411,7 @@ LDPCFecSession::AddToSymbol	(void	*to,
 #ifdef PERF_COUNT_XOR
 		m_nbXor++;
 #endif
-	} 
+	}
 	/* finally perform as many 8-bit XORs as needed if symbol size is not
 	 * multiple of 32 bits... */
 	if (m_symbolSize32rem > 0) {

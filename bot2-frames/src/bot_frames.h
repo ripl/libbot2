@@ -82,7 +82,7 @@ typedef struct _BotFrames BotFrames;
  *	string
  *
  * returns a newly allocated/initialized pointer to a BotFrames structure
- * 
+ *
  */
 BotFrames * bot_frames_new(lcm_t *lcm, BotParam *bot_param);
 
@@ -109,16 +109,16 @@ BotFrames * bot_frames_get_global(lcm_t *lcm, BotParam *bot_param);
  * to_frame: destination coordinate frame
  * timestamp: output parameter
  *
- * Retrieves the timestamp of the most recent rigid body transformation 
+ * Retrieves the timestamp of the most recent rigid body transformation
  * relating two coordinate frames.
  *
- * Since there may be many links relating two coordinate frames, this 
+ * Since there may be many links relating two coordinate frames, this
  * retrieves the timestamp of the most recently updated link.  For information
  * about a specific link, use bot_ctrans_link_get_nth_trans()
- * 
+ *
  * Returns: 1 on success, 0 on failure.
  */
-int bot_frames_get_latest_timestamp(BotFrames * bot_frames, 
+int bot_frames_get_latest_timestamp(BotFrames * bot_frames,
                                         const char *from_frame, const char *to_frame, int64_t *timestamp);
 
 /**
@@ -137,7 +137,7 @@ int bot_frames_get_latest_timestamp(BotFrames * bot_frames,
 void bot_frames_update_frame(BotFrames * bot_frames, const char * frame_name,
     const char * relative_to, const BotTrans * trans, int64_t utime);
 
-/** 
+/**
  * bot_frames_link_update_handler_t
  *
  * LCM handler function template for a BotFrames callback

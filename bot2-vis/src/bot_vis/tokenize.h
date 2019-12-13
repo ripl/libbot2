@@ -26,7 +26,7 @@ struct tokenize
     // the current line
     char *line_buffer;
     int  line_pos, line_len;
-    
+
     char *path;
     FILE *f;
 

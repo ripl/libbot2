@@ -120,13 +120,13 @@ bot_gl_draw_arrow_3d (double length, double head_width, double head_length,
 /** Draw text centered at xyz in the current projection, but the text
  * will be drawn in pixel coordinates (so it will be "rectified"). A
  * font may be specified, as well as an optional drop shadow.
- * 
+ *
  * Text will be drawn using the current GL color
  *
  * We DO support multi-line text.
  *
  **/
-void bot_gl_draw_text (const double xyz[3], void *font, const char *text, 
+void bot_gl_draw_text (const double xyz[3], void *font, const char *text,
         int flags);
 
 /** Iterate through OpenGL error list, printing the error string (from
@@ -144,7 +144,7 @@ void bot_gl_print_current_matrix(void);
 /**
  * bot_glutBitmapString
  *
- * Renders a given string in the specified font in the current window. 
+ * Renders a given string in the specified font in the current window.
  * Reverts to the FreeGLUT implementation, if available.
  */
 void

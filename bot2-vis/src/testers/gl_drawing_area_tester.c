@@ -31,7 +31,7 @@ on_gl_expose (GtkWidget * widget, GdkEventExpose * event, gpointer user_data)
 {
     state_t * self = (state_t *) user_data;
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
+
     glColor3f( 0, 1, 0 );
     glBegin(GL_LINE_STRIP);
     GList *piter;
@@ -51,7 +51,7 @@ on_gl_expose (GtkWidget * widget, GdkEventExpose * event, gpointer user_data)
     return TRUE;
 }
 
-static gboolean 
+static gboolean
 on_button_press( GtkWidget *widget, GdkEventButton *event, void *user_data )
 {
     state_t *self = (state_t*) user_data;
@@ -59,7 +59,7 @@ on_button_press( GtkWidget *widget, GdkEventButton *event, void *user_data )
     if( event->button == 1 ) {
         point2d_t *newpoint = (point2d_t*) malloc( sizeof(point2d_t) );
         GtkAllocation alloc;
-        gtk_widget_get_allocation(widget, &alloc); 
+        gtk_widget_get_allocation(widget, &alloc);
         newpoint->x = event->x / alloc.width;
         newpoint->y = event->y / alloc.height;
         self->todraw = g_list_append( self->todraw, newpoint );
@@ -87,12 +87,12 @@ on_button_release( GtkWidget *widget, GdkEventButton *event, void *user_data )
  * opengl window.  Use the event->state field to determine whether a button is
  * pressed or not
  */
-static gboolean 
+static gboolean
 on_motion_notify( GtkWidget *widget, GdkEventMotion *event, void *user_data )
 {
     state_t *self = (state_t*) user_data;
     GtkAllocation alloc;
-    gtk_widget_get_allocation(widget, &alloc); 
+    gtk_widget_get_allocation(widget, &alloc);
     self->last_mouse.x = event->x / alloc.width;
     self->last_mouse.y = event->y / alloc.height;
     bot_gtk_gl_drawing_area_invalidate (self->gl_area);
@@ -111,9 +111,9 @@ setup_gtk( state_t *self )
 {
     // create the main application window
     self->window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    g_signal_connect( G_OBJECT(self->window), "delete_event", 
+    g_signal_connect( G_OBJECT(self->window), "delete_event",
             gtk_main_quit, NULL );
-    g_signal_connect( G_OBJECT(self->window), "destroy", 
+    g_signal_connect( G_OBJECT(self->window), "destroy",
             gtk_main_quit, NULL );
     gtk_window_set_default_size(GTK_WINDOW(self->window), 600, 400);
     gtk_container_set_border_width( GTK_CONTAINER(self->window), 10 );
@@ -125,10 +125,10 @@ setup_gtk( state_t *self )
     gtk_widget_show(aspect);
 
     self->gl_area = BOT_GTK_GL_DRAWING_AREA(bot_gtk_gl_drawing_area_new(TRUE));
-    gtk_widget_set_events(GTK_WIDGET(self->gl_area), 
+    gtk_widget_set_events(GTK_WIDGET(self->gl_area),
             GDK_LEAVE_NOTIFY_MASK |
-            GDK_BUTTON_PRESS_MASK | 
-            GDK_BUTTON_RELEASE_MASK | 
+            GDK_BUTTON_PRESS_MASK |
+            GDK_BUTTON_RELEASE_MASK |
             GDK_POINTER_MOTION_MASK |
             GDK_KEY_PRESS_MASK
             );

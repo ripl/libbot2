@@ -23,7 +23,7 @@ extern "C" {
 /**
  * bot_lcmgl_decode:
  *
- * Decodes a block of LCMGL data, and executes the OpenGL commands with 
+ * Decodes a block of LCMGL data, and executes the OpenGL commands with
  * the current OpenGL context.
  */
 void bot_lcmgl_decode(uint8_t *data, int datalen);

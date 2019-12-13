@@ -83,7 +83,7 @@ bot_circular_pop_head (BotCircular * circular, void * data)
     return 0;
 }
 
-int 
+int
 bot_circular_size(BotCircular *circular)
 {
     return circular->len;

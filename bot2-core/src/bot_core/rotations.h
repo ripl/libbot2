@@ -32,7 +32,7 @@ extern "C" {
 /**
  * Multiply quaternions a and b, storing the result in c.
  *
- * When composing rotations, the resulting quaternion represents 
+ * When composing rotations, the resulting quaternion represents
  * first rotating by b, then rotation by a.
  */
 void bot_quat_mult (double c[4], const double a[4], const double b[4]);
@@ -55,20 +55,20 @@ void bot_quat_rotate_rev (const double quat[4], double v[3]);
  * same as bot_quat_rotate, but not necessarily in place (although %v and
  * %result can be the same)
  */
-void bot_quat_rotate_to (const double quat[4], const double v[3], 
+void bot_quat_rotate_to (const double quat[4], const double v[3],
         double result[3]);
 
 /**
  * rotate a vector %v by %quat, and then add a translational offset %trans
  */
-void bot_quat_rotate_and_translate (const double quat[4], 
+void bot_quat_rotate_and_translate (const double quat[4],
         const double trans[3], const double v[3], double result[3]);
 
 int bot_quat_to_matrix(const double quat[4], double rot[9]);
 
 int bot_matrix_to_quat(const double rot[9], double quat[4]);
 
-int bot_quat_pos_to_matrix(const double quat[4], const double pos[3], 
+int bot_quat_pos_to_matrix(const double quat[4], const double pos[3],
         double m[16]);
 
 /** quat_from_angle_axis:
@@ -101,7 +101,7 @@ void bot_roll_pitch_yaw_to_quat(const double rpy[3], double q[4]);
  * rpy[2] = yaw
  */
 void bot_quat_to_roll_pitch_yaw (const double q[4], double rpy[3]);
-  
+
 /* These doesn't truly belong with the quaternion functions, but are useful
  * and sort of fits in here.
  */
@@ -124,7 +124,7 @@ int bot_quaternion_test(void);
  * quaternion that lies at point (q0 * (1-u) + q1 * u) on the unit quaternion
  * sphere.
  */
-void bot_quat_interpolate(const double q0[4], const double q1[4], double u, 
+void bot_quat_interpolate(const double q0[4], const double q1[4], double u,
         double result[4]);
 
 /**

@@ -42,7 +42,7 @@ const char* bot_ctrans_path_get_frame_from(BotCTransPath *path);
  * Returns: the target coordinate frame for the specified transform path
  */
 const char * bot_ctrans_path_get_frame_to(BotCTransPath *path);
-        
+
 /**
  * bot_ctrans_get_new_path:
  *
@@ -50,7 +50,7 @@ const char * bot_ctrans_path_get_frame_to(BotCTransPath *path);
  * another.
  *
  * Returns: A newly allocated BotCTransPath, which must be freed with
- * bot_ctrans_path_destroy (it is not automatically freed by 
+ * bot_ctrans_path_destroy (it is not automatically freed by
  * bot_ctrans_destroy).  Returns NULL if no such path exists.
  */
 BotCTransPath * bot_ctrans_get_new_path(BotCTrans * ctrans,
@@ -163,7 +163,7 @@ bot_ctrans_frame_get_id(const BotCTransFrame *frame)
 
 // =========== link ==========
 
-static inline char * 
+static inline char *
 _make_link_id(const char * frame_a_id, const char * frame_b_id)
 {
     int v = strcmp(frame_a_id, frame_b_id);
@@ -175,7 +175,7 @@ _make_link_id(const char * frame_a_id, const char * frame_b_id)
 }
 
 static inline void
-_make_link_id2(const char * frame_a_id, const char * frame_b_id, 
+_make_link_id2(const char * frame_a_id, const char * frame_b_id,
         char *result, int buf_sz)
 {
     int v = strcmp(frame_a_id, frame_b_id);
@@ -195,8 +195,8 @@ _link_new(BotCTransFrame *frame_from, BotCTransFrame *frame_to,
     link->frame_to = frame_to;
     link->id = _make_link_id(frame_from->id, frame_to->id);
     link->history_maxlen = history_maxlen;
-    
-    link->trans_history = bot_circular_new(history_maxlen, 
+
+    link->trans_history = bot_circular_new(history_maxlen,
             sizeof(TimestampedTrans));
     return link;
 };
@@ -209,19 +209,19 @@ _link_destroy(BotCTransLink *link)
     g_slice_free(BotCTransLink, link);
 };
 
-const char * 
+const char *
 bot_ctrans_link_get_from_frame(BotCTransLink *link)
 {
     return link->frame_from->id;
 }
 
-const char * 
+const char *
 bot_ctrans_link_get_to_frame(BotCTransLink *link)
 {
     return link->frame_to->id;
 }
 
-void 
+void
 bot_ctrans_link_update(BotCTransLink * link, const BotTrans *transformation,
         int64_t utime)
 {
@@ -230,7 +230,7 @@ bot_ctrans_link_update(BotCTransLink * link, const BotTrans *transformation,
     memcpy(&ttrans.trans, transformation, sizeof(BotTrans));
 
     // if we've gone back in time, then clear the transformation history
-    TimestampedTrans *last_ttrans = 
+    TimestampedTrans *last_ttrans =
         bot_circular_peek_nth(link->trans_history, 0);
     if(utime < last_ttrans->utime) {
         bot_circular_clear(link->trans_history);
@@ -258,7 +258,7 @@ _link_get_trans_latest(const BotCTransLink *link, BotTrans *trans)
 }
 
 static gboolean
-_link_get_trans_interp(const BotCTransLink *link, int64_t utime, 
+_link_get_trans_interp(const BotCTransLink *link, int64_t utime,
         BotTrans *result)
 {
     if(bot_circular_is_empty(link->trans_history))
@@ -280,7 +280,7 @@ _link_get_trans_interp(const BotCTransLink *link, int64_t utime,
         memcpy(result, &t1->trans, sizeof(BotTrans));
     } else {
         assert(t1->utime < t2->utime);
-        double weight_2 = 
+        double weight_2 =
             (double)((utime - t1->utime)) / (t2->utime - t1->utime);
         bot_trans_interpolate(result, &t1->trans, &t2->trans, weight_2);
     }
@@ -296,26 +296,26 @@ _link_get_trans_interp(const BotCTransLink *link, int64_t utime,
             t1 = bot_circular_peek_nth (link->trans_history, 1);
         }
         assert(t1->utime < t2->utime);
-        double weight_2 = 
+        double weight_2 =
             (double)((utime - t1->utime)) / (t2->utime - t1->utime);
         bot_trans_interpolate(result, &t1->trans, &t2->trans, weight_2);
         }*/
     return TRUE;
 }
 
-int 
+int
 bot_ctrans_link_get_n_trans(const BotCTransLink * link)
 {
     return bot_circular_size(link->trans_history);
 }
 
-int 
+int
 bot_ctrans_link_get_nth_trans(BotCTransLink * link,
         int index, BotTrans *transformation, int64_t *utime)
 {
     if(index >= bot_circular_size(link->trans_history) || index < 0)
         return 0;
-    const TimestampedTrans *ttrans = 
+    const TimestampedTrans *ttrans =
         bot_circular_peek_nth(link->trans_history, index);
     if(transformation)
         memcpy(transformation, &ttrans->trans, sizeof(BotTrans));
@@ -335,7 +335,7 @@ struct _BotCTrans
     GHashTable * path_cache;
 };
 
-BotCTrans * 
+BotCTrans *
 bot_ctrans_new(void)
 {
     BotCTrans * ctrans = g_slice_new(BotCTrans);
@@ -348,7 +348,7 @@ bot_ctrans_new(void)
     return ctrans;
 }
 
-void 
+void
 bot_ctrans_destroy(BotCTrans *ctrans)
 {
     g_hash_table_destroy(ctrans->frames);
@@ -357,7 +357,7 @@ bot_ctrans_destroy(BotCTrans *ctrans)
     g_slice_free(BotCTrans, ctrans);
 }
 
-static BotCTransFrame * 
+static BotCTransFrame *
 bot_ctrans_get_frame(BotCTrans * ctrans, const char *frame_id)
 {
     return (BotCTransFrame*) g_hash_table_lookup(ctrans->frames, frame_id);
@@ -389,7 +389,7 @@ bot_ctrans_add_frame(BotCTrans * ctrans, const char *id)
     }
 }
 
-BotCTransLink * 
+BotCTransLink *
 bot_ctrans_get_link(BotCTrans * ctrans,
         const char * from_frame, const char * to_frame)
 {
@@ -402,13 +402,13 @@ bot_ctrans_get_link(BotCTrans * ctrans,
     return result;
 }
 
-BotCTransLink * 
-bot_ctrans_link_frames(BotCTrans * ctrans, 
+BotCTransLink *
+bot_ctrans_link_frames(BotCTrans * ctrans,
         const char *from_frame_id, const char * to_frame_id, int history_maxlen)
 {
     BotCTransFrame *from_frame = _get_frame_or_warn(ctrans, from_frame_id);
     BotCTransFrame *to_frame = _get_frame_or_warn(ctrans, to_frame_id);
-    if(!from_frame || !to_frame) 
+    if(!from_frame || !to_frame)
         return NULL;
     // check if the link will result in a graph cycle.  A cycle means
     // an overconstrained graph
@@ -421,7 +421,7 @@ bot_ctrans_link_frames(BotCTrans * ctrans,
         bot_ctrans_path_destroy(existing_path);
     }
     if(history_maxlen < 1) {
-        g_warning("%s: invalid history_maxlen (%d), coercing to 1\n", 
+        g_warning("%s: invalid history_maxlen (%d), coercing to 1\n",
                 __FUNCTION__, history_maxlen);
         history_maxlen = 1;
     }
@@ -434,7 +434,7 @@ bot_ctrans_link_frames(BotCTrans * ctrans,
     return link;
 }
 
-static BotCTransPath * 
+static BotCTransPath *
 _get_path(BotCTrans * ctrans, const char *from_frame, const char *to_frame)
 {
     char slenf = strlen(from_frame);
@@ -451,7 +451,7 @@ _get_path(BotCTrans * ctrans, const char *from_frame, const char *to_frame)
     return path;
 }
 
-int 
+int
 bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
         const char *to_frame, int64_t utime, BotTrans *result)
 {
@@ -461,7 +461,7 @@ bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
     return bot_ctrans_path_to_trans(path, utime, result);
 }
 
-int 
+int
 bot_ctrans_get_trans_latest(BotCTrans *ctrans, const char *from_frame,
         const char *to_frame, BotTrans *result)
 {
@@ -471,21 +471,21 @@ bot_ctrans_get_trans_latest(BotCTrans *ctrans, const char *from_frame,
     return bot_ctrans_path_to_trans_latest(path, result);
 }
 
-int 
+int
 bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
         const char *to_frame)
 {
     BotCTransPath * path = _get_path(ctrans, from_frame, to_frame);
     if(!path) {
-        g_warning("%s: invalid transformation requested (%s -> %s)\n", 
+        g_warning("%s: invalid transformation requested (%s -> %s)\n",
                 __FUNCTION__, from_frame, to_frame);
         return 0;
     }
     return bot_ctrans_path_have_trans(path);
 }
 
-int 
-bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans, 
+int
+bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
         const char *from_frame, const char *to_frame, int64_t *timestamp)
 {
     BotCTransPath * path = _get_path(ctrans, from_frame, to_frame);
@@ -502,7 +502,7 @@ struct _BotCTransPath {
     int *invert;
 };
 
-static BotCTransPath * 
+static BotCTransPath *
 _path_new(int nlinks)
 {
     BotCTransPath * path = g_slice_new(BotCTransPath);
@@ -512,7 +512,7 @@ _path_new(int nlinks)
     return path;
 }
 
-void 
+void
 bot_ctrans_path_destroy(BotCTransPath * path)
 {
     g_slice_free1(path->nlinks*sizeof(BotCTransLink*), path->links);
@@ -520,7 +520,7 @@ bot_ctrans_path_destroy(BotCTransPath * path)
     g_slice_free(BotCTransPath, path);
 }
 
-const char * 
+const char *
 bot_ctrans_path_get_frame_from(BotCTransPath *path)
 {
     if(0 == path->nlinks)
@@ -532,7 +532,7 @@ bot_ctrans_path_get_frame_from(BotCTransPath *path)
     }
 }
 
-const char * 
+const char *
 bot_ctrans_path_get_frame_to(BotCTransPath *path)
 {
     if(0 == path->nlinks)
@@ -567,7 +567,7 @@ _spnode_data_destroy(SPNodeData *ndata)
     g_slice_free(SPNodeData, ndata);
 }
 
-BotCTransPath * 
+BotCTransPath *
 bot_ctrans_get_new_path(BotCTrans * ctrans,
         const char * from_frame_id,
         const char * to_frame_id)
@@ -577,10 +577,10 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
 
     BotCTransFrame *from_frame = _get_frame_or_warn(ctrans, from_frame_id);
     BotCTransFrame *to_frame = _get_frame_or_warn(ctrans, to_frame_id);
-    if(!from_frame || !to_frame) 
+    if(!from_frame || !to_frame)
         return NULL;
     // do a djikstra shortest path search
- 
+
     GHashTable *Q = g_hash_table_new(g_direct_hash, g_direct_equal);
     GPtrArray *all_ndata = g_ptr_array_new();
 
@@ -588,7 +588,7 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
     for(GList *fiter=frames_list; fiter; fiter=fiter->next) {
         BotCTransFrame *frame = fiter->data;
         SPNodeData *ndata = _spnode_data_new(frame);
-        if(frame == from_frame) 
+        if(frame == from_frame)
             ndata->distance = 0;
         else
             ndata->distance = -1;
@@ -629,7 +629,7 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
         }
 
         g_hash_table_remove(Q, u->frame);
-        
+
         // check each neighbor of u
         for(int lind=0; lind<u->frame->links->len; lind++) {
             BotCTransLink *link = g_ptr_array_index(u->frame->links, lind);
@@ -658,7 +658,7 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
                 nbr_ndata->previous_link = link;
                 nbr_ndata->invert_transformation = invert_transformation;
 
-                dbg("  set: %s (%d)\n", nbr_ndata->frame->id, 
+                dbg("  set: %s (%d)\n", nbr_ndata->frame->id,
                         nbr_ndata->distance);
             }
         }
@@ -667,7 +667,7 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
     SPNodeData *to_node = g_hash_table_lookup(Q, to_frame);
     if(!to_node || to_node->distance < 0) {
         g_hash_table_destroy(Q);
-        bot_g_ptr_array_free_with_func(all_ndata, 
+        bot_g_ptr_array_free_with_func(all_ndata,
                 (GDestroyNotify)_spnode_data_destroy);
         g_list_free(frames_list);
 
@@ -695,13 +695,13 @@ bot_ctrans_get_new_path(BotCTrans * ctrans,
     assert(nind == -1);
 
     g_hash_table_destroy(Q);
-    bot_g_ptr_array_free_with_func(all_ndata, 
+    bot_g_ptr_array_free_with_func(all_ndata,
             (GDestroyNotify)_spnode_data_destroy);
     g_list_free(frames_list);
 
     return path;
 }
-        
+
 int
 bot_ctrans_path_to_trans(const BotCTransPath * path,
         int64_t utime, BotTrans *result)
@@ -741,7 +741,7 @@ bot_ctrans_path_to_trans_latest(const BotCTransPath * path, BotTrans *result)
     return 1;
 }
 
-int 
+int
 bot_ctrans_path_latest_timestamp(const BotCTransPath * path,
         int64_t *timestamp)
 {
@@ -749,7 +749,7 @@ bot_ctrans_path_latest_timestamp(const BotCTransPath * path,
     for(int lind=0; lind<path->nlinks; lind++) {
         BotCTransLink *link = path->links[lind];
         int64_t link_timestamp;
-        int have_trans = bot_ctrans_link_get_nth_trans(link, 0, NULL, 
+        int have_trans = bot_ctrans_link_get_nth_trans(link, 0, NULL,
                 &link_timestamp);
         if(!have_trans) {
             return 0;
@@ -762,7 +762,7 @@ bot_ctrans_path_latest_timestamp(const BotCTransPath * path,
     return 1;
 }
 
-int 
+int
 bot_ctrans_path_have_trans(const BotCTransPath *path)
 {
     for(int lind=0; lind<path->nlinks; lind++) {
@@ -775,12 +775,12 @@ bot_ctrans_path_have_trans(const BotCTransPath *path)
 
 void bot_ctrans_path_dump(const BotCTransPath *path);
 void
-bot_ctrans_path_dump(const BotCTransPath *path) 
+bot_ctrans_path_dump(const BotCTransPath *path)
 {
     printf("%s\n", __FUNCTION__);
     for(int i=0; i<path->nlinks; i++) {
         BotCTransLink *link = path->links[i];
-        printf("%2d: %s -> %s (%d)\n", i, link->frame_from->id, 
+        printf("%2d: %s -> %s (%d)\n", i, link->frame_from->id,
                 link->frame_to->id, path->invert[i]);
     }
 }

@@ -14,7 +14,7 @@ static const char op_chars[] = "!~<>=&|^%*+=/";
 
 static char unescape(char c)
 {
-    switch (c) 
+    switch (c)
     {
     case 'n':
         return 10;
@@ -68,8 +68,8 @@ void tokenize_destroy(tokenize_t *t)
     free(t);
 }
 
-/** get the next character, counting line numbers, and columns. **/ 
-static int 
+/** get the next character, counting line numbers, and columns. **/
+static int
 tokenize_next_char(tokenize_t *t)
 {
     t->save_line = t->in_line;
@@ -92,7 +92,7 @@ tokenize_next_char(tokenize_t *t)
             t->line_len = strlen(t->line_buffer);
             t->line_pos = 0;
         }
-        
+
         c = t->line_buffer[t->line_pos++];
     }
 
@@ -107,7 +107,7 @@ tokenize_next_char(tokenize_t *t)
     return c;
 }
 
-static int 
+static int
 tokenize_ungetc(tokenize_t *t, int c)
 {
     t->in_line = t->save_line;
@@ -117,7 +117,7 @@ tokenize_ungetc(tokenize_t *t, int c)
     return 0;
 }
 
-static void 
+static void
 tokenize_flush_line(tokenize_t *t)
 {
     int c;
@@ -127,7 +127,7 @@ tokenize_flush_line(tokenize_t *t)
 }
 
 /** chunkify tokens. **/
-static int 
+static int
 tokenize_next_internal(tokenize_t *t)
 {
     int c;
@@ -173,7 +173,7 @@ skip_white:
                 return -2;
 
             c = tokenize_next_char(t);
-            
+
             if (escape) {
                 escape = 0;
                 c = unescape(c);
@@ -238,7 +238,7 @@ in_tok:
         return -2;
 
     t->token[pos++] = c;
-    
+
     if (strchr(single_char_toks,c)!=NULL)
         goto end_tok;
 
@@ -248,7 +248,7 @@ in_tok:
         tokenize_ungetc(t, c);
         goto end_tok;
     }
-    
+
     if (!isspace(c))
         goto in_tok;
 

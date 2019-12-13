@@ -73,7 +73,7 @@ int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
  * @provider: The string specifying the LCM network provider. If %NULL, the
  * environment variable "LCM_DEFAULT_URL" is used if it is defined, otherwise
  * the lcm_create default settings are used.
- * 
+ *
  * The first time this function is invoked, it instantiates and returns new
  * lcm_t instance via lcm_create(provider). Every subsequent call just returns
  * the same lcm_t instance.

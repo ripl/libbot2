@@ -78,11 +78,11 @@ void bot_trans_set_from_velocities(BotTrans *dest, const double angular_rate[3],
  * @trans_b: rigid body transformation B
  * @weight_b: weighting parameter
  *
- * Interpolates two rigid body transformations.  The quaternion is interpolated 
- * via spherical interpolation on a 4-d sphere, and the translation vector is 
+ * Interpolates two rigid body transformations.  The quaternion is interpolated
+ * via spherical interpolation on a 4-d sphere, and the translation vector is
  * interpolated linearly.
  */
-void bot_trans_interpolate(BotTrans *dest, const BotTrans * trans_a, 
+void bot_trans_interpolate(BotTrans *dest, const BotTrans * trans_a,
         const BotTrans * trans_b, double weight_b);
 
 /**
@@ -128,7 +128,7 @@ void bot_trans_invert_and_compose(const BotTrans * curr, const BotTrans * prev, 
  *
  * Applies only the rotation portion of the transformation to a vector
  */
-void bot_trans_rotate_vec(const BotTrans * btrans, 
+void bot_trans_rotate_vec(const BotTrans * btrans,
         const double src[3], double dst[3]);
 
 /**

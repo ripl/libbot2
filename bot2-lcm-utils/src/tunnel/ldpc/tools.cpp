@@ -1,27 +1,27 @@
 /*
- * The contents of this directory and its sub-directories are 
+ * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
- * 
+ *
  * Permission is granted for anyone to copy, use, modify, or distribute these
  * programs and accompanying documents for any purpose, provided this copyright
- * notice is retained and prominently displayed, along with a note saying 
- * that the original programs are available from Radford Neal's web page, and 
- * note is made of any changes made to these programs.  These programs and 
+ * notice is retained and prominently displayed, along with a note saying
+ * that the original programs are available from Radford Neal's web page, and
+ * note is made of any changes made to these programs.  These programs and
  * documents are distributed without any warranty, express or implied.  As the
- * programs were written for research purposes only, they have not been tested 
+ * programs were written for research purposes only, they have not been tested
  * to the degree that would be advisable in any important application.  All use
  * of these programs is entirely at the user's own risk.
  */
 
 
-/* This module implements operations on sparse matrices of mod2 elements 
-   (bits, with addition and multiplication being done modulo 2).  
-  
-   All procedures in this module display an error message on standard 
+/* This module implements operations on sparse matrices of mod2 elements
+   (bits, with addition and multiplication being done modulo 2).
+
+   All procedures in this module display an error message on standard
    error and terminate the program if passed an invalid argument (indicative
-   of a programming error), or if memory cannot be allocated.  Errors from 
-   invalid contents of a file result in an error code being returned to the 
-   caller, with no message being printed by this module. 
+   of a programming error), or if memory cannot be allocated.  Errors from
+   invalid contents of a file result in an error code being returned to the
+   caller, with no message being printed by this module.
 */
 
 
@@ -29,9 +29,9 @@
    are represented by nodes that are doubly-linked both by row and by column,
    with the headers for these lists being kept in arrays.  Nodes are allocated
    in blocks to reduce time and space overhead.  Freed nodes are kept for
-   reuse in the same matrix, rather than being freed for other uses, except 
+   reuse in the same matrix, rather than being freed for other uses, except
    that they are all freed when the matrix is cleared to all zeros by the
-   mod2sparse_clear procedure, or copied into by mod2sparse_copy. 
+   mod2sparse_clear procedure, or copied into by mod2sparse_copy.
 
    Direct access to these structures should be avoided except in low-level
    routines.  Use the macros and procedures defined below instead. */
@@ -46,7 +46,7 @@ void *chk_alloc
 ( unsigned n,		/* Number of elements */
   unsigned size		/* Size of each element */
 )
-{ 
+{
   void *p;
 
   p = calloc(n,size);
@@ -64,13 +64,13 @@ void *chk_alloc
 #if 0
 /* READ AN INTEGER ONE BYTE AT A TIME.  Four bytes are read, ordered from
    low to high order.  These are considered to represent a signed integer,
-   in two's complement form.  The value returned is this integer, converted 
-   to whatever a C "int" is.  The conversion should work as long as an "int" 
-   is at least four bytes, even if it's not in two's complement representation 
+   in two's complement form.  The value returned is this integer, converted
+   to whatever a C "int" is.  The conversion should work as long as an "int"
+   is at least four bytes, even if it's not in two's complement representation
    (except for the largest two's complement negative integer).
 
    If an error or eof is encountered, zero is returned.  The caller can
-   check for these events using feof and ferror.  
+   check for these events using feof and ferror.
 
    The file read from should have been opened as "binary".
 */
@@ -78,7 +78,7 @@ void *chk_alloc
 int intio_read
 ( FILE *f   /* File to read from */
 )
-{ 
+{
   unsigned char b[4];
   int top;
   int i;
@@ -88,7 +88,7 @@ int intio_read
   }
 
   top = b[3]>127 ? (int)b[3] - 256 : b[3];
-  
+
   return (top<<24) + (b[2]<<16) + (b[1]<<8) + b[0];
 }
 
@@ -105,7 +105,7 @@ void intio_write
 ( FILE *f,  /* File to write to */
   int v     /* Value to write to file */
 )
-{ 
+{
   unsigned char b;
   int i;
 

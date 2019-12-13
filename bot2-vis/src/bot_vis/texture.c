@@ -36,7 +36,7 @@ struct _BotGlTexture {
     int use_pbo;
     int max_data_size;
 };
-    
+
 BotGlTexture *
 bot_gl_texture_new (int width, int height, int max_data_size)
 {
@@ -101,7 +101,7 @@ bot_gl_texture_new (int width, int height, int max_data_size)
         glGenBuffersARB (1, &t->pbo);
         t->max_data_size = max_data_size;
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, t->pbo);
-        glBufferDataARB (GL_PIXEL_UNPACK_BUFFER_ARB, t->max_data_size, NULL, 
+        glBufferDataARB (GL_PIXEL_UNPACK_BUFFER_ARB, t->max_data_size, NULL,
                 GL_STREAM_DRAW);
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, 0);
     }
@@ -138,10 +138,10 @@ bot_gl_texture_draw (BotGlTexture * t)
     glDisable (t->target);
 }
 void
-bot_gl_texture_draw_coords (BotGlTexture * t, 
+bot_gl_texture_draw_coords (BotGlTexture * t,
         double x0, double y0, double z0,
         double x1, double y1, double z1,
-        double x2, double y2, double z2, 
+        double x2, double y2, double z2,
         double x3, double y3, double z3)
 {
     glEnable (t->target);
@@ -207,7 +207,7 @@ bot_gl_texture_upload (BotGlTexture * t, GLenum format,
         GLenum type, int stride, const void * data)
 {
     if (t->use_pbo && (stride * t->height) > t->max_data_size) {
-        fprintf (stderr, 
+        fprintf (stderr,
                 "Error: bot_gl_texture buffer (%d bytes) too small for "
                 "texture (%d bytes)\n", t->max_data_size, stride * t->height);
         return -1;
@@ -245,7 +245,7 @@ bot_gl_texture_upload (BotGlTexture * t, GLenum format,
          * from the buffer object.  This can be useful to re-upload with
          * different PixelTransfer settings. */
         if (data) {
-            uint8_t *buffer_data = 
+            uint8_t *buffer_data =
                 (uint8_t*) glMapBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB,
                         GL_WRITE_ONLY);
             if (!buffer_data) {
@@ -276,7 +276,7 @@ bot_gl_texture_set_interp (BotGlTexture * t, GLint nearest_or_linear)
     t->interp_mode = nearest_or_linear;
 }
 
-void 
+void
 bot_gl_texture_set_internal_format (BotGlTexture *t, GLenum fmt)
 {
     t->int_format = fmt;
@@ -286,13 +286,13 @@ int bot_gl_texture_get_width (BotGlTexture *t) { return t->width; }
 
 int bot_gl_texture_get_height (BotGlTexture *t) { return t->height; }
 
-GLuint 
+GLuint
 bot_gl_texture_get_texname (BotGlTexture *t)
 {
     return t->texname;
 }
 
-GLenum 
+GLenum
 bot_gl_texture_get_target (BotGlTexture *t)
 {
     return t->target;

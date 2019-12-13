@@ -138,8 +138,8 @@ bot_fbgl_drawing_area_new (gboolean new_context, int width, int height,
         glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, priv->depthbuffers[i]);
         glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
                 width, height);
-        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, 
-                GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 
+        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT,
+                GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
                 priv->depthbuffers[i]);
     }
 

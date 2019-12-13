@@ -28,10 +28,10 @@ G_BEGIN_DECLS
 typedef struct _BotGtkParamWidget BotGtkParamWidget;
 typedef struct _BotGtkParamWidgetClass BotGtkParamWidgetClass;
 
-typedef enum 
+typedef enum
 {
     BOT_GTK_PARAM_WIDGET_DEFAULTS = 0,
-    
+
     BOT_GTK_PARAM_WIDGET_ENTRY,
 
     // ui hints for integers
@@ -55,7 +55,7 @@ const char *bot_gtk_param_widget_get_type_str(BotGtkParamWidget *pw,
 
 int bot_gtk_param_widget_add_enum (BotGtkParamWidget *pw,
         const char *name, BotGtkParamWidgetUIHint ui_hints, int initial_value,
-        const char *string1, int value1, ...) 
+        const char *string1, int value1, ...)
         __attribute__ ((sentinel));
 
 int bot_gtk_param_widget_add_enumv (BotGtkParamWidget *pw,
@@ -63,9 +63,9 @@ int bot_gtk_param_widget_add_enumv (BotGtkParamWidget *pw,
         int noptions, const char **names, const int *values);
 
 int bot_gtk_param_widget_add_int (BotGtkParamWidget *pw,
-        const char *name, BotGtkParamWidgetUIHint ui_hints, 
+        const char *name, BotGtkParamWidgetUIHint ui_hints,
         int min, int max, int increment, int initial_value);
-        
+
 int bot_gtk_param_widget_add_text_entry (BotGtkParamWidget *pw,
         const char *name, BotGtkParamWidgetUIHint ui_hints,
         const char *initial_value);
@@ -74,16 +74,16 @@ int bot_gtk_param_widget_add_double (BotGtkParamWidget *pw,
         const char *name, BotGtkParamWidgetUIHint ui_hints,
         double min, double max, double increment, double initial_value);
 
-int bot_gtk_param_widget_add_booleans (BotGtkParamWidget *pw, 
-        BotGtkParamWidgetUIHint ui_hints, 
+int bot_gtk_param_widget_add_booleans (BotGtkParamWidget *pw,
+        BotGtkParamWidgetUIHint ui_hints,
         const char *name1, int initially_checked1,
-        ...) 
+        ...)
         __attribute__ ((sentinel));
 
-int bot_gtk_param_widget_add_buttons (BotGtkParamWidget *pw, 
+int bot_gtk_param_widget_add_buttons (BotGtkParamWidget *pw,
         const char *name1, ...) __attribute__ ((sentinel));
 
-void bot_gtk_param_widget_add_separator (BotGtkParamWidget *pw, 
+void bot_gtk_param_widget_add_separator (BotGtkParamWidget *pw,
         const char *text);
 
 int bot_gtk_param_widget_get_int (BotGtkParamWidget *pw, const char *name);
@@ -96,10 +96,10 @@ int bot_gtk_param_widget_get_bool (BotGtkParamWidget *pw, const char *name);
 
 int bot_gtk_param_widget_get_enum (BotGtkParamWidget *pw, const char *name);
 
-const char* bot_gtk_param_widget_get_enum_str (BotGtkParamWidget *pw, 
+const char* bot_gtk_param_widget_get_enum_str (BotGtkParamWidget *pw,
         const char *name);
 
-void bot_gtk_param_widget_set_int (BotGtkParamWidget *pw, const char *name, 
+void bot_gtk_param_widget_set_int (BotGtkParamWidget *pw, const char *name,
         int val);
 
 void bot_gtk_param_widget_set_double (BotGtkParamWidget *pw, const char *name,
@@ -114,7 +114,7 @@ void bot_gtk_param_widget_set_enum (BotGtkParamWidget *pw, const char *name,
 void bot_gtk_param_widget_set_enabled (BotGtkParamWidget *pw, const char *name,
         int enabled);
 
-void bot_gtk_param_widget_load_from_key_file (BotGtkParamWidget *pw, 
+void bot_gtk_param_widget_load_from_key_file (BotGtkParamWidget *pw,
         GKeyFile *keyfile, const char *group_name);
 
 void bot_gtk_param_widget_save_to_key_file (BotGtkParamWidget *pw,
@@ -126,7 +126,7 @@ int bot_gtk_param_widget_modify_int(BotGtkParamWidget *pw,
 int bot_gtk_param_widget_modify_double(BotGtkParamWidget *pw,
         const char *name, double min, double max, double increment, double value);
 
-int bot_gtk_param_widget_modify_enum(BotGtkParamWidget *pw, 
+int bot_gtk_param_widget_modify_enum(BotGtkParamWidget *pw,
         const char *name, const char *label, const int value);
 
 void bot_gtk_param_widget_clear_enum(BotGtkParamWidget *pw, const char *name);

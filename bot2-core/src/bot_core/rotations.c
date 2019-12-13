@@ -21,7 +21,7 @@ qeq (double *q, double a, double b, double c, double d)
 }
 
 static inline int
-rpyeq (double roll, double pitch, double yaw, double r, double p, double y) 
+rpyeq (double roll, double pitch, double yaw, double r, double p, double y)
 {
     return feq(roll,r) && feq(pitch,p) && feq(yaw,y);
 }
@@ -72,8 +72,8 @@ bot_quat_rotate (const double rot[4], double v[3])
     memcpy(v, result, 3*sizeof(double));
 }
 
-void 
-bot_quat_rotate_and_translate (const double rot[4], 
+void
+bot_quat_rotate_and_translate (const double rot[4],
         const double t[3], const double v[3], double r[3])
 {
     double ab  =  rot[0]*rot[1], ac = rot[0]*rot[2], ad  =  rot[0]*rot[3];
@@ -150,7 +150,7 @@ bot_quat_to_angle_axis (const double q[4], double *theta, double axis[3])
     }
 }
 
-void 
+void
 bot_roll_pitch_yaw_to_quat (const double rpy[3], double q[4])
 {
     double roll = rpy[0], pitch = rpy[1], yaw = rpy[2];
@@ -173,8 +173,8 @@ bot_roll_pitch_yaw_to_quat (const double rpy[3], double q[4])
     q[3] = cos_r2 * cos_p2 * sin_y2 - sin_r2 * sin_p2 * cos_y2;
 }
 
-void 
-bot_quat_to_roll_pitch_yaw (const double q[4], double rpy[3]) 
+void
+bot_quat_to_roll_pitch_yaw (const double q[4], double rpy[3])
 {
     double roll_a = 2 * (q[0]*q[1] + q[2]*q[3]);
     double roll_b = 1 - 2 * (q[1]*q[1] + q[2]*q[2]);
@@ -188,7 +188,7 @@ bot_quat_to_roll_pitch_yaw (const double q[4], double rpy[3])
     rpy[2] = atan2 (yaw_a, yaw_b);
 }
 
-void 
+void
 bot_roll_pitch_yaw_to_angle_axis (const double rpy[3], double *theta,
         double axis[3])
 {
@@ -197,7 +197,7 @@ bot_roll_pitch_yaw_to_angle_axis (const double rpy[3], double *theta,
     bot_quat_to_angle_axis (q, theta, axis);
 }
 
-void 
+void
 bot_angle_axis_to_roll_pitch_yaw (double theta, const double axis[3],
         double rpy[3])
 {
@@ -207,7 +207,7 @@ bot_angle_axis_to_roll_pitch_yaw (double theta, const double axis[3],
 }
 
 
-int 
+int
 bot_quat_to_matrix(const double quat[4], double rot[9])
 {
   double norm = quat[0]*quat[0] + quat[1]*quat[1] + quat[2]*quat[2] +
@@ -239,7 +239,7 @@ bot_quat_to_matrix(const double quat[4], double rot[9])
   return 0;
 }
 
-int 
+int
 bot_quat_pos_to_matrix(const double quat[4], const double pos[3], double mat[16])
 {
     double rot[9];
@@ -268,7 +268,7 @@ bot_quat_pos_to_matrix(const double quat[4], const double pos[3], double mat[16]
     return 0;
 }
 
-int 
+int
 bot_matrix_to_quat(const double rot[9], double quat[4])
 {
   quat[0] = 0.5*sqrt(rot[0]+rot[4]+rot[8]+1);
@@ -302,7 +302,7 @@ bot_matrix_to_quat(const double rot[9], double quat[4])
   return 0;
 }
 
-void 
+void
 bot_rodrigues_to_quat(const double r[3], double q[4])
 {
     double rmag_sq = r[0]*r[0] + r[1]*r[1] + r[2]*r[2];
@@ -313,7 +313,7 @@ bot_rodrigues_to_quat(const double r[3], double q[4])
         q[1] = q[2] = q[3] = 0;
         return;
     }
-        
+
     double t = sin(theta/2) / theta;
 
     q[0] = cos(theta / 2);
@@ -397,12 +397,12 @@ bot_quaternion_test()
     fprintf(stderr, "by q2: [ %.2f, %.2f, %.2f ]\n", rvec[0], rvec[1], rvec[2]);
     rvec[0] = 0; rvec[1] = 0; rvec[2] = 1;
     bot_quat_rotate (q3, rvec);
-    fprintf(stderr, "by q*q2: [ %.2f, %.2f, %.2f ]\n", 
+    fprintf(stderr, "by q*q2: [ %.2f, %.2f, %.2f ]\n",
             rvec[0], rvec[1], rvec[2]);
     rvec[0] = 0; rvec[1] = 0; rvec[2] = 1;
     bot_quat_mult (q3, q2, q);
     bot_quat_rotate (q3, rvec);
-    fprintf(stderr, "by q2*q: [ %.2f, %.2f, %.2f ]\n", 
+    fprintf(stderr, "by q2*q: [ %.2f, %.2f, %.2f ]\n",
             rvec[0], rvec[1], rvec[2]);
 
     // TODO
@@ -413,8 +413,8 @@ bot_quaternion_test()
     return 1;
 }
 
-void 
-bot_quat_interpolate(const double q0[4], const double q1[4], double u, 
+void
+bot_quat_interpolate(const double q0[4], const double q1[4], double u,
         double result[4])
 {
     double cos_omega = q0[0]*q1[0] + q0[1]*q1[1] + q0[2]*q1[2] + q0[3]*q1[3];

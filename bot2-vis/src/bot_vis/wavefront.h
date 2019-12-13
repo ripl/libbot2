@@ -31,10 +31,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-    
-typedef struct _BotWavefrontModel BotWavefrontModel;    
-    
+
+
+typedef struct _BotWavefrontModel BotWavefrontModel;
+
 /**
  * bot_wavefront_model_create:
  * @filename: The name of the model's Wavefront .obj file
@@ -61,7 +61,7 @@ bot_wavefront_model_destroy (BotWavefrontModel *model);
 
 /**
  * bot_wavefront_model_get_extrema:
- * @model: The %BotWavefrontModel 
+ * @model: The %BotWavefrontModel
  *
  * Determins the min/max extrema over vertices
  *

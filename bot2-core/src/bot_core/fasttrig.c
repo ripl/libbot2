@@ -85,7 +85,7 @@ void bot_fasttrig_sincos(double theta, double *s, double *c)
 
 // use only the MSB table. This is a bit faster, but not worth the
 // substantial decrease in accuracy.
-static inline void 
+static inline void
 bot_fasttrig_sincos_coarse(double theta, double *s, double *c)
 {
     uint32_t idx = (K_MSB_TABLE_SIZE / (2*M_PI)) * theta;
@@ -173,8 +173,8 @@ double bot_fasttrig_atan2(double y, double x)
 }
 
 // good to 4.1 degrees, returns mod2pi answer.
-static inline double 
-bot_fasttrig_atan2_coarse(double y, double x) 
+static inline double
+bot_fasttrig_atan2_coarse(double y, double x)
 {
 	double abs_y = fabs(y);
 	double angle;
@@ -189,7 +189,7 @@ bot_fasttrig_atan2_coarse(double y, double x)
 	return y < 0 ? -angle : angle;
 }
 
-static inline void 
+static inline void
 bot_fasttrig_sincos_test()
 {
     bot_fasttrig_init();
@@ -226,7 +226,7 @@ static inline float signed_randf()
 }
 #define to_degrees(x) ( (x) * (180.0 / M_PI ))
 
-static inline void 
+static inline void
 bot_fasttrig_atan2_test()
 {
     double max_err = 0;
@@ -236,7 +236,7 @@ bot_fasttrig_atan2_test()
     for (int i = 0; i < 10000000; i++) {
         double x = signed_randf();
         double y = signed_randf();
-        
+
         double a = atan2(y,x);
         double b = bot_fasttrig_atan2(y,x);
 

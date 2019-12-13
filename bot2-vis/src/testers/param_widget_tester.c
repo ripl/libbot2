@@ -25,10 +25,10 @@ on_param_changed( BotGtkParamWidget *pw, const char *name, void *user_data )
     } else if ( ! strcmp( name, "check1" ) ||
                 ! strcmp( name, "check2" ) ||
                 ! strcmp( name, "check3" ) ) {
-        printf("%s: %s\n", name, 
+        printf("%s: %s\n", name,
                 bot_gtk_param_widget_get_bool( pw, name ) ? "True" : "False" );
     } else if( ! strcmp( name, "Menu" ) ) {
-        printf("menu: %s / %d\n", 
+        printf("menu: %s / %d\n",
                 bot_gtk_param_widget_get_enum_str( pw, name ),
                 bot_gtk_param_widget_get_enum( pw, name ) );
     }
@@ -61,8 +61,8 @@ int main(int argc, char **argv)
             0, 1, 0.01, 0.5 );
 
     bot_gtk_param_widget_add_booleans( pw, BOT_GTK_PARAM_WIDGET_CHECKBOX,
-            "check1", 0, 
-            "check2", 1, 
+            "check1", 0,
+            "check2", 1,
             "check3", 0, NULL );
 
     bot_gtk_param_widget_add_enum( pw, "Menu", BOT_GTK_PARAM_WIDGET_MENU,
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
             "entry 3", MENU_3,
             NULL );
 
-    g_signal_connect( G_OBJECT( pw ), "changed", 
+    g_signal_connect( G_OBJECT( pw ), "changed",
             G_CALLBACK( on_param_changed ), NULL );
 
     gtk_widget_show_all( window );

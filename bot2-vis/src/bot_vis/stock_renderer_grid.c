@@ -58,7 +58,7 @@ grid_draw (BotViewer *viewer, BotRenderer *renderer)
     glEnable (GL_DEPTH_TEST);
 
     glPushMatrix ();
-    
+
     // when looking directly down at the world, about how many grids
     // should appear across the screen?
     double grids_per_screen = 10;
@@ -88,7 +88,7 @@ grid_draw (BotViewer *viewer, BotRenderer *renderer)
         num_lines = 0;
 
     glTranslatef (grid_ox, grid_oy, grid_oz);
-    glRotatef (bot_gtk_param_widget_get_double (self->pw, PARAM_AZIMUTH), 
+    glRotatef (bot_gtk_param_widget_get_double (self->pw, PARAM_AZIMUTH),
             0, 0, 1);
 
     glPushMatrix ();
@@ -96,8 +96,8 @@ grid_draw (BotViewer *viewer, BotRenderer *renderer)
     glScalef (box_size, box_size, box_size);
 
     // ground
-    if (look[2] < eye[2] && 
-            bot_gtk_param_widget_get_bool (self->pw, PARAM_RENDER_GROUND)) { 
+    if (look[2] < eye[2] &&
+            bot_gtk_param_widget_get_bool (self->pw, PARAM_RENDER_GROUND)) {
         if (bot_gtk_param_widget_get_bool (self->pw, PARAM_BGLIGHT)) {
             glColor4f(0.8, 0.8, 0.8, 0.6);
         } else {
@@ -147,12 +147,12 @@ grid_draw (BotViewer *viewer, BotRenderer *renderer)
 }
 
 static void
-grid_free (BotRenderer *renderer) 
+grid_free (BotRenderer *renderer)
 {
     free (renderer);
 }
 
-static void 
+static void
 on_param_widget_changed (BotGtkParamWidget *pw, const char *param,
         void *user_data)
 {
@@ -201,19 +201,19 @@ static BotRenderer *renderer_grid_new (BotViewer *viewer)
     bot_gtk_param_widget_add_double (self->pw, PARAM_AZIMUTH,
             BOT_GTK_PARAM_WIDGET_SLIDER,
             0, 90, 0.1, 0);
-	bot_gtk_param_widget_add_booleans (self->pw, BOT_GTK_PARAM_WIDGET_DEFAULTS, 
-            PARAM_BGLIGHT, 1, 
-            PARAM_RENDER_GROUND, 0, 
+	bot_gtk_param_widget_add_booleans (self->pw, BOT_GTK_PARAM_WIDGET_DEFAULTS,
+            PARAM_BGLIGHT, 1,
+            PARAM_RENDER_GROUND, 0,
             NULL);
 
-	bot_gtk_param_widget_add_booleans (self->pw, BOT_GTK_PARAM_WIDGET_DEFAULTS, 
+	bot_gtk_param_widget_add_booleans (self->pw, BOT_GTK_PARAM_WIDGET_DEFAULTS,
             PARAM_GRID_SPACING_AUTOMATIC, 1, NULL);
-    bot_gtk_param_widget_add_double(self->pw, 
+    bot_gtk_param_widget_add_double(self->pw,
             PARAM_GRID_SPACING, BOT_GTK_PARAM_WIDGET_SPINBOX, 0, 10000, 0.1, 1);
 
     g_signal_connect (G_OBJECT (self->pw), "changed",
             G_CALLBACK (on_param_widget_changed), self);
-    g_signal_connect (G_OBJECT (viewer), "load-preferences", 
+    g_signal_connect (G_OBJECT (viewer), "load-preferences",
             G_CALLBACK (on_load_preferences), self);
     g_signal_connect (G_OBJECT (viewer), "save-preferences",
             G_CALLBACK (on_save_preferences), self);

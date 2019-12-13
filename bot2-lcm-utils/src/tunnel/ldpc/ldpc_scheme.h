@@ -1,5 +1,5 @@
 /* $Id: ldpc_scheme.h,v 1.12 2006/09/06 14:36:49 roca Exp $ */
-/* 
+/*
  *  LDPC/LDGM FEC Scheme.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
@@ -9,7 +9,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -25,8 +25,8 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
- 
+
+
 #ifndef LDPC_FEC_SCHEME_H /* { */
 #define LDPC_FEC_SCHEME_H
 
@@ -95,7 +95,7 @@ public:
 	  /**
 	 * Initialize the LDPC scheme.
 	 * Note that the packet size must be a multiple of the symbol size.
-	 * @param symbolSize	(IN) the symbol size, probably calculated by 
+	 * @param symbolSize	(IN) the symbol size, probably calculated by
 	 *			the DetermineSymbolSize() function above.
 	 * @param pktSize	(IN) the packet size (bytes).
 	 * @return		Completion status (LDPC_OK or LDPC_ERROR).
@@ -232,7 +232,7 @@ public:
 	int getNbParityPkts (void);
 	
 	/**
-	 * Return the number of source symbols 
+	 * Return the number of source symbols
 	 * It might differ from the number of parity packets since
 	 * several symbols can be grouped in the same packet.
 	 * @return	Number of parity packets.
@@ -240,7 +240,7 @@ public:
 	int getNbSourceSymbols (void);
 
 	/**
-	 * Return the number of parity symbols 
+	 * Return the number of parity symbols
 	 * It might differ from the number of parity packets since
 	 * several symbols can be grouped in the same packet.
 	 * @return	Number of parity packets.

@@ -1,5 +1,5 @@
 /* $Id: ldpc_fec.h,v 1.61 2006/09/06 14:36:49 roca Exp $ */
-/* 
+/*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
@@ -10,7 +10,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -51,9 +51,9 @@
 
 /****** CONSTANT AND CLASS DEFINITION *****************************************/
 
-/**             
+/**
  * Error status returned by functions.
- */             
+ */
 enum ldpc_error_status {
 	LDPC_OK = 0,
 	LDPC_ERROR = 1
@@ -139,7 +139,7 @@ public:
  * - The AllocTmpBuffer callback is called each time a temporary buffer is
  *   required by the system, e.g. to store a partial sum (check node). This
  *   function returns a symbol pointer, and accessing the data buffer requires
- *   a call to the GetData callback. The associated data buffer MUST be 
+ *   a call to the GetData callback. The associated data buffer MUST be
  *   initialized to '0' by the callback.
  * - The GetData callback is called each time the data associated to a symbol
  *   must be read. What this function does is application-dependant.
@@ -281,7 +281,7 @@ public:
  */
 	ldpc_error_status BuildParitySymbol (void*		symbol_canvas[],
 					  int		paritySymbol_index,
-					  void*		paritySymbol); 
+					  void*		paritySymbol);
 
 
 /**
@@ -297,7 +297,7 @@ public:
 	ldpc_error_status BuildParitySymbolsPerCol (void*	symbol_canvas[],
 						 int	symbol_index,
 						 int*	built_parity_symbols_indices[],
-						 int*	nb_built_parity_symbols); 
+						 int*	nb_built_parity_symbols);
 
 
 /**
@@ -380,7 +380,7 @@ public:
  * Resets the XOR counter.
  */
 	void ResetNbXor (void);
-#endif 
+#endif
 
 
 /****** PROTECTED MEMBERS ******************************************************/
@@ -480,7 +480,7 @@ protected:
 #	define m_nbTotalSymbols (m_nbParitySymbols+m_nbSourceSymbols)
 
 
-	mod2sparse*	m_pchkMatrix;	// Parity Check matrix in sparse mode 
+	mod2sparse*	m_pchkMatrix;	// Parity Check matrix in sparse mode
 					// format. This matrix is also used as
 					// a generator matrix in LDGM-* modes.
 
@@ -507,7 +507,7 @@ protected:
 	void**		m_parity_symbol_canvas; //Canvas of stored parity symbols.
 
 #if 0
-	uintptr_t* 	m_builtSymbol; 	// symbol built by decoder, used for 
+	uintptr_t* 	m_builtSymbol; 	// symbol built by decoder, used for
 					// recursive calls of DecodingStepWithSymbol
 #endif
 	bool		m_triangleWithSmallFECRatio;
@@ -517,7 +517,7 @@ protected:
 
 #ifdef PERF_COUNT_XOR
 	unsigned int	m_nbXor;	// 64/32/8-bit XOR counter for statisitics
-#endif 
+#endif
 	// Callbacks
 	void* (*m_decodedSymbol_callback) (void* context, int size, int symbol_seqno);
 					// Function called each time a new

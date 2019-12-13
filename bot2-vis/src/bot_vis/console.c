@@ -88,7 +88,7 @@ bot_gl_console_new ()
     return console;
 }
 
-void 
+void
 bot_gl_console_destroy (BotGlConsole *console)
 {
     while (!g_queue_is_empty (console->lines)) {
@@ -99,7 +99,7 @@ bot_gl_console_destroy (BotGlConsole *console)
     g_slice_free (BotGlConsole, console);
 }
 
-//void 
+//void
 //bot_gl_console_set_size (BotGlConsole *console,
 //        double x, double y, double width, double height)
 //{
@@ -109,21 +109,21 @@ bot_gl_console_destroy (BotGlConsole *console)
 //    console->height = height;
 //}
 
-void 
+void
 bot_gl_console_set_decay_lambda (BotGlConsole *console, double lambda)
 {
     console->lambda = lambda;
     assert (lambda >= 0);
 }
 
-void 
+void
 bot_gl_console_set_glut_font (BotGlConsole *console, void *font)
 {
     console->font = font;
     console->line_height = bot_glutBitmapHeight(font);
 }
 
-void 
+void
 bot_gl_console_color3f (BotGlConsole *console, float r, float g, float b)
 {
     console->cur_rgba[0] = r;
@@ -132,7 +132,7 @@ bot_gl_console_color3f (BotGlConsole *console, float r, float g, float b)
     console->cur_rgba[3] = 1;
 }
 
-void 
+void
 bot_gl_console_printf (BotGlConsole *console, const char *format, ...)
 {
     va_list ap;
@@ -152,7 +152,7 @@ bot_gl_console_printf (BotGlConsole *console, const char *format, ...)
             last_line = _line_new (text + line_start, console->cur_rgba, now);
             g_queue_push_head (console->lines, last_line);
         } else {
-            char *combined = g_strdup_printf ("%s%s", 
+            char *combined = g_strdup_printf ("%s%s",
                     last_line->text, text + line_start);
             free (last_line->text);
             last_line->text = combined;
@@ -162,14 +162,14 @@ bot_gl_console_printf (BotGlConsole *console, const char *format, ...)
         line_start = i+1;
     }
     if (line_start < text_len - 1) {
-        _line_t *last_line = _line_new (text + line_start, 
+        _line_t *last_line = _line_new (text + line_start,
                 console->cur_rgba, now);
         g_queue_push_head (console->lines, last_line);
     }
     free (text);
 }
 
-void 
+void
 bot_gl_console_render (BotGlConsole *console, double elapsed)
 {
     if (!g_queue_get_length (console->lines)) {

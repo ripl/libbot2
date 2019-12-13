@@ -25,12 +25,12 @@ struct _lcm_tunnel_udp_msg_t
     int32_t    data_size;
     uint8_t    *data;
 };
- 
+
 lcm_tunnel_udp_msg_t   *lcm_tunnel_udp_msg_t_copy(const lcm_tunnel_udp_msg_t *p);
 void lcm_tunnel_udp_msg_t_destroy(lcm_tunnel_udp_msg_t *p);
 
 typedef struct _lcm_tunnel_udp_msg_t_subscription_t lcm_tunnel_udp_msg_t_subscription_t;
-typedef void(*lcm_tunnel_udp_msg_t_handler_t)(const lcm_recv_buf_t *rbuf, 
+typedef void(*lcm_tunnel_udp_msg_t_handler_t)(const lcm_recv_buf_t *rbuf,
              const char *channel, const lcm_tunnel_udp_msg_t *msg, void *user);
 
 int lcm_tunnel_udp_msg_t_publish(lcm_t *lcm, const char *channel, const lcm_tunnel_udp_msg_t *p);

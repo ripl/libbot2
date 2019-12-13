@@ -5,7 +5,7 @@
 #include <gtk/gtk.h>
 
 /**
- * @defgroup BotGtkGlDrawingArea BotGTKGlDrawingArea 
+ * @defgroup BotGtkGlDrawingArea BotGTKGlDrawingArea
  * @brief GTK+ drawing-area widget with an OpenGL context
  * @ingroup BotVisGtk
  * @include: bot_vis/bot_vis.h

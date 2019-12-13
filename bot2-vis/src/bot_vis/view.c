@@ -20,7 +20,7 @@
 struct _BotGlView {
     double perspective_vertical_fov_degrees;
 
-    double perspectiveness; 
+    double perspectiveness;
 
     double lookAt[3];
     double eye[3];
@@ -34,7 +34,7 @@ struct _BotGlView {
     double height;
 };
 
-BotGlView * 
+BotGlView *
 bot_gl_view_new(void)
 {
     BotGlView * self = (BotGlView*) calloc(1, sizeof(BotGlView));
@@ -63,7 +63,7 @@ bot_gl_view_new(void)
     return self;
 }
 
-void 
+void
 bot_gl_view_unref(BotGlView *self)
 {
     free(self);
@@ -93,7 +93,7 @@ _gluPerspective(double fovy, double aspect, double znear, double zfar,
 }
 
 static void
-_glOrtho(double left, double right, double bottom, double top, 
+_glOrtho(double left, double right, double bottom, double top,
         double znear, double zfar, double M[16])
 {
     memset(M, 0, 16*sizeof(double));
@@ -107,7 +107,7 @@ _glOrtho(double left, double right, double bottom, double top,
 }
 
 static void
-_lookAt(const double eye_[3], const double c_[3], const double up_[3], 
+_lookAt(const double eye_[3], const double c_[3], const double up_[3],
         double M[16])
 {
     double eye[3]; memcpy(eye, eye_, sizeof(eye));
@@ -144,18 +144,18 @@ _lookAt(const double eye_[3], const double c_[3], const double up_[3],
 static void
 _recompute(BotGlView *self)
 {
-    self->width = self->viewport[2]; 
+    self->width = self->viewport[2];
     self->height = self->viewport[3];
 
 	double aspect = ((double) self->width) / self->height;
 	double dist = bot_vector_dist_3d(self->eye, self->lookAt);
 
 	double pM[16];
-    _gluPerspective(self->perspective_vertical_fov_degrees, aspect, 0.1, 
+    _gluPerspective(self->perspective_vertical_fov_degrees, aspect, 0.1,
             100000, pM);
 
 	double oM[16];
-    _glOrtho(-dist * aspect / 2, dist*aspect / 2, -dist/2, dist/2, -100000, 
+    _glOrtho(-dist * aspect / 2, dist*aspect / 2, -dist/2, dist/2, -100000,
             1000000, oM);
 
     for(int i=0; i<16; i++) {
@@ -167,7 +167,7 @@ _recompute(BotGlView *self)
     _lookAt(self->eye, self->lookAt, self->up, self->modelMatrix);
 }
 
-void 
+void
 bot_gl_view_setup_camera(BotGlView *self)
 {
     dbg("%s:%d\n", __FILE__, __LINE__);
@@ -189,7 +189,7 @@ bot_gl_view_setup_camera(BotGlView *self)
 	glMultMatrixd(model);
 }
 
-void 
+void
 bot_gl_view_look_at(BotGlView *self,
         const double eye[3], const double lookAt[3], const double up[3])
 {
@@ -213,12 +213,12 @@ bot_gl_view_look_at(BotGlView *self,
 //	recompute();
 //    }
 
-void 
-bot_gl_view_follow(BotGlView *self, 
-        double lastPos[3], 
-        double lastQuat[4], 
-        double newPos[3], 
-        double newQuat[4], 
+void
+bot_gl_view_follow(BotGlView *self,
+        double lastPos[3],
+        double lastQuat[4],
+        double newPos[3],
+        double newQuat[4],
         gboolean followYaw)
 {
     if (followYaw) {
@@ -295,25 +295,25 @@ bot_gl_view_follow(BotGlView *self,
     }
 }
 
-void 
+void
 bot_gl_view_set_perspectiveness(BotGlView *self, double perspectiveness)
 {
     self->perspectiveness = perspectiveness;
 }
 
-double 
+double
 bot_gl_view_get_perspectiveness(const BotGlView * self)
 {
     return self->perspectiveness;
 }
 
-void 
+void
 bot_gl_view_get_projection_matrix(const BotGlView *self, double m[16])
 {
     bot_matrix_transpose_4x4d(self->projectionMatrix, m);
 }
 
-void 
+void
 bot_gl_view_get_modelview_matrix(const BotGlView *self, double m[16])
 {
     bot_matrix_transpose_4x4d(self->modelMatrix, m);
@@ -325,8 +325,8 @@ bot_gl_view_get_viewport(const BotGlView *self, int viewport[4])
     memcpy(viewport, self->viewport, 4*sizeof(int));
 }
 
-void 
-bot_gl_view_get_look_at(const BotGlView *self, double eye[3], 
+void
+bot_gl_view_get_look_at(const BotGlView *self, double eye[3],
         double lookat[3], double up[3])
 {
     if(eye)

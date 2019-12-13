@@ -155,7 +155,7 @@ bot_ssocket_t *bot_ssocket_accept(bot_ssocket_t *s)
 {
 	int thesocket;
 	bot_ssocket_t *cs = bot_ssocket_create();
-       
+
 	s->addrlen=sizeof(struct sockaddr);
 
 	if (s->type!=BOT_SSOCKET_SERVER_TYPE)

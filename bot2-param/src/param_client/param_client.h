@@ -27,7 +27,7 @@ typedef struct _BotParam BotParam;
  * @param keep_update Keep listening for parameter updates.
  *
  * Gets the params for the param-server, and parse them. Returns a handle to the contents.
- * Checks the environment variable BOT_PARAM_SERVER_NAME. If no parameters are received within 
+ * Checks the environment variable BOT_PARAM_SERVER_NAME. If no parameters are received within
  * 5seconds, returns with an error.
  *
  * WARNING: This calls lcm_handle internally, so make sure that you create the param_client
@@ -45,8 +45,8 @@ bot_param_new_from_server (lcm_t * lcm, int keep_updated);
  * @param server_name Name of param server
  * @param keep_update Keep listening for parameter updates.
  *
- * Gets the params for the named param-server, and parse them. Returns a handle to the contents.  
- * If server_name is NULL, checks for environment variable BOT_PARAM_SERVER_NAME. If no parameters 
+ * Gets the params for the named param-server, and parse them. Returns a handle to the contents.
+ * If server_name is NULL, checks for environment variable BOT_PARAM_SERVER_NAME. If no parameters
  * are received within 5seconds, returns with an error.
  *
  * WARNING: This calls lcm_handle internally, so make sure that you create the param_client
@@ -376,7 +376,7 @@ bot_param_get_boolean_array (BotParam * param, const char * key, int * vals, int
  * @param len   Number of elements in %vals array.
  *
  * Same as bot_param_get_boolean_or_fail(), except for an array. Calls abort() if
- * the number of elements read is less than len. 
+ * the number of elements read is less than len.
  *
  */
 void
@@ -406,7 +406,7 @@ bot_param_get_double_array (BotParam * param, const char * key, double * vals, i
  * @param len   Number of elements in %vals array.
  *
  * Same as bot_param_get_double(), except for an array. Calls abort() if
- * the number of elements read is less than len. 
+ * the number of elements read is less than len.
  *
  */
 void

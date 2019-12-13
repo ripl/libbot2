@@ -27,15 +27,15 @@ extern "C" {
 typedef struct lcmgl bot_lcmgl_t;
 
 /**
- * bot_lcmgl_init:  
- * 
+ * bot_lcmgl_init:
+ *
  * Constructor
  */
 bot_lcmgl_t *bot_lcmgl_init(lcm_t *lc, const char *name);
 
 /**
- * bot_lcmgl_destroy:  
- * 
+ * bot_lcmgl_destroy:
+ *
  * Destructor
  */
 void bot_lcmgl_destroy(bot_lcmgl_t *lcmgl);
@@ -173,7 +173,7 @@ static inline void bot_lcmgl_color4fv(bot_lcmgl_t * lcmgl, const double v[4]){bo
 
 
 /* ================ drawing routines not part of OpenGL ===============
- * 
+ *
  * These routines do not have a direct correspondence to the OpenGL API, but
  * are included for convenience.
  */
@@ -183,7 +183,7 @@ static inline void bot_lcmgl_color4fv(bot_lcmgl_t * lcmgl, const double v[4]){bo
  *
  * Draws a rectangle on the X-Y plane, centered on @xyz.
  */
-void bot_lcmgl_rect(bot_lcmgl_t *lcmgl, double xyz[3], double size[2], 
+void bot_lcmgl_rect(bot_lcmgl_t *lcmgl, double xyz[3], double size[2],
         int filled);
 /**
  * bot_lcmgl_box:
@@ -300,7 +300,7 @@ typedef enum {
  * @return: the texture ID.  This ID is valid until bot_lcmgl_switch_buffer is
  * called.
  */
-int bot_lcmgl_texture2d(bot_lcmgl_t *lcmgl, const void *data, 
+int bot_lcmgl_texture2d(bot_lcmgl_t *lcmgl, const void *data,
         int width, int height, int row_stride,
         bot_lcmgl_texture_format_t format,
         bot_lcmgl_texture_type_t type,
@@ -317,7 +317,7 @@ void bot_lcmgl_texture_draw_quad(bot_lcmgl_t *lcmgl, int texture_id,
 
 /* ======================== */
 
-enum _bot_lcmgl_enum_t 
+enum _bot_lcmgl_enum_t
 {
     BOT_LCMGL_BEGIN=4,
     BOT_LCMGL_END,

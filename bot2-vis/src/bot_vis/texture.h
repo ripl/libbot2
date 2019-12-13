@@ -43,7 +43,7 @@ void bot_gl_texture_free (BotGlTexture * t);
 
 /**
  * Uploads texture data.
- * @param format OpenGL format of the texture.  Supported formats are: 
+ * @param format OpenGL format of the texture.  Supported formats are:
  *    GL_LUMINANCE, GL_ALPHA, GL_LUMINANCE_ALPHA, GL_RGB, GL_BGR, GL_RGBA,
  *    GL_BGRA.
  * @param type OpenGL data type used to represent the texture pixels.  Supported types are:
@@ -79,7 +79,7 @@ bot_gl_texture_draw (BotGlTexture * t);
  * Renders the texture in a quadrilateral using the specified coordinates
  */
 void
-bot_gl_texture_draw_coords (BotGlTexture * t, 
+bot_gl_texture_draw_coords (BotGlTexture * t,
         double x_top_left,  double y_top_left,  double z_top_left,
         double x_bot_left,  double y_bot_left,  double z_bot_left,
         double x_bot_right, double y_bot_right, double z_bot_right,

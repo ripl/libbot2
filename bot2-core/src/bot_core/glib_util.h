@@ -26,7 +26,7 @@ extern "C" {
 // calls func on every element of the specified list, and then
 // frees the list
 void bot_g_list_free_with_func (GList *list, GDestroyNotify func);
-    
+
 // calls func on every element of the specified queue, and then
 // frees the queue
 void bot_g_queue_free_with_func (GQueue *queue, GDestroyNotify func);
@@ -37,7 +37,7 @@ void bot_g_ptr_array_free_with_func (GPtrArray *a, GDestroyNotify func);
 
 // creates a newly allocated copy of a GPtrArray
 GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a);
-    
+
 /**
  * Returns: 1 if time1 is after time2
  *          0 if time1 and time2 are equal

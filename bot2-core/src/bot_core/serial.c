@@ -52,12 +52,12 @@ int bot_serial_open(const char *port, int baud, int blocking)
 		return -1;
 	}
 
- 
+
 	cfsetispeed(&opts, bot_serial_translate_baud(baud));
 	cfsetospeed(&opts, bot_serial_translate_baud(baud));
 
 	cfmakeraw(&opts);
-        
+
         // set one stop bit
         opts.c_cflag &= ~CSTOPB;
 /*
@@ -67,7 +67,7 @@ int bot_serial_open(const char *port, int baud, int blocking)
 	opts.c_cflag &= ~CSTOPB;
 	opts.c_cflag &= ~CSIZE;
 	opts.c_cflag |= CS8;
-  
+
 	opts.c_lflag = 0;
 
 	opts.c_iflag &= ~(IXON | IXOFF);
@@ -118,8 +118,8 @@ int bot_serial_set_N82 (int fd)
     return 0;
 }
 
-/** Enable cts/rts flow control. 
-    Returns non-zero on error. 
+/** Enable cts/rts flow control.
+    Returns non-zero on error.
 **/
 int bot_serial_enablectsrts(int fd)
 {
@@ -143,8 +143,8 @@ int bot_serial_enablectsrts(int fd)
 }
 
 
-/** Enable xon/xoff flow control. 
-    Returns non-zero on error. 
+/** Enable xon/xoff flow control.
+    Returns non-zero on error.
 **/
 int bot_serial_enablexon(int fd)
 {
@@ -217,7 +217,7 @@ int bot_serial_setbaud(int fd, int baudrate)
 
 		if (ioctl(fd, TIOCGSERIAL, &ser))
 			perror("ioctl TIOCGSERIAL");
-      
+
 		ser.flags=(ser.flags&(~ASYNC_SPD_MASK)) | ASYNC_SPD_CUST;
 		ser.custom_divisor=48;
 		ser.custom_divisor=ser.baud_base/baudrate;
@@ -231,9 +231,9 @@ int bot_serial_setbaud(int fd, int baudrate)
 #endif
 
 	}
-  
+
 	tcflush(fd, TCIFLUSH);
-  
+
 	return 0;
 }
 

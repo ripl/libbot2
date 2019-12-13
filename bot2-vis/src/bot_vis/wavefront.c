@@ -72,7 +72,7 @@ bot_wavefront_model_gl_draw (BotWavefrontModel *model)
         glmFacetNormals (model->glm_model);
         fprintf (stdout, "Adding %d FacetNormals\n", model->glm_model->numfacetnorms);
     }
-    
+
     // Generate normals for each vertex if they aren't specified in the .obj file
     // Per the suggestion in glm.c, use 90 deg as the facet outlier threshold
     if (model->glm_model->numnormals == 0) {

@@ -10,7 +10,7 @@
  *
  */
 
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,7 +32,7 @@ char *
 __glmStrdup(const char *string)
 {
     char *copy;
-    
+
     copy = (char*) malloc(strlen(string) + 1);
     if (copy == NULL)
         return NULL;
@@ -42,7 +42,7 @@ __glmStrdup(const char *string)
 #endif
 
 /* strip leading and trailing whitespace from a string and return a newly
-   allocated string containing the result (or NULL if the string is only 
+   allocated string containing the result (or NULL if the string is only
    whitespace)*/
 char *
 __glmStrStrip(const char *s)
@@ -52,7 +52,7 @@ __glmStrStrip(const char *s)
     int len;
     int i;
     char * rets;
-    
+
     i=0;
     while(i <= last &&
           (s[i]==' ' || s[i]=='\t' || s[i]=='\n' || s[i]=='\r'))
@@ -76,7 +76,7 @@ void
 __glmWarning(char *format,...)
 {
     va_list args;
-    
+
     va_start(args, format);
     fprintf(stderr, "GLM: Warning: ");
     vfprintf(stderr, format, args);
@@ -89,7 +89,7 @@ void
 __glmReportErrors(void)
 {
     GLenum error;
-    
+
     while ((error = glGetError()) != GL_NO_ERROR)
         __glmWarning("GL error: %s", gluErrorString(error));
 }
@@ -99,7 +99,7 @@ void
 __glmFatalError(char *format,...)
 {
     va_list args;
-    
+
     va_start(args, format);
     fprintf(stderr, "GLM: Fatal Error: ");
     vfprintf(stderr, format, args);
@@ -112,7 +112,7 @@ void
 __glmFatalUsage(char *format,...)
 {
     va_list args;
-    
+
     va_start(args, format);
     fprintf(stderr, "GLM: Fatal API Usage: ");
     vfprintf(stderr, format, args);
@@ -132,14 +132,14 @@ __glmDirName(char* path)
 {
     char* dir;
     char* s;
-    
+
     dir = __glmStrdup(path);
-    
+
     s = strrchr(dir, '/');
     if (s)
         s[1] = '\0';
     else
         dir[0] = '\0';
-    
+
     return dir;
 }

@@ -1,14 +1,14 @@
 /*
- * The contents of this directory and its sub-directories are 
+ * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
- * 
+ *
  * Permission is granted for anyone to copy, use, modify, or distribute these
  * programs and accompanying documents for any purpose, provided this copyright
- * notice is retained and prominently displayed, along with a note saying 
- * that the original programs are available from Radford Neal's web page, and 
- * note is made of any changes made to these programs.  These programs and 
+ * notice is retained and prominently displayed, along with a note saying
+ * that the original programs are available from Radford Neal's web page, and
+ * note is made of any changes made to these programs.  These programs and
  * documents are distributed without any warranty, express or implied.  As the
- * programs were written for research purposes only, they have not been tested 
+ * programs were written for research purposes only, they have not been tested
  * to the degree that would be advisable in any important application.  All use
  * of these programs is entirely at the user's own risk.
  */
@@ -56,7 +56,7 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 		return NULL;
 	}
 #endif
-	if (no4cycle) { 
+	if (no4cycle) {
 		fprintf(stderr, "ERROR: no4cycle mode is no longer supported!\n");
 		exit(-1);
 	}
@@ -66,7 +66,7 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 
 	/* Create the initial version of the parity check matrix. */
 	switch (makeMethod)
-	{ 
+	{
 	case Evencol:
 		for(j=skipCols; j<nbCols; j++)
 		{
@@ -95,7 +95,7 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 		for(j = skipCols; j<nbCols; j++)	/* for each source symbol column */
 		{
 			for(k = 0; k<leftDegree; k++)	/* add left_degree "1s" */
-			{ 
+			{
 				/* check that valid available choices remain */
 				for(i = t; i<leftDegree*nbDataCols && mod2sparse_find(pchkMatrix,u[i],j); i++) ;
 
@@ -145,10 +145,10 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 		}
 		e = mod2sparse_first_in_row(pchkMatrix,i);
 		if(mod2sparse_at_end(mod2sparse_next_in_row(e)) && nbDataCols>1)
-		{ 
-			do 
-			{ 
-				j = (ldpc_rand(nbDataCols))+skipCols; 
+		{
+			do
+			{
+				j = (ldpc_rand(nbDataCols))+skipCols;
 			} while (j==mod2sparse_col(e));
 			mod2sparse_insert(pchkMatrix,i,j);
 			added ++;
@@ -182,10 +182,10 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 #if 0
 	/* Eliminate cycles of length four, if asked, and if possible. */
 	if(no4cycle)
-	{ 
+	{
 		elim4 = 0;
 
-		for(t = 0; t<10; t++) 
+		for(t = 0; t<10; t++)
 		{
 			k = 0;
 			for(j = 0; j<nbCols; j++)
@@ -227,7 +227,7 @@ nextj: ;
 			fprintf(stderr, "Eliminated %d cycles of length four by moving checks within column\n", elim4);
 		}
 
-		if(t==10) 
+		if(t==10)
 		{
 			fprintf(stderr, "Couldn't eliminate all cycles of length four in 10 passes\n");
 		}

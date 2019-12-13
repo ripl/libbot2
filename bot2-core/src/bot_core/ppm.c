@@ -38,7 +38,7 @@ skip_whitespace_and_comments (FILE *fp)
 }
 
 static int
-read_header (FILE *fp, const char *magic, int *width, int *height, 
+read_header (FILE *fp, const char *magic, int *width, int *height,
         int *maxval)
 {
     char m[3] = { 0 };
@@ -56,15 +56,15 @@ read_header (FILE *fp, const char *magic, int *width, int *height,
     return 0;
 }
 
-int bot_ppm_read (FILE *fp, uint8_t **pixels, 
-        int *width, int *height, 
+int bot_ppm_read (FILE *fp, uint8_t **pixels,
+        int *width, int *height,
         int *rowstride)
 {
     int maxval;
     int i;
     int nread;
     int w, h, rs;
-    
+
     if (0 != read_header (fp, "P6", &w, &h, &maxval)) {
         fprintf(stderr, "that doesn't look like a PPM file!\n");
         return -1;
@@ -89,7 +89,7 @@ int bot_ppm_read (FILE *fp, uint8_t **pixels,
     return 0;
 }
 
-int 
+int
 bot_ppm_read_fname(const char* fname, uint8_t** pixels,
         int* width, int* height, int* rowstride)
 {
@@ -102,7 +102,7 @@ bot_ppm_read_fname(const char* fname, uint8_t** pixels,
 }
 
 int bot_ppm_write (FILE *fp, const uint8_t *pixels,
-        int width, int height, 
+        int width, int height,
         int rowstride)
 {
     fprintf(fp, "P6 %d %d %d\n", width, height, 255);
@@ -114,7 +114,7 @@ int bot_ppm_write (FILE *fp, const uint8_t *pixels,
     return 0;
 }
 
-int 
+int
 bot_ppm_write_fname(const char* fname, const uint8_t* pixels,
         int width, int height, int rowstride)
 {
@@ -127,7 +127,7 @@ bot_ppm_write_fname(const char* fname, const uint8_t* pixels,
 }
 
 int bot_ppm_write_bottom_up (FILE *fp, uint8_t *pixels,
-        int width, int height, 
+        int width, int height,
         int rowstride)
 {
     fprintf(fp, "P6 %d %d %d\n", width, height, 255);
@@ -139,15 +139,15 @@ int bot_ppm_write_bottom_up (FILE *fp, uint8_t *pixels,
     return 0;
 }
 
-int bot_pgm_read (FILE *fp, uint8_t **pixels, 
-        int *width, int *height, 
+int bot_pgm_read (FILE *fp, uint8_t **pixels,
+        int *width, int *height,
         int *rowstride)
 {
     int maxval;
     int i;
     int nread;
     int w, h, rs;
-    
+
     if (0 != read_header (fp, "P5", &w, &h, &maxval)) {
         fprintf(stderr, "that doesn't look like a PGM file!\n");
         return -1;
@@ -161,7 +161,7 @@ int bot_pgm_read (FILE *fp, uint8_t **pixels,
         nread = fread (*pixels + i*rs, 1, w, fp);
         if (w != nread) {
             perror("fread pgm");
-            fprintf(stderr, "only read %d bytes (expected %d)\n", 
+            fprintf(stderr, "only read %d bytes (expected %d)\n",
                     nread, w);
             return -1;
         }
@@ -186,7 +186,7 @@ int bot_pgm_read_fname(const char *fname, uint8_t **pixels,
 }
 
 int bot_pgm_write (FILE *fp, const uint8_t *pixels,
-        int width, int height, 
+        int width, int height,
         int rowstride)
 {
     fprintf(fp, "P5\n%d\n%d\n%d\n", width, height, 255);

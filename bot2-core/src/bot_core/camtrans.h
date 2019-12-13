@@ -85,14 +85,14 @@ extern "C" {
 
     /**
      * bot_null_distortion_create:
-     * 
+     *
      * TODO description
      *
      * Returns: TODO
      */
     BotDistortionObj*
     bot_null_distortion_create(void);
-    
+
 
     /**
      * bot_plumb_bob_distortion_create:
@@ -101,7 +101,7 @@ extern "C" {
      * @k3: TODO
      * @p1: TODO
      * @p2: TODO
-     * 
+     *
      * TODO description
      *
      * Returns: TODO

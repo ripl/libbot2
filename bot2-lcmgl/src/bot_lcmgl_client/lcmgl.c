@@ -439,7 +439,7 @@ void bot_lcmgl_cylinder(bot_lcmgl_t *lcmgl, double base_xyz[3], double base_radi
     bot_lcmgl_encode_u32(lcmgl, stacks);
 }
 
-void bot_lcmgl_sphere(bot_lcmgl_t *lcmgl, double xyz[3], double radius, 
+void bot_lcmgl_sphere(bot_lcmgl_t *lcmgl, double xyz[3], double radius,
         int slices, int stacks)
 {
     bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_SPHERE);
@@ -634,8 +634,8 @@ void bot_lcmgl_scale_to_viewer_ar(bot_lcmgl_t *lcmgl){
 
 // texture API
 
-int 
-bot_lcmgl_texture2d(bot_lcmgl_t *lcmgl, const void *data, 
+int
+bot_lcmgl_texture2d(bot_lcmgl_t *lcmgl, const void *data,
         int width, int height, int row_stride,
         bot_lcmgl_texture_format_t format,
         bot_lcmgl_texture_type_t type,
@@ -726,7 +726,7 @@ bot_lcmgl_texture2d(bot_lcmgl_t *lcmgl, const void *data,
 /**
  * Renders the specified texture with the active OpenGL color.
  */
-void 
+void
 bot_lcmgl_texture_draw_quad(bot_lcmgl_t *lcmgl, int texture_id,
         double x_top_left,  double y_top_left,  double z_top_left,
         double x_bot_left,  double y_bot_left,  double z_bot_left,

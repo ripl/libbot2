@@ -143,10 +143,10 @@ int main(int argc, char ** argv)
           return 1;
       }
   }
-  
+
   self->lcm = lcm_create(lcm_url);
   lcmu_glib_mainloop_attach_lcm(self->lcm);
-  
+
 
   self->seqNo = 0;
   self->id = _timestamp_now();
@@ -160,11 +160,11 @@ int main(int argc, char ** argv)
 
   // set channels here
   if (!param_prefix) param_prefix = getenv ("BOT_PARAM_SERVER_NAME");
-  self->update_channel = g_strconcat (param_prefix ? : "", 
+  self->update_channel = g_strconcat (param_prefix ? : "",
           BOT_PARAM_UPDATE_CHANNEL, NULL);
-  self->request_channel = g_strconcat (param_prefix ? : "", 
+  self->request_channel = g_strconcat (param_prefix ? : "",
           BOT_PARAM_REQUEST_CHANNEL, NULL);
-  self->set_channel = g_strconcat (param_prefix ? : "", 
+  self->set_channel = g_strconcat (param_prefix ? : "",
           BOT_PARAM_SET_CHANNEL, NULL);
 
   bot_param_update_t_subscribe(self->lcm, self->update_channel, on_param_update, (void *) self);

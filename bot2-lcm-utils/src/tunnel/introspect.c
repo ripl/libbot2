@@ -74,11 +74,11 @@ on_lcm_tunnel_introspect(const lcm_recv_buf_t *rbuf, const char *channel,
     int data_offset_okay = (doff == 0 && !lbuf->buf_from_ringbuf) ||
         (doff == sizeof(struct _lcm2_header_short) + strlen(channel) + 1 &&
          lbuf->buf_from_ringbuf);
-    if(! data_offset_okay || 
+    if(! data_offset_okay ||
        rbuf->data != lbuf->buf + doff ||
        lbuf->recv_utime != rbuf->recv_utime ||
        rbuf->data_size != lbuf->data_size) {
-        fprintf(stderr, 
+        fprintf(stderr,
                 "Received introspection packet, but failed validation check\n"
                 "This does not appear to be a udpm LCM network..\n");
         self->ready = 0;
@@ -111,7 +111,7 @@ introspect_new(lcm_t * lcm)
     return self;
 }
 
-void 
+void
 introspect_send_introspection_packet(introspect_t* self)
 {
     // generate a random bitstring

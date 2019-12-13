@@ -73,7 +73,7 @@ int ssocket_connect(ssocket_t *s, const char *hostname, int port)
 	}
 
 	sa.sin_port=htons(port);
-    if (host_lookup) 
+    if (host_lookup)
         sa.sin_addr=*(struct in_addr *) host->h_addr;
     else
         sa.sin_addr=ca.sin_addr;
@@ -165,7 +165,7 @@ ssocket_t *ssocket_accept(ssocket_t *s)
 {
 	int thesocket;
 	ssocket_t *cs = ssocket_create();
-       
+
 	s->addrlen=sizeof(struct sockaddr);
 
 	if (s->type!=SSOCKET_SERVER_TYPE)

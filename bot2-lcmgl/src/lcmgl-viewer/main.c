@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     bot_viewer_add_event_handler(viewer, ehandler, 0);
 
     // load saved preferences
-    char *fname = g_build_filename(g_get_user_config_dir(), 
+    char *fname = g_build_filename(g_get_user_config_dir(),
             ".lcmgl-viewerrc", NULL);
     bot_viewer_load_preferences(viewer, fname);
 

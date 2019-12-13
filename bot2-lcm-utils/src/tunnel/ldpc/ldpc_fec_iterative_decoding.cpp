@@ -10,7 +10,7 @@
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -47,7 +47,7 @@
  * This is the legacy front end to the DecodingStepWithSymbol() method. The actual
  * work will be done in the other DecodingStepWithSymbol() method.
  * => See header file for more informations.
- */ 
+ */
 ldpc_error_status
 LDPCFecSession::DecodingStepWithSymbol (void*	symbol_canvas[],
 					void*	new_symbol,
@@ -65,7 +65,7 @@ LDPCFecSession::DecodingStepWithSymbol (void*	symbol_canvas[],
 	// Fast path. If store symbol is not set, then call directly
 	// the full DecodingStepWithSymbol() method to avoid duplicate processing.
 	if (store_symbol == false) {
-		return(DecodingStepWithSymbol(symbol_canvas, new_symbol, new_symbol_seqno)); 
+		return(DecodingStepWithSymbol(symbol_canvas, new_symbol, new_symbol_seqno));
 	}
 	// Step 0: check if this is a fresh symbol, otherwise return
 	if ((mod2sparse_last_in_col(m_pchkMatrix, GetMatrixCol(new_symbol_seqno))->row < 0)
@@ -115,7 +115,7 @@ LDPCFecSession::DecodingStepWithSymbol (void*	symbol_canvas[],
 		new_symbol_dst = new_symbol;
 	}
 	/* continue decoding with the full DecodingStepWithSymbol() method */
-	return(DecodingStepWithSymbol(symbol_canvas, new_symbol_dst, new_symbol_seqno)); 
+	return(DecodingStepWithSymbol(symbol_canvas, new_symbol_dst, new_symbol_seqno));
 }
 
 
@@ -216,7 +216,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 		} else {
 			// The symbol will be stored if more than 1 partial sum
 			// is needed
-			const int	max_allowed_PS = 1; // threshold before 
+			const int	max_allowed_PS = 1; // threshold before
 							// storing symbol in array
 			int		PS_to_create = 0; // nb of partial sums that
 							//  would have to be allocated
@@ -498,7 +498,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 	// Step 3: Check if a new symbol has been decoded and take appropriate
 	// measures ...
 	int	decoded_symbol_seqno;	// sequence number of decoded symbol
-	//for (int i = 0; i < CheckOfDeg1_nb; i++) 
+	//for (int i = 0; i < CheckOfDeg1_nb; i++)
 	for (CheckOfDeg1_nb--; CheckOfDeg1_nb >= 0; CheckOfDeg1_nb--) {
 		if (IsDecodingComplete(symbol_canvas)) {
 			// decoding has just finished, no need to do anything else
