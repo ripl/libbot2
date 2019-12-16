@@ -2,15 +2,14 @@
 #define __lcm_tunnel_h__
 
 #include <inttypes.h>
+
 #include <deque>
+
 #include <glib.h>
 
-#include "ldpc/ldpc_wrapper.h"
-#include "lcm_tunnel_params_t.h"
-#include "lcm_tunnel_sub_msg_t.h"
-#include "lcm_tunnel_udp_msg_t.h"
-#include "lcm_tunnel_disconnect_msg_t.h"
+#include <lcmtypes/bot2_lcm_utils.h>
 
+#include "ldpc/ldpc_wrapper.h"
 #include "ssocket.h"
 #include "introspect.h"
 

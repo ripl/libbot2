@@ -29,9 +29,11 @@ set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
 
+include(cmake/lcmtypes.cmake)
+lcmtypes_build(EXPORT ${PROJECT_NAME})
+
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
-find_package(lcm 1.4 CONFIG REQUIRED)
 find_package(GLib2 MODULE REQUIRED)
 
 add_subdirectory(src/logfilter)

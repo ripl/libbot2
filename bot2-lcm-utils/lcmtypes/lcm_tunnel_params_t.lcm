@@ -1,4 +1,6 @@
-struct lcm_tunnel_params_t
+package lcm_tunnel;
+
+struct params_t
 {
     boolean udp;
     int32_t udp_port;

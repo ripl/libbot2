@@ -12,10 +12,6 @@ set(ldpc_sources
 
 add_executable(bot-lcm-tunnel
     introspect.c
-    lcm_tunnel_params_t.c
-    lcm_tunnel_sub_msg_t.c
-    lcm_tunnel_udp_msg_t.c
-    lcm_tunnel_disconnect_msg_t.c
     ssocket.c
     lcm_tunnel.cpp
     lcm_tunnel_server.cpp
@@ -23,6 +19,7 @@ add_executable(bot-lcm-tunnel
     lcm_util.c
     ${ldpc_sources}
     )
+target_link_libraries(bot-lcm-tunnel lcmtypes_bot2-lcm-utils)
 
 add_executable(ldpc-wrapper-test
     ldpc/ldpc_wrapper_test.cpp

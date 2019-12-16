@@ -1,4 +1,6 @@
-struct lcm_tunnel_sub_msg_t
+package lcm_tunnel;
+
+struct sub_msg_t
 {
     string channel;
     int32_t data_size;
