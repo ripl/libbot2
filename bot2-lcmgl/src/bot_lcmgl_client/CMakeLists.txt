@@ -6,7 +6,6 @@ set(libname bot2-lcmgl-client)
 add_library(${libname} ${c_files})
 target_link_libraries(${libname} PUBLIC ${LCM_NAMESPACE}lcm PRIVATE ${ZLIB_LIBRARIES} lcmtypes_bot2-lcmgl)
 target_include_directories(${libname} PRIVATE ${ZLIB_INCLUDE_DIRS})
-set_property(TARGET ${libname} PROPERTY C_STANDARD 99)
 
 # set the library API version.  Increment this every time the public API
 # changes.

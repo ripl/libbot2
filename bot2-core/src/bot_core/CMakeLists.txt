@@ -15,7 +15,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include> )
-set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 
 pods_install_libraries(EXPORT ${PROJECT_NAME} ${PROJECT_NAME})
 

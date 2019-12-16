@@ -44,7 +44,6 @@ target_include_directories(${PROJECT_NAME}
     ${PNG_INCLUDE_DIRS}
     ${JPEG_INCLUDE_DIR}
 )
-set_property(TARGET bot2-vis PROPERTY C_STANDARD 99)
 target_compile_options(bot2-vis PRIVATE ${PNG_DEFINITIONS})
 if(APPLE)
   target_compile_definitions(bot2-vis PRIVATE GL_SILENCE_DEPRECATION=1)

@@ -17,7 +17,6 @@ target_include_directories(${PROJECT_NAME}
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
-set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
 # set the library API version.  Increment this every time the public API
 # changes.
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 2)

@@ -1,7 +1,6 @@
 # Create a shared library libbot2-frames-renderer.so with a single source file
 add_library(bot2-frames-renderers
     coord_frames_renderer.c articulated_body_renderer.c frame_modifier_renderer.c)
-set_property(TARGET bot2-frames-renderers PROPERTY C_STANDARD 99)
 target_link_libraries(bot2-frames-renderers
   PUBLIC
     bot2-frames
@@ -46,4 +45,3 @@ find_package(bot2-lcmgl CONFIG REQUIRED)
 add_executable(test-viewer test_viewer.c)
 target_link_libraries(test-viewer ${GLUT_LIBRARIES} bot2-frames-renderers libbot2::bot2-vis libbot2::bot2-lcmgl-renderer)
 target_include_directories(test-viewer PRIVATE ${GLUT_INCLUDE_DIR} ${GTK3_INCLUDE_DIRS})
-set_property(TARGET test-viewer PROPERTY C_STANDARD 99)

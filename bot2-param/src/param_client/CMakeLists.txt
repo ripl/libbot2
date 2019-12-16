@@ -6,7 +6,6 @@ target_link_libraries(bot2-param-client PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2
 target_include_directories(bot2-param-client PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include> )
-set_property(TARGET bot2-param-client PROPERTY C_STANDARD 99)
 
 # set the library API version.  Increment this every time the public API
 # changes.

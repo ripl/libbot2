@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 project(bot2-lcmgl LANGUAGES C CXX VERSION 0.0.1)
 
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_EXTENSIONS ON)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(JAVA_INSTALL_SUBDIR share/java) # java
 macro(configure_import_targets _prop)
   if("${_prop}" STREQUAL "BUILD")
