@@ -1,6 +1,5 @@
 package lcm_tunnel;
 
-struct disconnect_msg_t
-{
-	int64_t utime;
+struct disconnect_msg_t {
+    int64_t  utime;
 }

@@ -1,8 +1,6 @@
 package bot_param;
 
-struct request_t
-{
-        int64_t utime;
-  		//not sure there is anything else to include...
-
+struct request_t {
+    int64_t  utime;
+    // Not sure there is anything else to include...
 }

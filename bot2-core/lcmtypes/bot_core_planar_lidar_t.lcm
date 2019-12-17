@@ -1,21 +1,22 @@
 package bot_core;
 
-struct planar_lidar_t
-{
-	int64_t  utime;
+struct planar_lidar_t {
+    int64_t  utime;
 
-	// range data (meters)
-	int32_t  nranges;
-	float    ranges[nranges];
+    // Range data (meters)
+    int32_t  nranges;
+    float    ranges[nranges];
 
-	// intensity data, in sensor-specific units
-	int32_t  nintensities;
-	float    intensities[nintensities];
+    // Intensity data, in sensor-specific units
+    int32_t  nintensities;
+    float    intensities[nintensities];
 
-	// the angle (in radians) to the first point in nranges,
-	// relative to the laser scanner's own coordinate frame.
-	float    rad0;
 
-	// the number of radians between each successive sample
-	float    radstep;
+    float    rad0;                       // Angle (in radians) to the first
+                                         // point in nranges, relative to the
+                                         // laser scanner's own coordinate
+                                         // frame
+
+    float    radstep;                    // Number of radians between each
+                                         // successive sample
 }

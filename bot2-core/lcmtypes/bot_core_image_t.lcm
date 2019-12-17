@@ -1,14 +1,10 @@
 package bot_core;
 
-// Describes an image
-//
-// This type should be kept compatible with camlcm.image_t, as defined
-// in camunits-extra
+// Describes an image. This type should be kept compatible with camlcm.image_t,
+// as defined in camunits-extra.
 
-struct image_t
-{
-    // microseconds since the epoch
-    int64_t  utime;
+struct image_t {
+    int64_t  utime;                        // Microseconds since the epoch
 
     int32_t  width;
     int32_t  height;
@@ -20,11 +16,11 @@ struct image_t
     byte     data[size];
 
     // metadata dictionary
-    int32_t nmetadata;
+    int32_t  nmetadata;
     image_metadata_t metadata[nmetadata];
 
-    // these values are to be kept in sync with the CamPixelFormat enumeration
-    // in the Camunits library.  See camunits/pixels.h in Camunits
+    // These values are to be kept in sync with the CamPixelFormat enumeration
+    // in the Camunits library. See camunits/pixels.h in Camunits.
     const int32_t PIXEL_FORMAT_UYVY             = 1498831189;
     const int32_t PIXEL_FORMAT_YUYV             = 1448695129;
     const int32_t PIXEL_FORMAT_IYU1             = 827677001;
