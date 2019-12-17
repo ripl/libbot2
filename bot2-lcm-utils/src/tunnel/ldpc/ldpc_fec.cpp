@@ -529,7 +529,7 @@ LDPCFecSession::BuildParitySymbolsPerCol (void*	symbol_canvas[],
 
 	ASSERT(m_sessionType== TypeSTAIRS || m_sessionType == TypeTRIANGLE || m_sessionType== TypeLDGM);
 
-	*nb_built_parity_symbols = 0;	
+	*nb_built_parity_symbols = 0;
 #ifdef DEBUG
 	if (this->m_verbosity >= 1) {
 		printf("LDPCFecSession::BuildParitySymbolsPerCol: column=%d processed\n", symbol_index);
@@ -550,7 +550,7 @@ LDPCFecSession::BuildParitySymbolsPerCol (void*	symbol_canvas[],
 					symbol_canvas[GetSymbolSeqno(e->row)] = (char*)calloc(m_symbolSize, 1);
 			}
 			paritySymbol = (uintptr_t*) GetBufferPtrOnly(symbol_canvas[GetSymbolSeqno(e->row)]);
-		
+
 			if (data == NULL) {
 				fprintf(stderr, "LDPCFecSession::BuildParitySymbol: FATAL ERROR, symbol %d is not allocated!\n", symbol_index);
 				return LDPC_ERROR;
@@ -571,13 +571,13 @@ LDPCFecSession::BuildParitySymbolsPerCol (void*	symbol_canvas[],
 				if (m_storeData_callback) {
 					m_storeData_callback(m_context_4_callback, paritySymbol);
 				}
-#endif						
+#endif
 			}
-			
-		}		
+
+		}
 		e = mod2sparse_next_in_col(e);
 	}
-	
+
 	/* Call recursively this function with new parity symbols as parameter*/
 	int temp = *nb_built_parity_symbols;
 	for (int i = 0; i < temp; i++) {

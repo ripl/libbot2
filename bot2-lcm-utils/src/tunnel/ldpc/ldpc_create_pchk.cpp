@@ -259,7 +259,7 @@ nextj: ;
 			mod2sparse_insert(pchkMatrix, i, i);
 			/* staircase */
 			mod2sparse_insert(pchkMatrix, i, i-1);
-			/* triangle */	
+			/* triangle */
 			j = i-1;
 			for (int l = 0; l < j; l++) { /* limit the # of "1s" added */
 				j = ldpc_rand(j);

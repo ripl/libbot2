@@ -1148,7 +1148,7 @@ glmFacetNormals(GLMmodel* model)
 	    model->vertices[3 * T(i).vindices[0] + 1];
 	u[2] = model->vertices[3 * T(i).vindices[1] + 2] -
 	    model->vertices[3 * T(i).vindices[0] + 2];
-	
+
 	v[0] = model->vertices[3 * T(i).vindices[2] + 0] -
 	    model->vertices[3 * T(i).vindices[0] + 0];
 	v[1] = model->vertices[3 * T(i).vindices[2] + 1] -
@@ -1291,10 +1291,10 @@ glmVertexNormals(GLMmodel* model, GLfloat angle, GLboolean keep_existing)
 				    model->numnormals += 1000;
 				    model->normals = (GLfloat*)realloc(model->normals, sizeof(GLfloat)* 3 * (model->numnormals+1));
 				}
-				
+
 				/* normalize the averaged normal */
 				glmNormalize(average);
-				
+
 				/* add the normal to the vertex normals list */
 				assert(model->numnormals >= numnormals);
 				model->normals[3 * numnormals + 0] = average[0];
@@ -1989,10 +1989,10 @@ glmDraw(GLMmodel* model, GLuint mode)
 			    glColor3fv(materialp->diffuse);
 			}
 		    }
-		
+
 		    if (mode & GLM_FLAT)
                 glNormal3fv(&model->facetnorms[3 * triangle->findex]);
-		
+
 		    for (j=0; j<3; j++) {
                 if (mode & GLM_SMOOTH && (triangle->nindices[j]!=-1)) {
                     assert(triangle->nindices[j]>=1 && triangle->nindices[j]<=model->numnormals);
@@ -2144,7 +2144,7 @@ GLvoid glmFlipModelTextures(GLMmodel* model)
 
         //AVL Texture Flip
         if (material->image) {
-            glmFlipTexture(material->image, material->width, material->height);                    	
+            glmFlipTexture(material->image, material->width, material->height);                    
 
             glBindTexture(_glmTextureTarget, model->materials[group->material].t_id[0]);
             //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

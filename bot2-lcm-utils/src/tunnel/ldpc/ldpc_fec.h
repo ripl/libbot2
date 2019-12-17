@@ -571,7 +571,7 @@ LDPCFecSession::IsSourceSymbol	(int	symbolSeqno)
 	return ((symbolSeqno < m_nbSourceSymbols) ? true : false);
 }
 
-inline bool	
+inline bool
 LDPCFecSession::IsParitySymbol	(int	symbolSeqno)
 {
 	return ((symbolSeqno < m_nbSourceSymbols) ? false : true);

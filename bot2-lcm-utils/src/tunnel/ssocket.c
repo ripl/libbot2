@@ -109,7 +109,7 @@ int ssocket_disable_nagle(ssocket_t *s)
 		close(s->socket);
 		return -1;
 	}
-	
+
 	return 0;
 }
 
@@ -191,9 +191,9 @@ void ssocket_get_remote_ip(ssocket_t *s, int *ip)
 {
 	struct sockaddr addr;
 	socklen_t addrlen;
-	
+
 	getpeername(s->socket,&addr,&addrlen);
-	
+
 	ip[0] = (int) (addr.sa_data[2])&0xff;
 	ip[1] = (int) (addr.sa_data[3])&0xff;
 	ip[2] = (int) (addr.sa_data[4])&0xff;

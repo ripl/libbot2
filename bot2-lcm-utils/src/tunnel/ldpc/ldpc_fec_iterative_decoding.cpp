@@ -568,7 +568,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 				} else
 #endif
 				{
-					free(currChk);	
+					free(currChk);
 				}
 				// And finally call this method recursively
 				DecodingStepWithSymbol(symbol_canvas, decoded_symbol_dst,
@@ -588,7 +588,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 				} else
 #endif
 				{
-					free(currChk);	
+					free(currChk);
 				}
 			}
 		}

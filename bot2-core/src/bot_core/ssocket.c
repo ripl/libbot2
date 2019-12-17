@@ -39,7 +39,7 @@ int bot_ssocket_connect(bot_ssocket_t *s, const char *hostname, int port)
 	struct hostent *host;
 	struct sockaddr_in sa;
 	int thesocket;
-	
+
 	/* let's find out about this host */
 	host=gethostbyname(hostname);
 	if (host==NULL)
@@ -99,7 +99,7 @@ int bot_ssocket_disable_nagle(bot_ssocket_t *s)
 		close(s->socket);
 		return -1;
 	}
-	
+
 	return 0;
 }
 
@@ -181,9 +181,9 @@ void bot_ssocket_get_remote_ip(bot_ssocket_t *s, int *ip)
 {
 	struct sockaddr addr;
 	socklen_t addrlen;
-	
+
 	getpeername(s->socket,&addr,&addrlen);
-	
+
 	ip[0] = (int) (addr.sa_data[2])&0xff;
 	ip[1] = (int) (addr.sa_data[3])&0xff;
 	ip[2] = (int) (addr.sa_data[4])&0xff;

@@ -168,7 +168,7 @@ LDPCFecScheme::InitScheme  (int	symbolSize,
 
 	m_nbSymbolsPerPkt = (int) floor((double) m_pktSize/(double) m_symbolSize);
 	m_nbSourcePkts 	= (int) ceil((double) m_nbSourceSymbols/(double) m_nbSymbolsPerPkt);
-	m_nbParityPkts	= (int) ceil((double) m_nbParitySymbols/(double) m_nbSymbolsPerPkt);	
+	m_nbParityPkts	= (int) ceil((double) m_nbParitySymbols/(double) m_nbSymbolsPerPkt);
 
 	if (m_nbSymbolsPerPkt == 1) {
 		if (m_pktSize != m_symbolSize) {
@@ -249,7 +249,7 @@ LDPCFecScheme::BuildPkt (int	pktIdx,
 			*ESIofFirstSymbol =
 				m_nbSourceSymbols +
 				m_txseqToESI[((pktIdx - m_nbSourcePkts) * m_nbSymbolsPerPkt)
-						% m_nbParitySymbols];	
+						% m_nbParitySymbols];
 			for (j = 0; j < m_nbSymbolsPerPkt; j++) {
 				memcpy((*(char**)pktBuffer) + j * m_symbolSize,
 					symbol_canvas[m_nbSourceSymbols +
@@ -294,7 +294,7 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 		/*
 		 * complex case, several symbols per packet
 		 */
-		if (ESIofFirstSymbol < m_nbSourceSymbols) {	
+		if (ESIofFirstSymbol < m_nbSourceSymbols) {
 			/* source packet */
 			for (j = 0; j < m_nbSymbolsPerPkt; j++) {
 				(*ESIofSymbols)[j] = (ESIofFirstSymbol + j) % m_nbSourceSymbols;
@@ -302,7 +302,7 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 			}
 		} else {
 			/* parity packet */
-			for (j = 0; j < m_nbSymbolsPerPkt; j++) {	
+			for (j = 0; j < m_nbSymbolsPerPkt; j++) {
 				(*ESIofSymbols)[j] = m_nbSourceSymbols
 						+ m_txseqToESI[(j + m_ESItoTxseq[ESIofFirstSymbol
 								- m_nbSourceSymbols]) % m_nbParitySymbols];
@@ -325,7 +325,7 @@ LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 {
 	ASSERT(pktBuffer);
 	return DecodingStepWithPkt (symbol_canvas, pktBuffer, ESIofFirstSymbol, false);
-}				
+}
 
 
 /******************************************************************************
@@ -362,14 +362,14 @@ LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 	if (generatedSymbols != NULL)
 		free(generatedSymbols);
 	if (ESIofSymbols != NULL)
-		free(ESIofSymbols);	
+		free(ESIofSymbols);
 	return LDPC_OK;
 
 error:
 	if (generatedSymbols != NULL)
 		free(generatedSymbols);
 	if (ESIofSymbols != NULL)
-		free(ESIofSymbols);			
+		free(ESIofSymbols);
 	return LDPC_ERROR;
 }
 

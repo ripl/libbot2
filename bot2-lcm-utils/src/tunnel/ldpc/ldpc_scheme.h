@@ -230,7 +230,7 @@ public:
 	 * @return	Number of parity packets.
 	 */
 	int getNbParityPkts (void);
-	
+
 	/**
 	 * Return the number of source symbols
 	 * It might differ from the number of parity packets since
@@ -250,7 +250,7 @@ public:
 
 /****** PRIVATE MEMBERS ********************************************************/
 protected:
-	
+
 	bool		m_SchemeInitialized;
 
 #	define		m_nbSymbols	(m_nbParitySymbols + m_nbSourceSymbols)
@@ -258,7 +258,7 @@ protected:
 	int		m_pktSize;
 	int		m_nbSourcePkts;
 	int		m_nbParityPkts;
-#	define		m_nbPkts	(m_nbParityPkts + m_nbSourcePkts)	
+#	define		m_nbPkts	(m_nbParityPkts + m_nbSourcePkts)
 	int		m_nbSymbolsPerPkt;
 
 	/** Table where the index is the ESI, the value is the transmission index. */
@@ -278,7 +278,7 @@ LDPCFecScheme::getNbSymbolsPerPkt ()
 {
 	return m_nbSymbolsPerPkt;
 }
-	
+
 inline int
 LDPCFecScheme::getNbSourcePkts ()
 {

@@ -18,12 +18,12 @@ Requirements:
     bot2-core
     bot2-param
 	bot2-vis (optional, for renderer)
-	
+
 =================
 Param File Format:
 	bot2-frames assumes specific param-file format, an example of which is shown below
 
-	
+
 coordinate_frames {
    root_frame = "local";                 #a root_frame must be defined
 

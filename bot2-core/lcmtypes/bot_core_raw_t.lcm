@@ -6,7 +6,7 @@ package bot_core;
 struct raw_t
 {
 	int64_t utime;
-	
+
 	int32_t length;
 	byte    data[length];
 }

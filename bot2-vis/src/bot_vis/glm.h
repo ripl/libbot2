@@ -64,7 +64,7 @@ typedef struct _GLMmaterial
       width;
   unsigned char* image;
   char *t_filename;
-  GLuint t_id[1];	
+  GLuint t_id[1];
 #endif
 } GLMmaterial;
 

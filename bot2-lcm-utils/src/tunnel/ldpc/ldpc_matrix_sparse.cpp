@@ -1361,9 +1361,9 @@ mod2entry * mod2sparse_last_in_col(mod2sparse * m, int i)
 {
 	mod2entry * e;
 	e=mod2sparse_first_in_col(m,i);
-	
+
 	while(!mod2sparse_at_end(e->down)) e=e->down;
-	
+
 	return e;
 }
 #endif
