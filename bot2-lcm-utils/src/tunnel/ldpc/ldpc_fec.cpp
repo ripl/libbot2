@@ -33,8 +33,6 @@
 #include <conio.h>
 #endif
 
-
-
 /******************************************************************************
  * LDPCFecSession Contructor.
  */
@@ -44,7 +42,6 @@ LDPCFecSession::LDPCFecSession()
 	m_verbosity = -1;
 }
 
-
 /******************************************************************************
  * LDPCFecSession Destructor.
  */
@@ -52,7 +49,6 @@ LDPCFecSession::~LDPCFecSession()
 {
         EndSession();
 }
-
 
 /******************************************************************************
  * InitSession : Initializes the LDPC session.
@@ -202,7 +198,6 @@ LDPCFecSession::InitSession (	int nbSourceSymbols,
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  * SetDecodedFunctions: Call the function whenever BuildParitySymbol decodes
  * a new parity or source symbol.
@@ -271,7 +266,6 @@ LDPCFecSession::SetCallbackFunctions (
 }
 #endif /* !EXTERNAL_MEMORY_MGMT_SUPPORT */
 
-
 /******************************************************************************
  * EndSession : Ends the LDPC session, and cleans up everything.
  * => See header file for more informations.
@@ -280,7 +274,6 @@ void
 LDPCFecSession::EndSession()
 {
 	if (m_initialized == true) {
-
 		m_initialized = false;
 #if defined(DECODER_ITERATIVE)
 
@@ -337,7 +330,6 @@ LDPCFecSession::EndSession()
 	memset(this, 0, sizeof(*this));
 }
 
-
 /******************************************************************************
  * SetVerbosity: Sets the verbosity level.
  * => See header file for more informations.
@@ -347,7 +339,6 @@ LDPCFecSession::SetVerbosity(int	verb)
 {
 	this->m_verbosity = verb;
 }
-
 
 /******************************************************************************
  * MoreAbout:Prints version number and copyright information about this codec.
@@ -377,7 +368,6 @@ LDPCFecSession::MoreAbout (FILE		*out)
 		fprintf(out, "(Iterative Decoding)\n");
 #endif
 }
-
 
 /******************************************************************************
  * Calculates the XOR sum of two symbols: to = to + from.
@@ -424,7 +414,6 @@ LDPCFecSession::AddToSymbol	(void	*to,
 	}
 
 #else //defined (__LP64__) || (__WORDSIZE == 64) } {
-
 	// 32-bit machines
 	UINT32		*t32 = (UINT32*)to;	// to pointer to 32-bit integers
 	UINT32		*f32 = (UINT32*)from;	// from pointer	to 32-bit integers
@@ -449,7 +438,6 @@ LDPCFecSession::AddToSymbol	(void	*to,
 	}
 #endif //defined (__LP64__) || (__WORDSIZE == 64) }
 }
-
 
 /******************************************************************************
  * BuildParitySymbol: Builds a new parity symbol.
@@ -508,7 +496,6 @@ LDPCFecSession::BuildParitySymbol (void* symbol_canvas[],
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  * BuildParitySymbol: Builds a new parity symbol.
  * => See header file for more informations.
@@ -519,7 +506,6 @@ LDPCFecSession::BuildParitySymbolsPerCol (void*	symbol_canvas[],
 					int*	built_parity_symbols[],
 					int*	nb_built_parity_symbols)
 {
-
 	mod2entry	*e;
 	uintptr_t	*data;
 	uintptr_t	*paritySymbol;
@@ -604,7 +590,6 @@ LDPCFecSession::BuildParitySymbolsPerCol (void*	symbol_canvas[],
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  * GetMatrixCol:
  * => See header file for more informations.
@@ -620,7 +605,6 @@ LDPCFecSession::GetMatrixCol(int symbolSeqno)
 		return (symbolSeqno - m_nbSourceSymbols);
 	}
 }
-
 
 /******************************************************************************
  * GetSymbolSeqno:
@@ -640,7 +624,6 @@ LDPCFecSession::GetSymbolSeqno(int matrixCol)
 		return (colInOrder - m_nbParitySymbols);
 	}
 }
-
 
 /******************************************************************************
  * IsAlreadyKnown: Returns true if the symbol has already been received
@@ -675,7 +658,6 @@ LDPCFecSession::SymbolAlreadyKnown (void*	symbol_canvas[],
 		return false;
 	}
 }
-
 
 /******************************************************************************
  * IsDecodingComplete: Checks if all DATA symbols have been received/rebuilt.

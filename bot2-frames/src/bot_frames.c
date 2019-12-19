@@ -62,7 +62,6 @@ struct _BotFrames {
 
   bot_frames_update_t_subscription_t * update_subscription;
   GList * update_callbacks;
-
 };
 
 static void _dispatch_update_callbacks(BotFrames * bot_frames,const char * frame_name, const char * relative_to,
@@ -90,7 +89,6 @@ static void on_transform_update(const lcm_recv_buf_t *rbuf, const char *channel,
   g_mutex_unlock(bot_frames->mutex);
 
   _dispatch_update_callbacks(bot_frames, frame_handle->frame_name, frame_handle->relative_to,msg->utime);
-
 }
 
 static void on_pose_update(const lcm_recv_buf_t *rbuf, const char *channel, const bot_core_pose_t *msg,
@@ -108,7 +106,6 @@ static void on_pose_update(const lcm_recv_buf_t *rbuf, const char *channel, cons
   g_mutex_unlock(bot_frames->mutex);
 
   _dispatch_update_callbacks(bot_frames, frame_handle->frame_name, frame_handle->relative_to,msg->utime);
-
 }
 
 static void on_frames_update(const lcm_recv_buf_t *rbuf, const char *channel, const bot_frames_update_t *msg,
@@ -144,7 +141,6 @@ static void on_frames_update(const lcm_recv_buf_t *rbuf, const char *channel, co
 
   _dispatch_update_callbacks(bot_frames, frame_handle->frame_name, frame_handle->relative_to, msg->utime);
 }
-
 
 BotFrames *
 bot_frames_new(lcm_t *lcm, BotParam *bot_param)
@@ -286,8 +282,6 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
     }
     g_hash_table_insert(self->frame_handles_by_channel, (gpointer) update_channel, (gpointer) frame_handle);
     }
-
-
   }
 
   //subscribe to the default update handler
@@ -300,7 +294,6 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
   fail: g_mutex_unlock(self->mutex);
   bot_frames_destroy(self);
   return NULL;
-
 }
 
 static void _update_handler_t_destroy(void * data, void * user)
@@ -310,7 +303,6 @@ static void _update_handler_t_destroy(void * data, void * user)
 
 void bot_frames_destroy(BotFrames * bot_frames)
 {
-
   g_mutex_lock(bot_frames->mutex);
 
   bot_ctrans_destroy(bot_frames->ctrans);
@@ -360,12 +352,10 @@ void bot_frames_add_update_subscriber(BotFrames *bot_frames, bot_frames_link_upd
   g_mutex_lock(bot_frames->mutex);
   bot_frames->update_callbacks = g_list_append(bot_frames->update_callbacks, uh);
   g_mutex_unlock(bot_frames->mutex);
-
 }
 
 int bot_frames_get_latest_timestamp(BotFrames * bot_frames,
                                     const char *from_frame, const char *to_frame, int64_t *timestamp){
-
     g_mutex_lock(bot_frames->mutex);
     int status = bot_ctrans_get_trans_latest_timestamp(bot_frames->ctrans, from_frame, to_frame, timestamp);
     g_mutex_unlock(bot_frames->mutex);

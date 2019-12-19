@@ -49,7 +49,6 @@ typedef struct _bot_rwx_model
     int nclumps;
 } BotRwxModel;
 
-
 BotRwxModel * bot_rwx_model_create( const char *fname );
 
 void bot_rwx_model_destroy( BotRwxModel *model );

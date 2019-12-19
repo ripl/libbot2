@@ -24,7 +24,6 @@ void bot_frames_add_articulated_body_renderer_to_viewer(BotViewer *viewer, int r
 
 void bot_frames_add_frame_modifier_to_viewer(BotViewer *viewer, int render_priority, BotFrames * frames);
 
-
 #ifdef __cplusplus
 }
 #endif

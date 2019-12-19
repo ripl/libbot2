@@ -287,7 +287,6 @@ bot_gl_draw_ortho_circles_3d()
   bot_gl_line(0, -1, 0, 1);
   glPopMatrix();
 
-
   glPushMatrix();
   glRotated(90,0,1,0);
   bot_gl_draw_circle(1);
@@ -693,7 +692,6 @@ void bot_gl_draw_axes()
   glVertex3f(0, 0, 1);
   glVertex3f(0, 0, 0);
   glEnd();
-
 }
 
 void bot_gl_multTrans(BotTrans * trans){

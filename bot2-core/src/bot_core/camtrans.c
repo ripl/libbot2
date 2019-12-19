@@ -179,7 +179,6 @@ bot_angular_lookup_distortion_create (const int num_dist,
     return dist;
 }
 
-
 typedef struct {
     int num_coeffs;
     double *coeffs;
@@ -275,19 +274,15 @@ bot_angular_poly_distortion_create (const double *coeffs, const int num_coeffs)
     return dist;
 }
 
-
-
 static int
 null_distort_func(const void *data, const double ray[3],
                   double *x, double *y)
 {
-
     if (ray[2] < CAMERA_EPSILON) return -1;
     *x = ray[0] / ray[2];
     *y = ray[1] / ray[2];
     return 0;
 }
-
 
 static int
 null_undistort_func(const void *data, const double x, const double y,
@@ -301,7 +296,6 @@ null_undistort_func(const void *data, const double x, const double y,
 
 static void
 null_distortion_destroy (void *dist) {}
-
 
 BotDistortionObj*
 bot_null_distortion_create(void)
@@ -327,9 +321,7 @@ typedef struct {
     double k3;
     double p1; //tangential distortion coeffs
     double p2;
-
 } OpenCvDistortionParams;
-
 
 static void
 plumb_bob_distortion_destroy (void *dist)
@@ -493,9 +485,7 @@ bot_camtrans_compute_matrices (BotCamTrans *self)
 /*            self->inv_matx[0], self->inv_matx[1], self->inv_matx[2], */
 /*            self->inv_matx[3], self->inv_matx[4], self->inv_matx[5], */
 /*            self->inv_matx[6], self->inv_matx[7], self->inv_matx[8]); */
-
 }
-
 
 void
 bot_camtrans_destroy (BotCamTrans *self)

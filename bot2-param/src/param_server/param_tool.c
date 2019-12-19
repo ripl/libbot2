@@ -20,7 +20,6 @@
 
 int main(int argc, char ** argv)
 {
-
   lcm_t * lcm = lcm_create(NULL); //TODO: provider options?
 
   if (argc != 3) {

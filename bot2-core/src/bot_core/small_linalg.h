@@ -353,7 +353,6 @@ bot_vector_interpolate_3d(const double ta[3], const double tb[3], double weight_
     result[0] = ta[0] * (1-weight_b) + tb[0] * weight_b;
     result[1] = ta[1] * (1-weight_b) + tb[1] * weight_b;
     result[2] = ta[2] * (1-weight_b) + tb[2] * weight_b;
-
 }
 
 static inline void

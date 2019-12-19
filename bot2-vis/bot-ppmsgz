@@ -52,6 +52,7 @@ FORMAT_OPTIONS:
 
          Compress at 10 megabits / second, 30 fps.
 
+
   msmpeg4v2 <bitrate> <framerate> <output.avi>
     Convert the .ppms.gz file into a .AVI file using the msmpeg4v2 codec.  This
     format is primarily useful because Windows XP has the codec built in.

@@ -13,7 +13,6 @@
  * of these programs is entirely at the user's own risk.
  */
 
-
 /* This module implements operations on sparse matrices of mod2 elements
    (bits, with addition and multiplication being done modulo 2).
 
@@ -23,7 +22,6 @@
    invalid contents of a file result in an error code being returned to the
    caller, with no message being printed by this module.
 */
-
 
 /* DATA STRUCTURES USED TO STORE A SPARSE MATRIX.  Non-zero entries (ie, 1s)
    are represented by nodes that are doubly-linked both by row and by column,
@@ -60,7 +58,6 @@ void *chk_alloc
   return p;
 }
 
-
 #if 0
 /* READ AN INTEGER ONE BYTE AT A TIME.  Four bytes are read, ordered from
    low to high order.  These are considered to represent a signed integer,
@@ -91,7 +88,6 @@ int intio_read
 
   return (top<<24) + (b[2]<<16) + (b[1]<<8) + b[0];
 }
-
 
 /* WRITE AN INTEGER ONE BYTE AT A TIME.  Four bytes are written, ordered from
    low to high order.  These are considered to represent a signed integer,

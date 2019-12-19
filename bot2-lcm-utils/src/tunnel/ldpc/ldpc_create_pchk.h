@@ -13,7 +13,6 @@
  * of these programs is entirely at the user's own risk.
  */
 
-
 #ifndef LDPC_CREATE_PCHK__
 #define LDPC_CREATE_PCHK__
 
@@ -24,7 +23,6 @@ typedef enum make_method_enum
 	Evencol, 	/* Uniform number of bits per column, with number specified */
 	Evenboth 	/* Uniform (as possible) over both columns and rows */
 } make_method;
-
 
 typedef enum SessionType_enum
 {

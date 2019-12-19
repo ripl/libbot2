@@ -40,7 +40,6 @@ include(cmake/pods.cmake)
 include(cmake/lcmtypes.cmake)
 lcmtypes_build(EXPORT ${PROJECT_NAME})
 
-
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 
 add_subdirectory(src/bot_core)

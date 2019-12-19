@@ -26,7 +26,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 #ifndef LDPC_TYPES_H
 #define LDPC_TYPES_H
 
@@ -55,6 +54,5 @@
 #define UINT64  unsigned long long
 #endif /* OS */
 #endif /* !UINT64 */
-
 
 #endif /* LDPC_TYPES_H */

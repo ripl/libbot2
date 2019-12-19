@@ -41,7 +41,6 @@
 
 static int g_draws = 0;
 
-
 // a structure for bookmarked viewpoints
 typedef struct _bookmark_persp bookmark_persp_t;
 struct _bookmark_persp {
@@ -230,7 +229,6 @@ void bot_viewer_set_status_bar_message (BotViewer *viewer, const char *fmt, ...)
 void
 bot_viewer_load_preferences (BotViewer *viewer, const char *fname)
 {
-
     BotViewerPriv* priv = BOT_VIEWER_GET_PRIVATE(viewer);
 
     GKeyFile *preferences = g_key_file_new ();
@@ -428,7 +426,6 @@ render_scene (BotViewer *self)
         BotRenderer *renderer = g_ptr_array_index(self->renderers, ridx);
 
         if (renderer->enabled) {
-
             glPushAttrib(GL_ENABLE_BIT | GL_POINT_BIT | GL_POLYGON_STIPPLE_BIT |
                          GL_POLYGON_BIT | GL_LINE_BIT | GL_FOG_BIT | GL_LIGHTING_BIT );
             glPushMatrix();
@@ -689,7 +686,6 @@ on_motion_notify (GtkWidget *widget, GdkEventMotion *event, void *user_data)
 
     // is anyone hovering?
     if (self->picking_handler == NULL || !self->picking_handler->picking) {
-
         // find a new hover?
         double best_distance = HUGE_VAL;
         BotEventHandler *best_handler = NULL;
@@ -845,7 +841,6 @@ _pixel_convert_8u_bgra_to_8u_rgb(uint8_t *dest, int dstride, int dwidth,
 static gboolean
 take_screenshot (void *user_data, char *fname)
 {
-
     BotViewer *self = (BotViewer*) user_data;
     BotViewHandler *vhandler = self->view_handler;
 
@@ -884,7 +879,6 @@ on_screenshot_clicked (GtkToolButton *ssbt, void *user_data)
     free (fname);
 }
 
-
 /*
 static gboolean
 on_screenshot_timer (BotViewer * self)
@@ -905,7 +899,6 @@ on_record_toggled (GtkToggleToolButton *tb, void *user_data)
         bot_viewer_stop_recording (self);
     }
 }
-
 
 static void
 on_renderer_enabled_toggled (GtkCheckMenuItem *cmi, void *user_data)
@@ -1022,11 +1015,8 @@ static void on_select_bookmark_save_view(GtkMenuItem *mi, void *user)
   bot_viewer_set_status_bar_message(viewer, "Saved viewpoint %d", views->index);
 }
 
-
-
 static void on_select_bookmark_load_view(GtkMenuItem *mi, void *user)
 {
-
   bookmark_persp_t *views = user;
   BotViewer* viewer = views->viewer;
   BotViewHandler *vhandler = viewer->view_handler;
@@ -1066,8 +1056,6 @@ static void on_select_orthographic_item(GtkMenuItem *mi, void *user)
   }
 }
 
-
-
 // ================
 
 static gint renderer_name_compare_function(gconstpointer _a, gconstpointer _b)
@@ -1095,8 +1083,6 @@ static int _g_ptr_array_find_index(GPtrArray *a, gconstpointer v)
     }
     return -1;
 }
-
-
 
 void bot_viewer_add_renderer_on_side (BotViewer *self, BotRenderer *renderer, int priority, int which_side)
 {
@@ -1175,13 +1161,9 @@ void bot_viewer_add_renderer_on_side (BotViewer *self, BotRenderer *renderer, in
     g_ptr_array_sort(self->renderers, sort_renderers_priority_decreasing);
 }
 
-
 void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priority){
     return bot_viewer_add_renderer_on_side (self, renderer, priority, 1);
 }
-
-
-
 
 /*
 static void
@@ -1282,7 +1264,6 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
                           G_CALLBACK (on_select_no_event_handlers_activate), viewer);
     }
 
-
     //add perspective and orthographic controls...
     GtkWidget *view_menuitem = gtk_menu_item_new_with_mnemonic("_View");
     gtk_menu_shell_append(GTK_MENU_SHELL(viewer->menu_bar), view_menuitem);
@@ -1335,8 +1316,6 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
     }
 
     gtk_widget_show_all(view_menuitem);
-
-
 }
 
 static void
@@ -1529,7 +1508,6 @@ bot_viewer_init (BotViewer *viewer)
 
     make_toolbar(viewer, vbox);
 
-
 #ifdef CONTROLS_BOX_LEFT_ENABLED
     // Embed the original viewing pane inside a second hpaned so as to add controls on the right:
     // GTK pan is then split like this:  [   left ctrl box        |[    gl pan  |right ctrl box]]
@@ -1565,7 +1543,6 @@ bot_viewer_init (BotViewer *viewer)
 
     gtk_box_pack_start(GTK_BOX(vbox), hpaned_main, TRUE, TRUE, 0);
 
-
 #else
 
     GtkWidget *hpaned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -1590,9 +1567,6 @@ bot_viewer_init (BotViewer *viewer)
 
     viewer->controls_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(controls_view), viewer->controls_box);
-
-
-
 
     viewer->status_bar = gtk_statusbar_new();
     gtk_box_pack_start(GTK_BOX(vbox), viewer->status_bar, FALSE, FALSE, 0);
@@ -1639,7 +1613,6 @@ bot_viewer_init (BotViewer *viewer)
 
     ////////////////////////////////////////////////////////////////////
     // Create plugins menu
-
 
     // plugins will be inserted here as add_plugin is called
 

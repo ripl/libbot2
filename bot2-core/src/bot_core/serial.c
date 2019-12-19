@@ -23,9 +23,7 @@
 
 #include "serial.h"
 
-
 static int bot_serial_translate_baud(int inrate);
-
 
 /** Creates a basic fd, setting baud to 9600, raw data i/o (no flow
     control, no fancy character handling. Configures it for blocking
@@ -51,7 +49,6 @@ int bot_serial_open(const char *port, int baud, int blocking)
 		perror("tcgetattr");
 		return -1;
 	}
-
 
 	cfsetispeed(&opts, bot_serial_translate_baud(baud));
 	cfsetospeed(&opts, bot_serial_translate_baud(baud));
@@ -83,7 +80,6 @@ int bot_serial_open(const char *port, int baud, int blocking)
 
 	opts.c_oflag &= ~OPOST;
 */
-
 
 	if (tcsetattr(fd,TCSANOW,&opts))
 	{
@@ -142,7 +138,6 @@ int bot_serial_enablectsrts(int fd)
 	return 0;
 }
 
-
 /** Enable xon/xoff flow control.
     Returns non-zero on error.
 **/
@@ -166,8 +161,6 @@ int bot_serial_enablexon(int fd)
 
 	return 0;
 }
-
-
 
 /** Set the baud rate, where the baudrate is just the integer value
     desired.
@@ -237,7 +230,6 @@ int bot_serial_setbaud(int fd, int baudrate)
 	return 0;
 }
 
-
 // private function
 int bot_serial_translate_baud(int inrate)
 {
@@ -278,7 +270,6 @@ int bot_serial_close(int fd)
 {
 	return close(fd);
 }
-
 
 int bot_serial_bytes_available(int fd)
 {

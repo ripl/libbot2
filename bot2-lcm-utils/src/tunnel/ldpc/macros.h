@@ -26,12 +26,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 #ifndef MACROS_H
 #define MACROS_H
 
 #include <stdio.h>
-
 
 /****** general macros ******/
 
@@ -102,6 +100,5 @@
 #else /* DEBUG */
 #define ASSERT(c)
 #endif /* DEBUG */
-
 
 #endif /* MACROS_H */

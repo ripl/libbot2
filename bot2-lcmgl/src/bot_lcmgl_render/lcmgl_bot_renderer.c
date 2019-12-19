@@ -21,7 +21,6 @@ typedef struct _BotLcmglRenderer {
     lcm_t     *lcm;
 
     GHashTable *channels;
-
 } BotLcmglRenderer;
 
 static void my_free( BotRenderer *renderer )
@@ -89,7 +88,6 @@ static void on_lcmgl_data (const lcm_recv_buf_t *rbuf, const char *channel,
 
     // new scene?
     if (current_scene != _msg->scene) {
-
         // free objects in foreground buffer
         for (int i = 0; i < chan->frontbuffer->len; i++)
             bot_lcmgl_data_t_destroy(g_ptr_array_index(chan->frontbuffer, i));

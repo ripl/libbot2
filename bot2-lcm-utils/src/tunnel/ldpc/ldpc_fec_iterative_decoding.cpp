@@ -33,14 +33,12 @@
 #include <conio.h>
 #endif
 
-
 #if defined(DECODER_ITERATIVE) /* { */
 
 /******************************************************************************/
 /*
  * Decoder using the Iterative Decoding Algorithm.
  */
-
 
 /******************************************************************************
  * DecodingStepWithSymbol: Perform a new decoding step with a new (given) symbol.
@@ -117,7 +115,6 @@ LDPCFecSession::DecodingStepWithSymbol (void*	symbol_canvas[],
 	/* continue decoding with the full DecodingStepWithSymbol() method */
 	return(DecodingStepWithSymbol(symbol_canvas, new_symbol_dst, new_symbol_seqno));
 }
-
 
 /******************************************************************************
  * DecodingStepWithSymbol: Perform a new decoding step with a new (given) symbol.
@@ -409,7 +406,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 
 				for (tmp_e = mod2sparse_first_in_row(m_pchkMatrix, row);
 				     !mod2sparse_at_end(tmp_e); ) {
-
 					tmp_seqno = GetSymbolSeqno(tmp_e->col);
 					if (IsParitySymbol(tmp_seqno)) {
 						tmp_symbol = m_parity_symbol_canvas[tmp_seqno - m_nbSourceSymbols];
@@ -575,7 +571,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 							decoded_symbol_seqno);
 
 			} else {
-
 				// Parity symbol.
 				// Call this method recursively first...
 				DecodingStepWithSymbol(symbol_canvas, currChk,

@@ -238,7 +238,6 @@ bot_gl_texture_upload (BotGlTexture * t, GLenum format,
 
     glPixelStorei (GL_UNPACK_ROW_LENGTH, stride * 8 / bits_per_pixel);
     if (t->use_pbo) {
-
         glBindBufferARB (GL_PIXEL_UNPACK_BUFFER_ARB, t->pbo);
 
         /* By setting data to NULL, we skip the memcpy and just re-upload

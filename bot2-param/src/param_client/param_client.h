@@ -38,7 +38,6 @@ typedef struct _BotParam BotParam;
 BotParam *
 bot_param_new_from_server (lcm_t * lcm, int keep_updated);
 
-
 /**
  * bot_param_new_from_named_server:
  * @param lcm         Handle to the lcm object to be used.
@@ -56,7 +55,6 @@ bot_param_new_from_server (lcm_t * lcm, int keep_updated);
  */
 BotParam *
 bot_param_new_from_named_server (lcm_t * lcm, const char * server_name, int keep_updated);
-
 
 /**
  * bot_param_update_handler_t
@@ -81,7 +79,6 @@ typedef void(bot_param_update_handler_t)(BotParam * old_param,BotParam * new_par
  */
 void bot_param_add_update_subscriber(BotParam *param,
     bot_param_update_handler_t * callback_func, void * user);
-
 
 /**
  * bot_param_new_from_file:
@@ -275,7 +272,6 @@ bot_param_get_double (BotParam * param, const char * key, double * val);
 int
 bot_param_get_str (BotParam * param, const char * key, char ** val);
 
-
 /**
  * bot_param_get_int_or_fail:
  * @param param The configuration.
@@ -352,7 +348,6 @@ bot_param_get_int_array (BotParam * param, const char * key, int * vals, int len
 void
 bot_param_get_int_array_or_fail (BotParam * param, const char * key, int * vals, int len);
 
-
 /**
  * bot_param_get_boolean_array:
  * @param param The configuration:
@@ -366,7 +361,6 @@ bot_param_get_int_array_or_fail (BotParam * param, const char * key, int * vals,
  */
 int
 bot_param_get_boolean_array (BotParam * param, const char * key, int * vals, int len);
-
 
 /**
  * bot_param_get_boolean_array_or_fail:
@@ -382,7 +376,6 @@ bot_param_get_boolean_array (BotParam * param, const char * key, int * vals, int
 void
 bot_param_get_boolean_array_or_fail (BotParam * param, const char * key, int * vals, int len);
 
-
 /**
  * bot_param_get_double_array:
  * @param param The configuration:
@@ -397,7 +390,6 @@ bot_param_get_boolean_array_or_fail (BotParam * param, const char * key, int * v
 int
 bot_param_get_double_array (BotParam * param, const char * key, double * vals, int len);
 
-
 /**
  * bot_param_get_double_array_or_fail:
  * @param param The configuration:
@@ -411,7 +403,6 @@ bot_param_get_double_array (BotParam * param, const char * key, double * vals, i
  */
 void
 bot_param_get_double_array_or_fail (BotParam * param, const char * key, double * vals, int len);
-
 
 /**
  * bot_param_get_array_len:
@@ -446,7 +437,6 @@ bot_param_get_str_array_alloc (BotParam * param, const char * key);
  */
 void bot_param_str_array_free ( char **data);
 
-
 /**
  * bot_param_get_global:
  * @param lcm          The lcm object for the global_param client to use
@@ -463,8 +453,6 @@ void bot_param_str_array_free ( char **data);
  */
 BotParam*
 bot_param_get_global(lcm_t * lcm,int keep_updated);
-
-
 
 /**
  * bot_param_local_override:
@@ -491,8 +479,6 @@ int bot_param_override_local_params(BotParam * param, const char * override_para
 int64_t bot_param_get_server_id(BotParam * param);
 
 int bot_param_get_seqno(BotParam * param);
-
-
 
 #ifdef __cplusplus
 }

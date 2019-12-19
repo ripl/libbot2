@@ -16,7 +16,6 @@ void param_update_handler(BotParam * old_param,BotParam * new_param, int64_t uti
   fprintf(stderr, "some parameters were updated %p!\n",user);
 }
 
-
 int main()
 {
   lcm_t * lcm = lcm_create(NULL);

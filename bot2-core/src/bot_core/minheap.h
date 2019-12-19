@@ -21,7 +21,6 @@ extern "C" {
 typedef struct _BotMinheap BotMinheap;
 typedef struct _BotMinheapNode BotMinheapNode;
 
-
 BotMinheap *bot_minheap_new(void);
 
 BotMinheap *bot_minheap_sized_new(int capacity);

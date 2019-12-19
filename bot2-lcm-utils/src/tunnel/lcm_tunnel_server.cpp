@@ -124,7 +124,6 @@ int LcmTunnelServer::acceptClient(GIOChannel *source, GIOCondition cond, void *u
   return TRUE;
 }
 
-
 int LcmTunnelServer::disconnectClient(LcmTunnel * client){
   clients_list.remove(client);
   fprintf(stderr,"disconnecting client: %s\n",client->name);

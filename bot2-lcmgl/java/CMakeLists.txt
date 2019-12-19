@@ -13,7 +13,6 @@ set(jar_fname bot2-lcmgl.jar)
 
 set(classpath ${java_dir}:${LCM_JAR_FILE})
 
-
 # ============= shouldn't need to modify anything below this line =============
 
 # get a list of all .java files

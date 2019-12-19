@@ -80,7 +80,6 @@
 # File: lcmtypes.cmake
 # Distributed with pods version: 12.09.21
 
-
 macro(lcmtypes_get_types msgvar)
     # get a list of all LCM types
     file(GLOB __tmplcmtypes "${PROJECT_SOURCE_DIR}/lcmtypes/*.lcm")
@@ -285,7 +284,6 @@ function(lcmtypes_build_cpp)
     pods_install_headers(${__agg_hpp_fname} DESTINATION lcmtypes)
     unset(__sanitized_project_name)
     unset(__agg_hpp_fname)
-
 
     lcmtypes_add_clean_dir("${PROJECT_SOURCE_DIR}/lcmtypes/cpp")
 endfunction()

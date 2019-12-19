@@ -99,7 +99,6 @@ int GetOption (
                             {
                                 // reached end of args looking for param
                             }
-
                         }
                         else
                         {

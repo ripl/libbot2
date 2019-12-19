@@ -289,7 +289,6 @@ int bot_gtk_param_widget_add_text_entry (BotGtkParamWidget *pw,
 {
     if (have_parameter_key (pw, name)) return -1;
 
-
     GtkWidget *w = NULL;
     switch(ui_hints) {
         case BOT_GTK_PARAM_WIDGET_ENTRY:
@@ -659,7 +658,6 @@ const gchar * bot_gtk_param_widget_get_text_entry (BotGtkParamWidget *pw, const 
     return 0;
 }
 
-
 int bot_gtk_param_widget_get_bool (BotGtkParamWidget *pw, const char *name)
 {
     if (! have_parameter_key (pw, name)) {
@@ -968,7 +966,6 @@ bot_gtk_param_widget_modify_int(BotGtkParamWidget *pw,
     return 0;
 }
 
-
 int
 bot_gtk_param_widget_modify_double(BotGtkParamWidget *pw,
         const char *name, double min, double max, double increment, double value)
@@ -998,8 +995,6 @@ bot_gtk_param_widget_modify_double(BotGtkParamWidget *pw,
 
     return 0;
 }
-
-
 
 int bot_gtk_param_widget_modify_enum(BotGtkParamWidget *pw, const char *name,
         const char *label, const int value)

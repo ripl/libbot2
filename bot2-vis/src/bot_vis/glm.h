@@ -13,7 +13,6 @@
 
  */
 
-
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -87,7 +86,6 @@ typedef struct _GLMtexture {
   GLfloat height;
 } GLMtexture;
 
-
 /* GLMgroup: Structure that defines a group in a model.
  */
 typedef struct _GLMgroup {
@@ -131,9 +129,7 @@ typedef struct _GLMmodel {
 #endif
 
   GLfloat position[3];          /* position of the model */
-
 } GLMmodel;
-
 
 #ifdef __cplusplus
 extern "C" {

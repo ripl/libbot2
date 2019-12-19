@@ -764,7 +764,6 @@ _set_command_stop_time_allowed (procman_cmd_t *p, float stop_time_allowed)
     mi->stop_time_allowed = stop_time_allowed;
 }
 
-
 static void
 _set_command_nickname (procman_cmd_t *p, const char *nickname)
 {
@@ -838,7 +837,6 @@ _handle_orders2(procman_deputy_t* s, const bot_procman_orders2_t* orders, int me
     if (s->verbose)
         dbgt ("orders for me received with %d commands\n", orders->ncmds);
     for (i=0; i<orders->ncmds; i++) {
-
         bot_procman_sheriff_cmd2_t *cmd_msg = &orders->cmds[i];
 
         if (s->verbose)

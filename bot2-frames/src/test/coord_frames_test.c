@@ -16,7 +16,6 @@ void update_handler(BotFrames *bot_frames, const char *frame, const char * relat
 
 int main(int argc, char ** argv)
 {
-
   lcm_t * lcm = lcm_create(NULL);
   BotParam * param = bot_param_new_from_server(lcm, 0);
   BotFrames * bcf = bot_frames_get_global(lcm, param);
@@ -44,5 +43,4 @@ int main(int argc, char ** argv)
   }
 
   return 0;
-
 }

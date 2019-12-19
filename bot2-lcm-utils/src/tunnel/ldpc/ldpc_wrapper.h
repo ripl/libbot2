@@ -57,7 +57,6 @@ protected:
 
   uint8_t **data; /* filled with original data symbols AND  built FEC symbols */
   int packetNum; /* number of packets sent/received */
-
 };
 
 class ldpc_enc_wrapper: public ldpc_wrapper {

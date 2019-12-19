@@ -199,13 +199,11 @@
 // requires.
 //
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "ldpc_rand.h"
 
 unsigned long	seed;
-
 
 #if 0
 /**
@@ -229,7 +227,6 @@ check_PRNG (void)
 	}
 }
 #endif
-
 
 /**
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE

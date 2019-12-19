@@ -20,7 +20,6 @@ http://en.wikipedia.org/wiki/Ziggurat_algorithm
 #include "rand_util.h"
 #include <time.h>
 
-
 static uint32_t jz,jsr=123456789;
 
 #define SHR3 (jz=jsr, jsr^=(jsr<<13), jsr^=(jsr>>17), jsr^=(jsr<<5),jz+jsr)
@@ -55,7 +54,6 @@ static float x, y;
       iz=hz&127;
       if(abs(hz)<kn[iz]) return (hz*wn[iz]);
   }
-
 }
 
 /* efix() generates variates from the residue when rejection in REXP occurs. */
@@ -125,7 +123,6 @@ void bot_gauss_rand_init(uint32_t seed)
   zigset(seed);
   zigInit=1;
 }
-
 
 double bot_gauss_rand(double mu, double sigma){
   if (!zigInit){

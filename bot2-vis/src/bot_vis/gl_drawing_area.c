@@ -147,7 +147,6 @@ bot_gtk_gl_drawing_area_size_allocate (GtkWidget * widget,
     GTK_WIDGET_CLASS (bot_gtk_gl_drawing_area_parent_class)->size_allocate (widget,
             allocation);
 
-
     /* Resize the OpenGL area to match the allocation size. */
     if (bot_gtk_gl_drawing_area_set_context (self) == 0)
         glViewport (0, 0, allocation->width, allocation->height);

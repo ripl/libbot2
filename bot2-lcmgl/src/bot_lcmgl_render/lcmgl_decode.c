@@ -45,7 +45,6 @@ struct lcmgl_decoder
     int      datapos;
 };
 
-
 static inline uint8_t lcmgl_decode_u8(lcmgl_decoder_t *ldec)
 {
     return ldec->data[ldec->datapos++];
@@ -158,10 +157,8 @@ void bot_lcmgl_decode(uint8_t *data, int datalen)
 #endif
 
     while (ldec.datapos < ldec.datalen) {
-
         uint8_t opcode = lcmgl_decode_u8(&ldec);
         switch (opcode) {
-
         case BOT_LCMGL_BEGIN:
         {
             uint32_t v = lcmgl_decode_u32(&ldec);
@@ -370,7 +367,6 @@ void bot_lcmgl_decode(uint8_t *data, int datalen)
 
           break;
         }
-
 
         case BOT_LCMGL_BOX:
         {
@@ -597,10 +593,8 @@ void bot_lcmgl_decode(uint8_t *data, int datalen)
                       break;
             }
 
-
             int bytes_per_row = width * subpix_per_pixel * bytes_per_subpixel;
             int max_data_size = height * bytes_per_row;
-
 
             int compression = lcmgl_decode_u32(&ldec);
             int raw_datalen = lcmgl_decode_u32(&ldec);
@@ -713,6 +707,5 @@ void bot_lcmgl_decode(uint8_t *data, int datalen)
     }
     free(textures);
 #endif
-
 }
 

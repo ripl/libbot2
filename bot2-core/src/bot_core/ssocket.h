@@ -31,7 +31,6 @@ struct bot_ssocket
 
 	struct sockaddr addr;
 	socklen_t addrlen;
-
 };
 
 bot_ssocket_t *bot_ssocket_create(void);

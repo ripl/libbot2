@@ -190,7 +190,6 @@ DECL_BGL_4 (glColor4f, color4f, float, float, float, float)
 DECL_BGL_4 (glRotated, rotated, double, double, double, double)
 DECL_BGL_4 (glRotatef, rotatef, float, float, float, float)
 
-
 #define DECL_BGL_1V(glfunc, name, type, size) \
 typedef struct { \
     bot_bgl_command_t parent; \

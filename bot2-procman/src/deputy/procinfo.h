@@ -35,7 +35,6 @@ typedef struct {
     int64_t memfree;
     int64_t swaptotal;
     int64_t swapfree;
-
 } sys_cpu_mem_t;
 
 int procinfo_read_proc_cpu_mem (int pid, proc_cpu_mem_t *s);

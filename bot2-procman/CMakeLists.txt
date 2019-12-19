@@ -37,7 +37,6 @@ include(cmake/pods.cmake)
 include(cmake/lcmtypes.cmake)
 lcmtypes_build(EXPORT ${PROJECT_NAME})
 
-
 add_subdirectory(src/deputy)
 add_subdirectory(python)
 

@@ -13,7 +13,6 @@
  * of these programs is entirely at the user's own risk.
  */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -159,7 +158,6 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 	{
 		fprintf(stderr, "Added %d extra bit-checks to make row counts at least two\n", added);
 	}
-
 
 	/* Add extra bits to try to avoid problems with even column counts. */
 	if(leftDegree%2==0 && leftDegree<nbRows && nbDataCols>1 && added<2)

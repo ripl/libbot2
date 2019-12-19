@@ -33,7 +33,6 @@ public:
   static guint server_sock_sid;
 
   static tunnel_server_params_t params;
-
 };
 
 #endif

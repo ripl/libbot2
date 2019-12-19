@@ -14,7 +14,6 @@
 #undef dbg
 #define dbg(args...)
 
-
 typedef void (*signal_pipe_glib_handler_t)( int signal, void *user_data );
 
 typedef struct _signal_pipe {
@@ -136,7 +135,6 @@ signal_pipe_attach_glib( signal_pipe_glib_handler_t func, gpointer user_data )
 
     return 0;
 }
-
 
 static void
 gqoi_handler( int signal, void *user )

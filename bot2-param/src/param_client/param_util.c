@@ -76,7 +76,6 @@ char * bot_param_get_planar_lidar_name_from_lcm_channel(BotParam *param, const c
   return bot_param_get_sensor_name_from_lcm_channel(param, PLANAR_LIDAR_PREFIX, channel);
 }
 
-
 //get coord frame name
 char * bot_param_get_sensor_coord_frame(BotParam *bot_param, const char * sensor_prefix, const char *sensor_name)
 {
@@ -95,7 +94,6 @@ bot_param_get_planar_lidar_coord_frame(BotParam *bot_param, const char *lidar_na
   return bot_param_get_sensor_coord_frame(bot_param, PLANAR_LIDAR_PREFIX, lidar_name);
 }
 
-
 //get lcm channel
 char * bot_param_get_sensor_lcm_channel(BotParam *bot_param, const char * sensor_prefix, const char *sensor_name)
 {
@@ -111,7 +109,6 @@ char * bot_param_get_planar_lidar_lcm_channel(BotParam *bot_param, const char *l
 {
   return bot_param_get_sensor_lcm_channel(bot_param, PLANAR_LIDAR_PREFIX, lidar_name);
 }
-
 
 /* ================ general ============== */
 int bot_param_get_quat(BotParam *param, const char *name, double quat[4])

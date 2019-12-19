@@ -24,7 +24,6 @@
  //wakeup the send thread immediately if there are this many bytes in the queue
 #define NUM_BYTES_TO_SEND_IMMEDIATELY (5*MAX_PAYLOAD_BYTES_PER_FRAGMENT)
 
-
 #define MAX_SEND_BUFFER_SIZE 33554432 //2^25 ~33MB
 
 #define MAX_NUM_FRAGMENTS 32768  //since we're using a int16_t for the fragment number
@@ -43,7 +42,6 @@ typedef struct {
     char lcm_url[1024];
     int startedAsClient;
 } tunnel_server_params_t;
-
 
 class  TunnelLcmMessage {
 public:
@@ -64,8 +62,6 @@ public:
   int64_t recv_utime;
   int encoded_size;
 } ;
-
-
 
 class LcmTunnel {
 public:
@@ -104,8 +100,6 @@ private:
   introspect_t *introspect;
   GMainLoop * mainloop; //pointer to the server's mainloop
 
-
-
   //tcp socket stuff
   ssocket_t * tcp_sock;
   GIOChannel * tcp_ioc;
@@ -129,9 +123,6 @@ private:
   GMutex * sendQueueLock;
   GCond* sendQueueCond; //thread waits on this
   bool flushImmediately;
-
-
-
 
   //buffers to store incoming messages
   char *channel;
@@ -161,12 +152,10 @@ private:
   int64_t lastErrorPrintTime;
   int numSuccessful;
 
-
   //forward error correction variables
   ldpc_dec_wrapper * ldpc_dec;
 
   lcm_subscription_t *subscription;
-
 };
 
 #endif

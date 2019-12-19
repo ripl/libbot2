@@ -28,7 +28,6 @@ extern "C" {
    */
   int bot_param_get_quat(BotParam * param, const char *name, double quat[4]);
 
-
   // Convenience Functions for lidars/cameras
   /*
    * Get the list of all cameras/lidars

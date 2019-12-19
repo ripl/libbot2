@@ -14,7 +14,6 @@
  * of these programs is entirely at the user's own risk.
  */
 
-
 /* This module implements operations on sparse matrices of mod2 elements
    (bits, with addition and multiplication being done modulo 2).
 
@@ -24,7 +23,6 @@
    invalid contents of a file result in an error code being returned to the
    caller, with no message being printed by this module.
 */
-
 
 /* DATA STRUCTURES USED TO STORE A SPARSE MATRIX.  Non-zero entries (ie, 1s)
    are represented by nodes that are doubly-linked both by row and by column,
@@ -42,7 +40,6 @@
 
 #include "ldpc_profile.h"	/* general LDPC codec profiles */
 #include "tools.h"
-
 
 /**
  * Structure representing a non-zero entry, or the header for a row or column.
@@ -80,7 +77,6 @@ typedef struct mod2entry
 #define Mod2sparse_block 10  /* Number of entries to block together for
                                 memory allocation */
 
-
 /**
  * Block of entries allocated all at once.
  */
@@ -92,7 +88,6 @@ typedef struct mod2block
 	/** Entries in this block. */
 	mod2entry	entry[Mod2sparse_block];
 } mod2block;
-
 
 /**
  * Representation of a sparse matrix.
@@ -108,7 +103,6 @@ typedef struct mod2sparse
 	mod2block *blocks;	  /* Blocks that have been allocated */
 	mod2entry *next_free;	  /* Next free entry */
 } mod2sparse;
-
 
 /* MACROS TO GET AT ELEMENTS OF A SPARSE MATRIX.  The 'first', 'last', 'next',
    and 'prev' macros traverse the elements in a row or column.  Moving past
@@ -132,13 +126,11 @@ typedef struct mod2sparse
 
 #define mod2sparse_at_end(e) ((e)->row<0) /* See if we've reached the end     */
 
-
 #define mod2sparse_row(e) ((e)->row)      /* Find out the row or column index */
 #define mod2sparse_col(e) ((e)->col)      /* of an entry (indexes start at 0) */
 
 #define mod2sparse_rows(m) ((m)->n_rows)  /* Get the number of rows or columns*/
 #define mod2sparse_cols(m) ((m)->n_cols)  /* in a matrix                      */
-
 
 #if 0
 /* POSSIBLE LU DECOMPOSITION STRATEGIES.  For use with mod2sparse_decomp. */
@@ -149,7 +141,6 @@ typedef enum mod2sparse_strategy_enum
   Mod2sparse_minprod
 } mod2sparse_strategy;
 #endif // #if 0
-
 
 /* PROCEDURES TO MANIPULATE SPARSE MATRICES. */
 
@@ -162,7 +153,6 @@ void mod2sparse_clear    (mod2sparse *);
 void mod2sparse_copy     (mod2sparse *, mod2sparse *);
 #endif // #if 0
 
-
 void mod2sparse_print       (FILE *, mod2sparse *);
 #if 0
 int  mod2sparse_write       (FILE *, mod2sparse *);
@@ -172,7 +162,6 @@ mod2sparse *mod2sparse_read (FILE *);
 mod2entry *mod2sparse_find   (mod2sparse *, int, int);
 mod2entry *mod2sparse_insert (mod2sparse *, int, int);
 void mod2sparse_delete       (mod2sparse *, mod2entry *);
-
 
 #if 0
 void mod2sparse_transpose (mod2sparse *, mod2sparse *);
@@ -199,7 +188,5 @@ int mod2sparse_backward_sub (mod2sparse *, int *, char *, char *);
 mod2entry * mod2sparse_last_in_col(mod2sparse * m, int i);
 #endif
 
-
 #endif // #ifndef LDPC_MATRIX_SPARSE__
-
 

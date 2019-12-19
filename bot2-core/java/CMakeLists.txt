@@ -17,7 +17,6 @@ set(jar_fname lcmspy_plugins_bot2.jar)
 
 set(classpath ${src_dir}:${LCM_JAR_FILE}:${LCMTYPES_JAR})
 
-
 # =============
 
 # get a list of all .java files

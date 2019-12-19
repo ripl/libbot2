@@ -129,7 +129,6 @@ static GLuint compile_wave_display_list(BotWavefrontModel * model)
 
   glEnable(GL_LIGHTING);
 
-
   bot_wavefront_model_gl_draw(model);
   glDisable(GL_LIGHTING);
 
@@ -301,7 +300,6 @@ void configure_body(RendererArticulated * self, BodyProperties * body_properties
 
   fail: fprintf(stderr, "error: failed to get %s, nothing will be drawn for this body", key_name);
   body_properties->vis_type = invalid;
-
 }
 
 static void articulated_body_draw(BotViewer *viewer, BotRenderer *renderer)
@@ -393,6 +391,5 @@ void bot_frames_add_articulated_body_renderer_to_viewer(BotViewer *viewer, int r
 
   bot_viewer_add_renderer(viewer, &self->renderer, render_priority);
   return;
-
 }
 

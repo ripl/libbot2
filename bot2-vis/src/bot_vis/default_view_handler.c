@@ -166,7 +166,6 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
 
     bot_vector_add_3d(motionup, motionleft, motion);
 
-
     double magnitude = bot_vector_magnitude_3d(motion);
     double new_magnitude = fmax(fmin(magnitude,MAX_MOTION_MAGNITUDE),MIN_MOTION_MAGNITUDE);
     //bot_vector_normalize_3d(motion); // if magnitude is zero it will return nan's
@@ -175,7 +174,6 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
     double neweye[3], newlookat[3];
     bot_vector_subtract_3d(dvh->eye, motion, neweye);
     bot_vector_subtract_3d(dvh->lookat, motion, newlookat);
-
 
     memcpy(dvh->eye, neweye, sizeof(double)*3);
     memcpy(dvh->lookat, newlookat, sizeof(double)*3);
@@ -194,8 +192,6 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
         look_at_changed(dvh);
         printf("skipping pan: %15f %15f\n", detOriginal, detNew);
     }
-
-
 }
 
 static int mouse_press   (BotViewer *viewer, BotEventHandler *ehandler,
@@ -283,7 +279,6 @@ static int mouse_motion  (BotViewer *viewer, BotEventHandler *ehandler,
         look_at_changed(dvh);
     }
     else if (event->state & GDK_BUTTON1_MASK) {
-
         double dx = event->x - dvh->last_mouse_x;
         double dy = event->y - dvh->last_mouse_y;
 
@@ -503,7 +498,6 @@ static void update_follow_target(BotViewHandler *vhandler, const double pos[3], 
     BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) vhandler->user;
 
     if (dvh->have_last && (vhandler->follow_mode & BOT_FOLLOW_YAW)) {
-
         // compute the vectors from the vehicle to the lookat and eye
         // point and then project them given the new position of the car/
         double v2eye[3];
@@ -535,7 +529,6 @@ static void update_follow_target(BotViewHandler *vhandler, const double pos[3], 
         // the above algorithm "builds in" a BOT_FOLLOW_POS behavior.
 
     } else if (dvh->have_last && (vhandler->follow_mode & BOT_FOLLOW_POS)) {
-
         double dpos[3];
         for (int i = 0; i < 3; i++)
             dpos[i] = pos[i] - dvh->lastpos[i];
@@ -545,7 +538,6 @@ static void update_follow_target(BotViewHandler *vhandler, const double pos[3], 
             dvh->lookat[i] += dpos[i];
         }
     } else {
-
         // when the follow target moves, we want rotations to still behave
         // correctly. Rotations use the lookat point as the center of rotation,
         // so adjust the lookat point so that it is on the same plane as the

@@ -17,7 +17,6 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
-
 /**
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.

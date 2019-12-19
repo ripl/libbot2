@@ -44,7 +44,6 @@ void bot_timespec_addns(struct timespec *ts, long ns)
 	// adjust the time
 	ts->tv_sec+=ts->tv_nsec/1000000000 + sec;
 	ts->tv_nsec=ts->tv_nsec%1000000000;
-
 }
 
 void bot_timeval_set(struct timeval *tv, double dt)
@@ -74,7 +73,6 @@ void bot_timespec_adjust(struct timespec *ts, double dt)
 	// adjust the time
 	ts->tv_sec+=ts->tv_nsec/1000000000 + sec;
 	ts->tv_nsec=ts->tv_nsec%1000000000;
-
 }
 
 int bot_timespec_compare(struct timespec *a, struct timespec *b)

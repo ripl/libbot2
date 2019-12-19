@@ -12,7 +12,6 @@ if(USE_BOT_VIS)
   list(APPEND REQUIRED_LIBS bot2-vis gl)
 endif()
 
-
 add_library(bot2-lcmgl-renderer ${c_files})
 target_link_libraries(bot2-lcmgl-renderer PRIVATE ${OPENGL_LIBRARIES} ${ZLIB_LIBRARIES} libbot2::bot2-core libbot2::lcmtypes_bot2-core lcmtypes_bot2-lcmgl)
 if(USE_BOT_VIS)

@@ -29,7 +29,6 @@ typedef struct {
 
 void publish_params(param_server_t *self)
 {
-
   bot_param_update_t * update_msg = (bot_param_update_t *) calloc(1, sizeof(bot_param_update_t));
 
   int ret = bot_param_write_to_string(self->params, &update_msg->params);
@@ -79,7 +78,6 @@ void on_param_set(const lcm_recv_buf_t *rbuf, const char * channel, const bot_pa
       fprintf(stderr, "error: could not set param (%s,%s)!\n", msg->entries[i].key, msg->entries[i].value);
     }
   }
-
 }
 
 static gboolean on_timer(gpointer user)
@@ -104,7 +102,6 @@ static void usage(int argc, char ** argv)
 
 int main(int argc, char ** argv)
 {
-
   if (argc < 2) {
       usage (argc, argv);
       exit(1);
@@ -116,7 +113,6 @@ int main(int argc, char ** argv)
       fprintf (stderr, "Error getting the GLIB main loop\n");
       exit(1);
   }
-
 
   char *optstring = "hs:l:";
   struct option long_opts[] = {
@@ -146,7 +142,6 @@ int main(int argc, char ** argv)
 
   self->lcm = lcm_create(lcm_url);
   lcmu_glib_mainloop_attach_lcm(self->lcm);
-
 
   self->seqNo = 0;
   self->id = _timestamp_now();

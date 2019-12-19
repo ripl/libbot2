@@ -85,7 +85,6 @@ LCM Channel | Message type | Description
 `PMD_INFO2` | [info2_t](\ref procman_lcm_info2_t) | When received, the sheriff updates its internal representation of a deputy's actual state.
 `PMD_PRINTF` | [printf_t](\ref procman_lcm_printf_t) | Contains the console output produced by a deputy-managed command.  When received, the sheriff may display a command's output to the user.  Subscribing to this channel is optional for a sheriff.
 
-
 # Appendix - message definitions {#procman_lcm_message_defs}
 
 ## bot_procman.info2_t {#procman_lcm_info2_t}

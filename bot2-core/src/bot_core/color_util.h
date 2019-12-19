@@ -24,7 +24,6 @@ extern "C" {
    */
   float *bot_color_util_jet(double v);
 
-
   /*
    * convenience arrays for commonly used colors
    */
@@ -36,7 +35,6 @@ extern "C" {
   static const float bot_color_util_yellow[3]  = {1,1,0};
   static const float bot_color_util_black[3]   = {0,0,0};
   static const float bot_color_util_white[3]   = {1,1,1};
-
 
 #ifdef __cplusplus
 }

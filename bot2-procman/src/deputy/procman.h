@@ -52,7 +52,6 @@ typedef struct _procman_cmd {
     void *user;  // use this for application-specific data
 } procman_cmd_t;
 
-
 void procman_params_init_defaults (procman_params_t *params,
         int argc, char **argv);
 

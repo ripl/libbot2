@@ -15,7 +15,6 @@
 
 #include <glib.h>
 
-
 /**
  * @defgroup BotVisWavefront Wavefront (.obj:geometry; .mtl:material)
  *           mesh mesh model rendering
@@ -32,7 +31,6 @@
 extern "C" {
 #endif
 
-
 typedef struct _BotWavefrontModel BotWavefrontModel;
 
 /**
@@ -47,7 +45,6 @@ typedef struct _BotWavefrontModel BotWavefrontModel;
 BotWavefrontModel *
 bot_wavefront_model_create (const char *filename);
 
-
 /**
  * bot_wavefront_model_destroy:
  * @model: The %BotWavefrontModel to free
@@ -57,7 +54,6 @@ bot_wavefront_model_create (const char *filename);
  */
 void
 bot_wavefront_model_destroy (BotWavefrontModel *model);
-
 
 /**
  * bot_wavefront_model_get_extrema:
@@ -78,9 +74,6 @@ bot_wavefront_model_get_extrema (BotWavefrontModel *model,
  */
 void
 bot_wavefront_model_gl_draw (BotWavefrontModel *model);
-
-
-
 
 #ifdef __cplusplus
 }

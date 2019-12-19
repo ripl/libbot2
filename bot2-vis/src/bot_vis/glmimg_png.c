@@ -176,7 +176,6 @@ glmReadPNG(const char* filename, GLboolean alpha, int* width_ret,
 
     bytes_per_row = png_get_rowbytes(png_ptr, info_ptr);
 
-
     buffer = (unsigned char*) malloc(bytes_per_row*height);
 
     format = channels;

@@ -77,7 +77,6 @@ bot_trans_set_from_velocities(BotTrans *dest, const double angular_rate[3],
   bot_vector_cross_3d(omega, vel, omega_cross_vel);
   double omega_dot_vel = bot_vector_dot_3d(omega, vel);
 
-
   double term1[3];
   double term2[3];
   double term3[3];
@@ -114,7 +113,6 @@ void bot_trans_apply_trans_to(const BotTrans * src1, const BotTrans * src2, BotT
   return;
 }
 
-
 void
 bot_trans_invert(BotTrans * btrans)
 {
@@ -126,7 +124,6 @@ bot_trans_invert(BotTrans * btrans)
     btrans->rot_quat[2] = -btrans->rot_quat[2];
     btrans->rot_quat[3] = -btrans->rot_quat[3];
 }
-
 
 void bot_trans_invert_and_compose(const BotTrans * curr, const BotTrans * prev, BotTrans * delta){
   bot_trans_copy(delta,prev);

@@ -37,7 +37,6 @@ static inline float bot_randf_in_range(float mi, float ma)
     return bot_randf()*(ma-mi) + mi;
 }
 
-
 /* return a random integer between [0, bound) */
 static inline int bot_irand(int bound)
 {

@@ -30,7 +30,6 @@
 #include "ldpc_scheme.h"
 #include "ldpc_rand.h"
 
-
 /******************************************************************************
  * LDPCFecScheme Contructor.
  */
@@ -38,7 +37,6 @@ LDPCFecScheme::LDPCFecScheme()
 {
 	memset(this, 0, sizeof(*this));
 }
-
 
 /******************************************************************************
  * LDPCFecScheme Destructor.
@@ -54,7 +52,6 @@ LDPCFecScheme::~LDPCFecScheme()
 	// and now init everything!
 	memset(this, 0, sizeof(*this));
 }
-
 
 /******************************************************************************
  * => See header file for more informations.
@@ -135,7 +132,6 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  *
  * => See header file for more informations.
@@ -199,7 +195,6 @@ LDPCFecScheme::InitScheme  (int	symbolSize,
 	m_SchemeInitialized = true;
 	return LDPC_OK;
 }
-
 
 /******************************************************************************
  *
@@ -266,7 +261,6 @@ LDPCFecScheme::BuildPkt (int	pktIdx,
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  *
  * => See header file for more informations.
@@ -313,7 +307,6 @@ LDPCFecScheme::DecomposePkt (void* 	pktBuffer,
 	return LDPC_OK;
 }
 
-
 /******************************************************************************
  *
  * => See header file for more informations.
@@ -326,7 +319,6 @@ LDPCFecScheme::DecodingStepWithPkt (void*	symbol_canvas[],
 	ASSERT(pktBuffer);
 	return DecodingStepWithPkt (symbol_canvas, pktBuffer, ESIofFirstSymbol, false);
 }
-
 
 /******************************************************************************
  *

@@ -13,7 +13,6 @@
  * of these programs is entirely at the user's own risk.
  */
 
-
 /* This module implements operations on sparse matrices of mod2 elements
    (bits, with addition and multiplication being done modulo 2).
 
@@ -23,7 +22,6 @@
    invalid contents of a file result in an error code being returned to the
    caller, with no message being printed by this module.
 */
-
 
 /* DATA STRUCTURES USED TO STORE A SPARSE MATRIX.  Non-zero entries (ie, 1s)
    are represented by nodes that are doubly-linked both by row and by column,
@@ -41,7 +39,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-
 
 void *chk_alloc(unsigned, unsigned);	/* Calls 'calloc' and exits with error if it fails */
 

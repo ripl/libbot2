@@ -1,7 +1,6 @@
 #ifndef _SSOCKET_H
 #define _SSOCKET_H
 
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
@@ -19,7 +18,6 @@ struct ssocket
 
 	struct sockaddr addr;
 	socklen_t addrlen;
-
 };
 
 ssocket_t *ssocket_create(void);
@@ -41,7 +39,6 @@ ssocket_t *ssocket_accept(ssocket_t *s);
 void ssocket_get_remote_ip(ssocket_t *s, int ip[4]);
 
 int ssocket_get_fd(ssocket_t *s);
-
 
 #ifdef __cplusplus
 }

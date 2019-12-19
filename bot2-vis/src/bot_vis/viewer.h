@@ -249,7 +249,6 @@ struct _BotEventHandler
  */
 typedef struct _BotRenderer BotRenderer;
 struct _BotRenderer {
-
     int        enabled;
 
     int        priority;
@@ -392,7 +391,6 @@ void bot_viewer_set_window_title (BotViewer *viewer, const char *window_name);
 void bot_viewer_start_recording (BotViewer *viewer);
 void bot_viewer_stop_recording (BotViewer *viewer);
 
-
 /**
  * bot_viewer_request_redraw:
  * @viewer: The viewer to redraw.
@@ -400,8 +398,6 @@ void bot_viewer_stop_recording (BotViewer *viewer);
  * Request a redraw (which will occur asynchronously).
  */
 void bot_viewer_request_redraw (BotViewer *viewer);
-
-
 
 /**
  * bot_viewer_on_side:
@@ -415,8 +411,6 @@ void bot_viewer_request_redraw (BotViewer *viewer);
  */
 void bot_viewer_add_renderer_on_side (BotViewer *viewer, BotRenderer *plugin, int priority, int which_side);
 
-
-
 /**
  * bot_viewer_add_renderer:
  * @viewer: The viewer to add the renderer to.
@@ -428,9 +422,6 @@ void bot_viewer_add_renderer_on_side (BotViewer *viewer, BotRenderer *plugin, in
  * Defaults to right hand side (control_box=1) - the default
  */
 void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priority);
-
-
-
 
 /**
  * bot_viewer_remove_renderer:
@@ -499,7 +490,6 @@ typedef enum {
 } BotViewerStockRendererId;
 
 void bot_viewer_add_stock_renderer(BotViewer* viewer, int stock_renderer_id, int priority);
-
 
 #ifdef __cplusplus
 }

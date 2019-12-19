@@ -114,7 +114,6 @@ LcmTunnel::~LcmTunnel()
   g_cond_clear(sendQueueCond);
   g_free(sendQueueCond);
 
-
   if (udp_fd >= 0) {
     //send out a disconnect message
     lcm_tunnel_disconnect_msg_t disc_msg;
@@ -331,11 +330,7 @@ int LcmTunnel::on_udp_data(GIOChannel * source, GIOCondition cond, void *user_da
     else {
       fprintf(stderr, "Received Corrupted UDP packet!\n");
     }
-
   }
-
-  //  printf("received: %d, %d / %d\n", recv_udp_msg->seqno, recv_udp_msg->fragment, recv_udp_msg->nfrags);
-
 
   if (self->verbose && recv_udp_msg->seqno < self->cur_seqno) {
     printf("Got Out of order packet!\n");
@@ -412,7 +407,6 @@ int LcmTunnel::on_udp_data(GIOChannel * source, GIOCondition cond, void *user_da
           //publish all the lcm messages in the buffer
           self->publishLcmMessagesInBuf(recv_udp_msg->payload_size);
         }
-
       }
       else if (self->verbose) {
         printf("ignoring udp packet\n");

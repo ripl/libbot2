@@ -37,7 +37,6 @@ struct _BotWavefrontModel
     GLMmodel *glm_model;
 };
 
-
 BotWavefrontModel *
 bot_wavefront_model_create (const char *filename)
 {
@@ -53,7 +52,6 @@ bot_wavefront_model_create (const char *filename)
     return model;
 }
 
-
 void
 bot_wavefront_model_destroy (BotWavefrontModel *model)
 {
@@ -62,7 +60,6 @@ bot_wavefront_model_destroy (BotWavefrontModel *model)
 
     free (model);
 }
-
 
 void
 bot_wavefront_model_gl_draw (BotWavefrontModel *model)

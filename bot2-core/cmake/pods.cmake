@@ -52,7 +52,6 @@ function(pods_install_headers)
 	#mark them to be installed
 	install(FILES ${ARGV} DESTINATION include/${dest_dir})
 
-
 endfunction(pods_install_headers)
 
 # pods_install_executables(<executable1> ...)
@@ -144,7 +143,6 @@ function(pods_install_pkg_config_file)
 
 endfunction(pods_install_pkg_config_file)
 
-
 # pods_install_python_script(<script_name> <python_module_or_file>)
 #
 # Create and install a script that invokes the python interpreter with a
@@ -214,7 +212,6 @@ function(_pods_install_python_package py_src_dir py_module_name)
     endif()
 endfunction()
 
-
 # pods_install_python_packages(<src_dir1> ...)
 #
 # Install python packages to lib/pythonX.Y/dist-packages, where X.Y refers to
@@ -251,7 +248,6 @@ function(pods_install_python_packages py_src_dir)
         endif()
     endif()
 endfunction()
-
 
 # pods_use_pkg_config_packages(<target> <package-name> ...)
 #

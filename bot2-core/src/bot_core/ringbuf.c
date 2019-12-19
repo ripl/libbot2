@@ -50,12 +50,10 @@ int bot_ringbuf_read(BotRingBuf * cbuf, int numBytes, uint8_t * buf)
   bot_ringbuf_flush(cbuf,bytes_read);
 
   return bytes_read;
-
 }
 
 int bot_ringbuf_write(BotRingBuf * cbuf, int numBytes, uint8_t * buf)
 {
-
   //check if there is enough space... maybe this should just wrap around??
   if (numBytes + cbuf->numBytes > cbuf->maxSize) {
     fprintf(stderr, "CIRC_BUF ERROR: not enough space in circular buffer,Discarding data!\n");
@@ -78,7 +76,6 @@ int bot_ringbuf_write(BotRingBuf * cbuf, int numBytes, uint8_t * buf)
   cbuf->writeOffset = (cbuf->writeOffset + bytes_written) % cbuf->maxSize;
 
   return bytes_written;
-
 }
 
 int bot_ringbuf_peek(BotRingBuf * cbuf, int numBytes, uint8_t * buf)

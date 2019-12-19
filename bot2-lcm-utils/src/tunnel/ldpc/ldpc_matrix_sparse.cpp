@@ -16,16 +16,12 @@
 
 /* NOTE:  See mod2sparse.html for documentation on these procedures. */
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h> //memcpy
 
 #include "ldpc_matrix_sparse.h"
-
-
-
 
 /* ALLOCATE AN ENTRY WITHIN A MATRIX.  This local procedure is used to
    allocate a new entry, representing a non-zero element, within a given
@@ -64,7 +60,6 @@ static mod2entry *alloc_entry
 
   return e;
 }
-
 
 /* ALLOCATE SPACE FOR A SPARSE MOD2 MATRIX.  */
 
@@ -116,7 +111,6 @@ mod2sparse *mod2sparse_allocate
   return m;
 }
 
-
 /* FREE SPACE OCCUPIED BY A SPARSE MOD2 MATRIX. */
 
 void mod2sparse_free
@@ -134,7 +128,6 @@ void mod2sparse_free
     free(b);
   }
 }
-
 
 /* CLEAR A SPARSE MATRIX TO ALL ZEROS. */
 
@@ -170,7 +163,6 @@ void mod2sparse_clear
     free(b);
   }
 }
-
 
 #if 0
 
@@ -208,8 +200,6 @@ void mod2sparse_copy
 }
 
 #endif // #if 0
-
-
 
 /* PRINT A SPARSE MOD2 MATRIX IN HUMAN-READABLE FORM. */
 
@@ -292,7 +282,6 @@ int mod2sparse_write
   return 1;
 }
 
-
 /* READ A SPARSE MOD2 MATRIX STORED IN MACHINE-READABLE FORM FROM A FILE. */
 
 mod2sparse *mod2sparse_read
@@ -339,7 +328,6 @@ mod2sparse *mod2sparse_read
   return 0;
 }
 #endif /* 0 */
-
 
 /* LOOK FOR AN ENTRY WITH GIVEN ROW AND COLUMN. */
 
@@ -401,7 +389,6 @@ mod2entry *mod2sparse_find
     ce = mod2sparse_next_in_col(ce);
   }
 }
-
 
 /* INSERT AN ENTRY WITH GIVEN ROW AND COLUMN. */
 
@@ -517,7 +504,6 @@ mod2entry *mod2sparse_insert
   return ne;
 }
 
-
 /* DELETE AN ENTRY FROM A SPARSE MATRIX. */
 
 void mod2sparse_delete (mod2sparse	*m,
@@ -553,8 +539,6 @@ void mod2sparse_delete (mod2sparse	*m,
   e->left = m->next_free;
   m->next_free = e;
 }
-
-
 
 #if 0
 
@@ -597,7 +581,6 @@ int mod2sparse_equal
   return 1;
 }
 
-
 /* COMPUTE THE TRANSPOSE OF A SPARSE MOD2 MATRIX. */
 
 void mod2sparse_transpose
@@ -633,7 +616,6 @@ void mod2sparse_transpose
     }
   }
 }
-
 
 /* ADD TWO SPARSE MOD2 MATRICES. */
 
@@ -696,7 +678,6 @@ void mod2sparse_add
     }
   }
 }
-
 
 /* MULTIPLY TWO SPARSE MOD2 MATRICES. */
 
@@ -762,7 +743,6 @@ void mod2sparse_multiply
   }
 }
 
-
 /* MULTIPLY VECTOR BY SPARSE MATRIX. */
 
 void mod2sparse_mulvec
@@ -791,7 +771,6 @@ void mod2sparse_mulvec
   }
 }
 
-
 /* COUNT ENTRIES IN A ROW. */
 
 int mod2sparse_count_row
@@ -818,7 +797,6 @@ int mod2sparse_count_row
   return count;
 }
 
-
 /* COUNT ENTRIES IN A COLUMN. */
 
 int mod2sparse_count_col
@@ -844,7 +822,6 @@ int mod2sparse_count_col
 
   return count;
 }
-
 
 /* ADD TO A ROW. */
 
@@ -893,7 +870,6 @@ void mod2sparse_add_row
   }
 }
 
-
 /* ADD TO A COLUMN. */
 
 void mod2sparse_add_col
@@ -940,7 +916,6 @@ void mod2sparse_add_col
     f2 = mod2sparse_next_in_col(f2);
   }
 }
-
 
 /* FIND AN LU DECOMPOSITION OF A SPARSE MATRIX. */
 
@@ -1221,7 +1196,6 @@ int mod2sparse_decomp
   return nnf;
 }
 
-
 /* SOLVE A LOWER-TRIANGULAR SYSTEM BY FORWARD SUBSTITUTION. */
 
 int mod2sparse_tunnel_sub
@@ -1287,7 +1261,6 @@ int mod2sparse_tunnel_sub
 
   return 1;
 }
-
 
 /* SOLVE AN UPPER-TRIANGULAR SYSTEM BY BACKWARD SUBSTITUTION. */
 

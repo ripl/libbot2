@@ -117,7 +117,6 @@ bot_lcm_get_global(const char *provider)
     return global_lcm;
 }
 
-
 void bot_lcm_handle_or_timeout(lcm_t * lcm, int64_t timeout)
 {
   int lcm_fileno = lcm_get_fileno(lcm);

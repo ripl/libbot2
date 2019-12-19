@@ -45,7 +45,6 @@ int bot_ringbuf_read(BotRingBuf * cbuf, int numBytes, uint8_t * buf);
  */
 int bot_ringbuf_write(BotRingBuf * cbuf, int numBytes, uint8_t * buf);
 
-
 /*
  * Fill the ringbuff with data from the file descriptor.
  * Either read numBytes from the fd,
@@ -53,12 +52,10 @@ int bot_ringbuf_write(BotRingBuf * cbuf, int numBytes, uint8_t * buf);
  */
 int bot_ringbuf_fill_from_fd(BotRingBuf * cbuf, int fd, int numBytes);
 
-
 /*
  * Copy numBytes from the head of the buffer, but DON'T move read pointers
  */
 int bot_ringbuf_peek(BotRingBuf * cbuf, int numBytes, uint8_t * buf); //read numBytes from start of buffer, but don't move readPtr
-
 
 /**
  * Return a pointer to a contiguous buffer with the next numBytes of data to be read
@@ -74,7 +71,6 @@ int bot_ringbuf_flush(BotRingBuf * cbuf, int numBytes);
  * Get the amount of data currently stored in the buffer (not the allocated size)
  */
 int bot_ringbuf_available(BotRingBuf * cbuf);
-
 
 #ifdef __cplusplus
 }

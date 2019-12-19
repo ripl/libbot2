@@ -10,7 +10,6 @@
 
 #include "lcmtypes/bot_lcmgl_data_t.h"
 
-
 #define BOT_GL_DRAW_TEXT_DROP_SHADOW      1
 #define BOT_GL_DRAW_TEXT_JUSTIFY_LEFT     2
 #define BOT_GL_DRAW_TEXT_JUSTIFY_RIGHT    4
@@ -253,7 +252,6 @@ void bot_lcmgl_scalef(bot_lcmgl_t *lcmgl, float v0, float v1, float v2)
     bot_lcmgl_encode_float(lcmgl, v2);
 }
 
-
 void bot_lcmgl_translated(bot_lcmgl_t *lcmgl, double v0, double v1, double v2)
 {
     bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_TRANSLATED);
@@ -300,7 +298,6 @@ void bot_lcmgl_mult_matrixd(bot_lcmgl_t *lcmgl, const double m[16])
         bot_lcmgl_encode_double(lcmgl, m[i]);
 }
 
-
 void bot_lcmgl_load_identity(bot_lcmgl_t *lcmgl)
 {
     bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_LOAD_IDENTITY);
@@ -310,7 +307,6 @@ void bot_lcmgl_matrix_mode(bot_lcmgl_t * lcmgl, unsigned int mode){
   bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_MATRIX_MODE);
   bot_lcmgl_encode_u32(lcmgl, mode);
 }
-
 
 void bot_lcmgl_ortho(bot_lcmgl_t *lcmgl,
     double        left,    double        right,
@@ -324,8 +320,6 @@ void bot_lcmgl_ortho(bot_lcmgl_t *lcmgl,
   bot_lcmgl_encode_double(lcmgl, nearVal);
   bot_lcmgl_encode_double(lcmgl, farVal);
 }
-
-
 
 void bot_lcmgl_color3f(bot_lcmgl_t *lcmgl, float v0, float v1, float v2)
 {
@@ -484,7 +478,6 @@ void bot_lcmgl_text(bot_lcmgl_t *lcmgl, const double xyz[3], const char *text)
                  BOT_GL_DRAW_TEXT_ANCHOR_VCENTER);
 }
 
-
 void bot_lcmgl_draw_axes(bot_lcmgl_t * lcmgl)
 {
   //x-axis
@@ -565,7 +558,6 @@ bot_lcmgl_draw_arrow_3d (bot_lcmgl_t * lcmgl, double length, double head_width, 
     lcmglPopMatrix();
 }
 
-
 ////////// vertex buffer
 //bot_lcmgl_vertex_buffer_t *bot_lcmgl_vertex_buffer_create(int capacity,
 //        bot_lcmgl_vertex_buffer_full_callback_t full_callback, void *user)
@@ -630,7 +622,6 @@ void bot_lcmgl_rect(bot_lcmgl_t *lcmgl, double xyz[3], double size[2], int fille
 void bot_lcmgl_scale_to_viewer_ar(bot_lcmgl_t *lcmgl){
   bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_SCALE_TO_VIEWER_AR);
 }
-
 
 // texture API
 

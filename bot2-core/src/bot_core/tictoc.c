@@ -23,7 +23,6 @@ static int64_t _timestamp_now()
     return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
-
 typedef struct
 {
     int64_t t;
@@ -50,7 +49,6 @@ _tictoc_t_print(gpointer data, gpointer user_data)
     printf(
             "%30s: numCalls = %11d   totalT=%10.2f   avgT=%8.4f   minT=%8.4f   maxT=%8.4f   emaT=%8.4f\n",
             tt->description, tt->numCalls, totalT, avgT, minT, maxT, emaT);
-
 }
 
 static gint
@@ -168,7 +166,6 @@ bot_tictoc_full(const char *description, double ema_alpha, int64_t * ema)
             g_mutex_unlock(&tictoc_mutex); //release
             return 0;
         }
-
     }
 
     int64_t tictoctime = _timestamp_now();
@@ -217,7 +214,6 @@ _get_all_vals_helper (gpointer key, gpointer value, gpointer user_data)
     GList ** vals = (GList **) user_data;
     *vals = g_list_prepend (*vals, value);
 }
-
 
 void
 bot_tictoc_print_stats(bot_tictoc_sort_type_t sortType)

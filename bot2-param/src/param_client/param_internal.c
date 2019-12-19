@@ -101,14 +101,12 @@ struct _BotParam {
   int64_t sequence_number;
 
   GList * update_callbacks;
-
 };
 
 typedef struct {
   bot_param_update_handler_t * callback_func;
   void * user;
 } update_handler_t;
-
 
 static BotParamElement *
 find_key(BotParamElement * el, const char * key, int inherit);
@@ -724,7 +722,6 @@ void bot_param_add_update_subscriber(BotParam *param,
   g_mutex_lock(param->lock);
   param->update_callbacks = g_list_append(param->update_callbacks, uh);
   g_mutex_unlock(param->lock);
-
 }
 
 static void _dispatch_update_callbacks(BotParam * old_param, BotParam * new_param, int64_t utime)
@@ -771,8 +768,6 @@ static void _on_param_update(const lcm_recv_buf_t *rbuf, const char * channel, c
   param->root = root;
   bot_param_destroy(new_params);
   g_mutex_unlock(param->lock);
-
-
 }
 
 BotParam * bot_param_new_from_server(lcm_t * lcm, int keep_updated)
@@ -924,7 +919,6 @@ BotParam * bot_param_new_from_file (const char *filename)
 
     return param;
 }
-
 
 BotParam * bot_param_new_from_string(const char * string, int length)
 {
@@ -1582,7 +1576,6 @@ bot_param_get_global(lcm_t * lcm, int keep_updated)
   return NULL;
 }
 
-
 int bot_param_override_local_param(BotParam * param, const char * key, const char * val)
 {
   g_mutex_lock(param->lock);
@@ -1601,7 +1594,6 @@ int bot_param_override_local_param(BotParam * param, const char * key, const cha
     fprintf(stderr, "BotParam Adding param key:%s with value %s\n", key, val);
   return bot_param_set_str(param, key, val);
 }
-
 
 int bot_param_override_local_params(BotParam * param, const char * override_params)
 {

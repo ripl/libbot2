@@ -40,9 +40,7 @@ int main(int argc, char * argv[])
   }
   unsigned int messageSize = 142230; //average stereo image size
 
-
   for (int r = 0; r < numRuns; r++) {
-
     uint8_t * message = (uint8_t *) calloc(messageSize, 1);
     for (unsigned int i = 0; i < messageSize; i++) {
       //    dataE[i] = (uint8_t) rand() % 255;
@@ -85,7 +83,6 @@ int main(int argc, char * argv[])
         //        printf("%d packets sent, and %d packets rec of %d possible\n", sentCount, recCount, ldpc_enc->getNumPackets());
         break;
       }
-
     }
 
     uint8_t * dataD = (uint8_t *) calloc(messageSize, 1);
@@ -121,5 +118,4 @@ int main(int argc, char * argv[])
   printf("succeeded %.2f%% of the time with fec_rate of %f and drop Pct of %f%% \n", (double) numSuccess
       / (double) numRuns * 100.0, fec_rate, dropfrac * 100);
   printf("dec_init time=%f, enc_init = %f\n", (t2 - t1) / numRuns, (t1 - t0) / numRuns);
-
 }

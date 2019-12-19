@@ -8,7 +8,6 @@
 static void _on_param_update(const lcm_recv_buf_t *rbuf, const char * channel, const bot_param_update_t * msg,
     void * user)
 {
-
   printf("%s", msg->params);
   exit(1);
 }
@@ -21,5 +20,4 @@ int main()
 
   while (1)
     lcm_handle(lcm);
-
 }

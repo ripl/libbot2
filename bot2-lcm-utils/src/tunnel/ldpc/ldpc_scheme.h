@@ -26,12 +26,10 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 #ifndef LDPC_FEC_SCHEME_H /* { */
 #define LDPC_FEC_SCHEME_H
 
 #include "ldpc_types.h"
-
 
 /**
  * Class that implements parts of the LDPC-Staircase/Triangle FEC Scheme,
@@ -50,7 +48,6 @@
  * (with InitScheme()).
  */
 class LDPCFecScheme : public LDPCFecSession {
-
 /****** PUBLIC MEMBERS *********************************************************/
 public:
 	/**
@@ -247,7 +244,6 @@ public:
 	 */
 	int getNbParitySymbols (void);
 
-
 /****** PRIVATE MEMBERS ********************************************************/
 protected:
 
@@ -267,7 +263,6 @@ protected:
 	/** Table where the index is transmission index, the value is the ESI. */
 	int* 		m_txseqToESI;
 };
-
 
 //------------------------------------------------------------------------------
 // Inlines for all classes follow

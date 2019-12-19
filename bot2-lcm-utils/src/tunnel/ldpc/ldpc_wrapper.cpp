@@ -111,7 +111,6 @@ ldpc_wrapper::~ldpc_wrapper()
 
 ldpc_enc_wrapper::ldpc_enc_wrapper(uint8_t * data_to_send, int objSize_, int packetSize, double fec_rate) //initializer for encoder
 {
-
   init(objSize_, packetSize, fec_rate, FLAG_CODER);
 
   /*
@@ -167,7 +166,6 @@ int ldpc_dec_wrapper::processPacket(uint8_t * pktBuf, int16_t ESI)
     return -1;
   }
   return 0;
-
 }
 
 int ldpc_wrapper::getObject(uint8_t * buf)
@@ -184,7 +182,6 @@ int ldpc_wrapper::getObject(uint8_t * buf)
     }
     return 0;
   }
-
 }
 
 int ldpc_enc_wrapper::encodeData(uint8_t * data_to_send)

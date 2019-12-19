@@ -119,7 +119,6 @@ void bot_trans_invert(BotTrans * btrans);
  */
 void bot_trans_invert_and_compose(const BotTrans * curr, const BotTrans * prev, BotTrans * diff);
 
-
 /**
  * bot_trans_rotate_vec:
  * @btrans: input rigid body transformation
@@ -181,9 +180,6 @@ void bot_trans_get_trans_vec(const BotTrans * btrans, double trans_vec[3]);
  * as (x,y,z) (r,p,y)
  */
 void bot_trans_print_trans(const BotTrans * tran);
-
-
-
 
 /**
  * @}

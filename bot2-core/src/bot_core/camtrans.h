@@ -93,7 +93,6 @@ extern "C" {
     BotDistortionObj*
     bot_null_distortion_create(void);
 
-
     /**
      * bot_plumb_bob_distortion_create:
      * @k1: TODO

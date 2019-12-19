@@ -65,7 +65,6 @@ int bot_glib_mainloop_detach_lcm(lcm_t *lcm);
 int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
         gboolean quit_on_lcm_fail);
 
-
 /**
  * bot_lcm_get_global:
  * @provider: The string specifying the LCM network provider. If %NULL, the
@@ -81,7 +80,6 @@ int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
  * Returns: pointer to lcm_t
  */
 lcm_t *bot_lcm_get_global(const char *provider);
-
 
 /**
  * bot_lcm_handle_or_timeout:

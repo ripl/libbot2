@@ -50,5 +50,4 @@ static inline int64_t _timestamp_now()
   return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
-
 #endif /* MISC_UTILS_H_ */

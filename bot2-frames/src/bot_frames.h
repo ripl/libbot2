@@ -100,7 +100,6 @@ void bot_frames_destroy(BotFrames * bot_frames);
  */
 BotFrames * bot_frames_get_global(lcm_t *lcm, BotParam *bot_param);
 
-
 /**
  * bot_frames_get_latest_timestamp
  * bot_frames: pointer to a BotFrames structure that is to be modified
@@ -163,7 +162,6 @@ typedef void(bot_frames_link_update_handler_t)(BotFrames *bot_frames,
 void bot_frames_add_update_subscriber(BotFrames *bot_frames,
     bot_frames_link_update_handler_t * callback_func, void * user);
 
-
 /**
  * bot_frames_get_trans
  *
@@ -197,7 +195,6 @@ int bot_frames_get_trans(BotFrames *bot_frames, const char *from_frame,
 int bot_frames_get_trans_with_utime(BotFrames *bot_frames, const char *from_frame,
         const char *to_frame, int64_t utime, BotTrans *result);
 
-
 /**
  * bot_frames_get_trans_latest_timestamp
  *
@@ -212,7 +209,6 @@ int bot_frames_get_trans_with_utime(BotFrames *bot_frames, const char *from_fram
  */
 int
 bot_frames_get_trans_latest_timestamp(BotFrames *bot_frames, const char *from_frame, const char *to_frame, int64_t *timestamp);
-
 
 /**
  * bot_frames_have_trans
@@ -251,7 +247,6 @@ int bot_frames_get_trans_mat_4x4(BotFrames *bot_frames, const char *from_frame,
 int bot_frames_get_trans_mat_4x4_with_utime(BotFrames *bot_frames,
         const char *from_frame, const char *to_frame, int64_t utime,
         double mat[16]);
-
 
 /**
  * Transforms a vector from one coordinate frame to another
@@ -318,8 +313,6 @@ char ** bot_frames_get_frame_names(BotFrames * bot_frames);
  *              coordinate frame
  */
 const char * bot_frames_get_root_name(BotFrames * bot_frames);
-
-
 
 #ifdef __cplusplus
 }

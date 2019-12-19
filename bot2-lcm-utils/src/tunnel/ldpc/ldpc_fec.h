@@ -48,7 +48,6 @@
 #include "ldpc_matrix_sparse.h"
 #include "ldpc_create_pchk.h"
 
-
 /****** CONSTANT AND CLASS DEFINITION *****************************************/
 
 /**
@@ -59,14 +58,12 @@ enum ldpc_error_status {
 	LDPC_ERROR = 1
 };
 
-
 /**
  * Is the session a coding or decoding session, or both.
  */
 #define FLAG_CODER	0x00000001
 #define FLAG_DECODER	0x00000002
 #define FLAG_BOTH (FLAG_DECODER|FLAG_CODER)
-
 
 /**
  * This is the LDPC FEC session class, where all the context information
@@ -93,7 +90,6 @@ public:
  */
 	LDPCFecSession ();
 	~LDPCFecSession ();
-
 
 /**
  * InitSession: Initializes the LDPC session.
@@ -122,7 +118,6 @@ public:
 					int	seed = 1,
 					SessionType	codecType = TypeTRIANGLE,
 					int	leftDegree = 3);
-
 
 /**
  * SetCallbackFunctions: Set the various callback functions for this session.
@@ -220,12 +215,10 @@ public:
 #endif /* EXTERNAL_MEMORY_MGMT_SUPPORT */
 		void*	context_4_callback = NULL);
 
-
 /**
  * EndSession: Ends the LDPC session, cleans up everything.
  */
 	void EndSession ();
-
 
 /**
  * IsInitialized: Check if the LDPC session has been initialized.
@@ -233,20 +226,17 @@ public:
  */
 	bool IsInitialized ();
 
-
 /**
  * Set the verbosity level.
  * @param verb		(IN) new verbosity level (0: no trace, 1: all traces)
  */
 	void SetVerbosity (int	verb);
 
-
 /**
  * Prints version number and copyright information about this codec.
  * @param out		(IN) FILE handle where the string should be written.
  */
 	void MoreAbout (FILE	*out);
-
 
 /**
  * Returns the maximum encoding block length (n parameter).
@@ -265,7 +255,6 @@ public:
  */
 	int	GetMaxN ();
 
-
 /**
  * Build a new parity symbol.
  * @param symbol_canvas	(IN)	Array of source and parity symbols.
@@ -283,7 +272,6 @@ public:
 					  int		paritySymbol_index,
 					  void*		paritySymbol);
 
-
 /**
  * Build a new parity symbol.
  * @param symbol_canvas	(IN)	Array of source and parity symbols.
@@ -298,7 +286,6 @@ public:
 						 int	symbol_index,
 						 int*	built_parity_symbols_indices[],
 						 int*	nb_built_parity_symbols);
-
 
 /**
  * Perform a new decoding step thanks to the newly received symbol.
@@ -324,7 +311,6 @@ public:
 					 int	new_symbol_seqno,
 					 bool	store_symbol);
 
-
 /**
  * Perform a new decoding step thanks to the newly received symbol.
  * Same as the other DecodingStepWithSymbol method, without the store_symbol argument
@@ -344,7 +330,6 @@ public:
 					 void*	new_symbol,
 					 int	new_symbol_seqno);
 
-
 /**
  * Returns true if the symbol has already been received
  * or decoded (i.e. if it is already known), false otherwise.
@@ -356,7 +341,6 @@ public:
 	bool SymbolAlreadyKnown (void*	symbol_canvas[],
 				 int	new_symbol_seqno);
 
-
 /**
  * Checks if all DATA symbols have been received/rebuilt.
  * @param symbol_canvas	(IN)	Array of received/rebuilt source symbols.
@@ -364,7 +348,6 @@ public:
  * 				or decoded.
  */
 	bool IsDecodingComplete (void*	symbol_canvas[] );
-
 
 #ifdef PERF_COUNT_XOR
 /**
@@ -375,13 +358,11 @@ public:
  */
 	unsigned int GetNbXor (void);
 
-
 /**
  * Resets the XOR counter.
  */
 	void ResetNbXor (void);
 #endif
-
 
 /****** PROTECTED MEMBERS ******************************************************/
 
@@ -450,7 +431,6 @@ protected:
 	void	AddToSymbol	(void	*to,
 				 void	*from);
 
-
 	bool	m_initialized;	// is TRUE if session has been initialized
 	int	m_sessionFlags;	// Mask containing session flags
 				// (FLAG_CODER, FLAG_DECODER, ...)
@@ -478,7 +458,6 @@ protected:
 	int	m_nbParitySymbols;	// number of parity symbol (=m_nbCheck)
 #	define	m_nbCheck m_nbParitySymbols
 #	define m_nbTotalSymbols (m_nbParitySymbols+m_nbSourceSymbols)
-
 
 	mod2sparse*	m_pchkMatrix;	// Parity Check matrix in sparse mode
 					// format. This matrix is also used as
@@ -543,7 +522,6 @@ protected:
 #endif /* EXTERNAL_MEMORY_MGMT_SUPPORT */
 	void*		m_context_4_callback; // used by callback functions
 };
-
 
 //------------------------------------------------------------------------------
 // Inlines for all classes follow

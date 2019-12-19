@@ -35,7 +35,6 @@
 #define PARAM_SAVE  "Save Calib"
 
 typedef struct _RendererFrames {
-
   BotRenderer renderer;
   BotEventHandler ehandler;
   BotViewer *viewer;
@@ -49,7 +48,6 @@ typedef struct _RendererFrames {
   int * frameNums;
 
   int updating;
-
 } RendererFrames;
 
 static void destroy_renderer_frames(BotRenderer *super)
@@ -63,7 +61,6 @@ static void draw(BotViewer *viewer, BotRenderer *super)
 {
   RendererFrames *self = (RendererFrames*) super->user;
   //nothing to draw
-
 }
 
 static void frames_update_handler(BotFrames *bot_frames, const char *frame, const char * relative_to, int64_t utime,
@@ -196,7 +193,6 @@ static void on_param_widget_changed(BotGtkParamWidget *pw, const char *name, voi
 
 void bot_frames_add_frame_modifier_to_viewer(BotViewer *viewer, int render_priority, BotFrames * frames)
 {
-
   RendererFrames *self = (RendererFrames*) calloc(1, sizeof(RendererFrames));
 
   BotRenderer *renderer = &self->renderer;

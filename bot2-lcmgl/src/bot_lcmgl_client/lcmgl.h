@@ -91,12 +91,9 @@ void bot_lcmgl_pop_attrib(bot_lcmgl_t *lcmgl);
 
 void bot_lcmgl_depth_func(bot_lcmgl_t *lcmgl, unsigned int func);
 
-
-
 //vector versions of some of the above
 static inline void bot_lcmgl_vertex2fv(bot_lcmgl_t * lcmgl, const float v[2]){bot_lcmgl_vertex2f(lcmgl,v[0],v[1]);}
 static inline void bot_lcmgl_vertex2dv(bot_lcmgl_t * lcmgl, const double v[2]){bot_lcmgl_vertex2d(lcmgl,v[0],v[1]);}
-
 
 static inline void bot_lcmgl_vertex3fv(bot_lcmgl_t * lcmgl, const float v[3]){bot_lcmgl_vertex3f(lcmgl,v[0],v[1],v[2]);}
 static inline void bot_lcmgl_vertex3dv(bot_lcmgl_t * lcmgl, const double v[3]){bot_lcmgl_vertex3d(lcmgl,v[0],v[1],v[2]);}
@@ -154,7 +151,6 @@ static inline void bot_lcmgl_color4fv(bot_lcmgl_t * lcmgl, const double v[4]){bo
 #define lcmglMateriald lcmglMaterialf
 #define lcmglMaterialdv lcmglMaterialfv
 
-
 //Defines of a few basic opengl constants
 /* Primitives */
 #define LCMGL_POINTS                               0x0000
@@ -167,10 +163,6 @@ static inline void bot_lcmgl_color4fv(bot_lcmgl_t * lcmgl, const double v[4]){bo
 #define LCMGL_QUADS                                0x0007
 #define LCMGL_QUAD_STRIP                           0x0008
 #define LCMGL_POLYGON                              0x0009
-
-
-
-
 
 /* ================ drawing routines not part of OpenGL ===============
  *
@@ -206,7 +198,6 @@ void bot_lcmgl_circle(bot_lcmgl_t *lcmgl, double xyz[3], double radius);
 void bot_lcmgl_sphere(bot_lcmgl_t *lcmgl, double xyz[3], double radius,
         int slices, int stacks);
 
-
 void bot_lcmgl_disk(bot_lcmgl_t *lcmgl,
         double xyz[3], double r_in, double r_out);
 /**
@@ -235,7 +226,6 @@ void bot_lcmgl_draw_axes(bot_lcmgl_t * lcmgl);
  */
 void bot_lcmgl_draw_ortho_circles_3d(bot_lcmgl_t * lcmgl);
 
-
 /**
  * bot_lcmgl_draw_arrow_3d():
  *
@@ -244,12 +234,10 @@ void bot_lcmgl_draw_ortho_circles_3d(bot_lcmgl_t * lcmgl);
 void bot_lcmgl_draw_arrow_3d (bot_lcmgl_t * lcmgl, double length, double head_width, double head_length,
         double body_width);
 
-
 #define lcmglBox(xyz, dim) bot_lcmgl_box(lcmgl, xyz, dim)
 #define lcmglCircle(xyz, radius) bot_lcmgl_circle(lcmgl, xyz, radius)
 #define lcmglDisk(xyz, r_in, r_out) bot_lcmgl_disk(lcmgl, xyz, r_in, r_out)
 #define lcmglCylinder(xyz, base_radius, top_radius, height, slices, stacks) bot_lcmgl_cylinder(lcmgl, xyz, base_radius, top_radius, height, slices, stacks)
-
 
 /**
  * bot_lcmgl_scale_to_viewer_aspect_ratio:
@@ -268,7 +256,6 @@ void bot_lcmgl_draw_arrow_3d (bot_lcmgl_t * lcmgl, double length, double head_wi
  */
 void bot_lcmgl_scale_to_viewer_ar(bot_lcmgl_t *lcmgl);
 
-
 // texture API
 typedef enum {
     BOT_LCMGL_LUMINANCE = 0x1909, //values pulled from gl.h
@@ -285,7 +272,6 @@ typedef enum {
     BOT_LCMGL_INT = 0x1404,
     BOT_LCMGL_FLOAT = 0x1406
 } bot_lcmgl_texture_type_t;
-
 
 typedef enum {
     BOT_LCMGL_COMPRESS_NONE = 0,

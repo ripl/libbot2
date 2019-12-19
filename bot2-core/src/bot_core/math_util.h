@@ -21,7 +21,6 @@
 extern "C" {
 #endif
 
-
 /** valid only for v > 0 **/
 static inline double bot_mod2pi_positive(double vin)
 {
@@ -78,7 +77,6 @@ static inline void bot_sincos(double theta, double *s, double *c)
 
 #define bot_min(a,b)((a < b) ? a : b)
 #define bot_max(a,b)((a > b) ? a : b)
-
 
 /**
  * @}

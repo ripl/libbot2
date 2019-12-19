@@ -140,7 +140,6 @@ int _bot_gl_check_errors(const char *file, int line);
  */
 void bot_gl_print_current_matrix(void);
 
-
 /**
  * bot_glutBitmapString
  *
@@ -165,7 +164,6 @@ bot_gl_draw_axes();
  *
  */
 void bot_gl_multTrans(BotTrans * trans);
-
 
 #ifdef __cplusplus
 }

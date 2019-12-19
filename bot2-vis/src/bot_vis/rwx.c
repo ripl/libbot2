@@ -148,7 +148,6 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
     // clump color
     tokenize_next( tok );
     while( 0 != strcmp( tok->token, "#texbegin" ) ) {
-
         if( ! strcmp( tok->token, "Color" ) ) {
             tokenize_next( tok );
             parse_double( tok, &clump->color[0] );
@@ -325,7 +324,6 @@ bot_rwx_model_get_extrema (BotRwxModel * model, double minv[3], double maxv[3])
 static inline void
 _matrix_vector_multiply_4x4_3d2 (const double m[16], const double v[3],
                                double result[3]) {
-
     result[0] = m[0]*v[0] + m[1]*v[1] + m[2]*v[2] + m[3];
     result[1] = m[4]*v[0] + m[5]*v[1] + m[6]*v[2] + m[7];
     result[2] = m[8]*v[0] + m[9]*v[1] + m[10]*v[2] + m[11];
@@ -352,7 +350,6 @@ bot_rwx_model_apply_transform (BotRwxModel * model, double m[16])
         }
     }
 }
-
 
 void
 bot_rwx_model_gl_draw( BotRwxModel *model )

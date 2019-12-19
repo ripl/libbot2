@@ -206,7 +206,6 @@ bot_angle_axis_to_roll_pitch_yaw (double theta, const double axis[3],
     bot_quat_to_roll_pitch_yaw (q, rpy);
 }
 
-
 int
 bot_quat_to_matrix(const double quat[4], double rot[9])
 {
@@ -440,12 +439,10 @@ bot_quat_interpolate(const double q0[4], const double q1[4], double u,
     if(cos_omega > 1)
         cos_omega = 1;
 
-
     double omega = acos(cos_omega);
     double sin_omega = sin(omega);
     double a = sin((1-u) * omega)/ sin_omega;
     double b = sin(u * omega) / sin_omega;
-
 
     if(fabs(sin_omega) < 1e-6) {
         // direct linear interpolation for numerically unstable regions

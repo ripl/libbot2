@@ -36,7 +36,6 @@
 #define MAX_HIST   10000
 
 typedef struct _RendererFrames {
-
   BotRenderer renderer;
   BotEventHandler ehandler;
   BotViewer *viewer;
@@ -56,7 +55,6 @@ typedef struct _RendererFrames {
   double smooth_xyzt[4];
   double yaw_offset;
   double yaw_prev;
-
 } RendererFrames;
 
 enum {
@@ -144,7 +142,6 @@ static void draw_axis(BotTrans * axis_to_local, float size, float lineThickness,
 
   glDisable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
-
 }
 
 static void draw_path(RendererFrames *self, BotTrans *last_coord)
@@ -219,12 +216,10 @@ static void draw_path(RendererFrames *self, BotTrans *last_coord)
       glEnd();
       break;
     }
-
   }
 
   glDisable(GL_BLEND);
   glDisable(GL_DEPTH_TEST);
-
 }
 
 static void update_path_hist(RendererFrames *self, BotTrans *frame_to_root)
@@ -249,7 +244,6 @@ static void update_path_hist(RendererFrames *self, BotTrans *frame_to_root)
     bot_trans_copy(p, frame_to_root);
     bot_ptr_circular_add(self->path, p);
   }
-
 }
 
 static void update_view_follower(RendererFrames *self, BotTrans *frame_to_root)
@@ -335,7 +329,6 @@ static void draw(BotViewer *viewer, BotRenderer *super)
   if (bot_gtk_param_widget_get_bool(self->pw, PARAM_FOLLOW_POS)) {
     update_view_follower(self, &frame_to_root);
   }
-
 }
 
 static void on_clear_button(GtkWidget *button, RendererFrames *self)
@@ -385,7 +378,6 @@ static void frames_update_handler(BotFrames *bot_frames, const char *frame, cons
 }
 
 void bot_frames_add_named_renderer_to_viewer(BotViewer *viewer, int render_priority, BotFrames * frames, const char * renderer_name){
-
   RendererFrames *self = (RendererFrames*) calloc(1, sizeof(RendererFrames));
 
   BotRenderer *renderer = &self->renderer;

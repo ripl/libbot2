@@ -13,7 +13,6 @@
 #include "glm.h"
 #include "glmint.h"
 
-
 /*
  * Based on example code found in the libjpeg archive
  *
@@ -33,7 +32,6 @@ extern "C" {
 }
 #endif
 
-
 #define ERR_NO_ERROR      0
 #define ERR_OPEN          1
 #define ERR_MEM           2
@@ -47,7 +45,6 @@ struct my_error_mgr {
     struct jpeg_error_mgr pub;    /* "public" fields */
     jmp_buf setjmp_buffer;        /* for return to caller */
 };
-
 
 typedef struct my_error_mgr * my_error_ptr;
 
@@ -74,7 +71,6 @@ copyScanline(unsigned char *currPtr, unsigned char *from, int cnt)
     currPtr -= cnt;
     return currPtr;
 }
-
 
 GLubyte*
 glmReadJPG(const char* filename, GLboolean alpha, int* width_ret,

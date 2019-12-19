@@ -42,15 +42,12 @@
 
 #define T(x) (model->triangles[(x)])
 
-
 /* _GLMnode: general purpose node */
 typedef struct _GLMnode {
     GLuint         index;
     GLboolean      averaged;
     struct _GLMnode* next;
 } GLMnode;
-
-
 
 /* glmMax: returns the maximum of two floats */
 static GLfloat
@@ -178,8 +175,6 @@ glmWeldVectors(GLfloat* vectors, GLuint* numvectors, GLfloat epsilon)
     return copies;
 }
 
-
-
 /* glmFindGroup: Find a group in the model */
 static GLMgroup*
 glmFindGroup(GLMmodel* model, char* name)
@@ -242,10 +237,6 @@ glmFindMaterial(GLMmodel* model, char* name)
   found:
     return i;
 }
-
-
-
-
 
 /* glmFindTexture: Find a texture in the model */
 static GLuint
@@ -549,7 +540,6 @@ glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
         fprintf(file, "\n");
     }
 }
-
 
 /* glmFirstPass: first pass at a Wavefront OBJ file that gets all the
  * statistics of the model (such as #vertices, #normals, etc)
@@ -940,9 +930,7 @@ glmSecondPass(GLMmodel* model, FILE* file)
 #endif
 }
 
-
 /* public functions */
-
 
 /* glmUnitize: "unitize" a model by translating it to the origin and
  * scaling it to fit in a unit cube around the origin.   Returns the
@@ -1159,7 +1147,6 @@ glmFacetNormals(GLMmodel* model)
 	glmCross(u, v, &model->facetnorms[3 * (i+1)]);
 	glmNormalize(&model->facetnorms[3 * (i+1)]);
     }
-
 }
 
 /* glmVertexNormals: Generates smooth vertex normals for a model.
@@ -1378,7 +1365,6 @@ glmVertexNormals(GLMmodel* model, GLfloat angle, GLboolean keep_existing)
     free(normals);
     DBG_(__glmWarning( "glmVertexNormals(): end"));
 }
-
 
 /* glmLinearTexture: Generates texture coordinates according to a
  * linear projection of the texture map.  It generates these by
@@ -1690,7 +1676,6 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
 		     "outputting only materials.");
         mode &= ~GLM_COLOR;
     }
-
 
     /* open the file */
     file = fopen(filename, "w");
@@ -2122,7 +2107,6 @@ GLvoid glmFlipTexture(unsigned char* texture, int width, int height)
 }
 //AVL END Flip Texture
 
-
 //AVL Flip Model Textures
 GLvoid glmFlipModelTextures(GLMmodel* model)
 {
@@ -2159,7 +2143,6 @@ GLvoid glmFlipModelTextures(GLMmodel* model)
 
         group = group->next;
     }
-
 }
 //AVL END Flip Model Textures
 #endif

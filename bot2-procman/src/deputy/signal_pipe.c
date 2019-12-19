@@ -130,7 +130,6 @@ signal_pipe_attach_glib (signal_pipe_glib_handler_t func, gpointer user_data)
     return 0;
 }
 
-
 static void
 spgqok_handler (int signal, void *user)
 {

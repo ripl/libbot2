@@ -33,8 +33,6 @@
 */
 #include "glmint.h"
 
-
-
 /* WARNING: GLOBAL VARIABLES */
 GLenum _glmTextureTarget = GL_TEXTURE_2D;
 static GLint gl_max_texture_size;
@@ -43,7 +41,6 @@ static GLboolean gl_sgis_generate_mipmap = GL_FALSE;
 
 static GLboolean glmIsExtensionSupported(const char *extension)
 {
-
     const GLubyte *extensions = NULL;
     const GLubyte *start;
     GLubyte *where, *terminator;
@@ -199,9 +196,6 @@ glmReadPPM(const char* filename, GLboolean alpha, int* width, int* height, int *
     return image;
 }
 
-
-
-
 /* don't try alpha=GL_FALSE: gluScaleImage implementations seem to be buggy */
 GLuint
 glmLoadTexture(const char *filename, GLboolean alpha, GLboolean repeat, GLboolean filtering,
@@ -226,7 +220,6 @@ glmLoadTexture(const char *filename, GLboolean alpha, GLboolean repeat, GLboolea
         DBG_(__glmWarning("glmLoadTexture(): got PPM for %s",filename));
         goto DONE;
     }
-
 
     // Assuming that we have libjpeg
     data = glmReadJPG(filename, alpha, &width, &height, &type);
@@ -390,7 +383,6 @@ glmLoadTexture(const char *filename, GLboolean alpha, GLboolean repeat, GLboolea
         glTexImage2D(_glmTextureTarget, 0, type, xSize2, ySize2, 0, type,
                      GL_UNSIGNED_BYTE, data);
     }
-
 
     /* Clean up and return the texture ID */
     free(data);

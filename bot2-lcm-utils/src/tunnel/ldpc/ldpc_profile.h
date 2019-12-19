@@ -27,7 +27,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 /****** GENERAL SETUP OPTIONS; EDIT AS APPROPRIATE ****************************/
 
 /**
@@ -37,7 +36,6 @@
  */
 #define DECODER_ITERATIVE
 
-
 /**
  * Enable the partial sum optimization during decoding.
  * This optimization is effective but adds some more complexity
@@ -45,12 +43,10 @@
  */
 #define PART_SUM_OPTIMIZATION
 
-
 /**
  * Enable/disable external memory management support.
  */
 #define EXTERNAL_MEMORY_MGMT_SUPPORT
-
 
 #ifdef DECODER_ITERATIVE
 /**
@@ -69,7 +65,6 @@
  */
 //#define SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
 #endif
-
 
 /**
  * This define reduces significantly the memory consumption of sparse matrices
@@ -91,12 +86,10 @@
 //#define SPARSE_MATRIX_OPT_SMALL_INDEX
 #endif
 
-
 /**
  * Enable the count of XOR operations, for performance monitoring.
  * The counter will not distinguish between 64-bit XORs (with 64-bit
  * architectures), 32-bit XORs, and 8-bit XORs.
  */
 #define PERF_COUNT_XOR
-
 

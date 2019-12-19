@@ -15,7 +15,6 @@
 #include <GL/glx.h>
 #endif
 
-
 #include <glib-object.h>
 
 #include "fbgl_drawing_area.h"
