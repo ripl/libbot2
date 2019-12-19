@@ -38,12 +38,15 @@ void bot_g_ptr_array_free_with_func (GPtrArray *a, GDestroyNotify func);
 // creates a newly allocated copy of a GPtrArray
 GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 /**
  * Returns: 1 if time1 is after time2
  *          0 if time1 and time2 are equal
  *         -1 if time1 is before time2
  */
 int bot_g_time_val_compare (const GTimeVal *time1, const GTimeVal *time2);
+#pragma GCC diagnostic pop
 
 GList * bot_g_hash_table_get_keys (GHashTable *hash_table);
 

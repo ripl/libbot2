@@ -42,6 +42,8 @@ GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a)
     return result;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 int
 bot_g_time_val_compare (const GTimeVal *time1, const GTimeVal *time2)
 {
@@ -51,6 +53,7 @@ bot_g_time_val_compare (const GTimeVal *time1, const GTimeVal *time2)
     if (time1->tv_usec < time2->tv_usec) return -1;
     return 0;
 }
+#pragma GCC pop
 
 static void
 get_all_keys_helper (gpointer key, gpointer value, gpointer user_data)

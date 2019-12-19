@@ -28,12 +28,6 @@ static inline int64_t _timestamp_now()
   return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
-static inline void _timestamp_to_GTimeVal(int64_t v, GTimeVal *ts)
-{
-  ts->tv_sec = v / 1000000;
-  ts->tv_usec = v % 1000000;
-}
-
 static int _fileutils_write_fully(int fd, const void *b, int len)
 {
   int cnt = 0;
@@ -667,9 +661,7 @@ gpointer LcmTunnel::sendThreadFunc(gpointer user_data)
     int64_t now = _timestamp_now();
     if (self->tunnel_params->max_delay_ms > 0 && self->bytesInQueue < NUM_BYTES_TO_SEND_IMMEDIATELY && nextFlushTime
         > now && !self->flushImmediately) {
-      GTimeVal next_timeout;
-      _timestamp_to_GTimeVal(nextFlushTime, &next_timeout);
-      g_cond_timed_wait(self->sendQueueCond, self->sendQueueLock, &next_timeout);
+      g_cond_wait_until(self->sendQueueCond, self->sendQueueLock, nextFlushTime);
 
       continue;
     }
