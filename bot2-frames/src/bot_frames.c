@@ -153,7 +153,8 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
 
   self->lcm = lcm;
   self->bot_param = bot_param;
-  self->mutex = g_mutex_new();
+  self->mutex = g_new(GMutex, 1);
+  g_mutex_init(self->mutex);
   self->num_frames =0;
   g_mutex_lock(self->mutex);
   // setup the coordinate frame graph
@@ -333,7 +334,8 @@ void bot_frames_destroy(BotFrames * bot_frames)
     g_list_free(bot_frames->update_callbacks);
   }
   g_mutex_unlock(bot_frames->mutex);
-  g_mutex_free(bot_frames->mutex);
+  g_mutex_clear(bot_frames->mutex);
+  g_free(bot_frames->mutex);
   g_slice_free(BotFrames, bot_frames);
 }
 

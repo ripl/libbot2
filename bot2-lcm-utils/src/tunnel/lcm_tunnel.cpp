@@ -57,9 +57,11 @@ LcmTunnel::LcmTunnel(bool verbose, const char *lcm_channel) :
   init_regex(lcm_channel);
 
   //sendThread stuff
-  sendQueueLock = g_mutex_new();
-  sendQueueCond = g_cond_new();
-  sendThread = g_thread_create(sendThreadFunc, (void *) this, 1, NULL);
+  sendQueueLock = g_new(GMutex, 1);
+  g_mutex_init(sendQueueLock);
+  sendQueueCond = g_new(GCond, 1);
+  g_cond_init(sendQueueCond);
+  sendThread = g_thread_try_new(NULL, sendThreadFunc, (void *) this, NULL);
 
 }
 
@@ -107,8 +109,10 @@ LcmTunnel::~LcmTunnel()
   }
   g_mutex_unlock(sendQueueLock);
 
-  g_mutex_free(sendQueueLock);
-  g_cond_free(sendQueueCond);
+  g_mutex_clear(sendQueueLock);
+  g_free(sendQueueLock);
+  g_cond_clear(sendQueueCond);
+  g_free(sendQueueCond);
 
 
   if (udp_fd >= 0) {

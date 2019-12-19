@@ -685,7 +685,8 @@ static BotParam * _bot_param_new(void)
   BotParam * param;
   param = calloc(1, sizeof(BotParam));
   param->root = root;
-  param->lock = g_mutex_new();
+  param->lock = g_new(GMutex, 1);
+  g_mutex_init(param->lock);
   param->server_id = -1;
   param->sequence_number = 0;
 
@@ -703,7 +704,8 @@ static void _update_handler_t_destroy(void * data, void * user)
 void bot_param_destroy(BotParam * param)
 {
   free_element(param->root);
-  g_mutex_free(param->lock);
+  g_mutex_clear(param->lock);
+  g_free(param->lock);
 
   if (param->update_callbacks != NULL) {
     g_list_foreach(param->update_callbacks, _update_handler_t_destroy, NULL);
