@@ -115,7 +115,7 @@ static void on_param_widget_changed(BotGtkParamWidget *pw, const char *name, voi
           self->frameNames[activeSensorNum]), bot_timestamp_now(), self);
     }
     else {
-      bot_viewer_set_status_bar_message(self->viewer, "");
+      bot_viewer_set_status_bar_message(self->viewer, "%s", "");
       bot_gtk_param_widget_set_enabled(self->pw, PARAM_X, 0);
       bot_gtk_param_widget_set_enabled(self->pw, PARAM_Y, 0);
       bot_gtk_param_widget_set_enabled(self->pw, PARAM_Z, 0);

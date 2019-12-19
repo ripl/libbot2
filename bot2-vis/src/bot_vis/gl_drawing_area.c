@@ -191,7 +191,10 @@ swap_thread (void * arg)
             fprintf (stderr, "Error: glXWaitVideoSyncSGI failed %d\n", v);
             break;
         }
-        write (priv->pipe[1], "+", 1);
+        if (-1 == write (priv->pipe[1], "+", 1)) {
+            perror("swap_thread");
+            break;
+        }
         usleep (10);
         odd_even = !odd_even;
     }
@@ -339,7 +342,11 @@ bot_gtk_gl_drawing_area_realize (GtkWidget * widget)
         return;
     }
 
-    pipe (priv->pipe);
+    if (!pipe (priv->pipe)) {
+        self->vblank_sync = 0;
+        perror("bot_gtk_gl_drawing_area_realize");
+        return;
+    }
     fcntl (priv->pipe[0], F_SETFL, O_NONBLOCK);
 
     if (pthread_create (&priv->thread, NULL, swap_thread, priv) != 0) {

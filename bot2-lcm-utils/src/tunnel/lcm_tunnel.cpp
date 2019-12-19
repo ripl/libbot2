@@ -287,7 +287,7 @@ int LcmTunnel::connectToServer(lcm_t * lcm_, introspect_t *introspect_, GMainLoo
   return 1;
 }
 
-int LcmTunnel::publishLcmMessagesInBuf(int numBytes)
+void LcmTunnel::publishLcmMessagesInBuf(int numBytes)
 {
   uint32_t msgOffset = 0;
   while (msgOffset < numBytes) {
@@ -337,13 +337,13 @@ int LcmTunnel::on_udp_data(GIOChannel * source, GIOCondition cond, void *user_da
   //  printf("received: %d, %d / %d\n", recv_udp_msg->seqno, recv_udp_msg->fragment, recv_udp_msg->nfrags);
 
 
-  if (self->verbose, recv_udp_msg->seqno < self->cur_seqno) {
+  if (self->verbose && recv_udp_msg->seqno < self->cur_seqno) {
     printf("Got Out of order packet!\n");
   }
 
   // start of a new message?
   if (recv_udp_msg->seqno > self->cur_seqno || recv_udp_msg->seqno < (int32_t) self->cur_seqno - SEQNO_WRAP_GAP) { //handle wrap-around with second part
-    if (!self->message_complete && self->cur_seqno > 0 || recv_udp_msg->seqno > (self->cur_seqno + 1)) {
+    if ((!self->message_complete && self->cur_seqno > 0) || recv_udp_msg->seqno > (self->cur_seqno + 1)) {
       printf("packets %d to %d dropped! with %d of %d fragments received, ", self->cur_seqno, recv_udp_msg->seqno - 1,
           self->numFragsRec, self->nfrags);
       if (self->tunnel_params->fec > 1 && self->nfrags >= MIN_NUM_FRAGMENTS_FOR_FEC) {
@@ -691,6 +691,8 @@ gpointer LcmTunnel::sendThreadFunc(gpointer user_data)
   g_mutex_unlock(self->sendQueueLock);
 
   g_thread_exit(NULL);
+
+  return NULL;
 }
 
 void LcmTunnel::send_to_remote(const void *data, uint32_t len, const char *lcm_channel)

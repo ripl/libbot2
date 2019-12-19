@@ -89,7 +89,7 @@ public:
   bool send_lcm_messages(std::deque<TunnelLcmMessage *> &msgQueue,uint32_t bytesInQueue);
   static int on_tcp_data(GIOChannel * source, GIOCondition cond, void *user_data);
   static int on_udp_data(GIOChannel * source, GIOCondition cond, void *user_data);
-  int publishLcmMessagesInBuf(int numBytes);
+  void publishLcmMessagesInBuf(int numBytes);
 
   bool verbose;
 

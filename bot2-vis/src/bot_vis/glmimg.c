@@ -153,16 +153,25 @@ glmReadPPM(const char* filename, GLboolean alpha, int* width, int* height, int *
 
     /* grab first two chars of the file and make sure that it has the
        correct magic cookie for a raw PPM file. */
-    fgets(head, 70, fp);
+    if (!fgets(head, 70, fp)) {
+        perror(filename);
+        fclose(fp);
+        return NULL;
+    }
     if (strncmp(head, "P6", 2)) {
         DBG_(__glmWarning("glmReadPPM() failed: %s: Not a raw PPM file", filename));
+        fclose(fp);
         return NULL;
     }
 
     /* grab the three elements in the header (width, height, maxval). */
     i = 0;
     while(i < 3) {
-        fgets(head, 70, fp);
+        if (!fgets(head, 70, fp)) {
+          perror(filename);
+          fclose(fp);
+          return NULL;
+        }
         if (head[0] == '#')     /* skip comments. */
             continue;
         if (i == 0)
@@ -173,9 +182,15 @@ glmReadPPM(const char* filename, GLboolean alpha, int* width, int* height, int *
             i += sscanf(head, "%d", &d);
     }
 
+    size_t count = w*h*3;
     /* grab all the image data in one fell swoop. */
-    image = (unsigned char*)malloc(sizeof(unsigned char)*w*h*3);
-    fread(image, sizeof(unsigned char), w*h*3, fp);
+    image = (unsigned char*)malloc(sizeof(unsigned char)*count);
+    size_t nread = fread(image, sizeof(unsigned char), count, fp);
+    if (nread != count && ferror(fp)) {
+        perror(filename);
+        fclose(fp);
+        return NULL;
+    }
     fclose(fp);
 
     *type = GL_RGB;

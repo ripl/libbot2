@@ -31,7 +31,7 @@ static int32_t hz;
 static uint32_t iz, kn[128], ke[256];
 static float wn[128],fn[128], we[256],fe[256];
 
-#define RNOR (hz=SHR3, iz=hz&127, (fabs(hz)<kn[iz])? hz*wn[iz] : nfix())
+#define RNOR (hz=SHR3, iz=hz&127, (abs(hz)<kn[iz])? hz*wn[iz] : nfix())
 #define REXP (jz=SHR3, iz=jz&255, (    jz <ke[iz])? jz*we[iz] : efix())
 
 /* nfix() generates variates from the residue when rejection in RNOR occurs. */
@@ -53,7 +53,7 @@ static float x, y;
      /* initiate, try to exit for(;;) for loop*/
       hz=SHR3;
       iz=hz&127;
-      if(fabs(hz)<kn[iz]) return (hz*wn[iz]);
+      if(abs(hz)<kn[iz]) return (hz*wn[iz]);
   }
 
 }

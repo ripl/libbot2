@@ -42,7 +42,8 @@ read_header (FILE *fp, const char *magic, int *width, int *height,
         int *maxval)
 {
     char m[3] = { 0 };
-    fread (m, sizeof(m)-1, 1, fp);
+    size_t nread = fread (m, sizeof(m)-1, 1, fp);
+    if (1 != nread && ferror(fp)) return -1;
     if (strcmp(m, magic)) {
         fprintf(stderr, "bad magic [%s]\n", m); return -1;
     }
@@ -73,7 +74,10 @@ int bot_ppm_read (FILE *fp, uint8_t **pixels,
     rs = w * 3;
     rs += rs % 4; // align each row on a 32-bit boundary
 
-    posix_memalign((void**)pixels, 16, h*rs);
+    if (!posix_memalign((void**)pixels, 16, h*rs)) {
+        fprintf(stderr, "aligned memory allocation failed\n");
+        return -1;
+    }
     for (i=0; i<h; i++) {
         nread = fread (*pixels + i*rs, w * 3, 1, fp);
         if (1 != nread) {
@@ -156,7 +160,10 @@ int bot_pgm_read (FILE *fp, uint8_t **pixels,
     rs = w;
     rs += rs % 4; // align each row on a 32-bit boundary
 
-    posix_memalign((void**)pixels, 16, h*rs);
+    if (!posix_memalign((void**)pixels, 16, h*rs)) {
+        fprintf(stderr, "aligned memory allocation failed\n");
+        return -1;
+    }
     for (i=0; i<h; i++) {
         nread = fread (*pixels + i*rs, 1, w, fp);
         if (w != nread) {

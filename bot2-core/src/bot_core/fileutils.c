@@ -192,7 +192,9 @@ void bot_fileutils_read_flush(int fd)
       if (avail>1024)
         avail=1024;
 
-      read(fd, buf, avail);
+      if (-1 == read(fd, buf, avail)) {
+        perror("bot_fileutils_read_flush");
+      }
     } while (avail>0);
 }
 
