@@ -30,7 +30,7 @@ lcm_message_ready (GIOChannel *source, GIOCondition cond, void *user_data)
 }
 
 static GHashTable *lcm_glib_sources = NULL;
-static GStaticMutex lcm_glib_sources_mutex = G_STATIC_MUTEX_INIT;
+static GMutex lcm_glib_sources_mutex;
 static lcm_t *global_lcm = NULL;
 
 int
@@ -43,7 +43,7 @@ int
 bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm,
         gboolean quit_on_lcm_fail)
 {
-    g_static_mutex_lock (&lcm_glib_sources_mutex);
+    g_mutex_lock (&lcm_glib_sources_mutex);
 
     if (!lcm_glib_sources) {
         lcm_glib_sources = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -51,7 +51,7 @@ bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm,
 
     if (g_hash_table_lookup (lcm_glib_sources, lcm)) {
         dbg ("lcm %p already attached to mainloop\n", lcm);
-        g_static_mutex_unlock (&lcm_glib_sources_mutex);
+        g_mutex_unlock (&lcm_glib_sources_mutex);
         return -1;
     }
 
@@ -68,17 +68,17 @@ bot_glib_mainloop_attach_lcm_full (GMainLoop * mainloop, lcm_t *lcm,
     dbg ("inserted lcm %p into glib mainloop\n", lcm);
     g_hash_table_insert (lcm_glib_sources, lcm, galcm);
 
-    g_static_mutex_unlock (&lcm_glib_sources_mutex);
+    g_mutex_unlock (&lcm_glib_sources_mutex);
     return 0;
 }
 
 int
 bot_glib_mainloop_detach_lcm (lcm_t *lcm)
 {
-    g_static_mutex_lock (&lcm_glib_sources_mutex);
+    g_mutex_lock (&lcm_glib_sources_mutex);
     if (!lcm_glib_sources) {
         dbg ("no lcm glib sources\n");
-        g_static_mutex_unlock (&lcm_glib_sources_mutex);
+        g_mutex_unlock (&lcm_glib_sources_mutex);
         return -1;
     }
 
@@ -87,7 +87,7 @@ bot_glib_mainloop_detach_lcm (lcm_t *lcm)
 
     if (!galcm) {
         dbg ("couldn't find matching galcm\n");
-        g_static_mutex_unlock (&lcm_glib_sources_mutex);
+        g_mutex_unlock (&lcm_glib_sources_mutex);
         return -1;
     }
 
@@ -103,17 +103,17 @@ bot_glib_mainloop_detach_lcm (lcm_t *lcm)
         lcm_glib_sources = NULL;
     }
 
-    g_static_mutex_unlock (&lcm_glib_sources_mutex);
+    g_mutex_unlock (&lcm_glib_sources_mutex);
     return 0;
 }
 
 lcm_t *
 bot_lcm_get_global(const char *provider)
 {
-    g_static_mutex_lock (&lcm_glib_sources_mutex);
+    g_mutex_lock (&lcm_glib_sources_mutex);
     if(!global_lcm)
         global_lcm = lcm_create(provider);
-    g_static_mutex_unlock (&lcm_glib_sources_mutex);
+    g_mutex_unlock (&lcm_glib_sources_mutex);
     return global_lcm;
 }
 

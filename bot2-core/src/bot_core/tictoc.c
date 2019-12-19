@@ -127,8 +127,7 @@ _tictoc_t_alphCompare(gconstpointer a, gconstpointer b)
         return strcmp(t1->description, t2->description);
 }
 
-GStaticMutex tictoc_mutex =
-G_STATIC_MUTEX_INIT;
+GMutex tictoc_mutex;
 
 static int _tictoc_enabled = 1;
 static int _tictoc_initialized = 0;
@@ -161,12 +160,12 @@ bot_tictoc_full(const char *description, double ema_alpha, int64_t * ema)
 
     int64_t ret = 0;
 
-    g_static_mutex_lock(&tictoc_mutex); //aquire the lock
+    g_mutex_lock(&tictoc_mutex); //aquire the lock
     if (!_tictoc_initialized) {
         _tictoc_initialized = 1;
         _initializeTictoc();
         if (!_tictoc_enabled) {
-            g_static_mutex_unlock(&tictoc_mutex); //release
+            g_mutex_unlock(&tictoc_mutex); //release
             return 0;
         }
 
@@ -208,7 +207,7 @@ bot_tictoc_full(const char *description, double ema_alpha, int64_t * ema)
         ret = dt;
     }
 
-    g_static_mutex_unlock(&tictoc_mutex); //release
+    g_mutex_unlock(&tictoc_mutex); //release
     return ret;
 }
 
@@ -226,9 +225,9 @@ bot_tictoc_print_stats(bot_tictoc_sort_type_t sortType)
     if (!_tictoc_enabled) {
         return;
     }
-    g_static_mutex_lock(&tictoc_mutex); //acquire lock for table
+    g_mutex_lock(&tictoc_mutex); //acquire lock for table
     if (!_tictoc_initialized) {
-        g_static_mutex_unlock(&tictoc_mutex); //release
+        g_mutex_unlock(&tictoc_mutex); //release
         return;
     }
     GList * list = NULL;
@@ -271,5 +270,5 @@ bot_tictoc_print_stats(bot_tictoc_sort_type_t sortType)
     printf("--------------------------------------------\n");
     g_list_free(list);
 
-    g_static_mutex_unlock(&tictoc_mutex); //release
+    g_mutex_unlock(&tictoc_mutex); //release
 }

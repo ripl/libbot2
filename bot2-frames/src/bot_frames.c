@@ -542,7 +542,7 @@ char ** bot_frames_get_frame_names(BotFrames * bot_frames)
 }
 
 static BotFrames *global_bot_frames = NULL;
-static GStaticMutex bot_frames_global_mutex = G_STATIC_MUTEX_INIT;
+static GMutex bot_frames_global_mutex;
 
 BotFrames*
 bot_frames_get_global(lcm_t *lcm, BotParam *bot_param)
@@ -552,7 +552,7 @@ bot_frames_get_global(lcm_t *lcm, BotParam *bot_param)
   if (bot_param == NULL)
     bot_param = bot_param_get_global(lcm, 0);
 
-  g_static_mutex_lock(&bot_frames_global_mutex);
+  g_mutex_lock(&bot_frames_global_mutex);
   if (global_bot_frames == NULL) {
     global_bot_frames = bot_frames_new(lcm, bot_param);
     if (!global_bot_frames)
@@ -560,10 +560,10 @@ bot_frames_get_global(lcm_t *lcm, BotParam *bot_param)
   }
 
   BotFrames *result = global_bot_frames;
-  g_static_mutex_unlock(&bot_frames_global_mutex);
+  g_mutex_unlock(&bot_frames_global_mutex);
   return result;
 
-  fail: g_static_mutex_unlock(&bot_frames_global_mutex);
+  fail: g_mutex_unlock(&bot_frames_global_mutex);
   fprintf(stderr, "ERROR: Could not get global bot_frames!\n");
   return NULL;
 }

@@ -1551,12 +1551,12 @@ int bot_param_get_seqno(BotParam * param)
 }
 
 static BotParam *global_param = NULL;
-static GStaticMutex bot_param_global_mutex = G_STATIC_MUTEX_INIT;
+static GMutex bot_param_global_mutex;
 
 BotParam*
 bot_param_get_global(lcm_t * lcm, int keep_updated)
 {
-  g_static_mutex_lock(&bot_param_global_mutex);
+  g_mutex_lock(&bot_param_global_mutex);
 
   if (lcm == NULL)
     lcm = bot_lcm_get_global(NULL);
@@ -1572,10 +1572,10 @@ bot_param_get_global(lcm_t * lcm, int keep_updated)
   }
 
   BotParam *result = global_param;
-  g_static_mutex_unlock(&bot_param_global_mutex);
+  g_mutex_unlock(&bot_param_global_mutex);
   return result;
 
-  fail: g_static_mutex_unlock(&bot_param_global_mutex);
+  fail: g_mutex_unlock(&bot_param_global_mutex);
   fprintf(stderr, "ERROR: Could not get global BotParam!\n");
   return NULL;
 }
