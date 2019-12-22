@@ -48,7 +48,7 @@ target_compile_options(bot2-vis PRIVATE ${PNG_DEFINITIONS})
 if(APPLE)
   target_compile_definitions(bot2-vis PRIVATE GL_SILENCE_DEPRECATION=1)
 endif()
-set(REQUIRED_PACKAGES glib-2.0 gtk+-3.0 gdk-pixbuf-3.0 lcm bot2-core libpng gl glu gthread-2.0)
+set(REQUIRED_PACKAGES glib-2.0 >= 2.32 gtk+-3.0 gdk-pixbuf-3.0 lcm >= 1.4 bot2-core libpng gl glu gthread-2.0)
 
 # set the library API version.  Increment this every time the public API
 # changes.

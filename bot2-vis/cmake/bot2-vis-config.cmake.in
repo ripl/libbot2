@@ -54,9 +54,9 @@ find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREF
 find_package(PkgConfig MODULE REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
-find_dependency(GLib2)
-find_dependency(GLUT)
-find_dependency(OpenGL)
+find_dependency(GLib2 2.32 MODULE)
+find_dependency(GLUT MODULE)
+find_dependency(OpenGL MODULE)
 # Clean CMAKE_MODULE_PATH: remove added path
 list(REMOVE_AT CMAKE_MODULE_PATH 0)
 

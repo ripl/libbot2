@@ -16,7 +16,7 @@ pods_install_libraries(EXPORT ${PROJECT_NAME} ${libname})
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_client)
 
-set(REQUIRED_PACKAGES glib-2.0 lcm lcmtypes_bot2-lcmgl)
+set(REQUIRED_PACKAGES glib-2.0 >= 2.32 lcm >= 1.4 lcmtypes_bot2-lcmgl)
 pods_install_pkg_config_file(bot2-lcmgl-client
     LIBS -l${libname}
     REQUIRES ${REQUIRED_PACKAGES}

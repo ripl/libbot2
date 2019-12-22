@@ -48,7 +48,7 @@ else()
 endif()
 
 find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-core")
-find_dependency(lcm CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")
+find_dependency(lcm 1.4 CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")
 
 # Import libraries that were generated with custom commands.
 if(NOT TARGET @NAMESPACE@lcmtypes_bot2-param-java)

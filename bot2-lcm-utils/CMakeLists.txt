@@ -34,7 +34,7 @@ lcmtypes_build(EXPORT ${PROJECT_NAME})
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
-find_package(GLib2 MODULE REQUIRED)
+find_package(GLib2 2.32 MODULE REQUIRED)
 
 add_subdirectory(src/logfilter)
 add_subdirectory(src/logsplice)

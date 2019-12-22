@@ -45,7 +45,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 find_package(lcm 1.4 CONFIG REQUIRED)
-find_package(GLib2 MODULE REQUIRED)
+find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(Java 1.8 MODULE)
 find_package(PkgConfig MODULE REQUIRED)
 find_package(OpenGL MODULE REQUIRED)

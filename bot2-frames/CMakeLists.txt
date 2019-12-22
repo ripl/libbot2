@@ -44,7 +44,7 @@ find_package(OpenGL MODULE REQUIRED)
 find_package(bot2-param CONFIG REQUIRED)
 find_package(bot2-core CONFIG REQUIRED)
 find_package(lcm 1.4 CONFIG REQUIRED)
-find_package(GLib2 MODULE REQUIRED)
+find_package(GLib2 2.32 MODULE REQUIRED)
 
 add_subdirectory(src)
 add_subdirectory(src/test)

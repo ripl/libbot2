@@ -19,7 +19,7 @@ pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-param-client)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.
-set(REQUIRED_LIBS lcm bot2-core glib-2.0 gthread-2.0 lcmtypes_bot2-param)
+set(REQUIRED_LIBS lcm >= 1.4 bot2-core glib-2.0 >= 2.32 gthread-2.0 >= 2.32 lcmtypes_bot2-param)
 pods_install_pkg_config_file(bot2-param-client
     LIBS -lbot2-param-client
     REQUIRES ${REQUIRED_LIBS}
