@@ -1,27 +1,23 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
+#include "rwx.h"
+
 #include <ctype.h>
-#include <errno.h>
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-#include <GL/glx.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include <glib.h>
-#include <math.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
-#include <bot_core/bot_core.h>
+#include <bot_core/small_linalg.h>
 
 #include "tokenize.h"
-#include "rwx.h"
 
 static void
 parse_error(tokenize_t *t, const char *fmt, ...)

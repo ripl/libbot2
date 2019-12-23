@@ -1,11 +1,24 @@
-#include <lcm/lcm.h>
+#include "lcmgl_bot_renderer.h"
 
-#include <bot_core/bot_core.h>
-#include <bot_vis/bot_vis.h>
-#include <lcmtypes/bot_lcmgl_data_t.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
+#include <lcm/lcm.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include <bot_core/glib_util.h>
+#include <bot_core/lcm_util.h>
+#include <bot_vis/param_widget.h>
 
 #include "lcmgl_decode.h"
-#include "lcmgl_bot_renderer.h"
+#include "lcmtypes/bot_lcmgl_data_t.h"
 
 typedef struct
 {

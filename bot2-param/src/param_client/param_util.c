@@ -1,7 +1,16 @@
+#include "param_util.h"
+
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "param_util.h"
+
+#include <glib.h>
+
+#include <bot_core/math_util.h>
+#include <bot_core/rotations.h>
+
+#include "param_client.h"
 
 #define PLANAR_LIDAR_PREFIX "planar_lidars"
 #define CAMERA_PREFIX "cameras"

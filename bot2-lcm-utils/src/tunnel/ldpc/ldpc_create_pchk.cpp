@@ -13,13 +13,13 @@
  * of these programs is entirely at the user's own risk.
  */
 
+#include "ldpc_create_pchk.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
 
-#include "ldpc_create_pchk.h"
 #include "ldpc_rand.h"
+#include "tools.h"
 
 mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, int leftDegree, int seed, bool no4cycle, SessionType type, int verbosity )
 {

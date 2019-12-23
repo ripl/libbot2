@@ -37,9 +37,6 @@
 #ifndef TOOLS_H__
 #define TOOLS_H__
 
-#include <stdlib.h>
-#include <stdio.h>
-
 void *chk_alloc(unsigned, unsigned);	/* Calls 'calloc' and exits with error if it fails */
 
 #if 0

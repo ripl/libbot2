@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-
 #include "lcm_util.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 //#define dbg(...) fprintf (stderr, __VA_ARGS__)
 #define dbg(...)

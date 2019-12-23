@@ -1,26 +1,20 @@
+#include "ssocket.h"
+
+#include <arpa/inet.h>
+#include <errno.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdarg.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <assert.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <arpa/inet.h>
-#include <netinet/tcp.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <strings.h>
-#include <string.h>
-#include <signal.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 #define SSOCKET_UNKNOWN_TYPE 0
 #define SSOCKET_SERVER_TYPE 1
 #define SSOCKET_CLIENT_TYPE 2
-
-#include "ssocket.h"
 
 ssocket_t *ssocket_create()
 {

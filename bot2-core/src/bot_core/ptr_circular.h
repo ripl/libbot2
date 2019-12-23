@@ -19,8 +19,7 @@ extern "C" {
 typedef void (*BotPtrCircularDestroy)(void *user, void *p);
 
 /** A circular Buffer, implemented with a PtrArray **/
-typedef struct gcircular BotPtrCircular;
-struct gcircular
+typedef struct gcircular
 {
     void **p;     // storage
     unsigned int size;     // number of valid elements in the buffer
@@ -29,7 +28,7 @@ struct gcircular
 
     void *user;
     BotPtrCircularDestroy handler;
-};
+} BotPtrCircular;
 
 // create a new circular buffer; the destroy handler will be called
 // whenever an element is evicted. (NULL means no handler).

@@ -26,6 +26,6 @@ add_executable(ldpc-wrapper-test
     ${ldpc_sources}
     )
 
-target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib)
+target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib lcmtypes_bot2-lcm-utils)
 
 pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-tunnel)

@@ -8,17 +8,10 @@
 #ifndef LDPC_WRAPPER_H_
 #define LDPC_WRAPPER_H_
 
-#include <unistd.h>
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
+#include <stdint.h>
 
-#include "ldpc_fec.h"
 #include "ldpc_scheme.h"
-#include "macros.h"
+// IWYU pragma: no_forward_declare LDPCFecScheme
 
 class ldpc_wrapper {
 public:

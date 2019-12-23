@@ -10,28 +10,29 @@
  *
  */
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <math.h>
 
-# ifdef _WIN32
-#   include <windows.h>
-# endif
+#define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+#include <OpenGL/glext.h>  /* IWYU pragma: keep */
+#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glext.h>
+#include <GL/glext.h>  /* IWYU pragma: keep */
+#include <GL/glu.h>
 #endif
+
 #include "glm.h"
+#include "glmint.h"
+
 /*
 #define DEBUG
 #define GLDEBUG
 */
-#include "glmint.h"
 
 /* WARNING: GLOBAL VARIABLES */
 GLenum _glmTextureTarget = GL_TEXTURE_2D;

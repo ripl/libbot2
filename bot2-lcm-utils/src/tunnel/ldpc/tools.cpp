@@ -36,6 +36,9 @@
 
 #include "tools.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 /* ALLOCATE SPACE AND CHECK FOR ERROR.  Calls 'calloc' to allocate space,
    and then displays an error message and exits if the space couldn't be
    found. */

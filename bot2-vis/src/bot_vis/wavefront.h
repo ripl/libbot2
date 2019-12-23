@@ -13,8 +13,6 @@
  *
  */
 
-#include <glib.h>
-
 /**
  * @defgroup BotVisWavefront Wavefront (.obj:geometry; .mtl:material)
  *           mesh mesh model rendering

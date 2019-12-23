@@ -1,8 +1,8 @@
-#include <sys/time.h>
-#include <time.h>
-#include <stdio.h>
-
 #include "timespec.h"
+/* IWYU pragma: no_forward_declare timespec */
+/* IWYU pragma: no_forward_declare timeval */
+
+#include <stdio.h>
 
 void bot_timespec_to_timeval(struct timespec *ts, struct timeval *tv)
 {

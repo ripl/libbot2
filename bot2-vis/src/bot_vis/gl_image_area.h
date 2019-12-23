@@ -13,6 +13,9 @@
  * @{
  */
 
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
@@ -30,10 +33,7 @@ G_BEGIN_DECLS
 #define GTK_IS_GL_IMAGE_AREA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), BOT_GTK_TYPE_GL_IMAGE_AREA))
 #define BOT_GTK_GL_IMAGE_AREA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), BOT_GTK_TYPE_GL_IMAGE_AREA, BotGtkGlImageAreaClass))
 
-typedef struct _BotGtkGlImageArea        BotGtkGlImageArea;
-typedef struct _BotGtkGlImageAreaClass   BotGtkGlImageAreaClass;
-
-struct _BotGtkGlImageArea {
+typedef struct _BotGtkGlImageArea {
     BotGtkGlDrawingArea  parent;
 
     /*< private >*/
@@ -50,11 +50,11 @@ struct _BotGtkGlImageArea {
     GLuint pbo;
     int use_pbo;
     int max_data_size;
-};
+} BotGtkGlImageArea;
 
-struct _BotGtkGlImageAreaClass {
+typedef struct _BotGtkGlImageAreaClass {
     GtkDrawingAreaClass parent_class;
-};
+} BotGtkGlImageAreaClass;
 
 GType       bot_gtk_gl_image_area_get_type (void);
 GtkWidget * bot_gtk_gl_image_area_new (void);

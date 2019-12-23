@@ -1,12 +1,6 @@
 #ifndef __gtk_util_h__
 #define __gtk_util_h__
 
-#include <gtk/gtk.h>
-#include "param_widget.h"
-#include "gl_drawing_area.h"
-#include "gl_image_area.h"
-#include "viewer.h"
-
 /**
  * @defgroup BotVisGtkUtil Miscellaneous GTK+ utility functions
  * @brief GTK utility functions

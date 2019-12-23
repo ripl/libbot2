@@ -1,12 +1,13 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <math.h>
+#include "lcmgl.h"
+
 #include <assert.h>
-#include <time.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
-#include <zlib.h> //for texture compression //TODO: is this portable?
+
+#include <zlib.h>
 
 #include "lcmtypes/bot_lcmgl_data_t.h"
 
@@ -22,8 +23,6 @@
 #define BOT_GL_DRAW_TEXT_ANCHOR_VCENTER 512
 #define BOT_GL_DRAW_TEXT_NORMALIZED_SCREEN_COORDINATES 1024
 #define BOT_GL_DRAW_TEXT_MONOSPACED 2048
-
-#include "lcmgl.h"
 
 #define INITIAL_ALLOC (1024*1024)
 

@@ -1,11 +1,9 @@
+#include "signal_pipe.h"
+
+#include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <stdlib.h>
-#include <signal.h>
-
-#include "signal_pipe.h"
 
 #define dbg(args...) fprintf(stderr, args)
 #undef dbg

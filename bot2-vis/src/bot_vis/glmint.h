@@ -1,6 +1,12 @@
 #ifndef __glmint_h__
 #define __glmint_h__
 
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 extern GLenum _glmTextureTarget;
 
 /* private routines from glm_util.c */

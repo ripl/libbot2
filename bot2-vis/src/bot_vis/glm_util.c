@@ -10,17 +10,20 @@
  *
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <stdlib.h>
 #include <stdarg.h>
-#include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include "glm.h"
-#include "glmint.h"
+#ifdef __APPLE_
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
+#include "glmint.h"  /* IWYU pragma: keep */
 
 #ifndef HAVE_STRDUP
 /* strdup is actually not a standard ANSI C or POSIX routine

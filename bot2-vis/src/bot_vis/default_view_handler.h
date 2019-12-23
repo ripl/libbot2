@@ -5,10 +5,11 @@
 extern "C" {
 #endif
 
+#include <stdint.h>
+
 #include "viewer.h"
 
-typedef struct _BotDefaultViewHandler BotDefaultViewHandler;
-struct _BotDefaultViewHandler
+typedef struct _BotDefaultViewHandler
 {
     BotEventHandler ehandler;
     BotViewHandler  vhandler;
@@ -64,7 +65,7 @@ struct _BotDefaultViewHandler
     // point.
     int have_last;
     double lastpos[3], lastquat[4];
-};
+} BotDefaultViewHandler;
 
 BotDefaultViewHandler *bot_default_view_handler_new(BotViewer *viewer);
 

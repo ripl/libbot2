@@ -1,13 +1,21 @@
 #ifndef __bot2_viewer_h__
 #define __bot2_viewer_h__
 
-#include <inttypes.h>
-#include <gtk/gtk.h>
-#include <glib-object.h>
+#include <stdint.h>
 
+#include <gdk/gdk.h>
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
 #include <zlib.h>
 
-#include "gtk_util.h"
+#include "gl_drawing_area.h"
+
+/* IWYU pragma: no_forward_declare _BotEventHandler */
+/* IWYU pragma: no_forward_declare _BotRenderer */
+/* IWYU pragma: no_forward_declare _BotViewer */
+/* IWYU pragma: no_forward_declare _BotViewerClass */
+/* IWYU pragma: no_forward_declare _BotViewHandler */
 
 #ifdef __cplusplus
 extern "C" {

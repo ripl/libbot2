@@ -4,9 +4,14 @@
  *  Created on: Oct 2, 2010
  *      Author: abachrac
  */
-#include <lcm/lcm.h>
-#include <sys/time.h>
+
+#include <stdint.h>
+#include <stdio.h>
 #include <sys/select.h>
+#include <sys/time.h>
+/* IWYU pragma: no_forward_declare timeval */
+
+#include <lcm/lcm.h>
 
 #ifndef MISC_UTILS_H_
 #define MISC_UTILS_H_

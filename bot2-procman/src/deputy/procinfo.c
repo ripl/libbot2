@@ -2,19 +2,20 @@
  * code for reading detailed process information on a GNU/Llinux system
  */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+#include "procinfo.h"
+
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <inttypes.h>
+#ifdef __linux__
 #include <assert.h>
+#include <inttypes.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <unistd.h>
+#endif
 
 #include <glib.h>
-
-#include "procinfo.h"
 
 static void strsplit (char *buf, char **words, int maxwords)
 {
@@ -150,8 +151,7 @@ procinfo_read_sys_cpu_mem_linux(sys_cpu_mem_t *s)
     return 0;
 }
 
-typedef struct _pid_info_t pid_info_t;
-struct _pid_info_t
+typedef struct _pid_info_t
 {
     int pid;
     int ppid;
@@ -159,7 +159,7 @@ struct _pid_info_t
     int session;
     char state;
     GPtrArray* children;
-};
+} pid_info_t;
 
 static void pid_info_destroy(pid_info_t* pinfo)
 {

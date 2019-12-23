@@ -5,11 +5,9 @@
  * computations using GPS in local neighborhoods of a few kilometers.
  */
 
-#include <stdint.h>
-#include <stdlib.h>
-#include <math.h>
-
 #include "gps_linearize.h"
+
+#include <math.h>
 
 #define REQ 6378135.0
 #define RPO 6356750.0

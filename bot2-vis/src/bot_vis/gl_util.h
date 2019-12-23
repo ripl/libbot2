@@ -3,21 +3,11 @@
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-//#include <GL/freeglut.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#include <GL/freeglut.h>
 #endif
 
-#include "texture.h"
-#include "scrollplot2d.h"
-#include "console.h"
-#include "batch_gl.h"
-#include <bot_core/bot_core.h>
+#include <bot_core/trans.h>
 
 /**
  * @defgroup BotGlUtil Miscellaneous OpenGL utility functions

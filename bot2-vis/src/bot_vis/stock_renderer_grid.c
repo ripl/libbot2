@@ -2,7 +2,21 @@
  * renders a grid
  */
 
-#include <bot_core/bot_core.h>
+#include <math.h>
+#include <stdlib.h>
+
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include <bot_core/small_linalg.h>
+
+#include "param_widget.h"
 #include "viewer.h"
 
 #define PARAM_AZIMUTH "Rotation"
@@ -13,16 +27,14 @@
 
 #define RENDERER_NAME "Grid"
 
-typedef struct _RendererGrid RendererGrid;
-
-struct _RendererGrid {
+typedef struct _RendererGrid {
     BotRenderer renderer;
 
     BotGtkParamWidget *pw;
     double             last_meters_per_grid;
     GtkWidget         *label;
     BotViewer *viewer;
-};
+} RendererGrid;
 
 /** round the input number to the next number of the form 1*10^n,
  * 2*10^n, or 5*10^n. */

@@ -8,25 +8,20 @@
  *
  *
  */
-#include <stdio.h>
+
+#include <arpa/inet.h>
+#include <assert.h>
+#include <netinet/in.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <sys/uio.h>
-#include <math.h>
-#include <time.h>
-#include <sys/time.h>
-#include <assert.h>
-
-#include <netinet/in.h>
 #include <sys/socket.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <netdb.h>
-#include <errno.h>
+#include <sys/time.h>
+#include <time.h>
 
 #include <glib.h>
+
 #include "signal_pipe.h"
 
 #define LCM_DEFAULT_URL "udpm://239.255.76.67:7667?ttl=0"

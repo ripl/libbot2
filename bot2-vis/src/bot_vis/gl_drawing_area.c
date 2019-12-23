@@ -1,38 +1,37 @@
+#include "gl_drawing_area.h"
+
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <X11/Xlib.h>
+
+#include <gdk/gdk.h>
 #include <gdk/gdkx.h>
+#include <glib-object.h>
 #include <gtk/gtk.h>
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#define GLX_GLXEXT_PROTOTYPES 1
-#include <GL/glx.h>
-#include <OpenGL/glext.h>
-#else
-#include <GL/gl.h>
-#define GLX_GLXEXT_PROTOTYPES 1
-#include <GL/glx.h>
-#include <GL/glext.h>
-#endif
-
 #ifndef __APPLE__
 #define USE_VBLANK 1
 #endif
-
 #ifdef USE_VBLANK
 #include <pthread.h>
 #endif
-
-#include "gl_drawing_area.h"
+#define GLX_GLXEXT_PROTOTYPES 1
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>  /* IWYU pragma: keep */
+#else
+#include <GL/gl.h>
+#include <GL/glext.h>  /* IWYU pragma: keep */
+#include <GL/glx.h>
+#endif
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 #define BOT_GTK_GL_DRAWING_AREA_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), BOT_GTK_TYPE_GL_DRAWING_AREA, BotGtkGlDrawingAreaPrivate))
-typedef struct _BotGtkGlDrawingAreaPrivate BotGtkGlDrawingAreaPrivate;
 
-struct _BotGtkGlDrawingAreaPrivate {
+typedef struct _BotGtkGlDrawingAreaPrivate {
     Display * dpy;
     XVisualInfo * visual;
     GLXContext context;
@@ -44,7 +43,7 @@ struct _BotGtkGlDrawingAreaPrivate {
     int quit_thread;
     int swap_requested;
 #endif
-};
+} BotGtkGlDrawingAreaPrivate;
 
 static void bot_gtk_gl_drawing_area_realize (GtkWidget * widget);
 static void bot_gtk_gl_drawing_area_unrealize (GtkWidget * widget);

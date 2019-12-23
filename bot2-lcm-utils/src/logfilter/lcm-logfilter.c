@@ -1,15 +1,14 @@
 // file: bot-lcm-logfilter.c
 // desc: utility to selectively extract channels from a logfile into a new one
 
+#include <getopt.h>
+#include <regex.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <regex.h>
-#include <getopt.h>
 
 #include <glib.h>
-
 #include <lcm/lcm.h>
 
 static void

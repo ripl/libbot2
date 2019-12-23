@@ -1,7 +1,8 @@
 #ifndef __BOT_GTK_GL_GL_DRAWING_AREA_H__
 #define __BOT_GTK_GL_GL_DRAWING_AREA_H__
 
-#include <gdk/gdk.h>
+#include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 /**
@@ -25,18 +26,15 @@ G_BEGIN_DECLS
 #define BOT_GTK_IS_GL_DRAWING_AREA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), BOT_GTK_TYPE_GL_DRAWING_AREA))
 #define BOT_GTK_GL_DRAWING_AREA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), BOT_GTK_TYPE_GL_DRAWING_AREA, BotGtkGlDrawingAreaClass))
 
-typedef struct _BotGtkGlDrawingArea        BotGtkGlDrawingArea;
-typedef struct _BotGtkGlDrawingAreaClass   BotGtkGlDrawingAreaClass;
-
-struct _BotGtkGlDrawingArea {
+typedef struct _BotGtkGlDrawingArea {
     GtkDrawingArea  area;
 
     gboolean vblank_sync;
-};
+} BotGtkGlDrawingArea;
 
-struct _BotGtkGlDrawingAreaClass {
+typedef struct _BotGtkGlDrawingAreaClass {
     GtkDrawingAreaClass parent_class;
-};
+} BotGtkGlDrawingAreaClass;
 
 GType       bot_gtk_gl_drawing_area_get_type (void);
 GtkWidget * bot_gtk_gl_drawing_area_new (gboolean vblank_sync);

@@ -1,11 +1,8 @@
+#include "bot_vis/param_widget.h"  /* IWYU pragma: associated */
+
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-#include <gtk/gtk.h>
-
-#include <bot_vis/bot_vis.h>
+#include <limits.h>
 
 enum {
     MENU_1,

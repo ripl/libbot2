@@ -1,10 +1,10 @@
+#include "timestamp.h"
+/* IWYU pragma: no_forward_declare timespec */
+/* IWYU pragma: no_forward_declare timeval */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
-#include <sys/select.h>
-
-#include "timestamp.h"
 
 int64_t bot_timestamp_now()
 {

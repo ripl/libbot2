@@ -1,14 +1,22 @@
-#include <string.h>
 #include <stdlib.h>
+
+#include <glib.h>
 #include <gtk/gtk.h>
-
-#include <bot_vis/bot_vis.h>
 #include <lcm/lcm.h>
-#include <bot_core/bot_core.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/freeglut.h>
+#endif
 
-//renderers
+#include <bot_core/lcm_util.h>
 #include <bot_lcmgl_render/lcmgl_bot_renderer.h>
-#include <bot_frames/bot_frames_renderers.h>
+#include <bot_param/param_client.h>
+#include <bot_vis/gtk_util.h>
+#include <bot_vis/viewer.h>
+
+#include "bot_frames_renderers.h"
+#include "bot_frames/bot_frames.h"
 
 static void on_top_view_clicked(GtkToggleToolButton *tb, void *user_data)
 {

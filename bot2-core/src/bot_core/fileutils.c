@@ -1,15 +1,15 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <sys/ioctl.h>
-#include <sys/poll.h>
-#include <arpa/inet.h>
-#include <time.h>
-#include <string.h>
-#include <sys/stat.h>
-
 #include "fileutils.h"
+
+#include <arpa/inet.h>
+#include <errno.h>
+#include <poll.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <time.h>
+#include <unistd.h>
 
 char *
 bot_fileutils_get_unique_filename (const char * path, const char * basename,

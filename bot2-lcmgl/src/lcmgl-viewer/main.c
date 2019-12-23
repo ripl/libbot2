@@ -1,11 +1,21 @@
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+#include <gdk/gdk.h>
+#include <glib.h>
 #include <gtk/gtk.h>
+#include <lcm/lcm.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/freeglut.h>
+#endif
 
-#include <bot_core/bot_core.h>
-#include <bot_vis/bot_vis.h>
+#include <bot_core/lcm_util.h>
+#include <bot_vis/viewer.h>
 
-#include <bot_lcmgl_render/lcmgl_bot_renderer.h>
+#include "bot_lcmgl_render/lcmgl_bot_renderer.h"
 #include "udp_util.h"
 #include "view_menu.h"
 

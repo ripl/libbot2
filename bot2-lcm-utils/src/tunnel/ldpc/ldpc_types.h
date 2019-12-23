@@ -29,6 +29,8 @@
 #ifndef LDPC_TYPES_H
 #define LDPC_TYPES_H
 
+#include <limits.h>  // IWYU pragma: keep
+
 /****** type specifications ******/
 
 #ifndef UINT32
@@ -46,13 +48,8 @@
 #endif /* !UINT32 */
 
 #ifndef UINT64
-#ifdef WIN32
-#define INT64   __int64
-#define UINT64  __uint64
-#else  /* UNIX */
 #define INT64   long long
 #define UINT64  unsigned long long
-#endif /* OS */
 #endif /* !UINT64 */
 
 #endif /* LDPC_TYPES_H */

@@ -4,22 +4,18 @@
     eolson@mit.edu, 2004
 **/
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/ioctl.h>
-#include <sys/time.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
 
-#include <stdlib.h>
-
 #ifdef __linux__
 #include <linux/serial.h>
+#include <linux/tty_flags.h>
+
 #define SUPPORT_HISPEED 1
 #endif
-
-#include <stdio.h>
 
 #include "serial.h"
 

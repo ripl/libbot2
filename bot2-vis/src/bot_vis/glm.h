@@ -1,5 +1,6 @@
 #ifndef GLM_H
 #define GLM_H
+
 /*
       glm.h
       Nate Robins, 1997, 2000
@@ -13,12 +14,12 @@
 
  */
 
+#include <math.h>
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #define GLM_MAX_SHININESS 100.0 /* for Poser */

@@ -18,7 +18,8 @@ http://en.wikipedia.org/wiki/Ziggurat_algorithm
 */
 
 #include "rand_util.h"
-#include <time.h>
+
+#include <math.h>
 
 static uint32_t jz,jsr=123456789;
 

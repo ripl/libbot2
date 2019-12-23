@@ -1,8 +1,6 @@
 #ifndef __lc_util_h__
 #define __lc_util_h__
 
-#include <glib.h>
-
 #include <lcm/lcm.h>
 
 #ifdef __cplusplus

@@ -34,19 +34,30 @@ articulated_body_name {
  *
  */
 
+ #include "bot_frames_renderers.h"  /* IWYU pragma: associated */
+
+#include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include "bot_frames_renderers.h"
-#include <bot_param/param_util.h>
-#include <bot_vis/bot_vis.h>
-
+#include <glib.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
+#include <GL/glu.h>
 #endif
+
+#include <bot_core/rotations.h>
+#include <bot_core/small_linalg.h>
+#include <bot_core/trans.h>
+#include <bot_param/param_util.h>
+#include <bot_vis/gl_util.h>
+#include <bot_vis/rwx.h>
+#include <bot_vis/wavefront.h>
 
 #define DEG2RAD(X) (X*180.0/M_PI)
 
@@ -54,9 +65,7 @@ typedef enum {
   cube, sphere, cylinder, rwx, wavefront, invalid
 } vis_type_t;
 
-typedef struct _BodyProperties BodyProperties;
-
-struct _BodyProperties {
+typedef struct _BodyProperties {
   char * frame_name;
   vis_type_t vis_type;
   double scale[3];
@@ -67,11 +76,9 @@ struct _BodyProperties {
   BotRwxModel * rwx_model;
   BotWavefrontModel * wave_model;
   int draw_list_ready;
-};
+} BodyProperties;
 
-typedef struct _RendererArticulated RendererArticulated;
-
-struct _RendererArticulated {
+typedef struct _RendererArticulated {
   BotRenderer renderer;
 //  BotGtkParamWidget *pw;
   BotViewer *viewer;
@@ -82,7 +89,7 @@ struct _RendererArticulated {
 
   int num_bodies;
   BodyProperties * body_properties;
-};
+} RendererArticulated;
 
 static void frames_update_handler(BotFrames *bot_frames, const char *frame, const char * relative_to, int64_t utime,
     void *user)

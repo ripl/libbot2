@@ -1,7 +1,13 @@
+#include "default_view_handler.h"
+
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+
+#include <gdk/gdk.h>
+/* IWYU pragma: no_include "gdk/gdkkeysyms.h" */
+#include <glib.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -10,12 +16,11 @@
 #include <GL/glu.h>
 #endif
 
-#include <gdk/gdkkeysyms.h>
+#include <bot_core/rotations.h>
+#include <bot_core/small_linalg.h>
+#include <bot_core/timestamp.h>
 
-#include <bot_core/bot_core.h>
-
-#include "viewer.h"
-#include "default_view_handler.h"
+#include "bot_vis/viewer.h"
 
 #define EYE_MIN_DIST 0.1
 #define EYE_MAX_DIST 10000

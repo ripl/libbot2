@@ -1,17 +1,23 @@
 #ifndef __lcm_tunnel_h__
 #define __lcm_tunnel_h__
 
-#include <inttypes.h>
+#include <math.h>  // IWYU pragma: keep
+// IWYU pragma: no_include <cmath>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <deque>
 
 #include <glib.h>
+#include <lcm/lcm.h>
 
-#include <lcmtypes/bot2_lcm_utils.h>
-
-#include "ldpc/ldpc_wrapper.h"
-#include "ssocket.h"
 #include "introspect.h"
+#include "lcmtypes/lcm_tunnel_params_t.h"
+#include "lcmtypes/lcm_tunnel_sub_msg_t.h"
+#include "ldpc/ldpc_wrapper.h"
+// IWYU pragma: no_forward_declare ldpc_dec_wrapper
+#include "ssocket.h"
 
 #define DEFAULT_PORT 6141
 

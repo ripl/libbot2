@@ -11,26 +11,19 @@
  *
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <ctype.h>
-#include <errno.h>
+ #include "wavefront.h"
+
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
 #endif
 
 #include "glm.h"
-#include "wavefront.h"
 
 struct _BotWavefrontModel
 {

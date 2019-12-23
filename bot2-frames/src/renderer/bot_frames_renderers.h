@@ -4,11 +4,14 @@
  *  Created on: Jan 22, 2011
  *      Author: abachrac
  */
-#include <bot_vis/bot_vis.h>
-#include <bot_frames/bot_frames.h>
 
 #ifndef COORD_FRAMES_RENDERER_H_
 #define COORD_FRAMES_RENDERER_H_
+
+#include <bot_param/param_client.h>
+#include <bot_vis/viewer.h>
+
+#include "bot_frames/bot_frames.h"
 
 #ifdef __cplusplus
 extern "C" {

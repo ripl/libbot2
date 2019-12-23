@@ -2,7 +2,9 @@
 #define __bot_timespec_h__
 
 #include <sys/time.h>
+/* IWYU pragma: no_forward_declare timeval */
 #include <time.h>
+/* IWYU pragma: no_forward_declare timespec */
 
 /**
  * @defgroup BotCoreTimeSpec Timespec

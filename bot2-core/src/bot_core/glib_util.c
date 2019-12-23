@@ -1,9 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-
 #include "glib_util.h"
+
+#include <stdint.h>
+#include <string.h>
 
 void
 bot_g_list_free_with_func (GList *list, GDestroyNotify functor)

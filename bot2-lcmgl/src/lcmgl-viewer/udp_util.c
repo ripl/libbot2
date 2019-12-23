@@ -1,16 +1,12 @@
+#include "udp_util.h"
+
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <inttypes.h>
-#include <poll.h>
-#include <netdb.h>
 #include <unistd.h>
-
-#include "udp_util.h"
 
 /** make and bind a udp socket to a specified port. Returns the fd. **/
 int udp_socket_listen(int port)

@@ -11,7 +11,7 @@ add_library(${PROJECT_NAME} ${c_files})
 # changes.
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm GLib2::glib PRIVATE m)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm GLib2::glib lcmtypes_bot2-core PRIVATE m)
 target_include_directories(${PROJECT_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include> )

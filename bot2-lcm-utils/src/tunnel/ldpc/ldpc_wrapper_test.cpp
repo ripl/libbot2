@@ -5,8 +5,15 @@
  *      Author: abachrac
  */
 #include "ldpc_wrapper.h"
+
+#include <errno.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
 #include <time.h>
-#include <sys/time.h>   /* for gettimeofday */
+
 static inline double getTime(void)
 {
   struct timeval tv;

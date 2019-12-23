@@ -1,10 +1,8 @@
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <ctype.h>
-#include <assert.h>
-
 #include "tokenize.h"
+
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 
 static const char single_char_toks[] = "();\",:\'[].";
 static const char op_chars[] = "!~<>=&|^%*+=/";

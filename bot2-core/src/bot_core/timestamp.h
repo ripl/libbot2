@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 #include <sys/time.h>
+/* IWYU pragma: no_forward_declare timeval */
 #include <time.h>
+/* IWYU pragma: no_forward_declare timespec */
 
 /**
  * @defgroup BotCoreTimestamp Timestamp
@@ -18,9 +20,7 @@
  * @{
  */
 
-typedef struct bot_timestamp_sync_state bot_timestamp_sync_state_t;
-
-struct bot_timestamp_sync_state {
+typedef struct bot_timestamp_sync_state {
     double  dev_ticks_per_second; // how fast does device clock count? (nominal)
     int64_t dev_ticks_wraparound; // device clock counts modulo what?
     double  max_rate_error;       // how fast do we need to count to ensure we're counting faster than device?
@@ -31,7 +31,7 @@ struct bot_timestamp_sync_state {
     int64_t last_dev_ticks;        // what device time was it when we were last called?
 
     uint8_t is_valid;             // have we ever synced?
-};
+} bot_timestamp_sync_state_t;
 
 #ifdef __cplusplus
 extern "C" {

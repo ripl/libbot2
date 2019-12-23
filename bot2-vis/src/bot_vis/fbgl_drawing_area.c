@@ -1,23 +1,18 @@
+#include "fbgl_drawing_area.h"
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <inttypes.h>
+#include <stdint.h>
+#include <sys/types.h>
+
 #define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#include <GL/glx.h>
+#include <OpenGL/glext.h>  /* IWYU pragma: keep */
 #else
 #include <GL/gl.h>
-#include <GL/glext.h>
+#include <GL/glext.h>  /* IWYU pragma: keep */
 #include <GL/glx.h>
 #endif
-
-#include <glib-object.h>
-
-#include "fbgl_drawing_area.h"
 
 enum {
     BUFFER_READY_SIGNAL,
@@ -27,9 +22,8 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 #define BOT_FBGL_DRAWING_AREA_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), BOT_TYPE_FBGL_DRAWING_AREA, BotFbglDrawingAreaPrivate))
-typedef struct _BotFbglDrawingAreaPrivate BotFbglDrawingAreaPrivate;
 
-struct _BotFbglDrawingAreaPrivate {
+typedef struct _BotFbglDrawingAreaPrivate {
     GLXContext context;
     uint framebuffer;
     uint renderbuffers[2];
@@ -38,7 +32,7 @@ struct _BotFbglDrawingAreaPrivate {
     int buffer_pending;
     int currbuf;
     GLenum format;
-};
+} BotFbglDrawingAreaPrivate;
 
 G_DEFINE_TYPE (BotFbglDrawingArea, bot_fbgl_drawing_area, G_TYPE_OBJECT);
 

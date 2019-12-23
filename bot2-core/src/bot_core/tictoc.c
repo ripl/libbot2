@@ -5,14 +5,13 @@
  *      Author: abachrac
  */
 
+#include "tictoc.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
-#include <glib.h>
 #include <sys/time.h>
-
-#include "tictoc.h"
+#include <glib.h>
 
 //simple, quick and dirty profiling tool...
 

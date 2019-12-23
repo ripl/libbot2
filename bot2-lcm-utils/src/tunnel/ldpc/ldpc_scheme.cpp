@@ -25,10 +25,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "ldpc_fec.h"
-#include "macros.h"
 #include "ldpc_scheme.h"
+
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "ldpc_fec.h"
 #include "ldpc_rand.h"
+#include "macros.h"
 
 /******************************************************************************
  * LDPCFecScheme Contructor.

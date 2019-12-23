@@ -1,15 +1,18 @@
+#include "ctrans.h"
+
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
-#include "small_linalg.h"
-#include "rotations.h"
-#include "glib_util.h"
-#include "circular.h"
 #include <glib.h>
 
-#include "ctrans.h"
+#include "circular.h"
+#include "glib_util.h"
+#include "trans.h"
+
+/* IWYU pragma: no_forward_declare _BotCTransPath */
+/* IWYU pragma: no_forward_declare _SPNodeData */
 
 //#define dbg(...) fprintf(stderr, __VA_ARGS__)
 #define dbg(...)
@@ -88,12 +91,11 @@ int bot_ctrans_path_latest_timestamp(const BotCTransPath * path,
  */
 int bot_ctrans_path_have_trans(const BotCTransPath *path);
 
-typedef struct _BotCTransFrame BotCTransFrame;
-struct _BotCTransFrame
+typedef struct _BotCTransFrame
 {
     char *id;
     GPtrArray * links;
-};
+} BotCTransFrame;
 
 typedef struct {
     int64_t utime;

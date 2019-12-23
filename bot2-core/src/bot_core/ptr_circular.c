@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <assert.h>
-#include <string.h>
-
 #include "ptr_circular.h"
+
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
 
 // NB: a capacity of 0 is legal!
 

@@ -28,10 +28,13 @@
  */
 
 #include "ldpc_fec.h"
+
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "ldpc_types.h"
 #include "macros.h"
-#ifdef WIN32
-#include <conio.h>
-#endif
 
 /******************************************************************************
  * LDPCFecSession Contructor.

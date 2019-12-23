@@ -30,23 +30,12 @@
 #ifndef LDPC_FEC_H /* { */
 #define LDPC_FEC_H
 
-#include <math.h>
-#include <sys/types.h>
-#include <errno.h>
+#include <limits.h>  // IWYU pragma: keep
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#ifndef WIN32
-#include <inttypes.h>
-#else
-#include <STDDEF.H>
-#endif
 
-#include "ldpc_profile.h"	/* defines the general compilation profile */
-
-#include "ldpc_types.h"
-#include "ldpc_matrix_sparse.h"
 #include "ldpc_create_pchk.h"
+#include "ldpc_matrix_sparse.h"
+#include "ldpc_profile.h"
 
 /****** CONSTANT AND CLASS DEFINITION *****************************************/
 

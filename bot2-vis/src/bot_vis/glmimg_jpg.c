@@ -10,27 +10,24 @@
  *
  */
 
-#include "glm.h"
-#include "glmint.h"
-
 /*
  * Based on example code found in the libjpeg archive
  *
  */
-#include <stdio.h>
-#include <setjmp.h>
-#include <string.h>
-#include <stdlib.h>
 
-/* The geniuses that made the libjpeg forgot to add this wrapper
-   around the header file. */
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#include <setjmp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <jpeglib.h>
-#ifdef __cplusplus
-}
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
 #endif
+
+#include "glmint.h"  /* IWYU pragma: keep */
 
 #define ERR_NO_ERROR      0
 #define ERR_OPEN          1

@@ -11,10 +11,9 @@
  * @{
  */
 
-#include <math.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include <assert.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,14 +1,9 @@
-#include <stdio.h>
+#include "ppm.h"
+
 #include <ctype.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#ifdef __APPLE__
-#include <malloc/malloc.h>
-#else
-#include <malloc.h>
-#endif
-
-#include "ppm.h"
 
 static int
 skip_whitespace_and_comments (FILE *fp)

@@ -1,17 +1,24 @@
+#include "console.h"
+
+#include <assert.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
-#include <inttypes.h>
 #include <sys/time.h>
-#include <time.h>
-#include <math.h>
-#include <assert.h>
 
 #include <glib.h>
-
-#include "gl_util.h"
-#include "console.h"
+#ifdef __APPLE
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 #define ALPHA_CUTOFF 0.05
 

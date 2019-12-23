@@ -1,8 +1,8 @@
 #ifndef __bot_ppm_h__
 #define __bot_ppm_h__
 
+#include <stdint.h>
 #include <stdio.h>
-#include <inttypes.h>
 
 /**
  * @defgroup BotCorePPM PPM/PGM

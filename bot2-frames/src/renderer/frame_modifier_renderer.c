@@ -1,25 +1,20 @@
+#include "bot_frames_renderers.h"  /* IWYU pragma: associated */
+
+#include <math.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
-#include <lcm/lcm.h>
-
-#include "bot_frames_renderers.h"
-#include <bot_core/bot_core.h>
-#include <bot_vis/bot_vis.h>
-#include <bot_vis/viewer.h>
-#include <bot_param/param_client.h>
-#include <bot_frames/bot_frames.h>
+#include <bot_core/math_util.h>
+#include <bot_core/rotations.h>
+#include <bot_core/timestamp.h>
+#include <bot_core/trans.h>
+#include <bot_vis/param_widget.h>
 
 #define RENDERER_NAME "Frame Modifier"
 

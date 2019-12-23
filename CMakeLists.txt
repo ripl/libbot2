@@ -109,6 +109,31 @@ set(default_cmake_args
   "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
   )
 
+option(INCLUDE_WHAT_YOU_USE
+  "Run the include-what-you-use-tool during the build" OFF
+)
+if(INCLUDE_WHAT_YOU_USE)
+  find_package(IWYU MODULE REQUIRED)
+  set(IWYU_ARGS
+    "-Xiwyu:::--mapping_file=${PROJECT_SOURCE_DIR}/scripts/lint/include-what-you-use.imp"
+  )
+  if(IWYU VERSION_GREATER_EQUAL 0.10)
+    set(IWYU_ARGS "${IWYU_ARGS}:::-Xiwyu:::--no_fwd_decls")
+  endif()
+  set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}:::${IWYU_ARGS}")
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}:::${IWYU_ARGS}")
+endif()
+if(CMAKE_C_INCLUDE_WHAT_YOU_USE)
+  list(APPEND default_cmake_args
+    "-DCMAKE_C_INCLUDE_WHAT_YOU_USE:STRING=${CMAKE_C_INCLUDE_WHAT_YOU_USE}"
+  )
+endif()
+if(CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
+  list(APPEND default_cmake_args
+    "-DCMAKE_CXX_INCLUDE_WHAT_YOU_USE:STRING=${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
+  )
+endif()
+
 ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core

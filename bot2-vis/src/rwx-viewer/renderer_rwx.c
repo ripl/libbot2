@@ -1,10 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <gdk/gdkkeysyms.h>
-
-#include <bot_vis/bot_vis.h>
+#include <glib-object.h>
+#include <glib.h>
+#include <gtk/gtk.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
+
+#include "bot_vis/param_widget.h"
+#include "bot_vis/rwx.h"
+#include "bot_vis/viewer.h"
 
 #define RENDERER_NAME "RWX"
 

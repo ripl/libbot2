@@ -1,7 +1,11 @@
 #ifndef __ar_bot_frames_h__
 #define __ar_bot_frames_h__
 
-#include <bot_core/bot_core.h>
+#include <stdint.h>
+
+#include <lcm/lcm.h>
+
+#include <bot_core/trans.h>
 #include <bot_param/param_client.h>
 
 #ifdef __cplusplus

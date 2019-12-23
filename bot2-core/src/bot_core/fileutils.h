@@ -1,6 +1,7 @@
 #ifndef __bot_fileutils_h__
 #define __bot_fileutils_h__
 
+#include <stdint.h>
 #include <stdio.h>
 
 /**

@@ -5,18 +5,18 @@
  *      Author: abachrac
  */
 // reading a complete binary file
+
 #include <stdio.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdlib.h>
+
 #include <glib.h>
 #include <lcm/lcm.h>
-#include <bot_param/param_client.h>
-#include <sys/time.h>
-#include "../param_client/param_internal.h"
-#include "../param_client/misc_utils.h"
 
-#include <lcmtypes/bot2_param.h>
+#include "bot_param/param_client.h"
+#include "lcmtypes/bot_param_entry_t.h"
+#include "lcmtypes/bot_param_set_t.h"
+#include "../param_client/misc_utils.h"
+#include "../param_client/param_internal.h"
 
 int main(int argc, char ** argv)
 {

@@ -30,15 +30,16 @@
  *  USA.
  */
 
+#include "ldpc_wrapper.h"
+
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "ldpc_wrapper.h"
-#include <math.h>
+#include <string.h>
 
-#include <getopt.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "ldpc_create_pchk.h"
+#include "ldpc_fec.h"
+#include "ldpc_scheme.h"
 
 int ldpc_wrapper::init(int objSize_, int pktSize_, double fec_ratio_, int typeFlag_)
 {

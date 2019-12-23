@@ -1,8 +1,7 @@
-#include <math.h>
+#include "color_util.h"
+
 #include <math.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include "color_util.h"
 
 // random number between [0, 1)
 static inline float _randf()

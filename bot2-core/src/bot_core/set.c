@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "set.h"
+
+#include <stdio.h>
 
 struct _BotSet {
     GHashTable *hash_table;

@@ -1,10 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "minheap.h"
+
 #include <assert.h>
+#include <stdio.h>
 
 #include <glib.h>
-
-#include "minheap.h"
 
 struct _BotMinheapNode
 {

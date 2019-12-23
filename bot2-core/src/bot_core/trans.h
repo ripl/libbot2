@@ -26,12 +26,11 @@ extern "C" {
  * Represents a rigid-body transformation corresponding to a rotation followed
  * by a translation.
  */
-typedef struct _BotTrans BotTrans;
-struct _BotTrans
+typedef struct _BotTrans
 {
     double rot_quat[4];
     double trans_vec[3];
-};
+} BotTrans;
 
 /**
  * bot_trans_set_identity:

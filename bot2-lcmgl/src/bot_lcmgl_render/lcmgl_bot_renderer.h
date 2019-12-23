@@ -15,7 +15,7 @@
 
 #include <lcm/lcm.h>
 
-#include <bot_vis/bot_vis.h>
+#include <bot_vis/viewer.h>
 
 #ifdef __cplusplus
 extern "C" {

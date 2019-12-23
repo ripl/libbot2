@@ -1,8 +1,6 @@
 #ifndef __bot_glib_util_h__
 #define __bot_glib_util_h__
 
-#include <stdint.h>
-
 /**
  * SECTION:glib_util
  * @title:GLib Utilities
@@ -13,11 +11,6 @@
  */
 
 #include <glib.h>
-//#include "gu_circular.h"
-//#include "gu_ptr_circular.h"
-//#include "gu_minheap.h"
-//#include "gu_set.h"
-//#include "gu_disjoint_set_forest.h"
 
 #ifdef __cplusplus
 extern "C" {

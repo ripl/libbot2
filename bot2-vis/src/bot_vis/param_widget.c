@@ -1,13 +1,14 @@
+#include "param_widget.h"
+
+#include <math.h>
 #include <stdarg.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-
-#include "param_widget.h"
 
 //#define dbg(args...) fprintf(stderr, args)
 #define dbg(args...)

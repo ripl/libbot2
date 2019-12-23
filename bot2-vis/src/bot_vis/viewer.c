@@ -1,31 +1,32 @@
+#include "viewer.h"
+
+#include <assert.h>
+#include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <time.h>
-#include <math.h>
-#include <assert.h>
 #include <string.h>
 
+#include <gdk/gdk.h>
+/* IWYU pragma: no_include "gdk/gdkkeysyms.h" */
+#include <glib.h>
+#include <gtk/gtk.h>
 #include <zlib.h>
-
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-#include <GLUT/glut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <GL/glut.h>
 #endif
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
+#include <bot_core/fileutils.h>
+#include <bot_core/ppm.h>
+#include <bot_core/small_linalg.h>
+#include <bot_core/timestamp.h>
 
-#include <bot_core/bot_core.h>
-
-#include "gtk_util.h"
-#include "viewer.h"
 #include "default_view_handler.h"
+#include "gl_drawing_area.h"
 
 //#define dbg(args...) fprintf (stderr, args)
 #define dbg(args...)
@@ -42,8 +43,7 @@
 static int g_draws = 0;
 
 // a structure for bookmarked viewpoints
-typedef struct _bookmark_persp bookmark_persp_t;
-struct _bookmark_persp {
+typedef struct _bookmark_persp {
     BotViewer* viewer;
     double eye[3];
     double lookat[3];
@@ -51,7 +51,7 @@ struct _bookmark_persp {
     BotProjectionMode projection_mode;
     int saved;
     int index;
-} bmtemp;
+} bookmark_persp_t;
 
 enum {
     LOAD_PREFERENCES_SIGNAL,
@@ -61,8 +61,7 @@ enum {
     LAST_SIGNAL
 };
 
-typedef struct _BotViewerPriv BotViewerPriv;
-struct _BotViewerPriv {
+typedef struct _BotViewerPriv {
     /*< private >*/
     int64_t next_render_utime;
     int64_t render_interval_usec;
@@ -71,7 +70,7 @@ struct _BotViewerPriv {
     int num_bookmarks;
 
     GtkAccelGroup* key_accel_group;
-};
+} BotViewerPriv;
 #define BOT_VIEWER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), TYPE_BOT_VIEWER, BotViewerPriv))
 
 static guint bot_viewer_signals[LAST_SIGNAL] = { 0 };

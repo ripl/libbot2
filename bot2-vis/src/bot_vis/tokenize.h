@@ -3,9 +3,7 @@
 
 #include <stdio.h>
 
-typedef struct tokenize tokenize_t;
-
-struct tokenize
+typedef struct tokenize
 {
     // current token
     char *token;
@@ -32,7 +30,7 @@ struct tokenize
 
     // do we have a token ready?
     int hasnext;
-};
+} tokenize_t;
 
 tokenize_t *tokenize_create(const char *path);
 void tokenize_destroy(tokenize_t *t);

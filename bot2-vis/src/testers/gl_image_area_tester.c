@@ -1,13 +1,14 @@
+#include "bot_vis/gl_image_area.h"  /* IWYU pragma: associated */
+
+#include <ctype.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <getopt.h>
-#include <ctype.h>
-#include <stdint.h>
+#include <gdk/gdk.h>
 
-#include <glib.h>
-
-#include <bot_vis/bot_vis.h>
+#include "bot_vis/param_widget.h"
+#include "bot_vis/gl_drawing_area.h"
 
 typedef struct _app_params_t
 {

@@ -16,12 +16,11 @@
 extern "C" {
 #endif
 
-typedef struct _BotGPSLinearize BotGPSLinearize;
-struct _BotGPSLinearize
+typedef struct _BotGPSLinearize
 {
     double lon0_deg, lat0_deg;
     double radius_ns, radius_ew;
-};
+} BotGPSLinearize;
 
 void bot_gps_linearize_init(BotGPSLinearize *gl, const double ll_deg[2]);
 int bot_gps_linearize_to_xy(BotGPSLinearize *gl, const double ll_deg[2], double xy[2]);

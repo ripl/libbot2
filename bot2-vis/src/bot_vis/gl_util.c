@@ -1,12 +1,23 @@
+#include "gl_util.h"
+
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #include <glib.h>
+#ifdef __APPLE
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 #include <bot_core/fasttrig.h>
-#include "gl_util.h"
+#include <bot_core/small_linalg.h>
 
 void
 bot_gl_draw_cube ()

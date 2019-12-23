@@ -1,6 +1,8 @@
 #ifndef _UDPUTIL_H
 #define _UDPUTIL_H
 
+#include <string.h>  /* IWYU pragma: keep */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

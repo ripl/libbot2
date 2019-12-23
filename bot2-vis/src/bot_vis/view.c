@@ -1,15 +1,19 @@
+#include "view.h"
+
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #include <glib.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
-#include <bot_core/small_linalg.h>
 #include <bot_core/rotations.h>
-
-#include "gl_util.h"
-#include "view.h"
+#include <bot_core/small_linalg.h>
 
 //#define dbg(args...) fprintf(stderr, args)
 #define dbg(args...)

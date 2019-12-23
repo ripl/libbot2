@@ -1,11 +1,19 @@
+#include "scrollplot2d.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
-
-#include "gl_util.h"
-#include "scrollplot2d.h"
+#ifdef __APPLE
+#include <GLUT/glut.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/freeglut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 typedef struct __plot2d_point {
     double x;

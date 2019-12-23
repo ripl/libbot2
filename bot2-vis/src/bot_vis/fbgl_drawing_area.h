@@ -1,6 +1,8 @@
 #ifndef __BOT_FBGL_DRAWING_AREA_H__
 #define __BOT_FBGL_DRAWING_AREA_H__
 
+#include <glib.h>
+#include <glib-object.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
@@ -28,18 +30,15 @@ G_BEGIN_DECLS
 #define FB_IS_GL_DRAWING_AREA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), BOT_TYPE_FBGL_DRAWING_AREA))
 #define BOT_FBGL_DRAWING_AREA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), BOT_TYPE_FBGL_DRAWING_AREA, BotFbglDrawingAreaClass))
 
-typedef struct _BotFbglDrawingArea        BotFbglDrawingArea;
-typedef struct _BotFbglDrawingAreaClass   BotFbglDrawingAreaClass;
-
-struct _BotFbglDrawingArea {
+typedef struct _BotFbglDrawingArea {
     GObject parent;
 
     int width, height;
-};
+} BotFbglDrawingArea;
 
-struct _BotFbglDrawingAreaClass {
+typedef struct _BotFbglDrawingAreaClass {
     GObjectClass parent;
-};
+} BotFbglDrawingAreaClass;
 
 GType       bot_fbgl_drawing_area_get_type (void);
 BotFbglDrawingArea * bot_fbgl_drawing_area_new (gboolean new_context,

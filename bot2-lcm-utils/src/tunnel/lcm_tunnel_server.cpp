@@ -1,23 +1,17 @@
+#include "lcm_tunnel_server.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <inttypes.h>
-#include <getopt.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <assert.h>
-#include <math.h>
+#include <string.h>
+
+#include <memory>  // IWYU pragma: keep
 
 #include <lcm/lcm.h>
 
-#include "lcm_tunnel_server.h"
-#include "ssocket.h"
-#include "signal_pipe.h"
-#include "lcm_util.h"
-#include "lcm_tunnel_params_t.h"
 #include "lcm_tunnel.h"
-#include "ldpc/ldpc_wrapper.h"
+#include "lcm_util.h"
+#include "signal_pipe.h"
+#include "ssocket.h"
 
 bool LcmTunnelServer::initialized=false;
 GMainLoop * LcmTunnelServer::mainloop;

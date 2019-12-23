@@ -5,9 +5,19 @@
  *      Author: abachrac
  */
 
-#include <bot_core/bot_core.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <lcm/lcm.h>
+
+#include <bot_core/rotations.h>
+#include <bot_core/timestamp.h>
+#include <bot_core/trans.h>
 #include <bot_param/param_client.h>
-#include <bot_frames/bot_frames.h>
+#include <lcmtypes/bot_core_rigid_transform_t.h>
+
+#include "bot_frames/bot_frames.h"
 
 void update_handler(BotFrames *bot_frames, const char *frame, const char * relative_to, int64_t utime, void *user)
 {

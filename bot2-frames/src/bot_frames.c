@@ -1,18 +1,20 @@
-#include <stdio.h>
-
-#include <glib.h>
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
-#include <lcm/lcm.h>
 #include "bot_frames.h"
 
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <glib.h>
+#include <lcm/lcm.h>
+
+#include <bot_core/ctrans.h>
+#include <bot_core/lcm_util.h>
 #include <bot_param/param_util.h>
-#include <lcmtypes/bot_frames_update_t.h>
+#include <lcmtypes/bot_core_pose_t.h>
+#include <lcmtypes/bot_core_rigid_transform_t.h>
+
+#include "lcmtypes/bot_frames_update_t.h"
 
 #define BOT_FRAMES_UPDATE_CHANNEL "BOT_FRAMES_UPDATE"
 #define DEFAULT_HISTORY_LEN 100

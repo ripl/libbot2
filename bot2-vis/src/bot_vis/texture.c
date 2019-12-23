@@ -2,23 +2,23 @@
  *
  * Convenience functions for uploading OpenGL textures and drawing them.
  */
+
+#include "texture.h"
+
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 #include <glib.h>
-
 #define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+#include <OpenGL/glext.h>  /* IWYU pragma: keep */
 #else
 #include <GL/gl.h>
-#include <GL/glext.h>
+#include <GL/glext.h>  /* IWYU pragma: keep */
 #endif
-
-#include "texture.h"
 
 #define err(args...) fprintf(stderr, args)
 

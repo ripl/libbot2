@@ -1,14 +1,12 @@
+#include "gtk_util.h"
+
+#include <fcntl.h>
 #include <signal.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <string.h>
-#include <stdlib.h>
 
+#include <glib.h>
 #include <gtk/gtk.h>
-
-#include "gtk_util.h"
 
 #define dbg(args...) fprintf(stderr, args)
 #undef dbg

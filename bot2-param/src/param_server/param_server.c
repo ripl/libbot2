@@ -1,20 +1,19 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdlib.h>
 #include <getopt.h>
-#include <sys/select.h>
-#include <sys/time.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include <glib.h>
-
 #include <lcm/lcm.h>
-#include <bot_param/param_client.h>
-#include "lcm_util.h"
 
+#include "bot_param/param_client.h"
+#include "lcm_util.h"
+#include "lcmtypes/bot_param_entry_t.h"
+#include "lcmtypes/bot_param_request_t.h"
+#include "lcmtypes/bot_param_set_t.h"
+#include "lcmtypes/bot_param_update_t.h"
 #include "../param_client/misc_utils.h"
 #include "../param_client/param_internal.h"
-
-#include <lcmtypes/bot2_param.h>
 
 typedef struct {
   BotParam * params;

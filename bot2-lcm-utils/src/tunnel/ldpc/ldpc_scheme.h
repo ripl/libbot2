@@ -29,6 +29,7 @@
 #ifndef LDPC_FEC_SCHEME_H /* { */
 #define LDPC_FEC_SCHEME_H
 
+#include "ldpc_fec.h"
 #include "ldpc_types.h"
 
 /**

@@ -14,40 +14,40 @@
  * Maintainer: Albert Huang <albert@csail.mit.edu>
  */
 
-#define _GNU_SOURCE
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
-#include <sys/poll.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include <inttypes.h>
+#include <poll.h>
 #include <signal.h>
 #include <stdarg.h>
-#include <time.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
-#include <inttypes.h>
-#include <errno.h>
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
 
 #include <glib.h>
-
 #include <lcm/lcm.h>
 
-#include <lcmtypes/bot_procman_printf_t.h>
-#include <lcmtypes/bot_procman_info_t.h>
-#include <lcmtypes/bot_procman_discovery_t.h>
-#include <lcmtypes/bot_procman_orders_t.h>
-
-#include <lcmtypes/bot_procman_info2_t.h>
-#include <lcmtypes/bot_procman_orders2_t.h>
-
-#include "procman.h"
-#include "procinfo.h"
-#include "signal_pipe.h"
 #include "lcm_util.h"
+#include "lcmtypes/bot_procman_command2_t.h"
+#include "lcmtypes/bot_procman_deputy_cmd_t.h"
+#include "lcmtypes/bot_procman_deputy_cmd2_t.h"
+#include "lcmtypes/bot_procman_discovery_t.h"
+#include "lcmtypes/bot_procman_info_t.h"
+#include "lcmtypes/bot_procman_info2_t.h"
+#include "lcmtypes/bot_procman_orders_t.h"
+#include "lcmtypes/bot_procman_orders2_t.h"
+#include "lcmtypes/bot_procman_printf_t.h"
+#include "lcmtypes/bot_procman_sheriff_cmd_t.h"
+#include "lcmtypes/bot_procman_sheriff_cmd2_t.h"
+#include "procinfo.h"
+#include "procman.h"
+#include "signal_pipe.h"
 
 #define ESTIMATED_MAX_CLOCK_ERROR_RATE 1.001
 

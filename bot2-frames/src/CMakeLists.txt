@@ -9,7 +9,6 @@ target_link_libraries(${PROJECT_NAME}
     GLib2::glib
     lcmtypes_bot2-frames
     libbot2::lcmtypes_bot2-core
-    libbot2::lcmtypes_bot2-param
     ${OPENGL_LIBRARIES}
 )
 target_include_directories(${PROJECT_NAME}

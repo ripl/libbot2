@@ -1,6 +1,7 @@
 #ifndef __bot2_vis_h__
 #define __bot2_vis_h__
 
+/* IWYU pragma: begin_exports */
 #include "batch_gl.h"
 #include "console.h"
 #include "default_view_handler.h"
@@ -11,11 +12,12 @@
 #include "gtk_util.h"
 #include "param_widget.h"
 #include "rwx.h"
-#include "wavefront.h"
 #include "scrollplot2d.h"
 #include "texture.h"
-#include "viewer.h"
 #include "view.h"
+#include "viewer.h"
+#include "wavefront.h"
+/* IWYU pragma: end_exports */
 
 /**
  * @defgroup BotVis Bot Vis

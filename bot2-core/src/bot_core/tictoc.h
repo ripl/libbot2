@@ -8,6 +8,8 @@
 #ifndef __bot_tictoch_h__
 #define __bot_tictoch_h__
 
+#include <stdint.h>
+
 /**
  * @defgroup BotCoreTicToc TicToc
  * @brief quick and dirty profiling tool.

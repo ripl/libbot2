@@ -6,34 +6,40 @@
  * one.
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <stdarg.h>
-#include <ctype.h>
-#include <assert.h>
-#include <bot_core/lcm_util.h>
-#include "param_client.h"
 #include "param_internal.h"
-#include "misc_utils.h"
-#include <lcmtypes/bot2_param.h>
+
+#include <assert.h>
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+
 #include <glib.h>
+#include <lcm/lcm.h>
+
+#include <bot_core/lcm_util.h>
+
+#include "lcmtypes/bot_param_request_t.h"
+#include "lcmtypes/bot_param_update_t.h"
+#include "misc_utils.h"
+#include "param_client.h"
+
+/* IWYU pragma: no_forward_declare _BotParamElement */
+/* IWYU pragma: no_forward_declare _Parser */
 
 #define err(args...) fprintf(stderr, args)
 
 #define MAX_REFERENCES ((1LL << 60))
 
-typedef struct _Parser Parser;
-typedef struct _ParserFile ParserFile;
-typedef struct _ParserString ParserString;
-typedef struct _BotParamElement BotParamElement;
-
-typedef int (*GetChFunc)(Parser *);
-
 typedef enum {
   ParserTypeFile, ParserTypeString
 } ParserType;
+
+typedef struct _Parser Parser;
+typedef int (*GetChFunc)(Parser *);
 
 struct _Parser {
   ParserType type;
@@ -41,16 +47,16 @@ struct _Parser {
   int extra_ch;
 };
 
-struct _ParserFile {
+typedef struct _ParserFile {
   Parser p;
   const char * filename;
   FILE * file;
   int row;
   int col;
   int in_comment;
-};
+} ParserFile;
 
-struct _ParserString {
+typedef struct _ParserString {
   Parser p;
   const char * string;
   int length;
@@ -58,7 +64,7 @@ struct _ParserString {
   int row;
   int col;
   int in_comment;
-};
+} ParserString;
 
 typedef enum {
   TokInvalid,
@@ -83,6 +89,7 @@ typedef enum {
   BotParamDataString, BotParamDataInt, BotParamDataBool, BotParamDataDouble
 } BotParamDataType;
 
+typedef struct _BotParamElement BotParamElement;
 struct _BotParamElement {
   BotParamType type;
   BotParamDataType data_type;

@@ -1,6 +1,9 @@
+#include "bot_vis/gl_drawing_area.h"  /* IWYU pragma: associated */
+
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <gdk/gdk.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -8,9 +11,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-
-#include <gtk/gtk.h>
-#include <bot_vis/bot_vis.h>
 
 typedef struct _point2d {
     double x;

@@ -1,12 +1,14 @@
 #ifndef __lcm_tunnel_server_h__
 #define __lcm_tunnel_server_h__
 
-#include <inttypes.h>
-#include "lcm_tunnel.h"
-#include "ldpc/ldpc_wrapper.h"
-#include "introspect.h"
-#include "ssocket.h"
 #include <list>
+
+#include <glib.h>
+#include <lcm/lcm.h>
+
+#include "introspect.h"
+#include "lcm_tunnel.h"
+#include "ssocket.h"
 
 class LcmTunnelServer {
 public:

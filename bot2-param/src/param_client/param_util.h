@@ -1,8 +1,10 @@
 #ifndef __BOT_PARAM_UTIL_H__
 #define __BOT_PARAM_UTIL_H__
 
-#include <bot_core/bot_core.h>
-#include <bot_param/param_client.h>
+#include <bot_core/camtrans.h>
+#include <bot_core/trans.h>
+
+#include "param_client.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,12 +16,12 @@
 
 /* NOTE:  See mod2sparse.html for documentation on these procedures. */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <string.h> //memcpy
-
 #include "ldpc_matrix_sparse.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "tools.h"
 
 /* ALLOCATE AN ENTRY WITHIN A MATRIX.  This local procedure is used to
    allocate a new entry, representing a non-zero element, within a given

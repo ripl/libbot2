@@ -1,6 +1,8 @@
 #ifndef __bot_lcmgl_h__
 #define __bot_lcmgl_h__
 
+#include <stdint.h>
+
 #include <lcm/lcm.h>
 
 /**

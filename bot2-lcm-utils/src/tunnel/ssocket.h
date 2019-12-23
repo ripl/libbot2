@@ -1,24 +1,20 @@
 #ifndef _SSOCKET_H
 #define _SSOCKET_H
 
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct ssocket ssocket_t;
-
-struct ssocket
+typedef struct ssocket
 {
 	int type;
 	int socket;
 
 	struct sockaddr addr;
 	socklen_t addrlen;
-};
+} ssocket_t;
 
 ssocket_t *ssocket_create(void);
 void ssocket_destroy(ssocket_t *s);

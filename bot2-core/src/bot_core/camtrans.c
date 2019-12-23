@@ -1,13 +1,13 @@
+#include "camtrans.h"
+
+#include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
-#include <assert.h>
 
 #include "fasttrig.h"
 #include "small_linalg.h"
-
-#include "camtrans.h"
 
 #if 1
 #define ERR(...) do { fprintf(stderr, "[%s:%d] ", __FILE__, __LINE__);	\

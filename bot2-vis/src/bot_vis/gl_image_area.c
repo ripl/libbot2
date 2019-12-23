@@ -1,18 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
+#include "gl_image_area.h"
 
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <gdk/gdk.h>
+#include <glib-object.h>
 #define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
+#include <OpenGL/glext.h>  /* IWYU pragma: keep */
 #else
 #include <GL/gl.h>
-#include <GL/glext.h>
+#include <GL/glext.h>  /* IWYU pragma: keep */
 #endif
 
-#include "gl_image_area.h"
+#include "gl_drawing_area.h"
 
 #define err(args...) fprintf (stderr, args)
 #define errl(args...) fprintf (stderr, args)

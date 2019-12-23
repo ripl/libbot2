@@ -1,11 +1,11 @@
-#include <stdlib.h>
-#include <string.h>
-#include <glib.h>
-
-#include "small_linalg.h"
-#include "rotations.h"
 #include "trans.h"
+
+#include <stdio.h>
+#include <string.h>
+
 #include "math_util.h"
+#include "rotations.h"
+#include "small_linalg.h"
 
 void
 bot_trans_set_identity(BotTrans *btrans)

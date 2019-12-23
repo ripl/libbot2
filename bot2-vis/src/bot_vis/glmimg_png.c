@@ -10,18 +10,23 @@
  *
  */
 
-#include "glm.h"
-#include "glmint.h"
-
 /*
  * Based heavily on example code in libpng. Some bugs fixed though.
  */
 
+#include <setjmp.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 #include <png.h>
+/* IWYU pragma: no_include "pngconf.h" */
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include "glmint.h"  /* IWYU pragma: keep */
 
 #define ERR_NO_ERROR     0
 #define ERR_OPEN         1

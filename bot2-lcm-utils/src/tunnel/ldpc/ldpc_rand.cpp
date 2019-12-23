@@ -199,9 +199,10 @@
 // requires.
 //
 
-#include <stdlib.h>
-#include <stdio.h>
 #include "ldpc_rand.h"
+
+#include <stdio.h>
+#include <stdlib.h>
 
 unsigned long	seed;
 

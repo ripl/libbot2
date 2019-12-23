@@ -1,8 +1,8 @@
+#include "circular.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "circular.h"
 
 BotCircular *
 bot_circular_new (int capacity, int element_size)

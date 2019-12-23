@@ -1,13 +1,13 @@
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
+#include "introspect.h"
+
 #include <netinet/in.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
 
 #include <glib.h>
-
-#include "introspect.h"
 
 struct _introspect_t
 {

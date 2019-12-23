@@ -1,9 +1,8 @@
+#include "rotations.h"
+
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <math.h>
-#include <assert.h>
-
-#include "rotations.h"
 
 #define ROT_EPSILON 1e-12
 

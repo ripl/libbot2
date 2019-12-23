@@ -22,22 +22,28 @@
       - glmVertexNormals(): have an option to add normals only where undefined
 */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #define MATERIAL_BY_FACE
 
+#include "glm.h"
+
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include "glm.h"
-/*
-#define DEBUG
-#define GLDEBUG
-*/
+
+#ifdef __APPLE_
+#include <OpenGL/gl.h>
+#ifdef AVL
+#include <OpenGL/glu.h>
+#endif
+#else
+#include <GL/gl.h>
+#ifdef AVL
+#include <GL/glu.h>
+#endif
+#endif
+
 #include "glmint.h"
 
 #define T(x) (model->triangles[(x)])

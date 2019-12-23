@@ -2,28 +2,32 @@
  * decodes and renders LCMGL data
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdint.h>
-#include <math.h>
+#include "lcmgl_decode.h"
 
+#include <math.h>
+#include <stdint.h>
+#include <stdio.h>
 #ifdef USE_BOT_VIS
-  #include <bot_core/bot_core.h>
-  #include <bot_vis/bot_vis.h>
-#else
-  #ifdef __APPLE__
-    #include <OpenGL/gl.h>
-    #include <OpenGL/glu.h>
-  #else
-    #include <GL/gl.h>
-    #include <GL/glu.h>
-  #endif
+#include <stdlib.h>
 #endif
 
-#include <lcmtypes/bot_lcmgl_data_t.h>
-#include "../bot_lcmgl_client/lcmgl.h"
-#include "lcmgl_decode.h"
-#include <zlib.h> //for compressed textures
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/gltypes.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+#ifdef USE_BOT_VIS
+#include <zlib.h>
+
+#include <bot_core/fasttrig.h>
+#include <bot_vis/gl_util.h>
+#include <bot_vis/texture.h>
+#endif
+
+#include "bot_lcmgl_client/lcmgl.h"
 
 union fu32
 {
@@ -37,13 +41,12 @@ union du64
     uint64_t u64;
 };
 
-typedef struct lcmgl_decoder lcmgl_decoder_t;
-struct lcmgl_decoder
+typedef struct lcmgl_decoder
 {
     uint8_t *data;
     int      datalen;
     int      datapos;
-};
+} lcmgl_decoder_t;
 
 static inline uint8_t lcmgl_decode_u8(lcmgl_decoder_t *ldec)
 {

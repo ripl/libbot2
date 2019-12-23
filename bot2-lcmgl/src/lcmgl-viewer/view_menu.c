@@ -1,9 +1,7 @@
+#include "view_menu.h"
+
+#include <glib-object.h>
 #include <gtk/gtk.h>
-
-#include <bot_core/bot_core.h>
-#include <bot_vis/bot_vis.h>
-
-void setup_view_menu(BotViewer *viewer);
 
 static void
 on_setview_y_up_item(GtkMenuItem *mi, void *user)

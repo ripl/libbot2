@@ -1,7 +1,10 @@
 #ifndef __bot_lcm_util_h__
 #define __bot_lcm_util_h__
 
+#include <stdint.h>
+
 #include <glib.h>
+#include <lcm/lcm.h>
 
 /**
  * @defgroup BotCoreLcmUtil LcmUtil
@@ -15,8 +18,6 @@
  *
  * Linking: `pkg-config --libs bot2-core`
  */
-
-#include <lcm/lcm.h>
 
 #ifdef __cplusplus
 extern "C" {

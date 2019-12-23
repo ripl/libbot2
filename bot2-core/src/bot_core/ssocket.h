@@ -14,24 +14,20 @@
  * @{
  */
 
-#include <sys/types.h>
 #include <sys/socket.h>
-#include <stdio.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct bot_ssocket bot_ssocket_t;
-
-struct bot_ssocket
+typedef struct bot_ssocket
 {
 	int type;
 	int socket;
 
 	struct sockaddr addr;
 	socklen_t addrlen;
-};
+} bot_ssocket_t;
 
 bot_ssocket_t *bot_ssocket_create(void);
 void bot_ssocket_destroy(bot_ssocket_t *s);

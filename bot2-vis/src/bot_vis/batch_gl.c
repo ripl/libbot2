@@ -1,9 +1,10 @@
-#include <stdio.h>
+#include "batch_gl.h"
+
 #include <string.h>
 
 #include <glib.h>
 
-#include "batch_gl.h"
+/* IWYU pragma: no_forward_declare _BotBatchGl_command */
 
 typedef struct _BotBatchGl_command bot_bgl_command_t;
 struct _BotBatchGl_command {
@@ -74,7 +75,7 @@ void bot_bgl_##name (BotBatchGl *bgl) { \
 }
 
 #define DECL_BGL_1(glfunc, name, type) \
-typedef struct { \
+typedef struct _bot_bgl_cmd_##name { \
     bot_bgl_command_t parent; \
     type v; \
 } bot_bgl_cmd_##name##_t; \
@@ -94,7 +95,7 @@ void bot_bgl_##name (BotBatchGl *bgl, type v) { \
 }
 
 #define DECL_BGL_2(glfunc, name, type_1, type_2) \
-typedef struct { \
+typedef struct _bot_bgl_cmd_##name { \
     bot_bgl_command_t parent; \
     type_1 a; \
     type_2 b; \
@@ -116,7 +117,7 @@ void bot_bgl_##name (BotBatchGl *bgl, type_1 a, type_2 b) { \
 }
 
 #define DECL_BGL_3(glfunc, name, type_1, type_2, type_3) \
-typedef struct { \
+typedef struct _bot_bgl_cmd_##name { \
     bot_bgl_command_t parent; \
     type_1 a; \
     type_2 b; \
@@ -140,7 +141,7 @@ void bot_bgl_##name (BotBatchGl *bgl, type_1 a, type_2 b, type_3 c) { \
 }
 
 #define DECL_BGL_4(glfunc, name, type_1, type_2, type_3, type_4) \
-typedef struct { \
+typedef struct _bot_bgl_cmd_##name { \
     bot_bgl_command_t parent; \
     type_1 a; \
     type_2 b; \
@@ -191,7 +192,7 @@ DECL_BGL_4 (glRotated, rotated, double, double, double, double)
 DECL_BGL_4 (glRotatef, rotatef, float, float, float, float)
 
 #define DECL_BGL_1V(glfunc, name, type, size) \
-typedef struct { \
+typedef struct _bot_bgl_cmd_##name { \
     bot_bgl_command_t parent; \
     type v[size]; \
 } bot_bgl_cmd_##name##_t; \

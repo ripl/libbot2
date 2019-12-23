@@ -1,9 +1,15 @@
-#include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
+#include <glib.h>
 #include <gtk/gtk.h>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/freeglut.h>
+#endif
 
-#include <bot_vis/bot_vis.h>
+#include "bot_vis/viewer.h"
 
 void setup_renderer_rwx(BotViewer *viewer, int render_priority, const char *rwx_fname);
 

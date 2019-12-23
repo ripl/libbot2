@@ -2,33 +2,29 @@
  * process management core code
  */
 
-#define _GNU_SOURCE
+#include "procman.h"
 
+#include <errno.h>
+#include <libgen.h>
+#include <limits.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <unistd.h>
 #include <string.h>
-#include <ctype.h>
-#include <time.h>
-#include <errno.h>
 #include <sys/time.h>
-
+#include <sys/wait.h>
+#include <time.h>
+#include <unistd.h>
 #ifdef __APPLE__
 #include <util.h>
 #else
 #include <pty.h>
 #endif
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <signal.h>
-
 #include <glib.h>
 
-#include <libgen.h>
-
-#include "procman.h"
 #include "procinfo.h"
 
 static void dbgt (const char *fmt, ...)

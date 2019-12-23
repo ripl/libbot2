@@ -30,6 +30,8 @@
 #define MACROS_H
 
 #include <stdio.h>
+#include <stdlib.h>  // IWYU pragma: keep
+#include <sys/time.h>
 
 /****** general macros ******/
 

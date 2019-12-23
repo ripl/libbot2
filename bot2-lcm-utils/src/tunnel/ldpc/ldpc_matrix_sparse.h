@@ -38,8 +38,7 @@
 #ifndef LDPC_MATRIX_SPARSE__
 #define LDPC_MATRIX_SPARSE__
 
-#include "ldpc_profile.h"	/* general LDPC codec profiles */
-#include "tools.h"
+#include <stdio.h>
 
 /**
  * Structure representing a non-zero entry, or the header for a row or column.

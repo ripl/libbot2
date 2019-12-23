@@ -24,15 +24,13 @@ extern "C" {
  *
  * @{
  */
-typedef struct _BotCircular BotCircular;
-
-struct _BotCircular {
+typedef struct _BotCircular {
     int len;
     int capacity;
     int element_size;
     int head;
     void * array;
-};
+} BotCircular;
 
 BotCircular *
 bot_circular_new (int capacity, int element_size);

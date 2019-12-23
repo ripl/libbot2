@@ -1,7 +1,7 @@
 #ifndef _BOT_LCMGL_DECODE_H
 #define _BOT_LCMGL_DECODE_H
 
-#include <inttypes.h>
+#include <stdint.h>
 
 /**
  * @defgroup BotLCMGLRender LCMGL decoding and rendering

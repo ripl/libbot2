@@ -1,7 +1,9 @@
 #ifndef __bot_param_client_h__
 #define __bot_param_client_h__
 
+#include <stdint.h>
 #include <stdio.h>
+
 #include <lcm/lcm.h>
 
 /**
