@@ -16,10 +16,6 @@
 #
 # Python
 #   pods_install_python_packages(...)
-#   pods_install_python_script(...)
-#
-# Java
-#   None yet
 #
 # ----
 # File: pods.cmake
@@ -48,11 +44,11 @@ function(pods_install_headers)
     foreach(header ${ARGV})
         get_filename_component(_header_name ${header} NAME)
         configure_file(${header} ${INCLUDE_OUTPUT_PATH}/${dest_dir}/${_header_name} COPYONLY)
-	endforeach(header)
+	endforeach()
 	#mark them to be installed
 	install(FILES ${ARGV} DESTINATION include/${dest_dir})
 
-endfunction(pods_install_headers)
+endfunction()
 
 # pods_install_executables(<executable1> ...)
 #
@@ -62,7 +58,7 @@ function(pods_install_executables _export _export_name)
         message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
     endif()
     install(TARGETS ${ARGN} EXPORT ${_export_name} RUNTIME DESTINATION bin)
-endfunction(pods_install_executables)
+endfunction()
 
 # pods_install_libraries(<library1> ...)
 #
@@ -72,7 +68,7 @@ function(pods_install_libraries _export _export_name)
         message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
     endif()
     install(TARGETS ${ARGN} EXPORT ${_export_name} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
-endfunction(pods_install_libraries)
+endfunction()
 
 # pods_install_pkg_config_file(<package-name>
 #                              [VERSION <version>]
@@ -121,8 +117,8 @@ function(pods_install_pkg_config_file)
         else(${mode_index} GREATER -1)
             message("WARNING incorrect use of pods_add_pkg_config (${word})")
             break()
-        endif(${mode_index} GREATER -1)
-    endforeach(word)
+        endif()
+    endforeach()
 
     # write the .pc file out
     file(WRITE ${pc_fname}
@@ -140,55 +136,6 @@ function(pods_install_pkg_config_file)
 
     # mark the .pc file for installation to the lib/pkgconfig directory
     install(FILES ${pc_fname} DESTINATION lib/pkgconfig)
-
-endfunction(pods_install_pkg_config_file)
-
-# pods_install_python_script(<script_name> <python_module_or_file>)
-#
-# Create and install a script that invokes the python interpreter with a
-# specified python module or script.
-#
-# A launcher script will be installed to bin/<script_name>. The script simply
-# adds <install-prefix>/lib/pythonX.Y/dist-packages
-# and  <install-prefix>/lib/pythonX.Y/site-packages
-# to the PYTHONPATH, and then
-# invokes `python -m <python_module>` or `python python_file`
-# depending on whether the function was passed a module name or script file.
-#
-# example:
-#    pods_install_python_script(run-py-module py_pkg.py_module)
-#    pods_install_python_script(run-py-script py_script.py)
-function(pods_install_python_script script_name python_module_or_file)
-    if (python_module_or_file MATCHES ".+\\.py") #ends with a .py
-        get_filename_component(py_file ${python_module_or_file} ABSOLUTE)
-
-        if (NOT EXISTS ${py_file})
-            message(FATAL_ERROR "${python_module_or_file} is not an absolute or relative path to a python script")
-        endif()
-
-        #get the directory where we'll install the script ${sanitized_POD_NAME}_scripts
-        string(REGEX REPLACE "[^a-zA-Z0-9]" "_" __sanitized_pod_name "${POD_NAME}")
-        set(pods_scripts_dir "${PYTHON_INSTALL_PATH}/${__sanitized_pod_name}_scripts")
-
-        # install the python script file
-        install(FILES ${py_file}  DESTINATION "${pods_scripts_dir}")
-
-        get_filename_component(py_script_name ${py_file} NAME)
-        # write the bash script file
-        file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${script_name}
-            "#!/bin/sh\n"
-            "export PYTHONPATH=${PYTHON_INSTALL_PATH}:\${PYTHONPATH}\n"
-            "exec ${PYTHON_EXECUTABLE} ${pods_scripts_dir}/${py_script_name} $*\n")
-    else()
-        get_filename_component(py_module ${python_module_or_file} NAME) #todo: check whether module exists?
-        # write the bash script file
-        file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${script_name}
-            "#!/bin/sh\n"
-            "export PYTHONPATH=${PYTHON_INSTALL_PATH}:\${PYTHONPATH}\n"
-            "exec ${PYTHON_EXECUTABLE} -m ${py_module} $*\n")
-    endif()
-    # install it...
-    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_name} DESTINATION bin)
 endfunction()
 
 # _pods_install_python_package(<py_src_dir> <py_module_name>)
@@ -248,58 +195,6 @@ function(pods_install_python_packages py_src_dir)
         endif()
     endif()
 endfunction()
-
-# pods_use_pkg_config_packages(<target> <package-name> ...)
-#
-# Convenience macro to get compiler and linker flags from pkg-config and apply them
-# to the specified target.
-#
-# Invokes `pkg-config --cflags-only-I <package-name> ...` and adds the result to the
-# include directories.
-#
-# Additionally, invokes `pkg-config --libs <package-name> ...` and adds the result to
-# the target's link flags (via target_link_libraries)
-#
-# example:
-#   add_executable(myprogram main.c)
-#   pods_use_pkg_config_packages(myprogram glib-2.0 opencv)
-macro(pods_use_pkg_config_packages target)
-    if(${ARGC} LESS 2)
-        message(WARNING "Useless invocation of pods_use_pkg_config_packages")
-        return()
-    endif()
-    find_package(PkgConfig MODULE REQUIRED)
-    execute_process(COMMAND
-        ${PKG_CONFIG_EXECUTABLE} --cflags-only-I ${ARGN}
-        OUTPUT_VARIABLE _pods_pkg_include_flags)
-    string(STRIP ${_pods_pkg_include_flags} _pods_pkg_include_flags)
-    string(REPLACE "-I" "" _pods_pkg_include_flags "${_pods_pkg_include_flags}")
-	separate_arguments(_pods_pkg_include_flags)
-    #    message("include: ${_pods_pkg_include_flags}")
-    execute_process(COMMAND
-        ${PKG_CONFIG_EXECUTABLE} --libs ${ARGN}
-        OUTPUT_VARIABLE _pods_pkg_ldflags)
-    string(STRIP ${_pods_pkg_ldflags} _pods_pkg_ldflags)
-    #    message("ldflags: ${_pods_pkg_ldflags}")
-
-    # make the target depend on libraries that are cmake targets
-    if (_pods_pkg_ldflags)
-        string(REPLACE " " ";" _split_ldflags ${_pods_pkg_ldflags})
-	target_link_libraries(${target} ${_split_ldflags})
-
-        foreach(__ldflag ${_split_ldflags})
-                string(REGEX REPLACE "^-l" "" __depend_target_name ${__ldflag})
-                if(TARGET ${__depend_target_name})
-                  #message("---- ${target} depends on  ${__depend_target_name}")
-                  add_dependencies(${target} ${__depend_target_name})
-                endif()
-        endforeach()
- 	unset(_split_ldflags)
-    endif()
-
-    unset(_pods_pkg_include_flags)
-    unset(_pods_pkg_ldflags)
-endmacro()
 
 macro(pods_install_cmake_config_files
     _namespace _namespace_value
@@ -363,32 +258,15 @@ macro(pods_config_search_paths)
         unset(__rand_target__name__)
 
         set(__pods_setup true)
-    endif(NOT DEFINED __pods_setup)
-endmacro(pods_config_search_paths)
-
-macro(enforce_out_of_source)
-    if(CMAKE_BINARY_DIR STREQUAL PROJECT_SOURCE_DIR)
-      message(FATAL_ERROR
-      "\n
-      Do not run cmake directly in the pod directory.
-      use the supplied Makefile instead!  You now need to
-      remove CMakeCache.txt and the CMakeFiles directory.
-
-      Then to build, simply type:
-       $ make
-      ")
     endif()
-endmacro(enforce_out_of_source)
+endmacro()
 
 #set the variable POD_NAME to the directory path, and set the cmake PROJECT_NAME
 if(NOT POD_NAME)
     get_filename_component(POD_NAME ${CMAKE_SOURCE_DIR} NAME)
     message(STATUS "POD_NAME is not set... Defaulting to directory name: ${POD_NAME}")
-endif(NOT POD_NAME)
+endif()
 project(${POD_NAME})
-
-#make sure we're running an out-of-source build
-enforce_out_of_source()
 
 #call the function to setup paths
 pods_config_search_paths()
