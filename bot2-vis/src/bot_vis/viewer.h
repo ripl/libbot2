@@ -362,7 +362,7 @@ struct _BotViewer {
     int64_t           movie_frame_last_utime;
     double            movie_actual_fps;
     double            movie_desired_fps;
-    gzFile            *movie_gzf;
+    gzFile            movie_gzf;
 
     guint             render_timer_id;
     int               is_recording;
