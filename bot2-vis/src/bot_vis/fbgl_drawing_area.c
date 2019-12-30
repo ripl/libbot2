@@ -1,10 +1,11 @@
+#define GL_GLEXT_PROTOTYPES 1
+
 #include "fbgl_drawing_area.h"
 
 #include <stdio.h>
 #include <stdint.h>
 #include <sys/types.h>
 
-#define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>  /* IWYU pragma: keep */

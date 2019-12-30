@@ -1,3 +1,7 @@
+#ifndef __APPLE__
+#define GL_GLXEXT_PROTOTYPES 1
+#endif
+
 #include "gl_drawing_area.h"
 
 #include <fcntl.h>
@@ -16,14 +20,12 @@
 #ifdef USE_VBLANK
 #include <pthread.h>
 #endif
-#define GLX_GLXEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glext.h>  /* IWYU pragma: keep */
 #else
 #include <GL/gl.h>
-#include <GL/glext.h>  /* IWYU pragma: keep */
 #include <GL/glx.h>
+#include <GL/glxext.h>  /* IWYU pragma: keep */
 #endif
 #include <X11/X.h>
 #include <X11/Xlib.h>

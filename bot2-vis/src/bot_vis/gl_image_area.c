@@ -1,3 +1,5 @@
+#define GL_GLEXT_PROTOTYPES 1
+
 #include "gl_image_area.h"
 
 #include <stdint.h>
@@ -6,7 +8,6 @@
 
 #include <gdk/gdk.h>
 #include <glib-object.h>
-#define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>  /* IWYU pragma: keep */

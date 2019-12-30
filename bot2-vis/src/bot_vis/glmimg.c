@@ -10,12 +10,13 @@
  *
  */
 
+#define GL_GLEXT_PROTOTYPES 1
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>  /* IWYU pragma: keep */

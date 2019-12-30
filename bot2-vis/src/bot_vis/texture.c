@@ -3,6 +3,8 @@
  * Convenience functions for uploading OpenGL textures and drawing them.
  */
 
+#define GL_GLEXT_PROTOTYPES 1
+
 #include "texture.h"
 
 #include <stdint.h>
@@ -11,7 +13,6 @@
 #include <string.h>
 
 #include <glib.h>
-#define GL_GLEXT_PROTOTYPES 1
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>  /* IWYU pragma: keep */
