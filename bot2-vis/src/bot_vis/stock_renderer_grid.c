@@ -200,7 +200,7 @@ static BotRenderer *renderer_grid_new (BotViewer *viewer)
 
 //    self->label = gtk_label_new ("Spacing: ???");
     self->pw = BOT_GTK_PARAM_WIDGET (bot_gtk_param_widget_new ());
-    GtkWidget *vbox = gtk_vbox_new (FALSE, 0);
+    GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 //    gtk_misc_set_alignment (GTK_MISC (self->label), 0.0, 0.5);
     gtk_container_add (GTK_CONTAINER (self->renderer.widget), vbox);
     gtk_widget_show (vbox);

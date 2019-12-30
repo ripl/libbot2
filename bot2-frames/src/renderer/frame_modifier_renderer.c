@@ -195,7 +195,7 @@ void bot_frames_add_frame_modifier_to_viewer(BotViewer *viewer, int render_prior
   renderer->draw = draw;
   renderer->destroy = destroy_renderer_frames;
 
-  renderer->widget = gtk_vbox_new(FALSE, 0);
+  renderer->widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   renderer->name = strdup(RENDERER_NAME);
   renderer->user = self;
   renderer->enabled = 1;

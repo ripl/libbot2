@@ -70,7 +70,7 @@ static void bot_gtk_param_widget_finalize (GObject *obj);
 
 static guint bot_gtk_param_widget_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (BotGtkParamWidget, bot_gtk_param_widget, GTK_TYPE_VBOX);
+G_DEFINE_TYPE (BotGtkParamWidget, bot_gtk_param_widget, GTK_TYPE_BOX);
 
 const char *bot_gtk_param_widget_get_type_str(BotGtkParamWidget *pw, const char *name) {
     GtkWidget *w = g_hash_table_lookup(pw->params, name);
@@ -215,7 +215,7 @@ bot_gtk_param_widget_add_int(BotGtkParamWidget *pw, const char *name,
             break;
         case BOT_GTK_PARAM_WIDGET_SLIDER:
         case BOT_GTK_PARAM_WIDGET_DEFAULTS:
-            w = gtk_hscale_new_with_range (min, max, increment);
+            w = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, min, max, increment);
             gtk_range_set_value (GTK_RANGE(w), initial_value);
             break;
         default:
@@ -269,7 +269,7 @@ int bot_gtk_param_widget_add_double (BotGtkParamWidget *pw,
             break;
         case BOT_GTK_PARAM_WIDGET_SLIDER:
         case BOT_GTK_PARAM_WIDGET_DEFAULTS:
-            w = gtk_hscale_new_with_range (min, max, increment);
+            w = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL, min, max, increment);
             gtk_range_set_value (GTK_RANGE(w), initial_value);
             break;
         default:
@@ -294,7 +294,7 @@ int bot_gtk_param_widget_add_text_entry (BotGtkParamWidget *pw,
     switch(ui_hints) {
         case BOT_GTK_PARAM_WIDGET_ENTRY:
             w = gtk_entry_new ();
-            gtk_entry_set_text (GTK_SPIN_BUTTON(w), initial_value);
+            gtk_entry_set_text (GTK_ENTRY(w), initial_value);
             break;
         default:
             err("ERROR: param_widget_add_text_entry - bad ui_hints\n");
@@ -579,14 +579,14 @@ void
 bot_gtk_param_widget_add_separator (BotGtkParamWidget *pw, const char *text)
 {
     if (!text) {
-        GtkWidget *sep = gtk_hseparator_new();
+        GtkWidget *sep = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
         gtk_box_pack_start (GTK_BOX (&pw->vbox), sep , FALSE, FALSE, 0);
         gtk_widget_show_all(sep);
     } else {
         GtkWidget *b = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-        gtk_box_pack_start(GTK_BOX(b), gtk_hseparator_new(), TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(b), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(b), gtk_label_new(text), FALSE, FALSE, 0);
-        gtk_box_pack_start(GTK_BOX(b), gtk_hseparator_new(), TRUE, TRUE, 0);
+        gtk_box_pack_start(GTK_BOX(b), gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), TRUE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(&pw->vbox), GTK_WIDGET(b), FALSE, FALSE, 0);
         gtk_widget_show_all(GTK_WIDGET(b));
     }
@@ -602,7 +602,7 @@ int bot_gtk_param_widget_get_int (BotGtkParamWidget *pw, const char *name)
 
     GType type = G_OBJECT_TYPE (w);
 
-    if (GTK_TYPE_HSCALE == type) {
+    if (GTK_TYPE_SCALE == type) {
         return (int) gtk_range_get_value (GTK_RANGE (w));
     } else if ( GTK_TYPE_SPIN_BUTTON == type) {
         return (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (w));
@@ -625,7 +625,7 @@ double bot_gtk_param_widget_get_double (BotGtkParamWidget *pw, const char *name)
 
     GType type = G_OBJECT_TYPE (w);
 
-    if (GTK_TYPE_HSCALE == type) {
+    if (GTK_TYPE_SCALE == type) {
         return gtk_range_get_value (GTK_RANGE (w));
     } else if ( GTK_TYPE_SPIN_BUTTON == type) {
         return gtk_spin_button_get_value (GTK_SPIN_BUTTON (w));
@@ -746,7 +746,7 @@ bot_gtk_param_widget_set_int (BotGtkParamWidget *pw, const char *name,
 
     if (GTK_TYPE_SPIN_BUTTON == type) {
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(w), val);
-    } else if (GTK_TYPE_HSCALE == type) {
+    } else if (GTK_TYPE_SCALE == type) {
         gtk_range_set_value (GTK_RANGE(w), val);
     }
 }
@@ -764,7 +764,7 @@ bot_gtk_param_widget_set_double (BotGtkParamWidget *pw, const char *name,
     GType type = G_OBJECT_TYPE(pdata->widget);
     if (GTK_TYPE_SPIN_BUTTON == type) {
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(pdata->widget), val);
-    } else if (GTK_TYPE_HSCALE == type) {
+    } else if (GTK_TYPE_SCALE == type) {
         gtk_range_set_value (GTK_RANGE(pdata->widget), val);
     }
 }
@@ -949,7 +949,7 @@ bot_gtk_param_widget_modify_int(BotGtkParamWidget *pw,
 
     GType type = G_OBJECT_TYPE (w);
 
-    if (GTK_TYPE_HSCALE == type) {
+    if (GTK_TYPE_SCALE == type) {
         gtk_range_set_range(GTK_RANGE(w), min, max);
         gtk_range_set_increments(GTK_RANGE(w), increment, increment * 10);
         gtk_range_set_value(GTK_RANGE(w), value);
@@ -979,7 +979,7 @@ bot_gtk_param_widget_modify_double(BotGtkParamWidget *pw,
 
     GType type = G_OBJECT_TYPE (w);
 
-    if (GTK_TYPE_HSCALE == type) {
+    if (GTK_TYPE_SCALE == type) {
         gtk_range_set_range(GTK_RANGE(w), min, max);
         gtk_range_set_increments(GTK_RANGE(w), increment, increment * 10);
         gtk_range_set_value(GTK_RANGE(w), value);

@@ -367,7 +367,7 @@ void bot_frames_add_articulated_body_renderer_to_viewer(BotViewer *viewer, int r
   renderer->user = self;
   renderer->enabled = 1;
 
-  //  renderer->widget = gtk_vbox_new(FALSE, 0);
+  //  renderer->widget = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   //  renderer->widget = gtk_alignment_new(0, 0.5, 1.0, 0);
   //
   //  g_signal_connect (G_OBJECT (self->pw), "changed",
