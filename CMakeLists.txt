@@ -48,6 +48,7 @@ find_package(lcm 1.4 CONFIG REQUIRED)
 find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(Java 1.8 MODULE)
 find_package(PkgConfig MODULE REQUIRED)
+set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL MODULE REQUIRED)
 find_package(PythonInterp 3.6 MODULE REQUIRED)
 

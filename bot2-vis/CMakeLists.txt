@@ -34,13 +34,16 @@ endif()
 
 include(cmake/pods.cmake)
 
-find_package(GLib2 2.32 MODULE REQUIRED)
+find_package(GLib2 2.32 MODULE REQUIRED COMPONENTS glib gobject)
+find_package(M MODULE REQUIRED)
 
 # Use the package PkgConfig to detect GTK+ headers/library files
 find_package(PkgConfig MODULE REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+pkg_check_modules(GDK3 REQUIRED IMPORTED_TARGET gdk-3.0)
+pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
 
 find_package(lcm 1.4 CONFIG REQUIRED)
+set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL MODULE REQUIRED)
 find_package(GLUT MODULE REQUIRED)
 
@@ -57,14 +60,12 @@ configure_file(cmake/${PROJECT_NAME}-config.cmake.in
     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
 configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
-configure_file(cmake/modules/FindOpenGL.cmake
-    ${PROJECT_BINARY_DIR}/modules/FindOpenGL.cmake COPYONLY)
 
 # Install FindGLib2.cmake which is not a standard CMake file
 install(FILES cmake/modules/FindGLib2.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
-install(FILES cmake/modules/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
+install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}

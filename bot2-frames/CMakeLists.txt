@@ -55,11 +55,12 @@ include(cmake/pods.cmake)
 include(cmake/lcmtypes.cmake)
 lcmtypes_build(EXPORT ${PROJECT_NAME})
 
+set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL MODULE REQUIRED)
 find_package(bot2-param CONFIG REQUIRED)
 find_package(bot2-core CONFIG REQUIRED)
 find_package(lcm 1.4 CONFIG REQUIRED)
-find_package(GLib2 2.32 MODULE REQUIRED)
+find_package(GLib2 2.32 MODULE REQUIRED COMPONENTS glib gobject)
 
 add_subdirectory(src)
 add_subdirectory(src/test)
@@ -77,7 +78,7 @@ configure_import_targets(INSTALL)
 
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
-install(FILES cmake/modules/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
+install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}

@@ -5,50 +5,55 @@ file(GLOB h_files *.h)
 list(REMOVE_ITEM h_files glm.h)
 
 find_package(bot2-core CONFIG REQUIRED)
-find_package(X11 MODULE REQUIRED)
-find_package(ZLIB MODULE REQUIRED)
 find_package(JPEG MODULE REQUIRED)
 find_package(PNG MODULE REQUIRED)
-
-set(REQUIRED_LIBS ${JPEG_LIBRARY} -lglut -lz)
-
-if(APPLE)
-  set(REQUIRED_LIBS ${REQUIRED_LIBS} ${X11_LIBRARIES})
-endif(APPLE)
+find_package(Threads MODULE REQUIRED)
+find_package(X11 MODULE REQUIRED)
+find_package(ZLIB MODULE REQUIRED)
 
 add_library(bot2-vis ${c_files})
-target_link_libraries(bot2-vis
-  PUBLIC
-    libbot2::lcmtypes_bot2-core
-    libbot2::bot2-core
-    GLib2::glib
-    OpenGL::GL
-    OpenGL::GLU
-    ${GLUT_LIBRARIES}
-    ${GTK3_LIBRARIES}
-    m
-  PRIVATE
-    pthread
-    ${X11_LIBRARIES}
-    ${PNG_LIBRARIES}
-    ${JPEG_LIBRARIES}
-    ${ZLIB_LIBRARIES}
+target_compile_definitions(bot2-vis
+  PRIVATE ${PNG_DEFINITIONS}
 )
-target_include_directories(${PROJECT_NAME}
+if(APPLE)
+  target_compile_definitions(bot2-vis
+     PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
+target_include_directories(bot2-vis
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
     ${GTK3_INCLUDE_DIRS}
   PRIVATE
-    ${X11_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIRS}
+    ${GDK3_INCLUDE_DIRS}
     ${JPEG_INCLUDE_DIR}
+    ${PNG_INCLUDE_DIRS}
+    ${X11_INCLUDE_DIR}
 )
-target_compile_options(bot2-vis PRIVATE ${PNG_DEFINITIONS})
-if(APPLE)
-  target_compile_definitions(bot2-vis PRIVATE GL_SILENCE_DEPRECATION=1)
+target_link_libraries(bot2-vis
+  PUBLIC
+    GLib2::glib
+    GLib2::gobject
+    ${GTK3_LIBRARIES}
+    OpenGL::GL
+    ZLIB::ZLIB
+  PRIVATE
+    ${GDK3_LIBRARIES}
+    GLUT::GLUT
+    OpenGL::GLU
+    ${JPEG_LIBRARIES}
+    ${M_LIBRARIES}
+    ${PNG_LIBRARIES}
+    Threads::Threads
+    ${X11_LIBRARIES}
+    libbot2::bot2-core
+)
+if(NOT APPLE)
+  target_link_libraries(bot2-vis
+    PRIVATE OpenGL::GLX
+  )
 endif()
-set(REQUIRED_PACKAGES glib-2.0 >= 2.32 gtk+-3.0 gdk-pixbuf-3.0 lcm >= 1.4 bot2-core libpng gl glu gthread-2.0)
 
 # set the library API version.  Increment this every time the public API
 # changes.
@@ -58,7 +63,8 @@ pods_install_libraries(EXPORT ${PROJECT_NAME} ${PROJECT_NAME})
 
 pods_install_headers(${h_files} DESTINATION bot_vis)
 
+set(REQUIRED_LIBS gl glib-2.0 >= 2.32 gobject-2.0 >= 2.32 gtk+-3.0 lcm >= 1.4 zlib bot2-core)
 pods_install_pkg_config_file(${PROJECT_NAME}
-    LIBS -lbot2-vis ${REQUIRED_LIBS}
-    REQUIRES ${REQUIRED_PACKAGES}
+    LIBS -lbot2-vis
+    REQUIRES ${REQUIRED_LIBS}
     VERSION 0.0.1)

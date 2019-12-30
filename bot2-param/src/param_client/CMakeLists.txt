@@ -2,10 +2,14 @@ add_library(bot2-param-client
     param_internal.c param_util.c)
 
 find_package(bot2-core CONFIG REQUIRED)
-target_link_libraries(bot2-param-client PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2-core PRIVATE GLib2::glib lcmtypes_bot2-param)
 target_include_directories(bot2-param-client PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-  $<INSTALL_INTERFACE:include> )
+  $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(bot2-param-client
+  PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2-core
+  PRIVATE GLib2::glib lcmtypes_bot2-param
+)
 
 # set the library API version.  Increment this every time the public API
 # changes.
@@ -19,7 +23,7 @@ pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-param-client)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.
-set(REQUIRED_LIBS lcm >= 1.4 bot2-core glib-2.0 >= 2.32 gthread-2.0 >= 2.32 lcmtypes_bot2-param)
+set(REQUIRED_LIBS lcm >= 1.4 bot2-core)
 pods_install_pkg_config_file(bot2-param-client
     LIBS -lbot2-param-client
     REQUIRES ${REQUIRED_LIBS}

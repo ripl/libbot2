@@ -1,13 +1,13 @@
 # - Config file for the @PROJECT_NAME@ package
 
-if(CMAKE_MAJOR_VERSION LESS 3)
-  message(FATAL_ERROR "CMake >= 3.0 required")
+if(CMAKE_VERSION VERSION_LESS 3.1)
+  message(FATAL_ERROR "CMake >= 3.1 required")
 endif()
 cmake_policy(PUSH)
-cmake_policy(VERSION 3.0)
+cmake_policy(VERSION 3.1)
 set(CMAKE_IMPORT_FILE_VERSION 1)
 
-if(CMAKE_VERSION VERSION_LESS 3.9.0)
+if(CMAKE_VERSION VERSION_LESS 3.9)
   # Imported from CMake 3.9.0
   macro(find_dependency dep)
     if (NOT ${dep}_FOUND)

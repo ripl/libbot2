@@ -24,7 +24,7 @@
 # ``GLib2::gio``
 #   The gio-2.0 library. Target defined if component ``gio`` is found.
 # ``GLib2::gmodule``
-#   The glib-2.0 library. Target defined if component ``gmodule`` is found.
+#   The gmodule-2.0 library. Target defined if component ``gmodule`` is found.
 # ``GLib2::gobject``
 #   The gobject-2.0 library. Target defined if component ``gobject`` is found.
 # ``GLib2::gthread``

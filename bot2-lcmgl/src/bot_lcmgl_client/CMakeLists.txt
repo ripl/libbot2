@@ -4,8 +4,10 @@ file(GLOB h_files *.h)
 set(libname bot2-lcmgl-client)
 
 add_library(${libname} ${c_files})
-target_link_libraries(${libname} PUBLIC ${LCM_NAMESPACE}lcm PRIVATE ${ZLIB_LIBRARIES} lcmtypes_bot2-lcmgl)
-target_include_directories(${libname} PRIVATE ${ZLIB_INCLUDE_DIRS})
+target_link_libraries(${libname}
+  PUBLIC ${LCM_NAMESPACE}lcm
+  PRIVATE ZLIB::ZLIB lcmtypes_bot2-lcmgl
+)
 
 # set the library API version.  Increment this every time the public API
 # changes.
@@ -16,7 +18,7 @@ pods_install_libraries(EXPORT ${PROJECT_NAME} ${libname})
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_client)
 
-set(REQUIRED_PACKAGES glib-2.0 >= 2.32 lcm >= 1.4 lcmtypes_bot2-lcmgl)
+set(REQUIRED_PACKAGES lcm >= 1.4)
 pods_install_pkg_config_file(bot2-lcmgl-client
     LIBS -l${libname}
     REQUIRES ${REQUIRED_PACKAGES}

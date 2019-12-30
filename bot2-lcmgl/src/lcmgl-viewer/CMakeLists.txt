@@ -2,14 +2,28 @@ find_package(bot2-vis CONFIG REQUIRED)
 
 # Use the package PkgConfig to detect GTK+ headers/library files
 find_package(PkgConfig MODULE REQUIRED)
-pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+pkg_check_modules(GDK3 REQUIRED IMPORTED_TARGET gdk-3.0)
+pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
 
 add_executable(bot-lcmgl-viewer
     main.c
     udp_util.c
     view_menu.c
     )
-target_link_libraries(bot-lcmgl-viewer bot2-lcmgl-renderer libbot2::bot2-vis libbot2::bot2-core ${GTK3_LIBRARIES})
-target_include_directories(bot-lcmgl-viewer PUBLIC ${GTK3_INCLUDE_DIRS})
+target_include_directories(bot-lcmgl-viewer
+  PRIVATE ${GDK3_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS}
+)
+target_link_libraries(bot-lcmgl-viewer
+ PRIVATE
+   GLib2::glib
+   GLib2::gobject
+   GLUT::GLUT
+   ${LCM_NAMESPACE}lcm
+   PkgConfig::GDK3
+   PkgConfig::GTK3
+   libbot2::bot2-core
+   libbot2::bot2-vis
+   bot2-lcmgl-renderer
+)
 
 pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcmgl-viewer)

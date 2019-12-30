@@ -1,3 +1,5 @@
+find_package(M MODULE REQUIRED)
+
 set(ldpc_sources
     ldpc/getopt.cpp
     ldpc/ldpc_create_pchk.cpp
@@ -19,13 +21,13 @@ add_executable(bot-lcm-tunnel
     lcm_util.c
     ${ldpc_sources}
     )
-target_link_libraries(bot-lcm-tunnel lcmtypes_bot2-lcm-utils)
+target_link_libraries(bot-lcm-tunnel
+  PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm M::M lcmtypes_bot2-lcm-utils
+)
 
 add_executable(ldpc-wrapper-test
     ldpc/ldpc_wrapper_test.cpp
     ${ldpc_sources}
     )
-
-target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib lcmtypes_bot2-lcm-utils)
 
 pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-tunnel)

@@ -1,19 +1,26 @@
 find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(lcm 1.4 CONFIG REQUIRED)
+find_package(M MODULE REQUIRED)
 
 file(GLOB c_files *.c)
 file(GLOB h_files *.h)
 
 add_library(${PROJECT_NAME} ${c_files})
+target_include_directories(${PROJECT_NAME} PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+  $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC
+    GLib2::glib
+    ${LCM_NAMESPACE}lcm
+    ${M_LIBRARIES}
+    lcmtypes_bot2-core
+)
 
 # set the library API version.  Increment this every time the public API
 # changes.
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 1)
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm GLib2::glib lcmtypes_bot2-core PRIVATE m)
-target_include_directories(${PROJECT_NAME} PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
-  $<INSTALL_INTERFACE:include> )
 
 pods_install_libraries(EXPORT ${PROJECT_NAME} ${PROJECT_NAME})
 
