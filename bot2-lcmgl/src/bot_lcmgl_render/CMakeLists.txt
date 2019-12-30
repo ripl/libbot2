@@ -2,7 +2,6 @@ set(c_files lcmgl_decode.c)
 set(h_files lcmgl_decode.h)
 set(REQUIRED_LIBS)
 
-list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 find_package(OpenGL MODULE REQUIRED)
 
 if(USE_BOT_VIS)

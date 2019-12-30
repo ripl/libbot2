@@ -134,6 +134,24 @@ if(CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
   )
 endif()
 
+option(LINK_WHAT_YOU_USE
+  "Run the ldd tool during the build" OFF
+)
+if(LINK_WHAT_YOU_USE)
+  find_program(LDD_EXECUTABLE NAMES ldd)
+  mark_as_advanced(LDD_EXECUTABLE)
+  include(CheckLinkerFlag)
+  check_linker_flag(-Wl,--no-as-needed LINKER_SUPPORTS_NO_AS_NEEDED)
+  if(LDD_EXECUTABLE AND LINKER_SUPPORTS_NO_AS_NEEDED)
+    set(CMAKE_LINK_WHAT_YOU_USE ON)
+  endif()
+endif()
+if(CMAKE_LINK_WHAT_YOU_USE)
+  list(APPEND default_cmake_args
+    "-DCMAKE_LINK_WHAT_YOU_USE:BOOL=${CMAKE_LINK_WHAT_YOU_USE}"
+  )
+endif()
+
 ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core

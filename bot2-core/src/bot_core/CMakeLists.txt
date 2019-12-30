@@ -1,4 +1,3 @@
-list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(lcm 1.4 CONFIG REQUIRED)
 

@@ -1,12 +1,28 @@
 cmake_minimum_required(VERSION 3.10)
 project(bot2-frames LANGUAGES C CXX VERSION 0.0.1)
 
+list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(CheckLinkerFlag)
+
+check_linker_flag(-Wl,-z,defs LINKER_SUPPORTS_Z_DEFS)
+check_linker_flag(-Wl,-z,now LINKER_SUPPORTS_Z_NOW)
+
+if(LINKER_SUPPORTS_Z_DEFS)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,defs")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
+endif()
+if(LINKER_SUPPORTS_Z_NOW)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,now")
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,now")
+endif()
 
 set(JAVA_INSTALL_SUBDIR share/java) # java
 macro(configure_import_targets _prop)
@@ -39,7 +55,6 @@ include(cmake/pods.cmake)
 include(cmake/lcmtypes.cmake)
 lcmtypes_build(EXPORT ${PROJECT_NAME})
 
-list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 find_package(OpenGL MODULE REQUIRED)
 find_package(bot2-param CONFIG REQUIRED)
 find_package(bot2-core CONFIG REQUIRED)
