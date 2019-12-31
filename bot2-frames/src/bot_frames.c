@@ -193,7 +193,7 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
     bot_ctrans_add_frame(self->ctrans, frame_name);
 
     char param_key[2048];
-    sprintf(param_key, "coordinate_frames.%s", frame_name);
+    snprintf(param_key, sizeof(param_key), "coordinate_frames.%s", frame_name);
     int num_sub_keys = bot_param_get_num_subkeys(self->bot_param, param_key);
     if (num_sub_keys == 0) {
       continue; // probably the root_frame definition
@@ -201,7 +201,7 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
     //setup the link parameters if this isn't a root frame
 
     //get which frame this is relative to
-    sprintf(param_key, "coordinate_frames.%s.relative_to", frame_name);
+    snprintf(param_key, sizeof(param_key), "coordinate_frames.%s.relative_to", frame_name);
     char * relative_to;
     int ret = bot_param_get_str(self->bot_param, param_key, &relative_to);
     if (ret < 0) {
@@ -210,7 +210,7 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
     }
 
     //get the history size
-    sprintf(param_key, "coordinate_frames.%s.history", frame_name);
+    snprintf(param_key, sizeof(param_key), "coordinate_frames.%s.history", frame_name);
     int history;
     ret = bot_param_get_int(self->bot_param, param_key, &history);
     if (ret < 0) {
@@ -218,7 +218,7 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
     }
 
     //get the initial transform
-    sprintf(param_key, "coordinate_frames.%s.initial_transform", frame_name);
+    snprintf(param_key, sizeof(param_key), "coordinate_frames.%s.initial_transform", frame_name);
     if (bot_param_get_num_subkeys(self->bot_param, param_key) != 2) {
       fprintf(stderr,
           "BotFrames Error: frame %s does not have the right number of fields in the 'initial_transform' block\n",
@@ -253,11 +253,11 @@ bot_frames_new(lcm_t *lcm, BotParam *bot_param)
 
     //get the update channel
     char * update_channel = NULL;
-    sprintf(param_key, "coordinate_frames.%s.update_channel", frame_name);
+    snprintf(param_key, sizeof(param_key), "coordinate_frames.%s.update_channel", frame_name);
     ret = bot_param_get_str(self->bot_param, param_key, &update_channel);
     int pose_update_chan = 0;
     if (ret < 0) {
-      sprintf(param_key, "coordinate_frames.%s.pose_update_channel", frame_name);
+      snprintf(param_key, sizeof(param_key), "coordinate_frames.%s.pose_update_channel", frame_name);
       ret = bot_param_get_str(self->bot_param, param_key, &update_channel);
       if (ret == 0) {
         pose_update_chan=1;

@@ -119,7 +119,7 @@ static void on_param_widget_changed(BotGtkParamWidget *pw, const char *name, voi
   }
   else if (!strcmp(name, PARAM_SAVE) && activeSensorNum > 0) {
     char save_fname[1024];
-    sprintf(save_fname, "manual_calib_%s.cfg", self->frameNames[activeSensorNum]);
+    snprintf(save_fname, sizeof(save_fname), "manual_calib_%s.cfg", self->frameNames[activeSensorNum]);
     fprintf(stderr, "saving params to: %s\n", save_fname);
     FILE * f = fopen(save_fname, "w");
     double pos[3];

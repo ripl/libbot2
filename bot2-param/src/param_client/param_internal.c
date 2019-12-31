@@ -1406,7 +1406,7 @@ static int set_value(BotParam * param, const char * key, const char * val)
 int bot_param_set_int(BotParam * param, const char * key, int val)
 {
   char str[16];
-  sprintf(str, "%d", val);
+  snprintf(str, sizeof(str), "%d", val);
   return set_value(param, key, str);
 }
 
@@ -1418,7 +1418,7 @@ int bot_param_set_boolean(BotParam * param, const char * key, int val)
 int bot_param_set_double(BotParam * param, const char * key, double val)
 {
   char str[32];
-  sprintf(str, "%f", val);
+  snprintf(str, sizeof(str), "%f", val);
   return set_value(param, key, str);
 }
 
@@ -1443,9 +1443,9 @@ int bot_param_set_int_array(BotParam * param, const char * key, int * vals, int 
   str[0] = '\0';
   for (i = 0; i < len; ++i) {
     if (i < len - 1)
-      sprintf(single_val, "%d,", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%d,", vals[i]);
     else
-      sprintf(single_val, "%d", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%d", vals[i]);
     single_len = strlen(single_val);
     str = realloc(str, string_len + single_len);
     strcat(str, single_val);
@@ -1471,9 +1471,9 @@ int bot_param_set_boolean_array(BotParam * param, const char * key, int * vals, 
   for (i = 0; i < len; ++i) {
     strcpy(val_str, (vals[i] == 0 ? "false" : "true"));
     if (i < len - 1)
-      sprintf(single_val, "%s,", val_str);
+      snprintf(single_val, sizeof(single_val), "%s,", val_str);
     else
-      sprintf(single_val, "%s", val_str);
+      snprintf(single_val, sizeof(single_val), "%s", val_str);
     single_len = strlen(single_val);
     str = realloc(str, string_len + single_len);
     strcat(str, single_val);
@@ -1497,9 +1497,9 @@ int bot_param_set_double_array(BotParam * param, const char * key, double * vals
   str[0] = '\0';
   for (i = 0; i < len; ++i) {
     if (i < len - 1)
-      sprintf(single_val, "%f,", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%f,", vals[i]);
     else
-      sprintf(single_val, "%f", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%f", vals[i]);
     single_len = strlen(single_val);
     str = realloc(str, string_len + single_len);
     strcat(str, single_val);
@@ -1523,9 +1523,9 @@ int bot_param_set_str_array(BotParam * param, const char * key, const char ** va
   str[0] = '\0';
   for (i = 0; i < len; ++i) {
     if (i < len - 1)
-      sprintf(single_val, "%s,", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%s,", vals[i]);
     else
-      sprintf(single_val, "%s", vals[i]);
+      snprintf(single_val, sizeof(single_val), "%s", vals[i]);
     single_len = strlen(single_val);
     str = realloc(str, string_len + single_len);
     strcat(str, single_val);
@@ -1606,7 +1606,7 @@ int bot_param_override_local_params(BotParam * param, const char * override_para
 {
   int ret = 0;
   char * tmp_orig = (char *) calloc(strlen(override_params) + 2, sizeof(char));
-  sprintf(tmp_orig, "%s|", override_params);
+  snprintf(tmp_orig, strlen(override_params) + 2, "%s|", override_params);
 
   char * tmpP = tmp_orig;
   while (strlen(tmpP) != 0) {

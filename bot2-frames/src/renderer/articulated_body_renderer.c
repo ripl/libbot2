@@ -242,12 +242,18 @@ void configure_body(RendererArticulated * self, BodyProperties * body_properties
     const char * models_dir)
 {
   char key_name[256];
-  sprintf(key_name, "%s.%s.frame", self->articulated_name, body_name);
+  int res = snprintf(key_name, sizeof(key_name), "%s.%s.frame", self->articulated_name, body_name);
+  if (res < 0 || res > sizeof(key_name)) {
+    goto fail;
+  }
   body_properties->frame_name = (char *) calloc(256, sizeof(char));
   if (bot_param_get_str(self->param, key_name, &body_properties->frame_name) == -1)
     goto fail; //FIXME no error checking currently to see if the frame exists
 
-  sprintf(key_name, "%s.%s.visualization", self->articulated_name, body_name);
+  res = snprintf(key_name, sizeof(key_name), "%s.%s.visualization", self->articulated_name, body_name);
+  if (res < 0 || res > sizeof(key_name)) {
+    goto fail;
+  }
   char * vis_string = calloc(256, sizeof(char));
   if (bot_param_get_str(self->param, key_name, &vis_string) == -1)
     goto fail;
@@ -266,12 +272,18 @@ void configure_body(RendererArticulated * self, BodyProperties * body_properties
     body_properties->vis_type = cylinder;
   }
   else if (strcmp(&vis_string[vis_string_length - 4], ".rwx") == 0) {
-    snprintf(model_full_path, sizeof(model_full_path), "%s/%s", models_dir, vis_string);
+    res = snprintf(model_full_path, sizeof(model_full_path), "%s/%s", models_dir, vis_string);
+    if (res < 0 || res > sizeof(model_full_path)) {
+      goto fail;
+    }
     body_properties->rwx_model = bot_rwx_model_create(model_full_path);
     body_properties->vis_type = rwx;
   }
   else if (strcmp(&vis_string[vis_string_length - 4], ".obj") == 0) {
-    snprintf(model_full_path, sizeof(model_full_path), "%s/%s", models_dir, vis_string);
+    res = snprintf(model_full_path, sizeof(model_full_path), "%s/%s", models_dir, vis_string);
+    if (res < 0 || res > sizeof(model_full_path)) {
+      goto fail;
+    }
     body_properties->wave_model = bot_wavefront_model_create(model_full_path);
     body_properties->vis_type = wavefront;
   }
@@ -283,10 +295,16 @@ void configure_body(RendererArticulated * self, BodyProperties * body_properties
     body_properties->vis_type = invalid;
   }
 
-  sprintf(key_name, "%s.%s", self->articulated_name, body_name);
+  res = snprintf(key_name, sizeof(key_name), "%s.%s", self->articulated_name, body_name);
+  if (res < 0 || res > sizeof(key_name)) {
+    goto fail;
+  }
   bot_param_get_trans(self->param, key_name, &body_properties->body_to_frame_trans);
 
-  sprintf(key_name, "%s.%s.color", self->articulated_name, body_name);
+  res = snprintf(key_name, sizeof(key_name), "%s.%s.color", self->articulated_name, body_name);
+  if (res < 0 || res > sizeof(key_name)) {
+    goto fail;
+  }
   if (bot_param_get_double_array(self->param, key_name, body_properties->color, 4) == -1) {
     //default color is blue
     body_properties->color[0] = 0;
@@ -295,7 +313,10 @@ void configure_body(RendererArticulated * self, BodyProperties * body_properties
     body_properties->color[3] = 1;
   }
 
-  sprintf(key_name, "%s.%s.scale", self->articulated_name, body_name);
+  res = snprintf(key_name, sizeof(key_name), "%s.%s.scale", self->articulated_name, body_name);
+  if (res < 0 || res > sizeof(key_name)) {
+    goto fail;
+  }
   if (bot_param_get_double_array(self->param, key_name, body_properties->scale, 3) == -1) {
     //default scale is 1
     body_properties->scale[0] = 1;

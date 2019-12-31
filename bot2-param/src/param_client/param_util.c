@@ -123,14 +123,14 @@ char * bot_param_get_planar_lidar_lcm_channel(BotParam *bot_param, const char *l
 int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
 {
   char key[2048];
-  sprintf(key, "%s.quat", name);
+  snprintf(key, sizeof(key), "%s.quat", name);
   if (bot_param_has_key(param, key)) {
     int sz = bot_param_get_double_array(param, key, quat, 4);
     assert(sz == 4);
     return 0;
   }
 
-  sprintf(key, "%s.rpy", name);
+  snprintf(key, sizeof(key), "%s.rpy", name);
   if (bot_param_has_key(param, key)) {
     double rpy[3];
     int sz = bot_param_get_double_array(param, key, rpy, 3);
@@ -141,7 +141,7 @@ int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
     return 0;
   }
 
-  sprintf(key, "%s.rodrigues", name);
+  snprintf(key, sizeof(key), "%s.rodrigues", name);
   if (bot_param_has_key(param, key)) {
     double rod[3];
     int sz = bot_param_get_double_array(param, key, rod, 3);
@@ -150,7 +150,7 @@ int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
     return 0;
   }
 
-  sprintf(key, "%s.angleaxis", name);
+  snprintf(key, sizeof(key), "%s.angleaxis", name);
   if (bot_param_has_key(param, key)) {
     double aa[4];
     int sz = bot_param_get_double_array(param, key, aa, 4);
@@ -165,7 +165,7 @@ int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
 int bot_param_get_translation(BotParam *param, const char *name, double translation[3])
 {
   char key[2048];
-  sprintf(key, "%s.translation", name);
+  snprintf(key, sizeof(key), "%s.translation", name);
   if (bot_param_has_key(param, key)) {
     int sz = bot_param_get_double_array(param, key, translation, 3);
     assert(sz == 3);
@@ -196,12 +196,12 @@ bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
 
   char key[2048];
   double width;
-  sprintf(key, "%s.width", prefix);
+  snprintf(key, sizeof(key), "%s.width", prefix);
   if (0 != bot_param_get_double(param, key, &width))
     goto fail;
 
   double height;
-  sprintf(key, "%s.height", prefix);
+  snprintf(key, sizeof(key), "%s.height", prefix);
   if (0 != bot_param_get_double(param, key, &height))
     goto fail;
 
@@ -216,7 +216,7 @@ bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
   double skew = pinhole_params[2];
 
   char * distortion_model;
-  sprintf(key, "%s.distortion_model", prefix);
+  snprintf(key, sizeof(key), "%s.distortion_model", prefix);
   if (0 != bot_param_get_str(param, key, &distortion_model))
     goto fail;
 
@@ -227,7 +227,7 @@ bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
   }
   else if (strcmp(distortion_model, "spherical") == 0) {
     double distortion_param;
-    sprintf(key, "%s.distortion_params", prefix);
+    snprintf(key, sizeof(key), "%s.distortion_params", prefix);
     if (1 != bot_param_get_double_array(param, key, &distortion_param, 1))
       goto fail;
 
@@ -237,12 +237,12 @@ bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
   }
   else if (strcmp(distortion_model, "plumb-bob") == 0) {
     double dist_k[3];
-    sprintf(key, "%s.distortion_k", prefix);
+    snprintf(key, sizeof(key), "%s.distortion_k", prefix);
     if (3 != bot_param_get_double_array(param, key, dist_k, 3))
       goto fail;
 
     double dist_p[2];
-    sprintf(key, "%s.distortion_p", prefix);
+    snprintf(key, sizeof(key), "%s.distortion_p", prefix);
     if (2 != bot_param_get_double_array(param, key, dist_p, 2))
       goto fail;
 
@@ -252,7 +252,7 @@ bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
   }
   else if (strcmp(distortion_model, "angular-poly") == 0) {
     double coeffs[64];
-    sprintf(key, "%s.distortion_coeffs", prefix);
+    snprintf(key, sizeof(key), "%s.distortion_coeffs", prefix);
     int num_coeffs = bot_param_get_double_array(param, key, coeffs, -1);
     if (0 >= num_coeffs)
       goto fail;

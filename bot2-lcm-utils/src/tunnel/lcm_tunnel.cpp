@@ -78,7 +78,7 @@ void LcmTunnel::init_regex(const char *lcm_channel)
 {
   if (lcm_channel && strlen(lcm_channel)) {
     char *rchannel = (char*) calloc(strlen(lcm_channel) + 3, sizeof(char));
-    sprintf(rchannel, "%c%s%c", '^', lcm_channel, '$');
+    snprintf(rchannel, strlen(lcm_channel) + 3, "%c%s%c", '^', lcm_channel, '$');
 
     if (regex != NULL) {
       if (verbose)
@@ -1085,7 +1085,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "recv channels string too long\n");
         return 1;
       }
-      sprintf(params.channels_recv, "^(?!^%s$).*+$", optarg);
+      snprintf(params.channels_recv, sizeof(params.channels_recv), "^(?!^%s$).*+$", optarg);
       printf("params.channels_recv=%s\n", params.channels_recv);
       break;
     case 'S':
@@ -1093,7 +1093,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "send channels string too long\n");
         return 1;
       }
-      sprintf(params.channels_send, "^(?!^%s$).*+$", optarg);
+      snprintf(params.channels_send, sizeof(params.channels_send), "^(?!^%s$).*+$", optarg);
       break;
     case 'u':
       params.udp = 1;

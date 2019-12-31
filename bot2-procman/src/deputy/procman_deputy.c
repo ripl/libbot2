@@ -1244,7 +1244,6 @@ int main (int argc, char **argv)
      } else {
          gethostname (pmd->hostname, sizeof (pmd->hostname));
      }
-//     sprintf (pmd->hostname + strlen (pmd->hostname), "%d", getpid());
 
      // load config file
      procman_params_t params;

@@ -44,7 +44,7 @@ procinfo_read_proc_cpu_mem_linux(int pid, proc_cpu_mem_t *s)
 {
     memset (s, 0, sizeof (proc_cpu_mem_t));
     char fname[80];
-    sprintf (fname, "/proc/%d/stat", pid);
+    snprintf (fname, sizeof(fname), "/proc/%d/stat", pid);
     FILE *fp = fopen (fname, "r");
     if (! fp) { return -1; }
 
@@ -63,7 +63,7 @@ procinfo_read_proc_cpu_mem_linux(int pid, proc_cpu_mem_t *s)
 
     fclose (fp);
 
-    sprintf (fname, "/proc/%d/statm", pid);
+    snprintf (fname, sizeof(fname), "/proc/%d/statm", pid);
     fp = fopen (fname, "r");
     if (! fp) { return -1; }
 

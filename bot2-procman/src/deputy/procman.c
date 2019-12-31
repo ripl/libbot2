@@ -96,7 +96,11 @@ procman_t *procman_create (const procman_params_t *params)
     char *path = getenv ("PATH");
     int newpathlen = strlen (path) + strlen(params->bin_path) + 2;
     char *newpath = calloc(1, newpathlen);
-    sprintf (newpath, "%s:%s", params->bin_path, path);
+    int result = snprintf (newpath, newpathlen, "%s:%s", params->bin_path, path);
+    if (result < 0 || result > sizeof (newpath)) {
+      free (newpath);
+      return NULL;
+    }
     printf ("setting PATH to %s\n", newpath);
     setenv ("PATH", newpath, 1);
     free (newpath);
