@@ -56,10 +56,10 @@ static int _fileutils_write_fully(int fd, const void *b, int len)
 }
 
 LcmTunnel::LcmTunnel(bool verbose, const char *lcm_channel) :
-  verbose(verbose), regex(NULL), buf_sz(65536), buf((char*) calloc(65536, sizeof(char))), channel_sz(65536), channel(
-      (char*) calloc(65536, sizeof(char))), recFlags_sz(1024), recFlags((char*) calloc(1024, sizeof(char))), ldpc_dec(
-      NULL), udp_fd(-1), server_udp_port(-1), udp_send_seqno(0), stopSendThread(false), bytesInQueue(0), cur_seqno(0),
-      errorStartTime(-1), numSuccessful(0), lastErrorPrintTime(-1), subscription(NULL)
+  verbose(verbose), regex(NULL), stopSendThread(false), bytesInQueue(0), channel((char*) calloc(65536, sizeof(char))),
+    channel_sz(65536), buf((char*) calloc(65536, sizeof(char))), buf_sz(65536), udp_fd(-1), server_udp_port(-1),
+    udp_send_seqno(0), recFlags((char*) calloc(1024, sizeof(char))), recFlags_sz(1024), cur_seqno(0),
+    errorStartTime(-1), lastErrorPrintTime(-1), numSuccessful(0), ldpc_dec(NULL), subscription(NULL)
 {
   //allocate and initialize things
 
@@ -297,7 +297,7 @@ int LcmTunnel::connectToServer(lcm_t * lcm_, introspect_t *introspect_, GMainLoo
 
 void LcmTunnel::publishLcmMessagesInBuf(int numBytes)
 {
-  uint32_t msgOffset = 0;
+  int msgOffset = 0;
   while (msgOffset < numBytes) {
     //decode
     lcm_tunnel_sub_msg_t p;
@@ -403,7 +403,7 @@ int LcmTunnel::on_udp_data(GIOChannel * source, GIOCondition cond, void *user_da
         memcpy(self->buf + pos_start, recv_udp_msg->data, curPayloadSize);
 
         self->message_complete = 1;
-        for (int i = self->completeTo_fragno; i < self->nfrags; i++) {
+        for (uint32_t i = self->completeTo_fragno; i < self->nfrags; i++) {
           if (!self->recFlags[i]) {
             self->message_complete = 0;
             break;

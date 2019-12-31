@@ -148,7 +148,7 @@ bot_gl_scrollplot2d_new ()
 void
 bot_gl_scrollplot2d_free (BotGlScrollPlot2d *self)
 {
-    memset (self, 0, sizeof (self));
+    memset (self, 0, sizeof (*self));
     g_slice_free (BotGlScrollPlot2d, self);
 }
 

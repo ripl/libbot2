@@ -482,7 +482,7 @@ int bot_frames_get_nth_trans(BotFrames *bot_frames, const char *from_frame, cons
   if (!link)
     status =0;
   else{
-    int status = bot_ctrans_link_get_nth_trans(link, nth_from_latest, btrans, timestamp);
+    status = bot_ctrans_link_get_nth_trans(link, nth_from_latest, btrans, timestamp);
     if (status && btrans && 0 != strcmp(to_frame, bot_ctrans_link_get_to_frame(link))) {
       bot_trans_invert(btrans);
     }

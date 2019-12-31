@@ -68,9 +68,13 @@ int ssocket_connect(ssocket_t *s, const char *hostname, int port)
 
 	sa.sin_port=htons(port);
     if (host_lookup)
+    {
         sa.sin_addr=*(struct in_addr *) host->h_addr;
+    }
     else
+    {
         sa.sin_addr=ca.sin_addr;
+    }
 
 	if (connect(thesocket, (struct sockaddr *) &sa, sizeof (sa)))
 	{

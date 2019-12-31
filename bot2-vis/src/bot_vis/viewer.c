@@ -322,7 +322,7 @@ bot_viewer_save_preferences (BotViewer *viewer, const char *fname)
 
     // save bookmarks to prefs
     int bmlist_len = 11;
-    char *str_key;
+    char *str_key = NULL;
     for (int bm_indx=0; bm_indx < priv->num_bookmarks; bm_indx++) {
         str_key = g_strdup_printf("bookmark_%d", bm_indx);
         double bmlist[bmlist_len];
