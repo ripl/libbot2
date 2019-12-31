@@ -21,6 +21,15 @@ check_c_compiler_flag(-fstack-protector
 check_c_compiler_flag(-fstack-protector-strong
   C_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG
 )
+check_c_compiler_flag(-Wall
+  C_COMPILER_SUPPORTS_WALL
+)
+check_c_compiler_flag(-Werror=format-security
+  C_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY
+)
+check_c_compiler_flag(-Wno-unused
+  C_COMPILER_SUPPORTS_WNO_UNUSED
+)
 
 if(C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
@@ -29,6 +38,15 @@ if(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
 elseif(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
+endif()
+if(C_COMPILER_SUPPORTS_WALL)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+endif()
+if(C_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=format-security")
+endif()
+if(C_COMPILER_SUPPORTS_WNO_UNUSED)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused")
 endif()
 
 include(CheckCXXCompilerFlag)
@@ -42,6 +60,15 @@ check_cxx_compiler_flag(-fstack-protector
 check_cxx_compiler_flag(-fstack-protector-strong
   CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG
 )
+check_cxx_compiler_flag(-Wall
+  CXX_COMPILER_SUPPORTS_WALL
+)
+check_cxx_compiler_flag(-Werror=format-security
+  CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY
+)
+check_cxx_compiler_flag(-Wno-unused
+  CXX_COMPILER_SUPPORTS_WNO_UNUSED
+)
 
 if(CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
@@ -50,6 +77,15 @@ if(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
 elseif(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
+endif()
+if(CXX_COMPILER_SUPPORTS_WALL)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+endif()
+if(CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=format-security")
+endif()
+if(CXX_COMPILER_SUPPORTS_WNO_UNUSED)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused")
 endif()
 
 include(CheckLinkerFlag)
