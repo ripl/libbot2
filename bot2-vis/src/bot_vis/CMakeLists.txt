@@ -12,9 +12,6 @@ find_package(X11 MODULE REQUIRED)
 find_package(ZLIB MODULE REQUIRED)
 
 add_library(bot2-vis ${c_files})
-target_compile_definitions(bot2-vis
-  PRIVATE ${PNG_DEFINITIONS}
-)
 if(APPLE)
   target_compile_definitions(bot2-vis
      PRIVATE GL_SILENCE_DEPRECATION=1
@@ -25,11 +22,7 @@ target_include_directories(bot2-vis
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
     ${GTK3_INCLUDE_DIRS}
-  PRIVATE
-    ${GDK3_INCLUDE_DIRS}
-    ${JPEG_INCLUDE_DIR}
-    ${PNG_INCLUDE_DIRS}
-    ${X11_INCLUDE_DIR}
+  PRIVATE ${GDK3_INCLUDE_DIRS}
 )
 target_link_libraries(bot2-vis
   PUBLIC
@@ -41,12 +34,13 @@ target_link_libraries(bot2-vis
   PRIVATE
     ${GDK3_LIBRARIES}
     GLUT::GLUT
-    OpenGL::GLU
-    ${JPEG_LIBRARIES}
+    JPEG::JPEG
     M::M
-    ${PNG_LIBRARIES}
+    OpenGL::GLU
+    PNG::PNG
     Threads::Threads
-    ${X11_LIBRARIES}
+    X11::X11
+    X11::Xutil
     libbot2::bot2-core
 )
 if(NOT APPLE)

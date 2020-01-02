@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 project(bot2-vis LANGUAGES C CXX VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
+if(CMAKE_VERSION VERSION_LESS 3.12)
+  list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules/3.12")
+endif()
+if(CMAKE_VERSION VERSION_LESS 3.14)
+  list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules/3.14")
+endif()
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS ON)
@@ -155,14 +161,31 @@ configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
 configure_file(cmake/modules/FindM.cmake
     ${PROJECT_BINARY_DIR}/modules/FindM.cmake COPYONLY)
+if(CMAKE_VERSION VERSION_LESS 3.12)
+  configure_file(cmake/modules/3.12/FindJPEG.cmake
+      ${PROJECT_BINARY_DIR}/modules/3.12/FindJPEG.cmake COPYONLY)
+endif()
+if(CMAKE_VERSION VERSION_LESS 3.14)
+  configure_file(cmake/modules/3.14/FindX11.cmake
+      ${PROJECT_BINARY_DIR}/modules/3.14/FindX11.cmake COPYONLY)
+endif()
 
 # Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
   DESTINATION lib/cmake/${PROJECT_NAME}/modules
 )
+# Install FindPNG.cmake which does not import target
+# in the CMake 3 style before CMake 3.5.
+install(FILES cmake/modules/3.5/FindPNG.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.5)
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
 install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)
+# Install FindJPEG.cmake which does not import target
+# in the CMake 3 style before CMake 3.12.
+install(FILES cmake/modules/3.12/FindJPEG.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.12)
+# Install FindX11.cmake which does not import target
+# in the CMake 3 style before CMake 3.14.
+install(FILES cmake/modules/3.14/FindX11.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.14)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}
