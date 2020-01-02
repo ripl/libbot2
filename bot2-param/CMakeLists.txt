@@ -156,6 +156,9 @@ set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 configure_import_targets(BUILD)
 configure_import_targets(INSTALL)
 
+# Install FindGLib2.cmake which is not a standard CMake file
+install(FILES cmake/modules/FindGLib2.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
+
 add_subdirectory(src/param_client)
 add_subdirectory(src/param_server)
 add_subdirectory(src/param_tester)

@@ -28,7 +28,7 @@ target_link_libraries(bot2-lcmgl-renderer
   PRIVATE
     GLib2::glib
     GLib2::gobject
-    ${M_LIBRARIES}
+    M::M
     OpenGL::GL
     OpenGL::GLU
     libbot2::bot2-core

@@ -14,7 +14,7 @@ target_link_libraries(${PROJECT_NAME}
   PUBLIC
     GLib2::glib
     ${LCM_NAMESPACE}lcm
-    ${M_LIBRARIES}
+    M::M
     lcmtypes_bot2-core
 )
 

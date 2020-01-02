@@ -30,21 +30,44 @@
 # ``M_LIBRARY``
 #   The path to the ``m`` math library.
 
+include(CheckFunctionExists)
 include(FindPackageHandleStandardArgs)
 
-find_library(M_LIBRARY NAMES m)
+set(_M_SAVED_CMAKE_REQUIRED_QUIET ${CMAKE_REQUIRED_QUIET})
+set(CMAKE_REQUIRED_QUIET ON)
+check_function_exists(cos M_LINK_FLAG_NOT_REQUIRED)
+set(CMAKE_REQUIRED_QUIET ${_M_SAVED_CMAKE_REQUIRED_QUIET})
+unset(_M_SAVED_CMAKE_REQUIRED_QUIET)
+
+if(M_LINK_FLAG_NOT_REQUIRED)
+  set(_M_REQUIRED_VARS M_FOUND)
+  set(M_FOUND ON)
+  set(M_LIBRARY)
+else()
+  set(_M_REQUIRED_VARS M_LIBRARY)
+  find_library(M_LIBRARY NAMES m)
+endif()
 
 find_package_handle_standard_args(M
-  REQUIRED_VARS M_LIBRARY
+  REQUIRED_VARS ${_M_REQUIRED_VARS}
 )
 
+unset(_M_REQUIRED_VARS)
+
 if(M_FOUND)
-  set(M_LIBRARIES "${M_LIBRARY}")
-  if(NOT TARGET M::M)
-    add_library(M::M UNKNOWN IMPORTED)
-    set_target_properties(M::M PROPERTIES
-      IMPORTED_LOCATION "${M_LIBRARY}"
-    )
+  if(M_LIBRARY)
+    set(M_LIBRARIES "${M_LIBRARY}")
+    if(NOT TARGET M::M)
+      add_library(M::M UNKNOWN IMPORTED)
+      set_target_properties(M::M PROPERTIES
+        IMPORTED_LOCATION "${M_LIBRARY}"
+      )
+    endif()
+    mark_as_advanced(M_LIBRARY)
+  else()
+    set(M_LIBRARIES)
+    if(NOT TARGET M::M)
+      add_library(M::M INTERFACE IMPORTED)
+    endif()
   endif()
-  mark_as_advanced(M_LIBRARY)
 endif()

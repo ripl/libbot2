@@ -155,10 +155,16 @@ add_subdirectory(java)
 
 configure_import_targets(BUILD)
 configure_import_targets(INSTALL)
+
 configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
-# Install FindGLib2.cmake which is not a standard CMake file
-install(FILES cmake/modules/FindGLib2.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
+configure_file(cmake/modules/FindM.cmake
+    ${PROJECT_BINARY_DIR}/modules/FindM.cmake COPYONLY)
+
+# Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
+install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
+  DESTINATION lib/cmake/${PROJECT_NAME}/modules
+)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}

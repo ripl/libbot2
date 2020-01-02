@@ -49,6 +49,10 @@ endif()
 
 set(USE_BOT_VIS CACHE INTERNAL "Build bot2-lcmgl with libbot2 dependency." @bot2-vis_FOUND@)
 
+list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules")
+find_dependency(GLib2 2.32 MODULE)
+find_dependency(M MODULE)
+list(REMOVE_AT CMAKE_MODULE_PATH 0)
 if(CMAKE_VERSION VERSION_LESS 3.10)
   list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.10")
 endif()

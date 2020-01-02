@@ -150,11 +150,16 @@ install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bot-ppmsgz DESTINATION bin)
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 configure_file(cmake/${PROJECT_NAME}-config.cmake.in
     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
+
 configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
+configure_file(cmake/modules/FindM.cmake
+    ${PROJECT_BINARY_DIR}/modules/FindM.cmake COPYONLY)
 
-# Install FindGLib2.cmake which is not a standard CMake file
-install(FILES cmake/modules/FindGLib2.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules)
+# Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
+install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
+  DESTINATION lib/cmake/${PROJECT_NAME}/modules
+)
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
 install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)

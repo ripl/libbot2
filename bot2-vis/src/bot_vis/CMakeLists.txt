@@ -43,7 +43,7 @@ target_link_libraries(bot2-vis
     GLUT::GLUT
     OpenGL::GLU
     ${JPEG_LIBRARIES}
-    ${M_LIBRARIES}
+    M::M
     ${PNG_LIBRARIES}
     Threads::Threads
     ${X11_LIBRARIES}

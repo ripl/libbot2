@@ -47,6 +47,8 @@ else()
   include(CMakeFindDependencyMacro)
 endif()
 
+find_dependency(lcm 1.4 CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")
+
 if(NOT TARGET @NAMESPACE@bot-spy)
   add_executable(@NAMESPACE@bot-spy IMPORTED)
   set_target_properties(@NAMESPACE@bot-spy PROPERTIES

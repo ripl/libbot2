@@ -20,7 +20,7 @@ target_link_libraries(bot2-frames-renderers
     GLib2::glib
     GLib2::gobject
     ${GTK3_LIBRARIES}
-    ${M_LIBRARIES}
+    M::M
     OpenGL::GL
     OpenGL::GLU
     libbot2::bot2-core
