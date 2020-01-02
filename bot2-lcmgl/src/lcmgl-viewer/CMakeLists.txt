@@ -10,6 +10,11 @@ add_executable(bot-lcmgl-viewer
     udp_util.c
     view_menu.c
     )
+if(APPLE)
+  target_compile_definitions(bot-lcmgl-viewer
+    PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
 target_include_directories(bot-lcmgl-viewer
   PRIVATE ${GDK3_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS}
 )

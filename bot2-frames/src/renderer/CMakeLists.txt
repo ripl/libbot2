@@ -5,6 +5,11 @@ pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
 # Create a shared library libbot2-frames-renderer.so with a single source file
 add_library(bot2-frames-renderers
     coord_frames_renderer.c articulated_body_renderer.c frame_modifier_renderer.c)
+if(APPLE)
+  target_compile_definitions(bot2-frames-renderers
+     PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
 target_include_directories(bot2-frames-renderers
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
@@ -50,6 +55,11 @@ find_package(bot2-lcmgl CONFIG REQUIRED)
 
 #build the test-viewer
 add_executable(test-viewer test_viewer.c)
+if(APPLE)
+  target_compile_definitions(test-viewer
+    PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
 target_link_libraries(test-viewer
   PRIVATE
     GLib2::glib
