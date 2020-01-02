@@ -1,11 +1,10 @@
-/* $Id: ldpc_fec.h,v 1.61 2006/09/06 14:36:49 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Laurent Fazio     (STMicroelectronics)
- *		  Julien Laboure    (julien.laboure@inrialpes.fr)
+ *                Laurent Fazio     (STMicroelectronics)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
@@ -27,8 +26,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LDPC_FEC_H /* { */
-#define LDPC_FEC_H
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_FEC_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_FEC_H_
 
 #include <limits.h>  // IWYU pragma: keep
 #include <stdio.h>
@@ -578,4 +577,4 @@ LDPCFecSession::ResetNbXor (void)
 	m_nbXor=0;
 }
 
-#endif /* } LDPC_FEC_H */
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_FEC_H_

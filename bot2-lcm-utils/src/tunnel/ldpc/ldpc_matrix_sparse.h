@@ -1,6 +1,4 @@
-/* ldpc_matrix.h - Interface to module for handling sparse mod2 matrices. */
 /*
- * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
  *
  * Permission is granted for anyone to copy, use, modify, or distribute these
@@ -13,6 +11,8 @@
  * to the degree that would be advisable in any important application.  All use
  * of these programs is entirely at the user's own risk.
  */
+
+/* ldpc_matrix.h - Interface to module for handling sparse mod2 matrices. */
 
 /* This module implements operations on sparse matrices of mod2 elements
    (bits, with addition and multiplication being done modulo 2).
@@ -35,8 +35,8 @@
    Direct access to these structures should be avoided except in low-level
    routines.  Use the macros and procedures defined below instead. */
 
-#ifndef LDPC_MATRIX_SPARSE__
-#define LDPC_MATRIX_SPARSE__
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_MATRIX_SPARSE_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_MATRIX_SPARSE_H_
 
 #include <stdio.h>
 
@@ -187,5 +187,5 @@ int mod2sparse_backward_sub (mod2sparse *, int *, char *, char *);
 mod2entry * mod2sparse_last_in_col(mod2sparse * m, int i);
 #endif
 
-#endif // #ifndef LDPC_MATRIX_SPARSE__
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_MATRIX_SPARSE_H_
 

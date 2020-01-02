@@ -1,6 +1,4 @@
-/* MOD2SPARSE.C - Procedures for handling sparse mod2 matrices. */
 /*
- * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
  *
  * Permission is granted for anyone to copy, use, modify, or distribute these
@@ -13,6 +11,8 @@
  * to the degree that would be advisable in any important application.  All use
  * of these programs is entirely at the user's own risk.
  */
+
+/* MOD2SPARSE.C - Procedures for handling sparse mod2 matrices. */
 
 /* NOTE:  See mod2sparse.html for documentation on these procedures. */
 

@@ -1,5 +1,4 @@
 /*
- * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
  *
  * Permission is granted for anyone to copy, use, modify, or distribute these
@@ -34,8 +33,8 @@
    Direct access to these structures should be avoided except in low-level
    routines.  Use the macros and procedures defined below instead. */
 
-#ifndef TOOLS_H__
-#define TOOLS_H__
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_TOOLS_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_TOOLS_H_
 
 void *chk_alloc(unsigned, unsigned);	/* Calls 'calloc' and exits with error if it fails */
 
@@ -44,5 +43,4 @@ int  intio_read (FILE *);	/* Read an integer  */
 void intio_write(FILE *, int);	/* Write an integer */
 #endif
 
-#endif
-
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_TOOLS_H_

@@ -1,4 +1,3 @@
-/* $Id: ldpc_scheme.cpp,v 1.13 2006/09/06 14:55:39 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Scheme.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved

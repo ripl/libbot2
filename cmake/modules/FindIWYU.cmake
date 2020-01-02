@@ -1,4 +1,21 @@
-#[=======================================================================[.rst:
+#[=============================================================================[
+This file is part of libbot2.
+
+libbot2 is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+libbot2 is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libbot2. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
+
+#[========================================================================[.rst:
 FindIWYU
 --------
 
@@ -41,7 +58,7 @@ The following cache variables may also be set:
 
 ``IWYU_EXECUTABLE``
   The path to an ``include-what-you-use`` or ``iwyu`` executable.
-#]=======================================================================]
+#]========================================================================]
 
 find_program(IWYU_EXECUTABLE NAMES include-what-you-use iwyu
   PATHS /usr/local/bin /usr/bin

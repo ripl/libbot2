@@ -1,7 +1,7 @@
 // signal_pipe was copied from bot_core to make lcm_tunnel a standalone pod
 
-#ifndef __bot_signal_pipe_h__
-#define __bot_signal_pipe_h__
+#ifndef BOT2_LCM_UTILS_TUNNEL_SIGNAL_PIPE_H_
+#define BOT2_LCM_UTILS_TUNNEL_SIGNAL_PIPE_H_
 
 /**
  * @defgroup BotCoreSignalPipe Signals to pipes
@@ -73,4 +73,4 @@ int bot_signal_pipe_glib_quit_on_kill (GMainLoop *mainloop);
  * @}
  */
 
-#endif
+#endif  /* BOT2_LCM_UTILS_TUNNEL_SIGNAL_PIPE_H_ */

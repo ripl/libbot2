@@ -1,3 +1,51 @@
+#[=============================================================================[
+This file is part of bot2-lcm-utils.
+
+bot2-lcm-utils is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+bot2-lcm-utils is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with bot2-lcm-utils. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
+
+#[========================================================================[.rst:
+CheckLinkerFlag
+---------------
+
+Check whether the linker supports a given flag.
+
+check_linker_flag
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: cmake
+
+   check_linker_flag(<flag> <var>)
+
+Check that the ``<flag>`` is accepted by the linker without a diagnostic.
+Stores the result in an ``INTERNAL`` cache entry named ``<var>``.
+
+This function temporarily sets the ``CMAKE_REQUIRED_LIBRARIES`` or
+``CMAKE_REQUIRED_LINK_OPTIONS`` variable and calls the
+``check_c_source_compiles`` macro from the ``CheckCSourceCompiles`` module.
+See documentation of that module for a listing of variables that can
+otherwise modify the build.
+
+A positive result from this check indicates only that the linker did not
+issue a diagnostic message when given the flag. Whether the flag has any
+effect or even a specific one is beyond the scope of this module.
+
+Note that since the ``try_compile`` command forwards flags from variables
+like ``CMAKE_C_FLAGS``, unknown flags in such variables may cause a false
+negative for this check.
+#]========================================================================]
+
 include_guard(GLOBAL)
 
 include(CheckCSourceCompiles)

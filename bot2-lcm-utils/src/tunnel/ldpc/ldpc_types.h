@@ -1,10 +1,9 @@
-/* $Id: ldpc_types.h,v 1.1 2006/09/06 14:36:49 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Julien Laboure   (julien.laboure@inrialpes.fr)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
@@ -26,8 +25,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LDPC_TYPES_H
-#define LDPC_TYPES_H
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_TYPES_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_TYPES_H_
 
 #include <limits.h>  // IWYU pragma: keep
 
@@ -52,4 +51,4 @@
 #define UINT64  unsigned long long
 #endif /* !UINT64 */
 
-#endif /* LDPC_TYPES_H */
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_TYPES_H_

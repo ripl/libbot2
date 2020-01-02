@@ -1,21 +1,32 @@
-/* Copyright (C) 1995,1996,1997,1998,2001,2002 Free Software Foundation, Inc.
-   This file is part of the GNU C Library.
-   Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, August 1995.
+/*
+ *  LDPC/LDGM FEC Library.
+ *  (c) Copyright 2002-2006 INRIA - All rights reserved
+ *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
+ *                Vincent Roca      (vincent.roca@inrialpes.fr)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
+ *
+ *  This copyright notice must be retained and prominently displayed,
+ *  along with a note saying that the original programs are available from
+ *  Vincent Roca's web page, and note is made of any changes made to these
+ *  programs.
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
-   The GNU C Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   The GNU C Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with the GNU C Library; if not, write to the Free
-   Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-   02111-1307 USA.  */
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_RAND_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_RAND_H_
 
 /**
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE
@@ -35,3 +46,4 @@ void		ldpc_srand (unsigned long s);
  */
 unsigned long	ldpc_rand (unsigned long	maxv);
 
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_RAND_H_

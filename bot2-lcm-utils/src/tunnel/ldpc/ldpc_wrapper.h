@@ -1,12 +1,29 @@
 /*
+ * This file is part of bot2-lcm-utils.
+ *
+ * bot2-lcm-utils is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-lcm-utils is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-lcm-utils. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_WRAPPER_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_WRAPPER_H_
+
+/*
  * ldpc_wrapper.h
  *
  *  Created on: Mar 5, 2009
  *      Author: abachrac
  */
-
-#ifndef LDPC_WRAPPER_H_
-#define LDPC_WRAPPER_H_
 
 #include <stdint.h>
 
@@ -66,4 +83,5 @@ public:
   ldpc_dec_wrapper(int objSize, int packetSize, double fec_rate); //initializer for decoder
   int processPacket(uint8_t * newPkt, int16_t ESI);
 };
-#endif /* LDPC_WRAPPER_H_ */
+
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_WRAPPER_H_

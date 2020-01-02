@@ -1,70 +1,91 @@
-# .rst:
-# FindGLib2
-# ---------
-#
-# Finds the glib-2.0 library and related libraries.
-#
-# The following components are supported:
-#
-# * ``glib``: search for the glib-2.0 library.
-# * ``gio``: search for the gio-2.0 library.
-# * ``gmodule``: search for the gmodule-2.0 library.
-# * ``gobject``: search for  the gobject-2.0 library.
-# * ``gthread``: search for the gthread-2.0 library.
-#
-# If no ``COMPONENTS`` are specified, then ``glib`` is assumed.
-#
-# Imported Targets
-# ^^^^^^^^^^^^^^^^
-#
-# This module provides the following imported targets, if found:
-#
-# ``GLib2::glib``
-#   The glib-2.0 library. Target defined if component ``glib`` is found.
-# ``GLib2::gio``
-#   The gio-2.0 library. Target defined if component ``gio`` is found.
-# ``GLib2::gmodule``
-#   The gmodule-2.0 library. Target defined if component ``gmodule`` is found.
-# ``GLib2::gobject``
-#   The gobject-2.0 library. Target defined if component ``gobject`` is found.
-# ``GLib2::gthread``
-#   The gthread-2.0 library. Target defined if component ``gthread`` is found.
-#
-# Result Variables
-# ^^^^^^^^^^^^^^^^
-#
-# This will define the following variables:
-#
-# ``GLib2_FOUND``
-#   True if the system has the glib-2.0 library.
-# ``GLib2_VERSION``
-#   The version of the glib-2.0 library that was found.
-#
-# Cache Variables
-# ^^^^^^^^^^^^^^^
-#
-# The following cache variables may also be set:
-#
-# ``GLIB2_GLIB_INCLUDE_DIR``
-#   The directory containing ``glib.h``.
-# ``GLIB2_GLIB_LIBRARY``
-#   The path to the glib-2.0 library.
-# ``GLIB2_GLIBCONFIG_INCLUDE_DIR``
-#   The directory containing ``glibconfig.h``.
-# ``GLIB2_GIO_INCLUDE_DIR``
-#   The directory containing ``gio/gio.h``.
-# ``GLIB2_GIO_LIBRARY``
-#   The path to the gio-2.0 library.
-# ``GLIB2_GMODULE_INCLUDE_DIR``
-#   The directory containing ``gmodule.h``.
-# ``GLIB2_GMODULE_LIBRARY``
-#   The path to the gmodule-2.0 library.
-# ``GLIB2_GOBJECT_INCLUDE_DIR``
-#   The directory containing ``glib-object.h``.
-# ``GLIB2_GOBJECT_LIBRARY``
-#   The path to the gobject-2.0 library.
-# ``GLIB2_GTHREAD_LIBRARY``
-#   The path to the gthread-2.0 library.
+#[=============================================================================[
+This file is part of bot2-core.
+
+bot2-core is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+bot2-core is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with bot2-core. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
+
+#[========================================================================[.rst:
+FindGLib2
+---------
+
+Finds the glib-2.0 library and related libraries.
+
+The following components are supported:
+
+* ``glib``: search for the glib-2.0 library.
+* ``gio``: search for the gio-2.0 library.
+* ``gmodule``: search for the gmodule-2.0 library.
+* ``gobject``: search for  the gobject-2.0 library.
+* ``gthread``: search for the gthread-2.0 library.
+
+If no ``COMPONENTS`` are specified, then ``glib`` is assumed.
+
+Imported Targets
+^^^^^^^^^^^^^^^^
+
+This module provides the following imported targets, if found:
+
+``GLib2::glib``
+  The glib-2.0 library. Target defined if component ``glib`` is found.
+``GLib2::gio``
+  The gio-2.0 library. Target defined if component ``gio`` is found.
+``GLib2::gmodule``
+  The gmodule-2.0 library. Target defined if component ``gmodule`` is
+  found.
+``GLib2::gobject``
+  The gobject-2.0 library. Target defined if component ``gobject`` is
+  found.
+``GLib2::gthread``
+  The gthread-2.0 library. Target defined if component ``gthread`` is
+  found.
+
+Result Variables
+^^^^^^^^^^^^^^^^
+
+This will define the following variables:
+
+``GLib2_FOUND``
+  True if the system has the glib-2.0 library.
+``GLib2_VERSION``
+  The version of the glib-2.0 library that was found.
+
+Cache Variables
+^^^^^^^^^^^^^^^
+
+The following cache variables may also be set:
+
+``GLIB2_GLIB_INCLUDE_DIR``
+  The directory containing ``glib.h``.
+``GLIB2_GLIB_LIBRARY``
+  The path to the glib-2.0 library.
+``GLIB2_GLIBCONFIG_INCLUDE_DIR``
+  The directory containing ``glibconfig.h``.
+``GLIB2_GIO_INCLUDE_DIR``
+  The directory containing ``gio/gio.h``.
+``GLIB2_GIO_LIBRARY``
+  The path to the gio-2.0 library.
+``GLIB2_GMODULE_INCLUDE_DIR``
+  The directory containing ``gmodule.h``.
+``GLIB2_GMODULE_LIBRARY``
+  The path to the gmodule-2.0 library.
+``GLIB2_GOBJECT_INCLUDE_DIR``
+  The directory containing ``glib-object.h``.
+``GLIB2_GOBJECT_LIBRARY``
+  The path to the gobject-2.0 library.
+``GLIB2_GTHREAD_LIBRARY``
+  The path to the gthread-2.0 library.
+#]========================================================================]
 
 include(FindPackageHandleStandardArgs)
 

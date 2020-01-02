@@ -1,7 +1,24 @@
-// lcm_util was copied from bot_core to make lcm_tunnel a standalone pod
+/*
+ * This file is part of bot2-lcm-utils.
+ *
+ * bot2-lcm-utils is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-lcm-utils is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-lcm-utils. If not, see <https://www.gnu.org/licenses/>.
+ */
 
-#ifndef __bot_lcm_util_h__
-#define __bot_lcm_util_h__
+#ifndef BOT2_LCM_UTILS_TUNNEL_LCM_UTIL_H_
+#define BOT2_LCM_UTILS_TUNNEL_LCM_UTIL_H_
+
+// lcm_util was copied from bot_core to make lcm_tunnel a standalone pod
 
 #include <glib.h>
 #include <lcm/lcm.h>
@@ -86,4 +103,4 @@ lcm_t *bot_lcm_get_global(const char *provider);
 }
 #endif
 
-#endif
+#endif  /* BOT2_LCM_UTILS_TUNNEL_LCM_UTIL_H_ */

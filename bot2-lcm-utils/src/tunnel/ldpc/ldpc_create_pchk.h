@@ -1,5 +1,4 @@
 /*
- * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
  *
  * Permission is granted for anyone to copy, use, modify, or distribute these
@@ -13,8 +12,8 @@
  * of these programs is entirely at the user's own risk.
  */
 
-#ifndef LDPC_CREATE_PCHK__
-#define LDPC_CREATE_PCHK__
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_CREATE_PCHK_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_CREATE_PCHK_H_
 
 #include "ldpc_matrix_sparse.h"
 
@@ -33,5 +32,5 @@ typedef enum SessionType_enum
 
 mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, int leftDegree, int seed, bool no4cycle, SessionType type, int verbosity );
 
-#endif
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_CREATE_PCHK_H_
 

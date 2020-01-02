@@ -1,11 +1,10 @@
-/* $Id: ldpc_fec_iterative_decoding.cpp,v 1.2 2006/09/05 15:59:49 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Laurent Fazio     (STMicroelectronics)
- *		  Julien Laboure   (julien.laboure@inrialpes.fr)
+ *                Laurent Fazio     (STMicroelectronics)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
@@ -27,7 +26,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
- #include "ldpc_fec.h"  // IWYU pragma: associated
+#include "ldpc_fec.h"  // IWYU pragma: associated
 
 #include <stdlib.h>
 #include <string.h>

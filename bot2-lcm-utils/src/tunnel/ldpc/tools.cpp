@@ -1,5 +1,4 @@
 /*
- * The contents of this directory and its sub-directories are
  * Copyright (c) 1995-2003 by Radford M. Neal
  *
  * Permission is granted for anyone to copy, use, modify, or distribute these

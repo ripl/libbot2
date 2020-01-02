@@ -1,10 +1,9 @@
-/* $Id: macros.h,v 1.8 2006/07/27 08:22:18 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Julien Laboure   (julien.laboure@inrialpes.fr)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
@@ -26,8 +25,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_MACROS_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_MACROS_H_
 
 #include <stdio.h>
 #include <stdlib.h>  // IWYU pragma: keep
@@ -103,4 +102,4 @@
 #define ASSERT(c)
 #endif /* DEBUG */
 
-#endif /* MACROS_H */
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_MACROS_H_

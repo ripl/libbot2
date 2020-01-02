@@ -1,5 +1,22 @@
-#ifndef __ar_bot_frames_h__
-#define __ar_bot_frames_h__
+/*
+ * This file is part of bot2-frames.
+ *
+ * bot2-frames is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-frames is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-frames. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_FRAMES_BOT_FRAMES_BOT_FRAMES_H_
+#define BOT2_FRAMES_BOT_FRAMES_BOT_FRAMES_H_
 
 #include <stdint.h>
 
@@ -321,7 +338,9 @@ const char * bot_frames_get_root_name(BotFrames * bot_frames);
 #ifdef __cplusplus
 }
 #endif
+
 /**
  * @}
  */
-#endif
+
+#endif  /* BOT2_FRAMES_BOT_FRAMES_BOT_FRAMES_H_ */

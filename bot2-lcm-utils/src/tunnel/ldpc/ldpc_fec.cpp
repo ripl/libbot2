@@ -1,11 +1,10 @@
-/* $Id: ldpc_fec.cpp,v 1.91 2006/09/06 14:36:49 roca Exp $ */
 /*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Laurent Fazio     (STMicroelectronics)
- *		  Julien Laboure   (julien.laboure@inrialpes.fr)
+ *                Laurent Fazio     (STMicroelectronics)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
