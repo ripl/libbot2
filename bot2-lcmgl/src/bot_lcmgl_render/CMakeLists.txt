@@ -10,7 +10,7 @@ if(USE_BOT_VIS)
   find_package(bot2-vis CONFIG REQUIRED)
   list(APPEND c_files lcmgl_bot_renderer.c)
   list(APPEND h_files lcmgl_bot_renderer.h)
-  list(APPEND REQUIRED_LIBS lcm >= 1.4 bot2-vis)
+  list(APPEND REQUIRED_LIBS gtk+-3.0 lcm >= 1.4 zlib bot2-vis)
 endif()
 
 add_library(bot2-lcmgl-renderer ${c_files})
@@ -39,12 +39,9 @@ if(USE_BOT_VIS)
   find_package(PkgConfig MODULE REQUIRED)
   pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
   target_compile_definitions(bot2-lcmgl-renderer PRIVATE USE_BOT_VIS)
-  target_include_directories(bot2-lcmgl-renderer
-    PRIVATE ${GTK3_INCLUDE_DIRS}
-  )
   target_link_libraries(bot2-lcmgl-renderer
     PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2-vis
-    PRIVATE ${GTK3_LIBRARIES} ZLIB::ZLIB
+    PRIVATE PkgConfig::GTK3 ZLIB::ZLIB
   )
 endif()
 

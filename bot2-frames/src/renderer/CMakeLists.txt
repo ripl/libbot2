@@ -14,7 +14,6 @@ target_include_directories(bot2-frames-renderers
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
     $<INSTALL_INTERFACE:include>
-  PRIVATE ${GTK3_INCLUDE_DIRS}
 )
 target_link_libraries(bot2-frames-renderers
   PUBLIC
@@ -24,10 +23,10 @@ target_link_libraries(bot2-frames-renderers
   PRIVATE
     GLib2::glib
     GLib2::gobject
-    ${GTK3_LIBRARIES}
     M::M
     OpenGL::GL
     OpenGL::GLU
+    PkgConfig::GTK3
     libbot2::bot2-core
 )
 # set the library API version.  Increment this every time the public API

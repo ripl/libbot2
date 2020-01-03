@@ -15,9 +15,6 @@ if(APPLE)
     PRIVATE GL_SILENCE_DEPRECATION=1
   )
 endif()
-target_include_directories(bot-lcmgl-viewer
-  PRIVATE ${GDK3_INCLUDE_DIRS} ${GTK3_INCLUDE_DIRS}
-)
 target_link_libraries(bot-lcmgl-viewer
  PRIVATE
    GLib2::glib

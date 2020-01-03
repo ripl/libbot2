@@ -177,6 +177,9 @@ configure_file(cmake/modules/FindM.cmake
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
   DESTINATION lib/cmake/${PROJECT_NAME}/modules
 )
+# Install FindPkgConfig.cmake which does not import target
+# in the CMake 3 style before CMake 3.6.
+install(FILES cmake/modules/3.6/FindPkgConfig.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.6)
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
 install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)

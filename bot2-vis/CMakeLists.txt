@@ -177,6 +177,9 @@ install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
 # Install FindPNG.cmake which does not import target
 # in the CMake 3 style before CMake 3.5.
 install(FILES cmake/modules/3.5/FindPNG.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.5)
+# Install FindPkgConfig.cmake which does not import target
+# in the CMake 3 style before CMake 3.6.
+install(FILES cmake/modules/3.6/FindPkgConfig.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.6)
 # Install FindOpenGL.cmake which does not import target
 # in the CMake 3 style before CMake 3.8.
 install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION lib/cmake/${PROJECT_NAME}/modules/3.10)

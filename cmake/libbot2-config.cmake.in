@@ -72,7 +72,7 @@ if(WITH_BOT_LCMGL)
   find_dependency(bot2-lcmgl CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-lcmgl")
 endif()
 
-if(WITH_BOT_FRAMES AND WITH_BOT_LCMGL AND WITH_BOT_PARAM )
+if(WITH_BOT_FRAMES AND WITH_BOT_LCMGL AND WITH_BOT_PARAM)
   find_dependency(bot2-frames CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-frames")
 endif()
 

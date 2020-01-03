@@ -21,22 +21,20 @@ target_include_directories(bot2-vis
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
     $<INSTALL_INTERFACE:include>
-    ${GTK3_INCLUDE_DIRS}
-  PRIVATE ${GDK3_INCLUDE_DIRS}
 )
 target_link_libraries(bot2-vis
   PUBLIC
     GLib2::glib
     GLib2::gobject
-    ${GTK3_LIBRARIES}
     OpenGL::GL
+    PkgConfig::GTK3
     ZLIB::ZLIB
   PRIVATE
-    ${GDK3_LIBRARIES}
     GLUT::GLUT
     JPEG::JPEG
     M::M
     OpenGL::GLU
+    PkgConfig::GDK3
     PNG::PNG
     Threads::Threads
     X11::X11

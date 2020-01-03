@@ -14,9 +14,6 @@ if(APPLE)
     PRIVATE GL_SILENCE_DEPRECATION=1
   )
 endif()
-target_include_directories(gl_image_area_tester
-  PRIVATE ${GDK3_INCLUDE_DIRS}
-)
 target_link_libraries(gl_image_area_tester
   PRIVATE PkgConfig::GDK3 bot2-vis
 )
