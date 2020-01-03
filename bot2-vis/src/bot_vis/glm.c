@@ -49,7 +49,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __APPLE_
+#ifdef __APPLE__
 #include <OpenGL/gl.h>
 #ifdef AVL
 #include <OpenGL/glu.h>

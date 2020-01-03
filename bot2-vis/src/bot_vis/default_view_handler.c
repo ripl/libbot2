@@ -37,7 +37,7 @@
 #include <bot_core/small_linalg.h>
 #include <bot_core/timestamp.h>
 
-#include "bot_vis/viewer.h"
+#include "viewer.h"
 
 #define EYE_MIN_DIST 0.1
 #define EYE_MAX_DIST 10000

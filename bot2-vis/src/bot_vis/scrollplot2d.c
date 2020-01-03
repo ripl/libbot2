@@ -22,7 +22,7 @@
 #include <string.h>
 
 #include <glib.h>
-#ifdef __APPLE
+#ifdef __APPLE__
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
