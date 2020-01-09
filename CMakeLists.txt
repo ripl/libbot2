@@ -75,7 +75,7 @@ ${PROJECT_BINARY_DIR}/bot2-frames
 string(REPLACE ";" ":::" SubprojectBinary_dir "${SubprojectBinary_dir}")
 
 # pass thru certain cmake variables.
-set(default_cmake_args
+set(COMMON_CMAKE_ARGS
   -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=${CMAKE_INSTALL_RPATH_USE_LINK_PATH}
@@ -101,28 +101,105 @@ set(default_cmake_args
   "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
   )
 
+option(CLANG_TIDY "Run the clang-tidy tool during the build" OFF)
+if(CLANG_TIDY)
+  find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy)
+  if(NOT CLANG_TIDY_EXECUTABLE)
+    message(FATAL_ERROR
+      "clang-tidy was NOT found (missing: CLANG_TIDY_EXECUTABLE)"
+    )
+  endif()
+  mark_as_advanced(CLANG_TIDY_EXECUTABLE)
+  set(CMAKE_C_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE}")
+  set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXECUTABLE}")
+endif()
+if(CMAKE_C_CLANG_TIDY)
+  string(REPLACE ";" ":::" C_CLANG_TIDY "${CMAKE_C_CLANG_TIDY}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_C_CLANG_TIDY:STRING=${C_CLANG_TIDY}"
+  )
+endif()
+if(CMAKE_CXX_CLANG_TIDY)
+  string(REPLACE ";" ":::" CXX_CLANG_TIDY "${CMAKE_CXX_CLANG_TIDY}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_CXX_CLANG_TIDY:STRING=${CXX_CLANG_TIDY}"
+  )
+endif()
+
+option(CPPCHECK "Run the cppcheck tool during the build" OFF)
+if(CPPCHECK)
+  find_program(CPPCHECK_EXECUTABLE NAMES cppcheck)
+  if(NOT CPPCHECK_EXECUTABLE)
+    message(FATAL_ERROR "cppcheck was NOT found (missing: CPPCHECK_EXECUTABLE)")
+  endif()
+  mark_as_advanced(CPPCHECK_EXECUTABLE)
+  set(CMAKE_C_CPPCHECK "${CPPCHECK_EXECUTABLE}")
+  set(CMAKE_CXX_CPPCHECK "${CPPCHECK_EXECUTABLE}")
+endif()
+if(CMAKE_C_CPPCHECK)
+  string(REPLACE ";" ":::" C_CPPCHECK "${CMAKE_C_CPPCHECK}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_C_CPPCHECK:STRING=${C_CPPCHECK}"
+  )
+endif()
+if(CMAKE_CXX_CPPCHECK)
+  string(REPLACE ";" ":::" CXX_CPPCHECK "${CMAKE_CXX_CPPCHECK}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_CXX_CPPCHECK:STRING=${CXX_CPPCHECK}"
+  )
+endif()
+option(CPPLINT "Run the cpplint tool during the build" OFF)
+if(CPPLINT)
+  find_program(CPPLINT_EXECUTABLE NAMES cpplint.py cpplint)
+  if(NOT CPPLINT_EXECUTABLE)
+    message(FATAL_ERROR "cpplint was NOT found (missing: CPPLINT_EXECUTABLE)")
+  endif()
+  mark_as_advanced(CPPLINT_EXECUTABLE)
+  set(C_CXX_CPPLINT "${CPPLINT_EXECUTABLE}" --extensions=c,cpp,h --quiet)
+  set(CMAKE_C_CPPLINT "${C_CXX_CPPLINT}")
+  set(CMAKE_CXX_CPPLINT "${C_CXX_CPPLINT}")
+endif()
+if(CMAKE_C_CPPLINT)
+  string(REPLACE ";" ":::" C_CPPLINT "${CMAKE_C_CPPLINT}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_C_CPPLINT:STRING=${C_CPPLINT}"
+  )
+endif()
+if(CMAKE_CXX_CPPLINT)
+  string(REPLACE ";" ":::" CXX_CPPLINT "${CMAKE_CXX_CPPLINT}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_CXX_CPPLINT:STRING=${CXX_CPPLINT}"
+  )
+endif()
+
 option(INCLUDE_WHAT_YOU_USE
-  "Run the include-what-you-use-tool during the build" OFF
+  "Run the include-what-you-use tool during the build" OFF
 )
 if(INCLUDE_WHAT_YOU_USE)
   find_package(IWYU MODULE REQUIRED)
-  set(IWYU_ARGS
-    "-Xiwyu:::--mapping_file=${PROJECT_SOURCE_DIR}/scripts/lint/include-what-you-use.imp"
+  set(C_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}" -Xiwyu
+    "--mapping_file=${PROJECT_SOURCE_DIR}/scripts/lint/include-what-you-use.imp"
   )
   if(IWYU VERSION_GREATER_EQUAL 0.10)
-    set(IWYU_ARGS "${IWYU_ARGS}:::-Xiwyu:::--no_fwd_decls")
+    list(APPEND C_CXX_INCLUDE_WHAT_YOU_USE -Xiwyu --no_fwd_decls)
   endif()
-  set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}:::${IWYU_ARGS}")
-  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}:::${IWYU_ARGS}")
+  set(CMAKE_C_INCLUDE_WHAT_YOU_USE "${C_CXX_INCLUDE_WHAT_YOU_USE}")
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${C_CXX_INCLUDE_WHAT_YOU_USE}")
 endif()
 if(CMAKE_C_INCLUDE_WHAT_YOU_USE)
-  list(APPEND default_cmake_args
-    "-DCMAKE_C_INCLUDE_WHAT_YOU_USE:STRING=${CMAKE_C_INCLUDE_WHAT_YOU_USE}"
+  string(REPLACE ";" ":::" C_INCLUDE_WHAT_YOU_USE
+    "${CMAKE_C_INCLUDE_WHAT_YOU_USE}"
+  )
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_C_INCLUDE_WHAT_YOU_USE:STRING=${C_INCLUDE_WHAT_YOU_USE}"
   )
 endif()
 if(CMAKE_CXX_INCLUDE_WHAT_YOU_USE)
-  list(APPEND default_cmake_args
-    "-DCMAKE_CXX_INCLUDE_WHAT_YOU_USE:STRING=${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
+  string(REPLACE ";" ":::" CXX_INCLUDE_WHAT_YOU_USE
+    "${CMAKE_CXX_INCLUDE_WHAT_YOU_USE}"
+  )
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_CXX_INCLUDE_WHAT_YOU_USE:STRING=${CXX_INCLUDE_WHAT_YOU_USE}"
   )
 endif()
 
@@ -131,15 +208,19 @@ option(LINK_WHAT_YOU_USE
 )
 if(LINK_WHAT_YOU_USE)
   find_program(LDD_EXECUTABLE NAMES ldd)
+  if(NOT LDD_EXECUTABLE)
+    message(FATAL_ERROR "ldd was NOT found (missing: LDD_EXECUTABLE)")
+  endif()
   mark_as_advanced(LDD_EXECUTABLE)
   include(CheckLinkerFlag)
   check_linker_flag(-Wl,--no-as-needed LINKER_SUPPORTS_NO_AS_NEEDED)
-  if(LDD_EXECUTABLE AND LINKER_SUPPORTS_NO_AS_NEEDED)
-    set(CMAKE_LINK_WHAT_YOU_USE ON)
+  if(NOT LINKER_SUPPORTS_NO_AS_NEEDED)
+    message(FATAL_ERROR "linker does NOT support flag --no-as-needed")
   endif()
+  set(CMAKE_LINK_WHAT_YOU_USE ON)
 endif()
 if(CMAKE_LINK_WHAT_YOU_USE)
-  list(APPEND default_cmake_args
+  list(APPEND COMMON_CMAKE_ARGS
     "-DCMAKE_LINK_WHAT_YOU_USE:BOOL=${CMAKE_LINK_WHAT_YOU_USE}"
   )
 endif()
@@ -148,9 +229,10 @@ ExternalProject_Add(bot2-core
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-core
   BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-core
   LIST_SEPARATOR ":::"
-  CMAKE_ARGS ${default_cmake_args}
+  CMAKE_ARGS ${COMMON_CMAKE_ARGS}
   ${INSTALL_CMD}
-  BUILD_ALWAYS 1)
+  BUILD_ALWAYS ON
+)
 set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-core;bot2core;Unspecified;/")
 
 option(WITH_BOT_PROCMAN "Build with bot2-procman" ON)
@@ -160,10 +242,11 @@ if(WITH_BOT_PROCMAN)
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-procman
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-procman
     LIST_SEPARATOR ":::"
-    CMAKE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
     ${INSTALL_CMD}
-    BUILD_ALWAYS 1)
+    BUILD_ALWAYS ON
+  )
   set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-procman;bot2-procman;ALL;/")
 endif()
 
@@ -174,10 +257,11 @@ if(WITH_BOT_LCM_UTILS)
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcm-utils
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcm-utils
     LIST_SEPARATOR ":::"
-    CMAKE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     "-DLCM_PYTHON_DIR_HINTS:PATH=${LCM_PYTHON_DIR_HINTS}"
     ${INSTALL_CMD}
-    BUILD_ALWAYS 1)
+    BUILD_ALWAYS ON
+  )
   set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcm-utils;bot2-lcm-utils;ALL;/")
 endif()
 
@@ -188,9 +272,10 @@ if(WITH_BOT_PARAM)
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-param
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-param
     LIST_SEPARATOR ":::"
-    CMAKE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     ${INSTALL_CMD}
-    DEPENDS bot2-core)
+    DEPENDS bot2-core
+  )
   set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-param;bot2-param;ALL;/")
 endif()
 
@@ -204,10 +289,11 @@ if(WITH_BOT_VIS)
   ExternalProject_Add(bot2-vis
     SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-vis
     BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-vis
-    CMAKE_ARGS ${default_cmake_args}
+    CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     LIST_SEPARATOR ":::"
     ${INSTALL_CMD}
-    DEPENDS bot2-core)
+    DEPENDS bot2-core
+  )
   set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-vis;bot2-vis;ALL;/")
 
   if(WITH_BOT_LCMGL)
@@ -215,9 +301,10 @@ if(WITH_BOT_VIS)
       SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
       BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
       LIST_SEPARATOR ":::"
-      CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+      CMAKE_ARGS ${COMMON_CMAKE_ARGS} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
       ${INSTALL_CMD}
-      DEPENDS bot2-core bot2-vis)
+      DEPENDS bot2-core bot2-vis
+    )
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
     if(WITH_BOT_FRAMES AND WITH_BOT_PARAM)
@@ -225,9 +312,10 @@ if(WITH_BOT_VIS)
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
         BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
         LIST_SEPARATOR ":::"
-        CMAKE_ARGS ${default_cmake_args}
+        CMAKE_ARGS ${COMMON_CMAKE_ARGS}
         ${INSTALL_CMD}
-        DEPENDS bot2-core bot2-param bot2-vis bot2-lcmgl)
+        DEPENDS bot2-core bot2-lcmgl bot2-param bot2-vis
+      )
       set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
     endif()
   endif()
@@ -239,20 +327,22 @@ else()
     ExternalProject_Add(bot2-lcmgl
       SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-lcmgl
       BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-lcmgl
-      CMAKE_ARGS ${default_cmake_args} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
+      CMAKE_ARGS ${COMMON_CMAKE_ARGS} -DUSE_BOT_VIS:BOOL=${WITH_BOT_VIS}
       LIST_SEPARATOR ":::"
       ${INSTALL_CMD}
-      DEPENDS bot2-core)
+      DEPENDS bot2-core
+    )
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-lcmgl;bot2-lcmgl;ALL;/")
 
     if(WITH_BOT_FRAMES AND WITH_BOT_PARAM)
       ExternalProject_Add(bot2-frames
         SOURCE_DIR ${PROJECT_SOURCE_DIR}/bot2-frames
         BINARY_DIR ${PROJECT_BINARY_DIR}/bot2-frames
-        CMAKE_ARGS ${default_cmake_args}
+        CMAKE_ARGS ${COMMON_CMAKE_ARGS}
         LIST_SEPARATOR ":::"
         ${INSTALL_CMD}
-        DEPENDS bot2-core bot2-param bot2-lcmgl)
+        DEPENDS bot2-core bot2-lcmgl bot2-param
+      )
       set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${PROJECT_BINARY_DIR}/bot2-frames;bot2-frames;ALL;/")
     endif()
   endif()

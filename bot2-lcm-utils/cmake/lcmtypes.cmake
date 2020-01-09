@@ -163,7 +163,11 @@ function(lcmtypes_build_c)
 
     # aggregate into a static library
     add_library(${libname} STATIC ${_lcmtypes_c_files})
-    set_target_properties(${libname} PROPERTIES C_INCLUDE_WHAT_YOU_USE "")
+    set_target_properties(${libname} PROPERTIES
+      C_CLANG_TIDY ""
+      C_CPPLINT ""
+      C_INCLUDE_WHAT_YOU_USE ""
+    )
     set_target_properties(${libname} PROPERTIES POSITION_INDEPENDENT_CODE ON)
     target_link_libraries(${libname} ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm)
     target_include_directories(${libname} PUBLIC

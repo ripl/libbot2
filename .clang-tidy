@@ -2,5 +2,5 @@
 # vi: set ft=yaml :
 
 ---
-Checks: 'clang-analyzer-*,clang-diagnostic-*,google-*'
+Checks: 'clang-analyzer-*,-clang-analyzer-security.insecureAPI.rand,clang-diagnostic-*,google-*,-google-readability-casting,-google-readability-todo,-google-runtime-int'
 ...
