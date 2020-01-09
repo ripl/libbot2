@@ -124,7 +124,6 @@ if(LINKER_SUPPORTS_Z_RELRO)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
 endif()
 
-set(POD_NAME ${PROJECT_NAME})
 set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)

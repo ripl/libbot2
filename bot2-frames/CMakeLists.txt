@@ -136,7 +136,6 @@ macro(configure_import_targets _prop)
 endmacro()
 
 # pull in the pods macros. See cmake/pods.cmake for documentation
-set(POD_NAME ${PROJECT_NAME})
 set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)

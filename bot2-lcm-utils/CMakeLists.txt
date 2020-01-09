@@ -134,7 +134,6 @@ macro(configure_import_targets _prop)
   endif()
 endmacro()
 
-set(POD_NAME ${PROJECT_NAME})
 set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)

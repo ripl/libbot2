@@ -1,10 +1,7 @@
 # Macros to simplify compliance with the pods build policies.
 #
 # To enable the macros, add the following lines to CMakeLists.txt:
-#   set(POD_NAME <pod-name>)
 #   include(cmake/pods.cmake)
-#
-# If POD_NAME is not set, then the CMake source directory is used as POD_NAME
 #
 # Next, any of the following macros can be used.  See the individual macro
 # definitions in this file for individual documentation.
@@ -240,13 +237,6 @@ macro(pods_config_search_paths)
         set(__pods_setup true)
     endif()
 endmacro()
-
-#set the variable POD_NAME to the directory path, and set the cmake PROJECT_NAME
-if(NOT POD_NAME)
-    get_filename_component(POD_NAME ${CMAKE_SOURCE_DIR} NAME)
-    message(STATUS "POD_NAME is not set... Defaulting to directory name: ${POD_NAME}")
-endif()
-project(${POD_NAME})
 
 #call the function to setup paths
 pods_config_search_paths()

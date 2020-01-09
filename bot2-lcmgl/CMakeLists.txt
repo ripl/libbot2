@@ -137,7 +137,6 @@ macro(configure_import_targets _prop)
   endif()
 endmacro()
 
-set(POD_NAME ${PROJECT_NAME})
 set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)
