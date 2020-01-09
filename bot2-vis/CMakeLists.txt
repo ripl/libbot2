@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(bot2-vis LANGUAGES C CXX VERSION 0.0.1)
+project(bot2-vis LANGUAGES C VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 if(CMAKE_VERSION VERSION_LESS 3.12)
@@ -14,9 +14,6 @@ include(GNUInstallDirs)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 98)
-set(CMAKE_CXX_EXTENSIONS ON)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CheckCCompilerFlag)
 
@@ -55,45 +52,6 @@ if(C_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
 endif()
 if(C_COMPILER_SUPPORTS_WNO_UNUSED)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused")
-endif()
-
-include(CheckCXXCompilerFlag)
-
-check_cxx_compiler_flag(-D_FORTIFY_SOURCE=2
-  CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2
-)
-check_cxx_compiler_flag(-fstack-protector
-  CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR
-)
-check_cxx_compiler_flag(-fstack-protector-strong
-  CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG
-)
-check_cxx_compiler_flag(-Wall
-  CXX_COMPILER_SUPPORTS_WALL
-)
-check_cxx_compiler_flag(-Werror=format-security
-  CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY
-)
-check_cxx_compiler_flag(-Wno-unused
-  CXX_COMPILER_SUPPORTS_WNO_UNUSED
-)
-
-if(CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
-endif()
-if(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
-elseif(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
-endif()
-if(CXX_COMPILER_SUPPORTS_WALL)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-endif()
-if(CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=format-security")
-endif()
-if(CXX_COMPILER_SUPPORTS_WNO_UNUSED)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused")
 endif()
 
 include(CheckLinkerFlag)
