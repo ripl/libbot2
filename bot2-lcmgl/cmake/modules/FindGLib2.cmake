@@ -93,7 +93,9 @@ find_package(PkgConfig QUIET)
 
 #------------------------------------------------------------------------------
 function(_glib2_find_include VAR HEADER)
-  list(APPEND CMAKE_PREFIX_PATH $ENV{GLIB_PATH})
+  if(DEFINED ENV{GLIB_PATH})
+    list(APPEND CMAKE_PREFIX_PATH $ENV{GLIB_PATH})
+  endif()
 
   set(_paths)
   foreach(_lib ${ARGN})
@@ -110,7 +112,9 @@ endfunction()
 
 #------------------------------------------------------------------------------
 function(_glib2_find_library VAR LIB)
-  list(APPEND CMAKE_PREFIX_PATH $ENV{GLIB_PATH})
+  if(DEFINED ENV{GLIB_PATH})
+    list(APPEND CMAKE_PREFIX_PATH $ENV{GLIB_PATH})
+  endif()
 
   pkg_check_modules(PC_GLIB2_${VAR} QUIET ${LIB}-2.0)
 
