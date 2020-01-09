@@ -114,7 +114,7 @@ procman_t *procman_create (const procman_params_t *params)
     int newpathlen = strlen (path) + strlen(params->bin_path) + 2;
     char *newpath = calloc(1, newpathlen);
     int result = snprintf (newpath, newpathlen, "%s:%s", params->bin_path, path);
-    if (result < 0 || result > sizeof (newpath)) {
+    if (result < 0 || result > newpathlen) {
       free (newpath);
       return NULL;
     }

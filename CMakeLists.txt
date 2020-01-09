@@ -12,9 +12,13 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   )
 endif()
 
+include(GNUInstallDirs)
+
 option(PACKAGE_LIBBOT2 "Set install prefix to package libbot2 on linux" OFF)
 if(PACKAGE_LIBBOT2)
   set(CMAKE_INSTALL_PREFIX "/opt/${CMAKE_PROJECT_NAME}/${PROJECT_VERSION}" CACHE PATH "Install location for project" FORCE)
+  set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
   set(INSTALL_CMD INSTALL_COMMAND :)
 endif()
 
@@ -33,7 +37,6 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
 
 find_package(lcm 1.4 CONFIG REQUIRED)
 find_package(GLib2 2.32 MODULE REQUIRED)
