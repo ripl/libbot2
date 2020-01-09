@@ -60,7 +60,7 @@
 # .jar file. The location of this jar file is stored in LCMTYPES_JAR
 #
 # and the .jar file will be installed to
-#   ${CMAKE_INSTALL_PREFIX}/share/java
+#   ${CMAKE_INSTALL_DATADIR}/java
 #
 #
 # Python
@@ -163,14 +163,12 @@ function(lcmtypes_build_c)
     add_library(${libname} STATIC ${_lcmtypes_c_files})
     set_target_properties(${libname} PROPERTIES C_INCLUDE_WHAT_YOU_USE "")
     set_target_properties(${libname} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-    set_target_properties(${libname} PROPERTIES PREFIX "lib")
-    set_target_properties(${libname} PROPERTIES CLEAN_DIRECT_OUTPUT 1)
     target_link_libraries(${libname} ${LCM_NAMESPACE}lcm-coretypes ${LCM_NAMESPACE}lcm)
     target_include_directories(${libname} PUBLIC
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include/lcmtypes>
-        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-        $<INSTALL_INTERFACE:include/lcmtypes>
-        $<INSTALL_INTERFACE:include> )
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}/lcmtypes>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/lcmtypes>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}> )
     add_dependencies(${libname} lcmgen_c)
 
     #    add_library("${libname}-static" STATIC ${_lcmtypes_c_files})
@@ -351,7 +349,7 @@ function(lcmtypes_build_java)
     # search for lcmtypes_*.jar files in well-known places and add them to the
     # classpath
     foreach(pfx /usr /usr/local ${CMAKE_INSTALL_PREFIX})
-        file(GLOB_RECURSE jarfiles ${pfx}/share/java/lcmtypes_*.jar)
+        file(GLOB_RECURSE jarfiles ${pfx}/${CMAKE_INSTALL_DATADIR}/java/lcmtypes_*.jar)
         foreach(jarfile ${jarfiles})
             set(java_classpath ${java_classpath}:${jarfile})
             #            message("found ${jarfile}")
@@ -377,7 +375,7 @@ function(lcmtypes_build_java)
 
     add_dependencies(lcmtypes_${PROJECT_NAME}_jar lcmgen_java)
 
-    install(FILES ${LCMTYPES_JAR} DESTINATION share/java)
+    install(FILES ${LCMTYPES_JAR} DESTINATION ${CMAKE_INSTALL_DATADIR}/java)
     set(LCMTYPES_JAR ${LCMTYPES_JAR} PARENT_SCOPE)
 
     lcmtypes_add_clean_dir(${_lcmtypes_java_dir})
@@ -441,7 +439,7 @@ function(lcmtypes_install_types)
         return()
     endif()
 
-    install(FILES ${_lcmtypes} DESTINATION share/lcmtypes)
+    install(FILES ${_lcmtypes} DESTINATION ${CMAKE_INSTALL_DATADIR}/lcmtypes)
 endfunction()
 
 macro(lcmtypes_build)

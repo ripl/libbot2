@@ -41,4 +41,4 @@ add_custom_command(OUTPUT ${jar_fname} COMMAND
     DEPENDS ${class_files} VERBATIM)
 add_custom_target(jar ALL DEPENDS ${jar_fname})
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${jar_fname} DESTINATION share/java)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${jar_fname} DESTINATION ${CMAKE_INSTALL_DATADIR}/java)

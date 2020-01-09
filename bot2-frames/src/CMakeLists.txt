@@ -2,8 +2,8 @@
 add_library(${PROJECT_NAME} bot_frames.c)
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_link_libraries(${PROJECT_NAME}
   PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2-core libbot2::bot2-param-client
@@ -15,7 +15,7 @@ target_link_libraries(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION 2)
 
 # make the header public
-# install it to include/bot2-frames
+# install it to CMAKE_INSTALL_INCLUDEDIR/bot2-frames
 pods_install_headers(bot_frames.h DESTINATION bot_frames)
 
 # make the library public

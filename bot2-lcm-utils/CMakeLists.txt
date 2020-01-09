@@ -3,6 +3,8 @@ project(bot2-lcm-utils LANGUAGES C CXX VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(GNUInstallDirs)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -124,7 +126,7 @@ macro(configure_import_targets _prop)
       "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
   elseif("${_prop}" STREQUAL "INSTALL")
     # INSTALL tree configure
-    set(RUNTIME_INSTALL_DIR \${\${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/bin)
+    set(RUNTIME_INSTALL_DIR \${\${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/${CMAKE_INSTALL_BINDIR})
     configure_file(cmake/${PROJECT_NAME}-config.cmake.in
         "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake" @ONLY)
   else()
@@ -170,7 +172,7 @@ configure_file(
   @ONLY)
 
 # install it...
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_name} DESTINATION bin)
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_name} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 configure_import_targets(BUILD)
@@ -185,5 +187,5 @@ export(EXPORT ${PROJECT_NAME}
 pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
                                 EXPORT ${PROJECT_NAME}
                                 EXPORT_FILE ${EXPORT_FILE}
-                                DESTINATION lib/cmake/${PROJECT_NAME}
+                                DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
                                 CONFIG cmake/${PROJECT_NAME}-config.cmake)

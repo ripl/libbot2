@@ -3,6 +3,8 @@ project(bot2-core LANGUAGES C CXX VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(GNUInstallDirs)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -116,7 +118,7 @@ if(LINKER_SUPPORTS_Z_RELRO)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
 endif()
 
-set(JAVA_INSTALL_SUBDIR share/java) # java
+set(JAVA_INSTALL_SUBDIR ${CMAKE_INSTALL_DATADIR}/java) # java
 macro(configure_import_targets _prop)
   if("${_prop}" STREQUAL "BUILD")
     # BUILD tree configure
@@ -163,7 +165,7 @@ configure_file(cmake/modules/FindM.cmake
 
 # Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
-  DESTINATION lib/cmake/${PROJECT_NAME}/modules
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
 )
 
 # Exported targets for build directory
@@ -175,5 +177,5 @@ export(EXPORT ${PROJECT_NAME}
 pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
                                 EXPORT ${PROJECT_NAME}
                                 EXPORT_FILE ${EXPORT_FILE}
-                                DESTINATION lib/cmake/${PROJECT_NAME}
+                                DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
                                 CONFIG cmake/${PROJECT_NAME}-config.cmake)

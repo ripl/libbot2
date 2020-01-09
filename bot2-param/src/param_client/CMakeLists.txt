@@ -2,9 +2,10 @@ add_library(bot2-param-client
     param_internal.c param_util.c)
 
 find_package(bot2-core CONFIG REQUIRED)
-target_include_directories(bot2-param-client PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-  $<INSTALL_INTERFACE:include>
+target_include_directories(bot2-param-client
+  PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_link_libraries(bot2-param-client
   PUBLIC ${LCM_NAMESPACE}lcm libbot2::bot2-core

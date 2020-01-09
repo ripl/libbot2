@@ -12,8 +12,8 @@ if(APPLE)
 endif()
 target_include_directories(bot2-frames-renderers
   PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_link_libraries(bot2-frames-renderers
   PUBLIC
@@ -34,7 +34,7 @@ target_link_libraries(bot2-frames-renderers
 set_target_properties(bot2-frames-renderers PROPERTIES SOVERSION 1)
 
 # make the header public
-# install it to include/bot_frames
+# install it to CMAKE_INSTALL_INCLUDE_DIR/bot_frames
 pods_install_headers(bot_frames_renderers.h DESTINATION bot_frames)
 
 # make the library public

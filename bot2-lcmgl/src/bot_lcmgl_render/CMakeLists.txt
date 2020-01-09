@@ -21,8 +21,8 @@ if(APPLE)
 endif()
 target_include_directories(bot2-lcmgl-renderer
   PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 target_link_libraries(bot2-lcmgl-renderer
   PRIVATE

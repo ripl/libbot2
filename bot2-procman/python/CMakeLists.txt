@@ -32,5 +32,5 @@ if(PYTHONINTERP_FOUND)
   install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/bot-procman-sheriff"
     DESTINATION "${EXECUTABLE_INSTALL_PATH}")
 
-  install(FILES procman-sheriff.glade DESTINATION share/bot_procman)
+  install(FILES procman-sheriff.glade DESTINATION ${CMAKE_INSTALL_DATADIR}/bot_procman)
 endif()

@@ -12,7 +12,6 @@
 # C/C++
 #   pods_install_headers(...)
 #   pods_install_libraries(...)
-#   pods_install_executables(...)
 #
 # Python
 #   pods_install_python_packages(...)
@@ -25,7 +24,7 @@
 #
 # Install a (list) of header files.
 #
-# Header files will all be installed to include/<subdir_name>
+# Header files will all be installed to ${CMAKE_INSTALL_INCLUDEDIR}/<subdir_name>
 #
 # example:
 #   add_library(perception detector.h sensor.h)
@@ -40,34 +39,24 @@ function(pods_install_headers)
     list(GET ARGV -1 dest_dir)
     list(REMOVE_AT ARGV -1)
     list(REMOVE_AT ARGV -1)
-    #copy the headers to the INCLUDE_OUTPUT_PATH (${CMAKE_BINARY_DIR}/include)
+    #copy the headers to the INCLUDE_OUTPUT_PATH (${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
     foreach(header ${ARGV})
         get_filename_component(_header_name ${header} NAME)
         configure_file(${header} ${INCLUDE_OUTPUT_PATH}/${dest_dir}/${_header_name} COPYONLY)
 	endforeach()
 	#mark them to be installed
-	install(FILES ${ARGV} DESTINATION include/${dest_dir})
+	install(FILES ${ARGV} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${dest_dir})
 
-endfunction()
-
-# pods_install_executables(<executable1> ...)
-#
-# Install a (list) of executables to bin/
-function(pods_install_executables _export _export_name)
-    if(NOT "${_export}" STREQUAL "EXPORT")
-        message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
-    endif()
-    install(TARGETS ${ARGN} EXPORT ${_export_name} RUNTIME DESTINATION bin)
 endfunction()
 
 # pods_install_libraries(<library1> ...)
 #
-# Install a (list) of libraries to lib/
+# Install a (list) of libraries to CMAKE_INSTALL_LIBDIR
 function(pods_install_libraries _export _export_name)
     if(NOT "${_export}" STREQUAL "EXPORT")
         message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
     endif()
-    install(TARGETS ${ARGN} EXPORT ${_export_name} LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
+    install(TARGETS ${ARGN} EXPORT ${_export_name} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 endfunction()
 
 # pods_install_pkg_config_file(<package-name>
@@ -124,8 +113,8 @@ function(pods_install_pkg_config_file)
     file(WRITE ${pc_fname}
         "prefix=${CMAKE_INSTALL_PREFIX}\n"
         "exec_prefix=\${prefix}\n"
-        "libdir=\${exec_prefix}/lib\n"
-        "includedir=\${prefix}/include\n"
+        "libdir=\${exec_prefix}/${CMAKE_INSTALL_LIBDIR}\n"
+        "includedir=\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}\n"
         "\n"
         "Name: ${pc_name}\n"
         "Description: ${pc_description}\n"
@@ -135,7 +124,7 @@ function(pods_install_pkg_config_file)
         "Cflags: -I\${includedir} ${pc_cflags}\n")
 
     # mark the .pc file for installation to the lib/pkgconfig directory
-    install(FILES ${pc_fname} DESTINATION lib/pkgconfig)
+    install(FILES ${pc_fname} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endfunction()
 
 # _pods_install_python_package(<py_src_dir> <py_module_name>)
@@ -217,7 +206,7 @@ macro(pods_install_cmake_config_files
   if(NOT "${_destination}" STREQUAL "DESTINATION")
       message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
   endif()
-  install(FILES ${CMAKE_BINARY_DIR}/${_config_name} DESTINATION lib/cmake/${_export_name})
+  install(FILES ${CMAKE_BINARY_DIR}/${_config_name} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${_export_name})
   install(EXPORT ${_export_name} FILE ${_export_file_name} DESTINATION ${_destination_folder} NAMESPACE ${_namespace_value})
 endmacro()
 
@@ -229,15 +218,15 @@ endmacro()
 macro(pods_config_search_paths)
     if(NOT DEFINED __pods_setup)
 		#set where files should be output locally
-	    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
-	    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-	    set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/include)
+	    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+	    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+	    set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
       set(PKG_CONFIG_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/pkgconfig)
 
 		#set where files should be installed to
-	    set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib)
-	    set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/bin)
-	    set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/include)
+	    set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+	    set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})
+	    set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
       set(PKG_CONFIG_INSTALL_PATH ${LIBRARY_INSTALL_PATH}/pkgconfig)
 
       find_package(PythonInterp 3.6 MODULE REQUIRED)
@@ -247,15 +236,6 @@ macro(pods_config_search_paths)
         OUTPUT_STRIP_TRAILING_WHITESPACE)
       set(PYTHON_INSTALL_PATH
         "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
-
-      set(CMAKE_INSTALL_RPATH "${LIBRARY_INSTALL_PATH}")
-      set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
-
-        # hack to force cmake always create install and clean targets
-        install(FILES DESTINATION)
-        string(RANDOM LENGTH 32 __rand_target__name__)
-        add_custom_target(${__rand_target__name__})
-        unset(__rand_target__name__)
 
         set(__pods_setup true)
     endif()

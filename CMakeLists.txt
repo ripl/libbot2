@@ -44,6 +44,8 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(GNUInstallDirs)
+
 find_package(lcm 1.4 CONFIG REQUIRED)
 find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(Java 1.8 MODULE)
@@ -270,7 +272,7 @@ endif()
 configure_file(cmake/${CMAKE_PROJECT_NAME}-config.cmake.in
         "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" @ONLY)
 
-install(FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" DESTINATION lib/cmake/${CMAKE_PROJECT_NAME})
+install(FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME})
 
 if(PACKAGE_LIBBOT2)
   include(cmake/cpack.cmake)
