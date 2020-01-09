@@ -13,8 +13,13 @@ target_link_libraries(${libname}
 # changes.
 set_target_properties(${libname} PROPERTIES SOVERSION 1)
 
-# make both the shared library public
-pods_install_libraries(EXPORT ${PROJECT_NAME} ${libname})
+install(TARGETS ${libname}
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_client)
 

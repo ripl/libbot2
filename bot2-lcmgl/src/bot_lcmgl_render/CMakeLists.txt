@@ -49,7 +49,13 @@ endif()
 # changes.
 set_target_properties(bot2-lcmgl-renderer PROPERTIES SOVERSION 1)
 
-pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-lcmgl-renderer)
+install(TARGETS bot2-lcmgl-renderer
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 pods_install_headers(${h_files} DESTINATION bot_lcmgl_render)
 

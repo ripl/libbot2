@@ -19,8 +19,13 @@ set_target_properties(bot2-param-client PROPERTIES SOVERSION 1)
 # make the header public
 pods_install_headers(param_client.h param_util.h DESTINATION bot_param)
 
-# make the library public
-pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-param-client)
+install(TARGETS bot2-param-client
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.

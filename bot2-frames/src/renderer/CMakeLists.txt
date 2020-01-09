@@ -37,8 +37,13 @@ set_target_properties(bot2-frames-renderers PROPERTIES SOVERSION 1)
 # install it to CMAKE_INSTALL_INCLUDE_DIR/bot_frames
 pods_install_headers(bot_frames_renderers.h DESTINATION bot_frames)
 
-# make the library public
-pods_install_libraries(EXPORT ${PROJECT_NAME} bot2-frames-renderers)
+install(TARGETS bot2-frames-renderers
+  EXPORT ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
 
 # create a pkg-config file for the library, to make it for other software to
 # use it.

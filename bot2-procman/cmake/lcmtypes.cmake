@@ -210,7 +210,13 @@ function(lcmtypes_build_c)
     unset(__agg_h_fname)
 
     # make header files and libraries public
-    pods_install_libraries(EXPORT ${_export_name} ${libname})
+    install(TARGETS ${libname}
+      EXPORT ${_export_name}
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+      RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+      INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
     pods_install_headers(${_lcmtypes_h_files} DESTINATION lcmtypes)
 
     # set some compilation variables
