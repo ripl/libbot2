@@ -8,36 +8,24 @@ project(libbot2
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install" CACHE STRING
-    "Install path prefix, prepended onto install directories" FORCE)
+    "Install path prefix, prepended onto install directories" FORCE
+  )
 endif()
 
 option(PACKAGE_LIBBOT2 "Set install prefix to package libbot2 on linux" OFF)
 if(PACKAGE_LIBBOT2)
   set(CMAKE_INSTALL_PREFIX "/opt/${CMAKE_PROJECT_NAME}/${PROJECT_VERSION}" CACHE PATH "Install location for project" FORCE)
   set(INSTALL_CMD INSTALL_COMMAND :)
-  mark_as_advanced(FORCE _build_dir)
-else()
-  # PODs out-of-source build logic
-  if(CMAKE_INSTALL_PREFIX STREQUAL "/usr/local" OR CMAKE_INSTALL_PREFIX STREQUAL "C:/Program Files/${PROJECT_NAME}")
-    mark_as_advanced(CLEAR _build_dir)
-    set(INSTALL_CMD)
-    find_file(_build_dir build PATHS ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/.. ${PROJECT_SOURCE_DIR}/../.. ${PROJECT_SOURCE_DIR}/../../.. ${PROJECT_SOURCE_DIR}/../../../..)
-    if(_build_dir)
-        set(CMAKE_INSTALL_PREFIX "${_build_dir}" CACHE PATH "Install location for project" FORCE)
-    else()
-      execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/build)
-      set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/build)
-    endif()
-  endif()
 endif()
-message(STATUS CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX})
 
-# set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'Release' as none was specified.")
-  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING
+    "Choose the type of build, options are None Debug Release RelWithDebInfo MinSizeRel"
+    FORCE
+  )
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    None Debug Release RelWithDebInfo MinSizeRel
+  )
 endif()
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
