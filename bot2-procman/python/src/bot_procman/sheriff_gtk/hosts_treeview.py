@@ -117,6 +117,7 @@ class SheriffHostTreeView(Gtk.TreeView):
         self.hosts_ctxt_menu = Gtk.Menu()
 
         self.cleanup_hosts_ctxt_mi = Gtk.MenuItem(label="_Cleanup")
+        self.cleanup_hosts_ctxt_mi.set_use_underline(True)
         self.hosts_ctxt_menu.append(self.cleanup_hosts_ctxt_mi)
         self.cleanup_hosts_ctxt_mi.connect("activate", self._cleanup_hosts)
         self.hosts_ctxt_menu.show_all()

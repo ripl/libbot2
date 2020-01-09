@@ -561,7 +561,7 @@ class Sheriff(object):
 
     mainloop = GLib.MainLoop()
     GLib.io_add_watch(
-        lc, GLib.IO_IN, lambda *s: lc.handle() or True)
+        lc, GLib.IOCondition.IN, lambda *s: lc.handle() or True)
     GLib.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
     mainloop.run()
     @endcode
@@ -1641,7 +1641,7 @@ def main():
     sheriff.deputy_info_received.connect(lambda s, dep: sys.stdout.write(
         "deputy info received from %s\n" % dep.name))
     mainloop = GLib.MainLoop()
-    GLib.io_add_watch(comms, GLib.IO_IN, lambda *s: comms.handle() or True)
+    GLib.io_add_watch(comms, GLib.IOCondition.IN, lambda *s: comms.handle() or True)
     GLib.timeout_add(1000, lambda *s: sheriff.send_orders() or True)
     mainloop.run()
 

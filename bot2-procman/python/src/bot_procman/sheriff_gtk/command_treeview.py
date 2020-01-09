@@ -78,20 +78,24 @@ class SheriffCommandTreeView(Gtk.TreeView):
         self.cmd_ctxt_menu = Gtk.Menu()
 
         self.start_cmd_ctxt_mi = Gtk.MenuItem(label="_Start")
+        self.start_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.start_cmd_ctxt_mi)
         self.start_cmd_ctxt_mi.connect("activate",
                                        self._start_selected_commands)
 
         self.stop_cmd_ctxt_mi = Gtk.MenuItem(label="_Stop")
+        self.stop_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.stop_cmd_ctxt_mi)
         self.stop_cmd_ctxt_mi.connect("activate", self._stop_selected_commands)
 
         self.restart_cmd_ctxt_mi = Gtk.MenuItem(label="R_estart")
+        self.restart_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.restart_cmd_ctxt_mi)
         self.restart_cmd_ctxt_mi.connect("activate",
                                          self._restart_selected_commands)
 
         self.remove_cmd_ctxt_mi = Gtk.MenuItem(label="_Remove")
+        self.remove_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.remove_cmd_ctxt_mi)
         self.remove_cmd_ctxt_mi.connect("activate",
                                         self._remove_selected_commands)
@@ -99,10 +103,12 @@ class SheriffCommandTreeView(Gtk.TreeView):
         self.cmd_ctxt_menu.append(Gtk.SeparatorMenuItem())
 
         self.edit_cmd_ctxt_mi = Gtk.MenuItem(label="_Edit")
+        self.edit_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.edit_cmd_ctxt_mi)
         self.edit_cmd_ctxt_mi.connect("activate", self._edit_selected_command)
 
         self.new_cmd_ctxt_mi = Gtk.MenuItem(label="_New Command")
+        self.new_cmd_ctxt_mi.set_use_underline(True)
         self.cmd_ctxt_menu.append(self.new_cmd_ctxt_mi)
         self.new_cmd_ctxt_mi.connect(
             "activate", lambda *s: sd.do_add_command_dialog(

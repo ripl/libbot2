@@ -852,7 +852,7 @@ def main():
             traceback.print_exc()
         return True
 
-    GLib.io_add_watch(lc, GLib.IO_IN, handle)
+    GLib.io_add_watch(lc, GLib.IOCondition.IN, handle)
 
     if use_gui:
         gui = SheriffGtk(lc)

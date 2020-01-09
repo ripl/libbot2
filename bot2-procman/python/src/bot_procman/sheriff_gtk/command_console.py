@@ -231,6 +231,7 @@ class SheriffCommandConsole(Gtk.ScrolledWindow):
         menu.append(sep)
         sep.show()
         mi = Gtk.MenuItem(label="_Clear")
+        mi.set_use_underline(True)
         menu.append(mi)
         mi.connect("activate", self._tb_clear)
         mi.show()
@@ -275,7 +276,7 @@ class SheriffCommandConsole(Gtk.ScrolledWindow):
             adj.set_value(adj.get_upper() - adj.get_page_size())
 
     def on_adj_value_changed(self, adj):
-        adj.scrolled_to_end = adj.value(
+        adj.scrolled_to_end = adj.get_value(
         ) == adj.get_upper() - adj.get_page_size()
 
     def on_procman_printf(self, channel, data):
