@@ -16,4 +16,7 @@ target_link_libraries(bot-rwx-viewer
     bot2-vis
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-rwx-viewer)
+install(TARGETS bot-rwx-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

@@ -12,4 +12,7 @@ target_link_libraries(bot-procman-deputy
   PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm Util::Util lcmtypes_bot2-procman
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-procman-deputy)
+install(TARGETS bot-procman-deputy
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

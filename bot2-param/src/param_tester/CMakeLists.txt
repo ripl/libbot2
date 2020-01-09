@@ -10,5 +10,7 @@ target_link_libraries(bot-param-dump
   PRIVATE ${LCM_NAMESPACE}lcm bot2-param-client lcmtypes_bot2-param
 )
 
-# make executable public
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-param-dump)
+install(TARGETS bot-param-dump
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

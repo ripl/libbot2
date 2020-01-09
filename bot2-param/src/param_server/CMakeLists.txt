@@ -10,6 +10,7 @@ target_link_libraries(bot-param-tool
   PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm bot2-param-client lcmtypes_bot2-param
 )
 
-# make executables public
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-param-server bot-param-tool)
-
+install(TARGETS bot-param-server bot-param-tool
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

@@ -30,4 +30,7 @@ add_executable(ldpc-wrapper-test
     ${ldpc_sources}
     )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-tunnel)
+install(TARGETS bot-lcm-tunnel
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

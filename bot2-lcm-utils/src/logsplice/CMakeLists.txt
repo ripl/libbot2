@@ -4,5 +4,7 @@ target_link_libraries(bot-lcm-logsplice
   PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-logsplice)
-
+install(TARGETS bot-lcm-logsplice
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

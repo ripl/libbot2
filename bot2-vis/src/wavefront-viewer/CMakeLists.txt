@@ -16,4 +16,7 @@ target_link_libraries(bot-wavefront-viewer
     bot2-vis
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-wavefront-viewer)
+install(TARGETS bot-wavefront-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

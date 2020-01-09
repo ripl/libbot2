@@ -10,7 +10,6 @@ include_guard(GLOBAL)
 #
 # C/C++
 #   pods_install_headers(...)
-#   pods_install_executables(...)
 #
 # Python
 #   pods_install_python_packages(...)
@@ -46,16 +45,6 @@ function(pods_install_headers)
 	#mark them to be installed
 	install(FILES ${ARGV} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${dest_dir})
 
-endfunction()
-
-# pods_install_executables(<executable1> ...)
-#
-# Install a (list) of executables to CMAKE_INSTALL_BINDIR
-function(pods_install_executables _export _export_name)
-    if(NOT "${_export}" STREQUAL "EXPORT")
-        message(FATAL_ERROR "pods_install_executables missing EXPORT parameter")
-    endif()
-    install(TARGETS ${ARGN} EXPORT ${_export_name} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endfunction()
 
 # pods_install_pkg_config_file(<package-name>

@@ -5,4 +5,7 @@ target_link_libraries(bot-lcm-who
   PRIVATE GLib2::glib
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcm-who)
+install(TARGETS bot-lcm-who
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

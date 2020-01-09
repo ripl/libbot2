@@ -9,5 +9,4 @@ target_link_libraries(coord-frames-test
      libbot2::lcmtypes_bot2-core
      bot2-frames
 )
-# make executable public
-#pods_install_executables(coord-frames-test)
+

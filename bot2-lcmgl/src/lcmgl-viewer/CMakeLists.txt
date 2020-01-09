@@ -28,4 +28,7 @@ target_link_libraries(bot-lcmgl-viewer
    bot2-lcmgl-renderer
 )
 
-pods_install_executables(EXPORT ${PROJECT_NAME} bot-lcmgl-viewer)
+install(TARGETS bot-lcmgl-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
