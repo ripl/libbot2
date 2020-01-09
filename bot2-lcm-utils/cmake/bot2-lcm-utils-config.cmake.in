@@ -55,9 +55,11 @@ if(NOT TARGET @NAMESPACE@bot-spy)
     IMPORTED_LOCATION "@RUNTIME_INSTALL_DIR@/bot-spy"
   )
 endif()
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@bot-lcm-logfilter)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
+
+if(NOT TARGET @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
 unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)

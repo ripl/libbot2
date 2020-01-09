@@ -53,18 +53,10 @@ list(REMOVE_AT CMAKE_MODULE_PATH 0)
 find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-core")
 find_dependency(lcm 1.4 CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")
 
-# Import libraries that were generated with custom commands.
-if(NOT TARGET @NAMESPACE@lcmtypes_bot2-param-java)
-  add_library(@NAMESPACE@lcmtypes_bot2-param-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@lcmtypes_bot2-param-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@/lcmtypes_bot2-param.jar
-    JAR_FILE @JAVA_INSTALL_DIR@/lcmtypes_bot2-param.jar
-  )
-endif()
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
 
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET libbot2::bot2-param-client)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+if(NOT TARGET @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
 unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)

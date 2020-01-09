@@ -121,14 +121,12 @@ endif()
 macro(configure_import_targets _prop)
   if("${_prop}" STREQUAL "BUILD")
     # BUILD tree configure
-    set(JAVA_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR})
     set(RUNTIME_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/python)
     configure_file(cmake/${PROJECT_NAME}-config.cmake.in
       "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
   elseif("${_prop}" STREQUAL "INSTALL")
     # INSTALL tree configure
     set(INSTALL_DIR \${\${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX})
-    set(JAVA_INSTALL_DIR ${INSTALL_DIR}/${CMAKE_INSTALL_DATADIR}/java)
     set(RUNTIME_INSTALL_DIR ${INSTALL_DIR}/${CMAKE_INSTALL_BINDIR})
     configure_file(cmake/${PROJECT_NAME}-config.cmake.in
         "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake" @ONLY)
@@ -141,6 +139,11 @@ set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
 
+find_package(Java 1.8 MODULE)
+if(JAVA_FOUND)
+  include(UseJava)
+endif()
+
 # automatically build LCM types.  This also defines a number of CMake
 # variables, see cmake/lcmtypes.cmake for details
 include(cmake/lcmtypes.cmake)
@@ -150,6 +153,8 @@ add_subdirectory(src/deputy)
 add_subdirectory(python)
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
+set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)
+
 configure_import_targets(BUILD)
 configure_import_targets(INSTALL)
 
@@ -159,8 +164,23 @@ export(EXPORT ${PROJECT_NAME}
   FILE ${PROJECT_BINARY_DIR}/${EXPORT_FILE}
 )
 
+if(JAVA_FOUND)
+  export_jars(TARGETS lcmtypes_${PROJECT_NAME}-java
+    NAMESPACE ${NAMESPACE}
+    FILE ${JAVA_EXPORT_FILE}
+  )
+endif()
+
 pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
                                 EXPORT ${PROJECT_NAME}
                                 EXPORT_FILE ${EXPORT_FILE}
                                 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
                                 CONFIG cmake/${PROJECT_NAME}-config.cmake)
+
+if(JAVA_FOUND)
+  install_jar_exports(TARGETS lcmtypes_${PROJECT_NAME}-java
+    NAMESPACE ${NAMESPACE}
+    FILE ${JAVA_EXPORT_FILE}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
+endif()

@@ -89,17 +89,10 @@ if(USE_BOT_VIS)
   find_dependency(bot2-vis CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-vis")
 endif()
 
-# Import libraries that were generated with custom commands.
-if(NOT TARGET @NAMESPACE@lcmtypes_bot2-frames-java)
-  add_library(@NAMESPACE@lcmtypes_bot2-frames-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@lcmtypes_bot2-frames-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@/lcmtypes_bot2-frames.jar
-    JAR_FILE @JAVA_INSTALL_DIR@/lcmtypes_bot2-frames.jar
-  )
-endif()
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@@PROJECT_NAME@)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
+
+if(NOT TARGET @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
 unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)

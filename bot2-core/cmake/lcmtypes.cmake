@@ -299,14 +299,10 @@ function(lcmtypes_build_java)
     endif()
 
     # do we have Java?
-    find_package(Java 1.8 MODULE)
-    if(JAVA_COMPILE STREQUAL JAVA_COMPILE-NOTFOUND OR
-       JAVA_ARCHIVE STREQUAL JAVA_ARCHIVE-NOTFOUND)
+    if(NOT JAVA_FOUND)
         message(STATUS "Not building Java LCM type bindings (Can't find Java)")
         return()
     endif()
-
-    set(LCMTYPES_JAR ${CMAKE_CURRENT_BINARY_DIR}/lcmtypes_${PROJECT_NAME}.jar)
 
     # generate Java bindings for LCM types
     set(_lcmtypes_java_dir ${PROJECT_SOURCE_DIR}/lcmtypes/java)
@@ -346,39 +342,20 @@ function(lcmtypes_build_java)
     # get a list of all generated .java files
     file(GLOB_RECURSE _lcmtypes_java_files ${_lcmtypes_java_dir}/*.java)
 
-    set(java_classpath ${_lcmtypes_java_dir}:${LCM_JAR_FILE})
+    set(_output_name lcmtypes_${PROJECT_NAME})
 
-    # search for lcmtypes_*.jar files in well-known places and add them to the
-    # classpath
-    foreach(pfx /usr /usr/local ${CMAKE_INSTALL_PREFIX})
-        file(GLOB_RECURSE jarfiles ${pfx}/${CMAKE_INSTALL_DATADIR}/java/lcmtypes_*.jar)
-        foreach(jarfile ${jarfiles})
-            set(java_classpath ${java_classpath}:${jarfile})
-            #            message("found ${jarfile}")
-        endforeach()
-    endforeach()
+    add_jar(lcmtypes_${PROJECT_NAME}-java
+      SOURCES ${_lcmtypes_java_files}
+      INCLUDE_JARS lcm-java
+      OUTPUT_NAME ${_output_name}
+    )
+    add_dependencies(lcmtypes_${PROJECT_NAME}-java lcmgen_java)
 
-    # convert the list of .java filenames to a list of .class filenames
-    foreach(javafile ${_lcmtypes_java_files})
-        string(REPLACE .java .class __tmp_class_fname ${javafile})
-        list(APPEND _lcmtypes_class_files ${__tmp_class_fname})
-        unset(__tmp_class_fname)
-    endforeach()
+    install_jar(lcmtypes_${PROJECT_NAME}-java
+      DESTINATION ${CMAKE_INSTALL_DATADIR}/java
+    )
 
-    # add a rule to build the .class files from from the .java files
-    add_custom_command(OUTPUT ${_lcmtypes_class_files} COMMAND
-        ${JAVA_COMPILE} -cp ${java_classpath} ${_lcmtypes_java_files}
-        DEPENDS ${_lcmtypes_java_files} VERBATIM)
-
-    # add a rule to build a .jar file from the .class files
-    add_custom_command(OUTPUT lcmtypes_${PROJECT_NAME}.jar COMMAND
-        ${JAVA_ARCHIVE} cf ${LCMTYPES_JAR} -C ${_lcmtypes_java_dir} . DEPENDS ${_lcmtypes_class_files} VERBATIM)
-    add_custom_target(lcmtypes_${PROJECT_NAME}_jar ALL DEPENDS ${LCMTYPES_JAR})
-
-    add_dependencies(lcmtypes_${PROJECT_NAME}_jar lcmgen_java)
-
-    install(FILES ${LCMTYPES_JAR} DESTINATION ${CMAKE_INSTALL_DATADIR}/java)
-    set(LCMTYPES_JAR ${LCMTYPES_JAR} PARENT_SCOPE)
+    set(LCMTYPES_JAR "${CMAKE_CURRENT_BINARY_DIR}/${_output_name}.jar" PARENT_SCOPE)
 
     lcmtypes_add_clean_dir(${_lcmtypes_java_dir})
 endfunction()

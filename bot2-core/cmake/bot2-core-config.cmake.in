@@ -54,25 +54,10 @@ find_dependency(M MODULE)
 # Clean CMAKE_MODULE_PATH: remove added path
 list(REMOVE_AT CMAKE_MODULE_PATH 0)
 
-# Import libraries that were generated with custom commands.
-if(NOT TARGET @NAMESPACE@lcmspy_plugins_bot2-java)
-  add_library(@NAMESPACE@lcmspy_plugins_bot2-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@lcmspy_plugins_bot2-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@@JAVA_BUILD_SUBDIR@/lcmspy_plugins_bot2.jar
-    JAR_FILE @JAVA_INSTALL_DIR@@JAVA_BUILD_SUBDIR@/lcmspy_plugins_bot2.jar
-  )
-endif()
-if(NOT TARGET @NAMESPACE@lcmtypes_bot2-core-java)
-  add_library(@NAMESPACE@lcmtypes_bot2-core-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@lcmtypes_bot2-core-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@/lcmtypes_bot2-core.jar
-    JAR_FILE @JAVA_INSTALL_DIR@/lcmtypes_bot2-core.jar
-  )
-endif()
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
 
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@bot2-core)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+if(NOT TARGET @NAMESPACE@lcmspy_plugins_bot2-java AND NOT @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
 unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)

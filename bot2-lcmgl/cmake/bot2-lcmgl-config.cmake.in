@@ -89,18 +89,10 @@ if(USE_BOT_VIS)
   find_dependency(bot2-vis CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-vis")
 endif()
 
-# Import libraries that were generated with custom commands.
-if(NOT TARGET @NAMESPACE@bot2-lcmgl-java)
-  add_library(@NAMESPACE@bot2-lcmgl-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@bot2-lcmgl-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@@JAVA_BUILD_SUBDIR@/bot2-lcmgl.jar
-    JAR_FILE @JAVA_INSTALL_DIR@@JAVA_BUILD_SUBDIR@/bot2-lcmgl.jar
-  )
-endif()
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
 
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@bot2-lcmgl-client)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+if(NOT TARGET @NAMESPACE@@PROJECT_NAME@-java AND NOT @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
 unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)

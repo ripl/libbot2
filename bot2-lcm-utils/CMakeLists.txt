@@ -138,6 +138,11 @@ set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
 
+find_package(Java 1.8 MODULE)
+if(JAVA_FOUND)
+  include(UseJava)
+endif()
+
 include(cmake/lcmtypes.cmake)
 lcmtypes_build(EXPORT ${PROJECT_NAME})
 
@@ -174,6 +179,8 @@ configure_file(
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_name} DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
+set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)
+
 configure_import_targets(BUILD)
 configure_import_targets(INSTALL)
 
@@ -183,8 +190,23 @@ export(EXPORT ${PROJECT_NAME}
   FILE ${PROJECT_BINARY_DIR}/${EXPORT_FILE}
 )
 
+if(JAVA_FOUND)
+  export_jars(TARGETS lcmtypes_${PROJECT_NAME}-java
+    NAMESPACE ${NAMESPACE}
+    FILE ${JAVA_EXPORT_FILE}
+  )
+endif()
+
 pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
                                 EXPORT ${PROJECT_NAME}
                                 EXPORT_FILE ${EXPORT_FILE}
                                 DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
                                 CONFIG cmake/${PROJECT_NAME}-config.cmake)
+
+if(JAVA_FOUND)
+  install_jar_exports(TARGETS lcmtypes_${PROJECT_NAME}-java
+    NAMESPACE ${NAMESPACE}
+    FILE ${JAVA_EXPORT_FILE}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  )
+endif()
