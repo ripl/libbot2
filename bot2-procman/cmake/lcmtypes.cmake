@@ -1,3 +1,5 @@
+include_guard(GLOBAL)
+
 # Macros for automatically compiling LCM types into C, Java, and Python
 # libraries.
 #

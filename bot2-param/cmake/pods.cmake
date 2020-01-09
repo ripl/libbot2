@@ -1,3 +1,5 @@
+include_guard(GLOBAL)
+
 # Macros to simplify compliance with the pods build policies.
 #
 # To enable the macros, add the following lines to CMakeLists.txt:
@@ -218,36 +220,24 @@ macro(pods_install_cmake_config_files
   install(EXPORT ${_export_name} FILE ${_export_file_name} DESTINATION ${_destination_folder} NAMESPACE ${_namespace_value})
 endmacro()
 
-# pods_config_search_paths()
-#
 # Setup include, linker, and pkg-config paths according to the pods core
-# policy.  This macro is automatically invoked, there is no need to do so
-# manually.
-macro(pods_config_search_paths)
-    if(NOT DEFINED __pods_setup)
-		#set where files should be output locally
-	    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-	    set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
-	    set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
-      set(PKG_CONFIG_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/pkgconfig)
+# policy.
 
-		#set where files should be installed to
-	    set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-	    set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})
-	    set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-      set(PKG_CONFIG_INSTALL_PATH ${LIBRARY_INSTALL_PATH}/pkgconfig)
+# Set where files should be output locally
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
+set(PKG_CONFIG_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/pkgconfig)
 
-      find_package(PythonInterp 3.6 MODULE REQUIRED)
-      execute_process(
-        COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
-        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-      set(PYTHON_INSTALL_PATH
-        "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
+# Set where files should be installed to
+set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
+set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})
+set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
+set(PKG_CONFIG_INSTALL_PATH ${LIBRARY_INSTALL_PATH}/pkgconfig)
 
-        set(__pods_setup true)
-    endif()
-endmacro()
-
-#call the function to setup paths
-pods_config_search_paths()
+find_package(PythonInterp 3.6 MODULE REQUIRED)
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
+  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+set(PYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
