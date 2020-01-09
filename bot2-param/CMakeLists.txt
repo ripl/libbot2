@@ -159,6 +159,12 @@ install(FILES cmake/modules/FindGLib2.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
 )
 
+# CMakeFindDependencyMacro.cmake does not forward all arguments through to
+# find_package before CMake 3.9.
+install(FILES cmake/modules/3.9/CMakeFindDependencyMacro.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.9
+)
+
 add_subdirectory(src/param_client)
 add_subdirectory(src/param_server)
 add_subdirectory(src/param_tester)

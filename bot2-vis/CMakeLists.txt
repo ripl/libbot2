@@ -159,6 +159,12 @@ install(FILES cmake/modules/3.10/FindOpenGL.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.10
 )
 
+# CMakeFindDependencyMacro.cmake does not forward all arguments through to
+# find_package before CMake 3.9.
+install(FILES cmake/modules/3.9/CMakeFindDependencyMacro.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.9
+)
+
 # FindJPEG.cmake does not import a target before CMake 3.12.
 install(FILES cmake/modules/3.12/FindJPEG.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.12

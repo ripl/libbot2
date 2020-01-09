@@ -270,6 +270,12 @@ else()
   endif()
 endif()
 
+# CMakeFindDependencyMacro.cmake does not forward all arguments through to
+# find_package before CMake 3.9.
+install(FILES cmake/modules/3.9/CMakeFindDependencyMacro.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.9
+)
+
 configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
   ${PROJECT_NAME}-config.cmake
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
