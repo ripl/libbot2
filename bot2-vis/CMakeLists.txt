@@ -9,6 +9,7 @@ if(CMAKE_VERSION VERSION_LESS 3.14)
   list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules/3.14")
 endif()
 
+include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 set(CMAKE_C_STANDARD 99)
@@ -113,8 +114,17 @@ add_subdirectory(src/wavefront-viewer)
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bot-ppmsgz DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
-configure_file(cmake/${PROJECT_NAME}-config.cmake.in
-    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
+
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config.cmake
+  INSTALL_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
+  NO_SET_AND_CHECK_MACRO
+  INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+  COMPATIBILITY AnyNewerVersion
+)
 
 configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
@@ -155,8 +165,23 @@ export(EXPORT ${PROJECT_NAME}
   FILE ${PROJECT_BINARY_DIR}/${EXPORT_FILE}
 )
 
-pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
-                                EXPORT ${PROJECT_NAME}
-                                EXPORT_FILE ${EXPORT_FILE}
-                                DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-                                CONFIG ${PROJECT_NAME}-config.cmake)
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config-install.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NO_SET_AND_CHECK_MACRO
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-install.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  RENAME ${PROJECT_NAME}-config.cmake
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(EXPORT ${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NAMESPACE ${NAMESPACE}
+  FILE ${EXPORT_FILE}
+)

@@ -3,6 +3,7 @@ project(bot2-core LANGUAGES C CXX VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 set(CMAKE_C_STANDARD 99)
@@ -118,20 +119,6 @@ if(LINKER_SUPPORTS_Z_RELRO)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
 endif()
 
-macro(configure_import_targets _prop)
-  if("${_prop}" STREQUAL "BUILD")
-    # BUILD tree configure
-    configure_file(cmake/${PROJECT_NAME}-config.cmake.in
-      "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
-  elseif("${_prop}" STREQUAL "INSTALL")
-    # INSTALL tree configure
-    configure_file(cmake/${PROJECT_NAME}-config.cmake.in
-        "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake" @ONLY)
-  else()
-    message(FATAL_ERROR "Choose between BUILD and INSTALL")
-  endif()
-endmacro()
-
 set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)
@@ -155,8 +142,16 @@ set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)
 add_subdirectory(src/bot_core)
 add_subdirectory(java)
 
-configure_import_targets(BUILD)
-configure_import_targets(INSTALL)
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config.cmake
+  INSTALL_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
+  NO_SET_AND_CHECK_MACRO
+  INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+  COMPATIBILITY AnyNewerVersion
+)
 
 configure_file(cmake/modules/FindGLib2.cmake
     ${PROJECT_BINARY_DIR}/modules/FindGLib2.cmake COPYONLY)
@@ -181,11 +176,26 @@ if(JAVA_FOUND)
   )
 endif()
 
-pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
-                                EXPORT ${PROJECT_NAME}
-                                EXPORT_FILE ${EXPORT_FILE}
-                                DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-                                CONFIG cmake/${PROJECT_NAME}-config.cmake)
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config-install.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NO_SET_AND_CHECK_MACRO
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-install.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  RENAME ${PROJECT_NAME}-config.cmake
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(EXPORT ${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NAMESPACE ${NAMESPACE}
+  FILE ${EXPORT_FILE}
+)
 
 if(JAVA_FOUND)
   install_jar_exports(

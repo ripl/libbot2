@@ -1,8 +1,29 @@
-# - Config file for the @PROJECT_NAME@ package
+#[=============================================================================[
+This file is part of @PROJECT_NAME@.
+
+@PROJECT_NAME@ is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+@PROJECT_NAME@ is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with @PROJECT_NAME@. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
+
+@PACKAGE_INIT@
 
 if(CMAKE_VERSION VERSION_LESS 3.1)
-  message(FATAL_ERROR "CMake >= 3.1 required")
+  message(FATAL_ERROR
+    "CMake 3.1 or higher is required to use @PROJECT_NAME@. "
+    "You are running version ${CMAKE_VERSION}."
+  )
 endif()
+
 cmake_policy(PUSH)
 cmake_policy(VERSION 3.1)
 set(CMAKE_IMPORT_FILE_VERSION 1)
@@ -47,12 +68,14 @@ else()
   include(CMakeFindDependencyMacro)
 endif()
 
-find_dependency(lcm 1.4 CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/lcm")
+find_dependency(lcm 1.4 CONFIG
+  HINTS "${PACKAGE_PREFIX_DIR}/lib/cmake/lcm"
+)
 
 if(NOT TARGET @NAMESPACE@bot-spy)
   add_executable(@NAMESPACE@bot-spy IMPORTED)
   set_target_properties(@NAMESPACE@bot-spy PROPERTIES
-    IMPORTED_LOCATION "@RUNTIME_INSTALL_DIR@/bot-spy"
+    IMPORTED_LOCATION "@PACKAGE_RUNTIME_INSTALL_DIR@/bot-spy"
   )
 endif()
 
@@ -62,6 +85,7 @@ if(NOT TARGET @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
   include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
-unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)
+check_required_components(@PROJECT_NAME@)
+
 unset(CMAKE_IMPORT_FILE_VERSION)
 cmake_policy(POP)

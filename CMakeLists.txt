@@ -44,6 +44,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 find_package(lcm 1.4 CONFIG REQUIRED)
@@ -269,10 +270,21 @@ else()
   endif()
 endif()
 
-configure_file(cmake/${CMAKE_PROJECT_NAME}-config.cmake.in
-        "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" @ONLY)
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NO_SET_AND_CHECK_MACRO
+)
 
-install(FILES "${PROJECT_BINARY_DIR}/${CMAKE_PROJECT_NAME}-config.cmake" DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME})
+write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+  COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
 
 if(PACKAGE_LIBBOT2)
   include(cmake/cpack.cmake)

@@ -3,6 +3,7 @@ project(bot2-procman LANGUAGES C CXX VERSION 0.0.1)
 
 list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
 
+include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
 set(CMAKE_C_STANDARD 99)
@@ -118,23 +119,6 @@ if(LINKER_SUPPORTS_Z_RELRO)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
 endif()
 
-macro(configure_import_targets _prop)
-  if("${_prop}" STREQUAL "BUILD")
-    # BUILD tree configure
-    set(RUNTIME_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/python)
-    configure_file(cmake/${PROJECT_NAME}-config.cmake.in
-      "${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake" @ONLY)
-  elseif("${_prop}" STREQUAL "INSTALL")
-    # INSTALL tree configure
-    set(INSTALL_DIR \${\${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX})
-    set(RUNTIME_INSTALL_DIR ${INSTALL_DIR}/${CMAKE_INSTALL_BINDIR})
-    configure_file(cmake/${PROJECT_NAME}-config.cmake.in
-        "${PROJECT_BINARY_DIR}/cmake/${PROJECT_NAME}-config.cmake" @ONLY)
-  else()
-    message(FATAL_ERROR "Choose between BUILD and INSTALL")
-  endif()
-endmacro()
-
 set(NAMESPACE libbot2::)
 
 include(cmake/pods.cmake)
@@ -155,8 +139,18 @@ add_subdirectory(python)
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)
 
-configure_import_targets(BUILD)
-configure_import_targets(INSTALL)
+set(RUNTIME_INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/python")
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config.cmake
+  INSTALL_DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
+  PATH_VARS RUNTIME_INSTALL_DIR
+  NO_SET_AND_CHECK_MACRO
+  INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+  COMPATIBILITY AnyNewerVersion
+)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}
@@ -171,11 +165,28 @@ if(JAVA_FOUND)
   )
 endif()
 
-pods_install_cmake_config_files(NAMESPACE ${NAMESPACE}
-                                EXPORT ${PROJECT_NAME}
-                                EXPORT_FILE ${EXPORT_FILE}
-                                DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-                                CONFIG cmake/${PROJECT_NAME}-config.cmake)
+set(RUNTIME_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
+configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
+  ${PROJECT_NAME}-config-install.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  PATH_VARS RUNTIME_INSTALL_DIR
+  NO_SET_AND_CHECK_MACRO
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-install.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  RENAME ${PROJECT_NAME}-config.cmake
+)
+
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(EXPORT ${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+  NAMESPACE ${NAMESPACE}
+  FILE ${EXPORT_FILE}
+)
 
 if(JAVA_FOUND)
   install_jar_exports(TARGETS lcmtypes_${PROJECT_NAME}-java

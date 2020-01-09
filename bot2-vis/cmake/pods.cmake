@@ -173,31 +173,6 @@ function(pods_install_python_packages py_src_dir)
     endif()
 endfunction()
 
-macro(pods_install_cmake_config_files
-    _namespace _namespace_value
-    _export _export_name
-    _export_file _export_file_name
-    _destination _destination_folder
-    _config _config_name)
-  if(NOT "${_namespace}" STREQUAL "NAMESPACE")
-      message(FATAL_ERROR "pods_install_cmake_config_file missing NAMESPACE parameter")
-  endif()
-  if(NOT "${_export}" STREQUAL "EXPORT")
-      message(FATAL_ERROR "pods_install_cmake_config_file missing EXPORT parameter")
-  endif()
-  if(NOT "${_config}" STREQUAL "CONFIG")
-      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
-  endif()
-  if(NOT "${_export_file}" STREQUAL "EXPORT_FILE")
-      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
-  endif()
-  if(NOT "${_destination}" STREQUAL "DESTINATION")
-      message(FATAL_ERROR "pods_install_cmake_config_file missing CONFIG parameter")
-  endif()
-  install(FILES ${CMAKE_BINARY_DIR}/${_config_name} DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${_export_name})
-  install(EXPORT ${_export_name} FILE ${_export_file_name} DESTINATION ${_destination_folder} NAMESPACE ${_namespace_value})
-endmacro()
-
 # Setup include, linker, and pkg-config paths according to the pods core
 # policy.
 
