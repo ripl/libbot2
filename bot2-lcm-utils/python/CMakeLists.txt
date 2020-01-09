@@ -21,5 +21,6 @@ if(PYTHONINTERP_FOUND)
   configure_file(bot-log2mat.in bot-log2mat @ONLY)
 
   install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/bot-log2mat"
-    DESTINATION "${EXECUTABLE_INSTALL_PATH}")
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
 endif()

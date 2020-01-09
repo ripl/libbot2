@@ -160,8 +160,9 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/${script_name}
   @ONLY)
 
-# install it...
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${script_name} DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(PROGRAMS "${CMAKE_CURRENT_BINARY_DIR}/${script_name}"
+  DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)

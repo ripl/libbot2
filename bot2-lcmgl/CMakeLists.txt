@@ -174,16 +174,20 @@ configure_file(cmake/modules/FindGLib2.cmake
 configure_file(cmake/modules/FindM.cmake
     ${PROJECT_BINARY_DIR}/modules/FindM.cmake COPYONLY)
 
-# Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
+# FindGLib2.cmake and FindM.cmake are not standard CMake files.
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
 )
-# Install FindPkgConfig.cmake which does not import target
-# in the CMake 3 style before CMake 3.6.
-install(FILES cmake/modules/3.6/FindPkgConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.6)
-# Install FindOpenGL.cmake which does not import target
-# in the CMake 3 style before CMake 3.8.
-install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.10)
+
+# FindPkgConfig.cmake does not import a target before CMake 3.6.
+install(FILES cmake/modules/3.6/FindPkgConfig.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.6
+)
+
+# FindOpenGL.cmake does not import a target before CMake 3.8.
+install(FILES cmake/modules/3.10/FindOpenGL.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.10
+)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}

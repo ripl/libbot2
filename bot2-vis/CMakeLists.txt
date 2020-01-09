@@ -111,7 +111,7 @@ add_subdirectory(src/rwx-viewer)
 add_subdirectory(src/wavefront-viewer)
 
 # bot-ppmsgz script
-install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/bot-ppmsgz DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(PROGRAMS bot-ppmsgz DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 
@@ -139,25 +139,35 @@ if(CMAKE_VERSION VERSION_LESS 3.14)
       ${PROJECT_BINARY_DIR}/modules/3.14/FindX11.cmake COPYONLY)
 endif()
 
-# Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
+# FindGLib2.cmake and FindM.cmake are not standard CMake files.
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
 )
-# Install FindPNG.cmake which does not import target
-# in the CMake 3 style before CMake 3.5.
-install(FILES cmake/modules/3.5/FindPNG.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.5)
-# Install FindPkgConfig.cmake which does not import target
-# in the CMake 3 style before CMake 3.6.
-install(FILES cmake/modules/3.6/FindPkgConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.6)
-# Install FindOpenGL.cmake which does not import target
-# in the CMake 3 style before CMake 3.8.
-install(FILES cmake/modules/3.10/FindOpenGL.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.10)
-# Install FindJPEG.cmake which does not import target
-# in the CMake 3 style before CMake 3.12.
-install(FILES cmake/modules/3.12/FindJPEG.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.12)
-# Install FindX11.cmake which does not import target
-# in the CMake 3 style before CMake 3.14.
-install(FILES cmake/modules/3.14/FindX11.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.14)
+
+# FindPNG.cmake does not import a target before CMake 3.5.
+install(FILES cmake/modules/3.5/FindPNG.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.5
+)
+
+# FindPkgConfig.cmake does not import a target before CMake 3.6.
+install(FILES cmake/modules/3.6/FindPkgConfig.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.6
+)
+
+# FindOpenGL.cmake does not import a target before CMake 3.8.
+install(FILES cmake/modules/3.10/FindOpenGL.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.10
+)
+
+# FindJPEG.cmake does not import a target before CMake 3.12.
+install(FILES cmake/modules/3.12/FindJPEG.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.12
+)
+
+# FindX11.cmake does not import a target before CMake 3.14.
+install(FILES cmake/modules/3.14/FindX11.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules/3.14
+)
 
 # Exported targets for build directory
 export(EXPORT ${PROJECT_NAME}

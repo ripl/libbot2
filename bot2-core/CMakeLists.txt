@@ -158,7 +158,7 @@ configure_file(cmake/modules/FindGLib2.cmake
 configure_file(cmake/modules/FindM.cmake
     ${PROJECT_BINARY_DIR}/modules/FindM.cmake COPYONLY)
 
-# Install FindGLib2.cmake and FindM.cmake which are not standard CMake files
+# FindGLib2.cmake and FindM.cmake are not standard CMake files.
 install(FILES cmake/modules/FindGLib2.cmake cmake/modules/FindM.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
 )

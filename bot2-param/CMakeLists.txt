@@ -154,8 +154,10 @@ write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
   COMPATIBILITY AnyNewerVersion
 )
 
-# Install FindGLib2.cmake which is not a standard CMake file
-install(FILES cmake/modules/FindGLib2.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules)
+# FindGLib2.cmake is not a standard CMake file.
+install(FILES cmake/modules/FindGLib2.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}/modules
+)
 
 add_subdirectory(src/param_client)
 add_subdirectory(src/param_server)
