@@ -88,9 +88,7 @@ bot_wavefront_model_gl_draw (BotWavefrontModel *model)
     }
 
     // Call GLM to draw the object.
-    //glDisable(GL_LIGHTING);
     glmDraw (model->glm_model, GLM_SMOOTH | GLM_MATERIAL | GLM_TEXTURE);
-    //glEnable(GL_LIGHTING);
 }
 
 void
@@ -119,6 +117,4 @@ bot_wavefront_model_get_extrema (BotWavefrontModel *model,
         if (minv[2] > model->glm_model->vertices[3 * i + 2])
             minv[2] = model->glm_model->vertices[3 * i + 2];
     }
-
-    return;
 }

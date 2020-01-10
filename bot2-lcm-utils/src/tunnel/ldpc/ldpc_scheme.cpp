@@ -80,13 +80,6 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 			return LDPC_ERROR;
 		}
 		ss = pktSize >> 1;
-#if 0
-		if ((ss % 4) != 0) {
-			fprintf(stderr,
-			"LDPCFecScheme::InitScheme: ERROR, pktSize (%d bytes) IS NOT multiple of 8 and the resulting symbolSize (%d bytes) IS NOT multiple of 4\n", pktSize, ss);
-			return LDPC_ERROR;
-		}
-#endif
 	} else if (nbPkt >= 1000) {
 		// target: at least 4000 symbols
 		if ((pktSize % 4) != 0) {
@@ -95,13 +88,6 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 			return LDPC_ERROR;
 		}
 		ss = pktSize >> 2;
-#if 0
-		if ((ss % 4) != 0) {
-			fprintf(stderr,
-			"LDPCFecScheme::InitScheme: ERROR, pktSize (%d bytes) IS NOT multiple of 16 and the resulting symbolSize (%d bytes) IS NOT multiple of 4\n", pktSize, ss);
-			return LDPC_ERROR;
-		}
-#endif
 	} else if (nbPkt >= 500) {
 		// target: at least 4000 symbols
 		if ((pktSize % 8) != 0) {
@@ -110,13 +96,6 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 			return LDPC_ERROR;
 		}
 		ss = pktSize >> 3;
-#if 0
-		if ((ss % 4) != 0) {
-			fprintf(stderr,
-			"LDPCFecScheme::InitScheme: ERROR, pktSize (%d bytes) IS NOT multiple of 32 and the resulting symbolSize (%d bytes) IS NOT multiple of 4\n", pktSize, ss);
-			return LDPC_ERROR;
-		}
-#endif
 	} else {
 		if ((pktSize % 16) != 0) {
 			fprintf(stderr,
@@ -124,13 +103,6 @@ LDPCFecScheme::DetermineSymbolSize (INT64	objectSize,
 			return LDPC_ERROR;
 		}
 		ss = pktSize >> 4;
-#if 0
-		if ((ss % 4) != 0) {
-			fprintf(stderr,
-			"LDPCFecScheme::InitScheme: ERROR, pktSize (%d bytes) IS NOT multiple of 64 and the resulting symbolSize (%d bytes) IS NOT multiple of 4\n", pktSize, ss);
-			return LDPC_ERROR;
-		}
-#endif
 	}
 	*symbolSize = ss;
 	*nbSourceSymbols = (int)ceil((double)objectSize / (double)ss);

@@ -717,9 +717,6 @@ introspection_timeout (procman_deputy_t *s)
             g_list_length ((GList*)procman_get_cmds (s->pm)),
             nrunning
            );
-//    dbgt ("       orders: %d forme: %d (%d stale) sheriffs: %d\n",
-//            s->norders_slm, s->norders_forme_slm, s->nstale_orders_slm,
-//            g_list_length (s->observed_sheriffs_slm));
 
     s->norders_slm = 0;
     s->norders_forme_slm = 0;
@@ -844,9 +841,6 @@ _handle_orders2(procman_deputy_t* s, const bot_procman_orders2_t* orders, int me
 
     // update variables
     procman_remove_all_variables(s->pm);
-//    for(int varind=0; varind<orders->nvars; varind++) {
-//        procman_set_variable(s->pm, orders->varnames[varind], orders->varvals[varind]);
-//    }
 
     // attempt to carry out the orders
     int action_taken = 0;

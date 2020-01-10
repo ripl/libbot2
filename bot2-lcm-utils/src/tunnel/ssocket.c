@@ -61,7 +61,6 @@ int ssocket_connect(ssocket_t *s, const char *hostname, int port)
         host=gethostbyname(hostname);
         if (host==NULL)
         {
-            //      perror(hostname);
             return -1;
         }
     }
@@ -79,7 +78,6 @@ int ssocket_connect(ssocket_t *s, const char *hostname, int port)
 	if (bind (thesocket, (struct sockaddr *) &sa, sizeof (sa)) <0)
 	{
 		close(thesocket);
-		//      perror ("bind failed");
 		return -1;
 	}
 
@@ -97,7 +95,6 @@ int ssocket_connect(ssocket_t *s, const char *hostname, int port)
 	{
 		if (errno!=EINPROGRESS)
 		{
-			//        perror("connect failed");
 			close(thesocket);
 			return -1;
 		}
@@ -142,7 +139,6 @@ int ssocket_listen(ssocket_t *s, int port, int listenqueue, int localhostOnly)
 	if (setsockopt (thesocket, SOL_SOCKET, SO_REUSEADDR,
 			(char *) &n, sizeof(n))<0)
 	{
-		//      perror("could not setsockopt");
 		close(thesocket);
 		return -1;
 	}
@@ -158,7 +154,6 @@ int ssocket_listen(ssocket_t *s, int port, int listenqueue, int localhostOnly)
 	if (bind (thesocket, (struct sockaddr *) &sa, sizeof (sa)) <0)
 	{
 		close(thesocket);
-		//      perror ("bind failed\n");
 		return -1;
 	}
 

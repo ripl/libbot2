@@ -95,22 +95,15 @@ grid_draw (BotViewer *viewer, BotRenderer *renderer)
     double eye_dist = bot_vector_dist_3d (eye, look);
     double meters_per_grid = round_to_125(eye_dist / grids_per_screen );
 
-//    char txt[64];
-//    if(meters_per_grid >= 1) {
-//        snprintf (txt, sizeof (txt), "Spacing: %.0fm", meters_per_grid);
-//    } else {
-//        snprintf (txt, sizeof (txt), "Spacing: %.1fm", meters_per_grid);
-//    }
     if(bot_gtk_param_widget_get_bool(self->pw, PARAM_GRID_SPACING_AUTOMATIC)) {
         bot_gtk_param_widget_set_double(self->pw, PARAM_GRID_SPACING, meters_per_grid);
     } else {
         meters_per_grid = bot_gtk_param_widget_get_double(self->pw, PARAM_GRID_SPACING);
     }
-//    gtk_label_set_text (GTK_LABEL (self->label), txt);
 
     double grid_ox = ceil (look[0] / meters_per_grid) * meters_per_grid;
     double grid_oy = ceil (look[1] / meters_per_grid) * meters_per_grid;
-    double grid_oz = 0;//look[2]; //always want the grid at 0
+    double grid_oz = 0; //always want the grid at 0
 
     int num_lines = 300;
     if(0 == meters_per_grid)
@@ -215,17 +208,13 @@ static BotRenderer *renderer_grid_new (BotViewer *viewer)
 
     self->renderer.widget = gtk_alignment_new (0, 0.5, 1.0, 0);
 
-//    self->label = gtk_label_new ("Spacing: ???");
     self->pw = BOT_GTK_PARAM_WIDGET (bot_gtk_param_widget_new ());
     GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-//    gtk_misc_set_alignment (GTK_MISC (self->label), 0.0, 0.5);
     gtk_container_add (GTK_CONTAINER (self->renderer.widget), vbox);
     gtk_widget_show (vbox);
 
     gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (self->pw), FALSE, TRUE, 0);
-//    gtk_box_pack_start (GTK_BOX (vbox), self->label, FALSE, TRUE, 0);
     gtk_widget_show (GTK_WIDGET (self->pw));
-//    gtk_widget_show (self->label);
 
     bot_gtk_param_widget_add_double (self->pw, PARAM_AZIMUTH,
             BOT_GTK_PARAM_WIDGET_SLIDER,

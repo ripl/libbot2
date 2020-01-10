@@ -195,8 +195,6 @@ LDPCFecSession::InitSession (	int nbSourceSymbols,
 	}
 #endif
 	m_initialized = true;
-	//printf("Pchk Matrix:\n");
-	//mod2sparse_print(stdout, m_pchkMatrix);
 	return LDPC_OK;
 }
 

@@ -313,7 +313,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 #endif  // !PART_SUM_OPTIMIZATION
 	}
 
-//printf("0: start step 2 for symbol seq=%d\n", new_symbol_seqno);
 	// Step 2: Inject the symbol value in each equation it is involved
 	// (if partial sum already exists or if partial sum should be created)
 	for (e = mod2sparse_first_in_col(m_pchkMatrix, GetMatrixCol(new_symbol_seqno));
@@ -329,7 +328,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 			// stored in the system. Make sure data is still available.
 			if (m_getData_callback != NULL) {
 				m_getData_callback(m_context_4_callback, currChk);
-//printf("1: currChk already exists; getData, databuf=x%x\n", GetBufferPtrOnly(currChk));
 			}
 		}
 #endif
@@ -351,7 +349,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 				currChk = m_allocTmpBuffer_callback(
 							m_context_4_callback,
 							m_symbolSize);
-//printf("2: currChk does not exist; allocTmpBuf, databuf=x%x\n", GetBufferPtrOnly(currChk));
 			} else
 #endif
 			{
@@ -368,10 +365,8 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 				// calling GetBuffer(new_symbol) rather than
 				// GetBufferPtrOnly(new_symbol).
 				// we can add the symbol content to this PS
-//printf("3: before add to currChk, databuf=x%x\n", GetBufferPtrOnly(currChk));
 				AddToSymbol(GetBufferPtrOnly(currChk),
 					    GetBuffer(new_symbol));
-//printf("3': after add to currChk, databuf=x%x\n", GetBufferPtrOnly(currChk));
 			}
 			// else this is useless, since new_symbol is the last
 			// symbol of this equation, and its value is necessary
@@ -419,11 +414,9 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 					}
 					if (tmp_symbol != NULL) {
 						// add the symbol content now
-//printf("4: ready to add to currChk the tmp_symbol seq=%d, databuf=x%x\n", tmp_seqno, GetBufferPtrOnly(currChk));
 						AddToSymbol(
 							GetBufferPtrOnly(currChk),
 							GetBuffer(tmp_symbol));
-//printf("5: add to currChk done, databuf=x%x\n", GetBufferPtrOnly(currChk));
 						// delete the entry
 						delMe = tmp_e;
 						tmp_e =  mod2sparse_next_in_row(tmp_e);
@@ -460,7 +453,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 			if (m_storeData_callback != NULL) {
 				m_storeData_callback(m_context_4_callback,
 							currChk);
-//printf("6: currChk stored\n");
 			}
 #endif
 		} else {
@@ -494,7 +486,6 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 	// Step 3: Check if a new symbol has been decoded and take appropriate
 	// measures ...
 	int	decoded_symbol_seqno;	// sequence number of decoded symbol
-	//for (int i = 0; i < CheckOfDeg1_nb; i++)
 	for (CheckOfDeg1_nb--; CheckOfDeg1_nb >= 0; CheckOfDeg1_nb--) {
 		if (IsDecodingComplete(symbol_canvas)) {
 			// decoding has just finished, no need to do anything else

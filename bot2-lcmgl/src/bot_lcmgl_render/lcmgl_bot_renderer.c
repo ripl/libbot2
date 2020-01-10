@@ -102,35 +102,11 @@ static void on_lcmgl_data (const lcm_recv_buf_t *rbuf, const char *channel,
     if (!chan) {
         chan = (lcmgl_channel_t*) calloc(1, sizeof(lcmgl_channel_t));
         chan->enabled=1;
-        //chan->backbuffer = g_ptr_array_new();
         chan->frontbuffer = g_ptr_array_new();
         g_hash_table_insert(self->channels, strdup(_msg->name), chan);
         bot_gtk_param_widget_add_booleans (self->pw,
                 0, strdup(_msg->name), 1, NULL);
     }
-
-#if 0
-    int current_scene = -1;
-    if (chan->backbuffer->len > 0) {
-        bot_lcmgl_data_t *ld = g_ptr_array_index(chan->backbuffer, 0);
-        current_scene = ld->scene;
-    }
-
-    // new scene?
-    if (current_scene != _msg->scene) {
-        // free objects in foreground buffer
-        for (int i = 0; i < chan->frontbuffer->len; i++)
-            bot_lcmgl_data_t_destroy(g_ptr_array_index(chan->frontbuffer, i));
-        g_ptr_array_set_size(chan->frontbuffer, 0);
-
-        // swap front and back buffers
-        GPtrArray *tmp = chan->backbuffer;
-        chan->backbuffer = chan->frontbuffer;
-        chan->frontbuffer = tmp;
-
-        bot_viewer_request_redraw( self->viewer );
-    }
-#endif
 
     for (int i = 0; i < chan->frontbuffer->len; i++)
         bot_lcmgl_data_t_destroy(g_ptr_array_index(chan->frontbuffer, i));

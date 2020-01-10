@@ -123,16 +123,6 @@ bot_gl_console_destroy (BotGlConsole *console)
     g_slice_free (BotGlConsole, console);
 }
 
-//void
-//bot_gl_console_set_size (BotGlConsole *console,
-//        double x, double y, double width, double height)
-//{
-//    console->x = x;
-//    console->y = y;
-//    console->width = width;
-//    console->height = height;
-//}
-
 void
 bot_gl_console_set_decay_lambda (BotGlConsole *console, double lambda)
 {
@@ -230,7 +220,6 @@ bot_gl_console_render (BotGlConsole *console, double elapsed)
         if (console->last_render_utime && console->lambda > 0) {
             elapsed = (now - console->last_render_utime) * 1e-6;
             decay = exp ( - elapsed * console->lambda);
-//        printf ("elapsed: %f decay: %f\n", elapsed, decay);
         }
     }
     console->last_render_utime = now;

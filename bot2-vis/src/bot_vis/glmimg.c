@@ -100,29 +100,12 @@ static void glmImgInit(void)
     if(gl_max_texture_size > GLM_MAX_TEXTURE_SIZE)
         gl_max_texture_size = GLM_MAX_TEXTURE_SIZE;
 #endif
-    //return;
-#if 0				/* rectangle textures */
-#ifdef GL_TEXTURE_RECTANGLE_ARB
-    if (glmIsExtensionSupported("GL_ARB_texture_rectangle")) {
-        DBG_(__glmWarning("glmImgInit(): GL_ARB_texture_rectangle is available"));
-        _glmTextureTarget = GL_TEXTURE_RECTANGLE_ARB;
-    }
-    else
-#endif
-#ifdef GL_TEXTURE_RECTANGLE_NV
-        if (glmIsExtensionSupported("GL_NV_texture_rectangle")) {
-            DBG_(__glmWarning("glmImgInit(): GL_NV_texture_rectangle is available"));
-            _glmTextureTarget = GL_TEXTURE_RECTANGLE_NV;
-        }
-#endif
-#endif				/* rectangle textures */
 #ifdef GL_GENERATE_MIPMAP_SGIS
     if (glmIsExtensionSupported("GL_SGIS_generate_mipmap")) {
         DBG_(__glmWarning("glmImgInit(): GL_SGIS_generate_mipmap is available"));
         gl_sgis_generate_mipmap = GL_TRUE;
     }
 #endif
-    /*_glmTextureTarget = GL_TEXTURE_2D;*/
 }
 
 /* glmReadPPM: read a PPM raw (type P6) file.  The PPM file has a header
@@ -271,30 +254,6 @@ glmLoadTexture(const char *filename, GLboolean alpha, GLboolean repeat, GLboolea
         return 0;
     }
 
-    /*#define FORCE_ALPHA*/
-#ifdef FORCE_ALPHA
-    if(alpha && type == GL_RGB) {
-        /* if we really want RGBA */
-        const unsigned int size = width * height;
-
-        unsigned char *rgbaimage;
-        unsigned char *ptri, *ptro;
-        int i;
-
-        rgbaimage = (unsigned char*)malloc(sizeof(unsigned char)* size * 4);
-        ptri = data;
-        ptro = rgbaimage;
-        for(i=0; i<size; i++) {
-            *(ptro++) = *(ptri++);
-            *(ptro++) = *(ptri++);
-            *(ptro++) = *(ptri++);
-            *(ptro++) = 255;
-        }
-        free(data);
-        data = rgbaimage;
-        type = GL_RGBA;
-    }
-#endif /* FORCE_ALPHA */
     switch(type) {
     case GL_LUMINANCE:
         pixelsize = 1;
@@ -326,7 +285,6 @@ glmLoadTexture(const char *filename, GLboolean alpha, GLboolean repeat, GLboolea
         ySize2 = gl_max_texture_size;
 
     if (_glmTextureTarget == GL_TEXTURE_2D) {
-        //if(1) {
         /* scale image to power of 2 in height and width */
         xPow2 = log((double)xSize2) / log(2.0);
         yPow2 = log((double)ySize2) / log(2.0);

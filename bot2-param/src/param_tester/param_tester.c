@@ -52,10 +52,6 @@ int main()
   fprintf(stderr, "%s", s);
   free(s);
 
-//  double foo = bot_param_get_double_or_fail(param, "foo");
-//  double bar = bot_param_get_double_or_fail(param, "bar");
-//  printf("foo=%f, bar = %f\n", foo, bar);
-
   bot_param_write(param, stderr);
 
   while (1) {

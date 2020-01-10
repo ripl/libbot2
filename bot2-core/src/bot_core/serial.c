@@ -70,29 +70,6 @@ int bot_serial_open(const char *port, int baud, int blocking)
 
         // set one stop bit
         opts.c_cflag &= ~CSTOPB;
-/*
-	opts.c_cflag |= (CLOCAL | CREAD);
-	opts.c_cflag &= ~CRTSCTS;
-	opts.c_cflag &= ~PARENB;
-	opts.c_cflag &= ~CSTOPB;
-	opts.c_cflag &= ~CSIZE;
-	opts.c_cflag |= CS8;
-
-	opts.c_lflag = 0;
-
-	opts.c_iflag &= ~(IXON | IXOFF);
-	opts.c_iflag |= IXANY;
-	opts.c_iflag |= IGNPAR;
-	//  opts.c_iflag |= IXON | IXOFF | IXANY;
-
-	//  opts.c_iflag &= ~IGNPAR;
-	opts.c_iflag &= ~(INLCR | IGNCR | ICRNL | IUCLC);
-
-	opts.c_cc[VTIME]=0;   // synchronous I/O
-	opts.c_cc[VMIN]=1;
-
-	opts.c_oflag &= ~OPOST;
-*/
 
 	if (tcsetattr(fd,TCSANOW,&opts))
 	{
@@ -209,8 +186,6 @@ int bot_serial_setbaud(int fd, int baudrate)
 	else
 	{
 #ifdef SUPPORT_HISPEED
-		//      printf("Setting custom divisor\n");
-
 		if (tcgetattr(fd, &tios))
 			perror("tcgetattr");
 
@@ -228,8 +203,6 @@ int bot_serial_setbaud(int fd, int baudrate)
 		ser.custom_divisor=48;
 		ser.custom_divisor=ser.baud_base/baudrate;
 		ser.reserved_char[0]=0; // what the hell does this do?
-
-		//      printf("baud_base %i\ndivisor %i\n", ser.baud_base,ser.custom_divisor);
 
 		if (ioctl(fd, TIOCSSERIAL, &ser))
 			perror("ioctl TIOCSSERIAL");

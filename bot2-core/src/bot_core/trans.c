@@ -72,12 +72,6 @@ bot_trans_set_from_velocities(BotTrans *dest, const double angular_rate[3],
     return;
   }
 
-  //"exponential of a twist: R=exp(skew(omega*t));
-  //rescale vel, omega, t so ||omega||=1
-  //trans =  (I-R)*(omega \cross v) + (omega \dot v) *omega* t
-  //                term2                       term3
-  // R*(omega \cross v)
-  //     term1
   //rescale
   double t = dt * norm_angular_rate;
   double omega[3], vel[3];
@@ -127,7 +121,6 @@ void bot_trans_apply_trans_to(const BotTrans * src1, const BotTrans * src2, BotT
   bot_trans_copy(&tmp,src2);
   bot_trans_apply_trans(&tmp,src1);
   bot_trans_copy(dest,&tmp);
-  return;
 }
 
 void
@@ -146,7 +139,6 @@ void bot_trans_invert_and_compose(const BotTrans * curr, const BotTrans * prev, 
   bot_trans_copy(delta,prev);
   bot_trans_invert(delta);
   bot_trans_apply_trans_to(delta,curr,delta);
-  return;
 }
 
 void
@@ -164,7 +156,6 @@ bot_trans_rotate_vec(const BotTrans * btrans,
         const double src[3], double dst[3])
 {
     bot_quat_rotate_to(btrans->rot_quat, src, dst);
-//    bot_matrix_vector_multiply_3x3_3d(btrans->rot_mat, src, dst);
 }
 
 void
@@ -181,7 +172,6 @@ void
 bot_trans_get_rot_mat_3x3(const BotTrans * btrans, double rot_mat[9])
 {
     bot_quat_to_matrix(btrans->rot_quat, rot_mat);
-//    memcpy(rot_mat, btrans->rot_mat, 9*sizeof(double));
 }
 
 void

@@ -574,53 +574,6 @@ bot_lcmgl_draw_arrow_3d (bot_lcmgl_t * lcmgl, double length, double head_width, 
     lcmglPopMatrix();
 }
 
-////////// vertex buffer
-//bot_lcmgl_vertex_buffer_t *bot_lcmgl_vertex_buffer_create(int capacity,
-//        bot_lcmgl_vertex_buffer_full_callback_t full_callback, void *user)
-//{
-//    bot_lcmgl_vertex_buffer_t *vertbuf = (bot_lcmgl_vertex_buffer_t*) calloc(1, sizeof(bot_lcmgl_vertex_buffer_t));
-//    vertbuf->size = 0;
-//    vertbuf->capacity = capacity;
-//    vertbuf->vertices = (struct bot_lcmgl_vertex*) calloc(capacity,
-//            sizeof(struct bot_lcmgl_vertex));
-//    vertbuf->full_callback = full_callback;
-//    vertbuf->user = user;
-//
-//    return vertbuf;
-//}
-//
-//void bot_lcmgl_vertex_buffer_destroy(bot_lcmgl_vertex_buffer_t *vertbuf)
-//{
-//    free(vertbuf->vertices);
-//    free(vertbuf);
-//}
-//
-//void bot_lcmgl_vertex_buffer_flush(bot_lcmgl_vertex_buffer_t *vertbuf)
-//{
-//    if (vertbuf->size)
-//        vertbuf->full_callback(vertbuf, vertbuf->user);
-//}
-//
-//void bot_lcmgl_vertex_buffer_add(bot_lcmgl_vertex_buffer_t *vertbuf, double v[3])
-//{
-//    assert(vertbuf->size < vertbuf->capacity);
-//
-//    memcpy(vertbuf->vertices[vertbuf->size].xyz, v, sizeof(double)*3);
-//    vertbuf->size++;
-//    if (vertbuf->size == vertbuf->capacity)
-//        bot_lcmgl_vertex_buffer_flush(vertbuf);
-//}
-//
-//void bot_lcmgl_vertex_buffer_send(bot_lcmgl_vertex_buffer_t *vertbuf, bot_lcmgl_t *lcmgl)
-//{
-//    for (int i = 0; i < vertbuf->size; i++) {
-///*        printf("%f %f %f\n", vertbuf->vertices[i].xyz[0],
-//               vertbuf->vertices[i].xyz[1],
-//               vertbuf->vertices[i].xyz[2]);*/
-//        lcmglVertex3dv(vertbuf->vertices[i].xyz);
-//    }
-//}
-
 void bot_lcmgl_rect(bot_lcmgl_t *lcmgl, double xyz[3], double size[2], int filled)
 {
     bot_lcmgl_encode_u8(lcmgl, BOT_LCMGL_RECT);

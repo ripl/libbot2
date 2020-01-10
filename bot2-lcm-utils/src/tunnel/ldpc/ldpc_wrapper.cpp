@@ -114,7 +114,6 @@ int ldpc_wrapper::init(int objSize_, int pktSize_, double fec_ratio_, int typeFl
 
 ldpc_wrapper::~ldpc_wrapper()
 {
-  //  fprintf(stderr, "cleanup\n");
   /*
    * close and free everything
    */
@@ -160,7 +159,6 @@ int ldpc_enc_wrapper::getNextPacket(uint8_t * pktBuf, int16_t * ESI)
   int ESI_;
   MyFecScheme->BuildPkt(packetNum, (void**) &pktBuf, (void**) data, &ESI_);
   *ESI = (int16_t) ESI_;
-  //  printf("PktIdx %i mapped to first symbol ESI %i\n", packetNum, ESI);
 
   packetNum++;
   return packetNum >= nbPKT;

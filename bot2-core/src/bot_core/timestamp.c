@@ -122,7 +122,6 @@ bot_timestamp_sync (bot_timestamp_sync_state_t * s, int64_t dev_ticks,
 	s->dev_ticks_since_sync = 0;
         dev_utime = host_utime;
     }
-    //printf ("%llu %llu %lld %lld\n", host_utime, dev_utime, time_err, dev_utime + s->time_offset);
 
     return dev_utime;
 }

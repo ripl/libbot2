@@ -190,7 +190,6 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
 
     double magnitude = bot_vector_magnitude_3d(motion);
     double new_magnitude = fmax(fmin(magnitude,MAX_MOTION_MAGNITUDE),MIN_MOTION_MAGNITUDE);
-    //bot_vector_normalize_3d(motion); // if magnitude is zero it will return nan's
     bot_vector_scale_3d(motion,new_magnitude/fmax(magnitude,MIN_MOTION_MAGNITUDE));
 
     double neweye[3], newlookat[3];
@@ -206,8 +205,6 @@ static void window_space_pan(BotDefaultViewHandler *dvh, double dq[], double x, 
     // then just reject it.  this is better than letting the
     // projection become singular! (This only happens with preserveZ?)
     double detNew = A[0]*A[3] - A[1]*A[2];
-    //printf(" %15f %15f\n", detOriginal, detNew);
-    //if (fabs(detNew) < 0.01 && fabs(detNew) <= fabs(detOriginal)) {
     if ((fabs(detNew) < 25 )||(fabs(detOriginal) < 25 )) {
         memcpy(dvh->eye, orig_eye, 3 * sizeof(double));
         memcpy(dvh->lookat, orig_lookat, 3 * sizeof(double));
@@ -235,8 +232,6 @@ static int mouse_press   (BotViewer *viewer, BotEventHandler *ehandler,
 static int mouse_release (BotViewer *viewer, BotEventHandler *ehandler,
                            const double ray_start[3], const double ray_dir[3], const GdkEventButton *event)
 {
-//    BotDefaultViewHandler *dvh = (BotDefaultViewHandler*) ehandler->user;
-
     return 1;
 }
 
@@ -509,7 +504,6 @@ static void set_look_at_smooth (BotViewHandler *vhandler, const double eye[3], c
     dvh->goal_up[0] = up[0] / up_norm;
     dvh->goal_up[1] = up[1] / up_norm;
     dvh->goal_up[2] = up[2] / up_norm;
-//    memcpy(dvh->goal_up, up, 3 * sizeof(double));
 
     // periodically update the viewpoint until the goal viewpoint is reached
     g_timeout_add(30, (GSourceFunc)set_look_at_smooth_func, vhandler);

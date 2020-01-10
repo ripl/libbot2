@@ -67,10 +67,6 @@ typedef struct mod2entry
 #ifndef SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE /* memory opt., see ldpc_profile.h */
 	struct mod2entry	*up;
 #endif
-#if 0
-	double pr, lr;	  /* Probability and likelihood ratios - not used  */
-			  /*   by the mod2sparse module itself             */
-#endif
 } mod2entry;
 
 #define Mod2sparse_block 10  /* Number of entries to block together for
@@ -131,16 +127,6 @@ typedef struct mod2sparse
 #define mod2sparse_rows(m) ((m)->n_rows)  /* Get the number of rows or columns*/
 #define mod2sparse_cols(m) ((m)->n_cols)  /* in a matrix                      */
 
-#if 0
-/* POSSIBLE LU DECOMPOSITION STRATEGIES.  For use with mod2sparse_decomp. */
-
-typedef enum mod2sparse_strategy_enum
-{ Mod2sparse_first,
-  Mod2sparse_mincol,
-  Mod2sparse_minprod
-} mod2sparse_strategy;
-#endif // #if 0
-
 /* PROCEDURES TO MANIPULATE SPARSE MATRICES. */
 
 mod2sparse *mod2sparse_allocate (int, int);
@@ -148,40 +134,11 @@ void mod2sparse_free            (mod2sparse *);
 
 void mod2sparse_clear    (mod2sparse *);
 
-#if 0
-void mod2sparse_copy     (mod2sparse *, mod2sparse *);
-#endif // #if 0
-
 void mod2sparse_print       (FILE *, mod2sparse *);
-#if 0
-int  mod2sparse_write       (FILE *, mod2sparse *);
-mod2sparse *mod2sparse_read (FILE *);
-#endif // #if 0
 
 mod2entry *mod2sparse_find   (mod2sparse *, int, int);
 mod2entry *mod2sparse_insert (mod2sparse *, int, int);
 void mod2sparse_delete       (mod2sparse *, mod2entry *);
-
-#if 0
-void mod2sparse_transpose (mod2sparse *, mod2sparse *);
-void mod2sparse_add       (mod2sparse *, mod2sparse *, mod2sparse *);
-void mod2sparse_multiply  (mod2sparse *, mod2sparse *, mod2sparse *);
-void mod2sparse_mulvec    (mod2sparse *, char *, char *);
-
-int mod2sparse_equal (mod2sparse *, mod2sparse *);
-
-int mod2sparse_count_row (mod2sparse *, int);
-int mod2sparse_count_col (mod2sparse *, int);
-
-void mod2sparse_add_row (mod2sparse *, int, mod2sparse *, int);
-void mod2sparse_add_col (mod2sparse *, int, mod2sparse *, int);
-
-int mod2sparse_decomp (mod2sparse *, int, mod2sparse *, mod2sparse *,
-                       int *, int *, mod2sparse_strategy, int, int);
-
-int mod2sparse_tunnel_sub  (mod2sparse *, int *, char *, char *);
-int mod2sparse_backward_sub (mod2sparse *, int *, char *, char *);
-#endif // #if 0
 
 #ifdef SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
 mod2entry * mod2sparse_last_in_col(mod2sparse * m, int i);

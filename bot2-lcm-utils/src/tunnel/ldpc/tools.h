@@ -38,9 +38,4 @@
 
 void *chk_alloc(unsigned, unsigned);	/* Calls 'calloc' and exits with error if it fails */
 
-#if 0
-int  intio_read (FILE *);	/* Read an integer  */
-void intio_write(FILE *, int);	/* Write an integer */
-#endif
-
 #endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_TOOLS_H_

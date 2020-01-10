@@ -63,10 +63,6 @@ int main(int argc, char *argv[])
   gtk_init(&argc, &argv);
   glutInit(&argc, argv);
 
-  //  if (argc < 2) {
-  //    fprintf(stderr, "usage: %s <render_plugins>\n", g_path_get_basename(argv[0]));
-  //    exit(1);
-  //  }
   lcm_t * lcm = bot_lcm_get_global(NULL);
   BotParam * param = bot_param_get_global(lcm, 0);
   BotFrames * bcf = bot_frames_get_global(lcm, param);

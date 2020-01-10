@@ -168,9 +168,6 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
             parse_double( tok, &clump->color[2] );
         } else if( ! strcmp( tok->token, "Surface" ) ) {
             tokenize_next( tok );
-//            parse_double( tok, &clump->surface[0] );
-//            parse_double( tok, &clump->surface[1] );
-//            parse_double( tok, &clump->surface[2] );
             parse_double( tok, &clump->ambient );
             parse_double( tok, &clump->diffuse );
             parse_double( tok, &clump->specular );
@@ -231,7 +228,6 @@ parse_clump( BotRwxClump *clump, tokenize_t *tok )
     // parse the list of triangles
     tokenize_next( tok );
     while( 1 ) {
-//    while( tokenize_next( tok ) != EOF ) {
         if( ! strcmp( tok->token, "Triangle" ) ) {
             parse_triangle( tok, tbuf + clump->ntriangles );
             clump->ntriangles++;
@@ -373,17 +369,10 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
     double n[3];
 
     float color[4];
-#if 0
-    float minv[3] = {INFINITY, INFINITY, INFINITY };
-    float maxv[3] = {-INFINITY, -INFINITY, -INFINITY };
-#endif
 
     for( citer = model->clumps; citer != NULL; citer = citer->next ) {
         BotRwxClump *clump = (BotRwxClump*)citer->data;
         int i;
-
-        /*glColor4f( clump->color[0], clump->color[1], clump->color[2],
-          clump->opacity ); */
 
         // ambient
         if (clump->ambient < .5)
@@ -396,7 +385,6 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
         glMaterialfv( GL_FRONT, GL_AMBIENT, color );
 
         // diffuse
-        //	clump->diffuse = 1.0;
         color[0] = clump->color[0] * clump->diffuse;
         color[1] = clump->color[1] * clump->diffuse;
         color[2] = clump->color[2] * clump->diffuse;
@@ -426,19 +414,6 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
         // the triangle is drawn).
         int *vertex_counts = (int*)calloc(1,clump->nvertices*sizeof(int));
         double *normals = (double*)calloc(1,clump->nvertices*sizeof(double)*3);
-
-#if 0
-        for (i = 1; i < clump->nvertices; i++) {
-            BotRwxVertex * v = clump->vertices + i;
-            int j;
-            for (j = 0; j < 3; j++) {
-                if (v->pos[j] < minv[j])
-                    minv[j] = v->pos[j];
-                if (v->pos[j] > maxv[j])
-                    maxv[j] = v->pos[j];
-            }
-        }
-#endif
 
         // account for the normal vector of every triangle.
         for( i=1; i<clump->ntriangles; i++ ) {
@@ -506,18 +481,6 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
             v2 = &clump->vertices[vid2];
             v3 = &clump->vertices[vid3];
 
-#if 0
-            // compute and set the normal
-            vector_subtract_3d( v2->pos, v1->pos, a );
-            vector_subtract_3d( v3->pos, v1->pos, b );
-            vector_cross_3d( a, b, n );
-            double nmag = sqrt( n[0]*n[0] + n[1]*n[1] + n[2]*n[2] );
-            n[0] /= nmag;
-            n[1] /= nmag;
-            n[2] /= nmag;
-            glNormal3d( n[0], n[1], n[2] );
-#endif
-
             // render the triangle
             glNormal3d( normals[vid1*3+ 0],
                     normals[vid1*3 + 1],
@@ -536,58 +499,4 @@ bot_rwx_model_gl_draw( BotRwxModel *model )
         free( normals );
         glEnd();
     }
-
-#if 0
-    printf ("max-min %f %f %f\n", maxv[0] - minv[0], maxv[1] - minv[1],
-            maxv[2] - minv[2]);
-    printf ("min %f %f %f\n", minv[0], minv[1], minv[2]);
-#endif
-
-#if 0
-    glLineWidth( 4.0 );
-    glBegin( GL_LINES );
-    glColor4f( 1, 1, 1, 0.5 );
-
-    for( citer = model->clumps; citer != NULL; citer = citer->next ) {
-        BotRwxClump *clump = (BotRwxClump*)citer->data;
-        int i;
-        for( i=0; i<clump->ntriangles; i++ ) {
-            // find the vertex indices
-            int vid1, vid2, vid3;
-            vid1 = clump->triangles[i].vertices[0];
-            vid2 = clump->triangles[i].vertices[1];
-            vid3 = clump->triangles[i].vertices[2];
-
-            // load the vertices
-            BotRwxVertex *v1, *v2, *v3;
-            v1 = &clump->vertices[vid1];
-            v2 = &clump->vertices[vid2];
-            v3 = &clump->vertices[vid3];
-
-            // compute and set the normal
-            vector_subtract_3d( v2->pos, v1->pos, a );
-            vector_subtract_3d( v3->pos, v1->pos, b );
-            vector_cross_3d( a, b, n );
-            double nmag = sqrt( n[0]*n[0] + n[1]*n[1] + n[2]*n[2] );
-            n[0] /= nmag;
-            n[1] /= nmag;
-            n[2] /= nmag;
-
-            n[0] *= 5;
-            n[1] *= 5;
-            n[2] *= 5;
-
-            // midpoint of the triangle
-            double m[3];
-            m[0] = (v1->pos[0] + v2->pos[0] + v3->pos[0]) / 3;
-            m[1] = (v1->pos[1] + v2->pos[1] + v3->pos[1]) / 3;
-            m[2] = (v1->pos[2] + v2->pos[2] + v3->pos[2]) / 3;
-
-            // render the normal vector
-            glVertex3f( m[0], m[1], m[2] );
-            glVertex3f( m[0] + n[0], m[1] + n[1], m[2] + n[2] );
-        }
-    }
-    glEnd();
-#endif
 }

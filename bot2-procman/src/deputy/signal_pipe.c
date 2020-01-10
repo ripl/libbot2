@@ -107,23 +107,7 @@ void
 signal_pipe_add_signal (int sig)
 {
     // TODO use sigaction instead of signal()
-#if 0
-    struct sigaction siga;
-    siga.sa_handler = signal_handler;
-    siga.sa_sigaction = NULL;
-    sigemptyset (&siga.sa_mask);
-    siga.sa_flags = 0;
-    siga.sa_restorer = 0;
-
-    int status = sigaction (sig, &siga, NULL);
-    if (0 != status) {
-        perror("signal_pipe: sigaction failed");
-    }
-#else
     signal (sig, signal_handler);
-#endif
-
-    return;
 }
 
 int

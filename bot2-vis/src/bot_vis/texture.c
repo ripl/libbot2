@@ -81,11 +81,6 @@ bot_gl_texture_new (int width, int height, int max_data_size)
     }
     g_strfreev (exts);
 
-//    printf ("%s:%d - %d %d %d\n", __FILE__, __LINE__,
-//            has_non_power_of_two, has_texture_rectangle,
-//            has_pbo
-//            );
-
     t->use_pbo = has_pbo;
     t->int_format = GL_RGBA8;
     t->interp_mode = GL_LINEAR;
@@ -110,10 +105,6 @@ bot_gl_texture_new (int width, int height, int max_data_size)
     }
 
     glGenTextures (1, &t->texname);
-#if 0
-    glBindTexture (t->target, t->texname);
-
-#endif
 
     if (t->use_pbo) {
         glGenBuffersARB (1, &t->pbo);
@@ -194,12 +185,6 @@ static inline int _bits_per_channel (GLenum type)
     default:
         return 0;
     }
-// GL_UNSIGNED_BYTE_3_3_2, GL_UNSIGNED_BYTE_2_3_3_REV,
-// GL_UNSIGNED_SHORT_5_6_5, GL_UNSIGNED_SHORT_5_6_5_REV,
-// GL_UNSIGNED_SHORT_4_4_4_4, GL_UNSIGNED_SHORT_4_4_4_4_REV,
-// GL_UNSIGNED_SHORT_5_5_5_1, GL_UNSIGNED_SHORT_1_5_5_5_REV,
-// GL_UNSIGNED_INT_8_8_8_8, GL_UNSIGNED_INT_8_8_8_8_REV,
-// GL_UNSIGNED_INT_10_10_10_2, and GL_UNSIGNED_INT_2_10_10_10_REV
 }
 
 static inline int _num_channels (GLenum format) {

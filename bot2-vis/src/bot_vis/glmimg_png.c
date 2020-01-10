@@ -102,9 +102,6 @@ glmReadPNG(const char* filename, GLboolean alpha, int* width_ret,
      * the compiler header file version, so that we know if the application
      * was compiled with a compatible version of the library.  REQUIRED
      */
-    /*png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
-      (void *)user_error_ptr, user_error_fn, user_warning_fn);*/
-
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,
                                      NULL, err_callback, warn_callback);
 
@@ -161,19 +158,6 @@ glmReadPNG(const char* filename, GLboolean alpha, int* width_ret,
     /* tell libpng to strip 16 bit/color files down to 8 bits/color */
     png_set_strip_16(png_ptr);
 
-    /* strip alpha bytes from the input data without combining with th
-     * background (not recommended) */
-    /* png_set_strip_alpha(png_ptr); */
-
-    /* extract multiple pixels with bit depths of 1, 2, and 4 from a single
-     * byte into separate bytes (useful for paletted and grayscale images).
-     */
-    /* png_set_packing(png_ptr); */
-
-    /* change the order of packed pixels to least significant bit first
-     * (not useful if you are using png_set_packing). */
-    /* png_set_packswap(png_ptr); */
-
     /* expand paletted colors into true RGB triplets */
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand(png_ptr);
@@ -186,9 +170,6 @@ glmReadPNG(const char* filename, GLboolean alpha, int* width_ret,
      * so the data will be available as RGBA quartets */
     if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
         png_set_expand(png_ptr);
-
-    /* Add filler (or alpha) byte (before/after each RGB triplet) */
-    /* png_set_filler(png_ptr, 0xff, PNG_FILLER_AFTER); */
 
     png_read_update_info(png_ptr, info_ptr);
 

@@ -76,17 +76,9 @@ void bot_fasttrig_sincos(double theta, double *s, double *c)
     int lsb_idx = idx & (K_LSB_TABLE_SIZE - 1);
     float sinL, cosL;
 
-    if (0) {
-        // compute sinL/cosL using small angle approximation.
-        // Less memory (don't need LSB table), but a bit slower.
-        float L = (2.0 * M_PI / K_MSB_TABLE_SIZE / K_LSB_TABLE_SIZE) * lsb_idx;
-        sinL = L;
-        cosL = 1.0 - L*L*.5;
-    } else {
         // compute sinL/cosL using lookup table
         sinL = lsb_table[lsb_idx].m_sin;
         cosL = lsb_table[lsb_idx].m_cos;
-    }
 
     int msb_idx = (idx >> K_LSB_BITS) & (K_MSB_TABLE_SIZE - 1);
     float sinM = msb_table[msb_idx].m_sin;
@@ -220,13 +212,11 @@ bot_fasttrig_sincos_test()
         double s2, c2;
         bot_fasttrig_sincos(theta, &s2, &c2);
 
-        if (1) {
             double s_err = fabs(s-s2), c_err = fabs(c-c2);
             if (s_err > eps)
                 printf("sin %20.5f : %15.12f %15.12f %15.12f %10.5f\n", theta, s, s2, s_err, s_err/eps);
             if (c_err > eps)
                 printf("cos %20.5f : %15.12f %15.12f %15.12f %10.5f\n", theta, c, c2, c_err, c_err/eps);
-        }
     }
     exit(0);
 }
@@ -266,9 +256,3 @@ bot_fasttrig_atan2_test()
     printf("dt: %15f\n", (stop-start)/1000000.0);
 }
 
-/*
-int main(int argc, char *argv[])
-{
-    bot_fasttrig_atan2_test();
-}
-*/

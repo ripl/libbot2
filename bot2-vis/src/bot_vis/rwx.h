@@ -48,7 +48,6 @@ typedef struct _bot_rwx_triangle
 typedef struct _bot_rwx_clump
 {
     double color[3];
-//    double surface[3];
     double diffuse;
     double specular;
     double opacity;

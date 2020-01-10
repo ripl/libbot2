@@ -45,10 +45,6 @@ void bot_gps_linearize_init(BotGPSLinearize *gl, const double ll_deg[2])
 
     double lat_rad = TO_RAD(ll_deg[0]);
 
-    // this is the best radius approximation, agnostic of direction
-    // we don't use this anymore.
-    //    gl->radius = REQ*REQ*RPO / (SQ(REQ*cos(lat_rad)) + SQ(RPO*sin(lat_rad)));
-
     // best radius approximation in ns and ew direction.
     gl->radius_ns = SQ(REQ*RPO) / pow((SQ(REQ*cos(lat_rad))) + SQ(RPO*sin(lat_rad)), 1.5);
     gl->radius_ew = REQ*REQ / sqrt(SQ(REQ*cos(lat_rad)) + SQ(RPO*sin(lat_rad)));

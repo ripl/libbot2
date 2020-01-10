@@ -85,14 +85,6 @@ void bot_bgl_mult_matrixf (BotBatchGl *bgl, const float *matrix);
 void bot_bgl_render (BotBatchGl *bgl);
 void bot_bgl_switch_buffer (BotBatchGl *bgl);
 
-//void bot_bgl_box_3dv_3fv(BotBatchGl *bgl, double xyz[3], float dim[3]);
-//void bot_bgl_circle(BotBatchGl *bgl, double xyz[3], double radius);
-//void bot_bgl_disk(BotBatchGl *bgl, double xyz[3], double r_in, double r_out);
-//void BotBatchGlext(BotBatchGl *bgl, const double xyz[3], const char *text);
-//void BotBatchGlext_ex(BotBatchGl *bgl, const double xyz[3], const char *text, uint32_t font, uint32_t flags);
-//
-//void bot_bgl_rect(BotBatchGl *bgl, double xyz[3], double size[2], double theta_rad, int filled);
-
 /**
  * @}
  */

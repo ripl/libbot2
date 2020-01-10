@@ -896,8 +896,6 @@ _param_load_from_keyfile (void *key, void *value, void *user_data)
         // TODO
     }
     if (gerr) {
-//        g_warning ("couldn't load param %s from GKeyFile\n", param_name);
-//        g_warning ("%s\n", gerr->message);
         g_error_free (gerr);
     }
 }
@@ -1056,6 +1054,5 @@ void bot_gtk_param_widget_clear_enum(BotGtkParamWidget *pw, const char *name)
 	gtk_list_store_set(store, &iter, 0, "None", 1, 0, -1);
     	gtk_combo_box_set_active_iter (GTK_COMBO_BOX(w), &iter);
     }
-    return;
 }
 

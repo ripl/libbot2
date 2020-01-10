@@ -206,29 +206,6 @@
 
 unsigned long	seed;
 
-#if 0
-/**
- * Check that the PRNG is compliant with [Park88].
- */
-void
-check_PRNG (void)
-{
-	int		i;
-	unsigned long	val;
-
-	seed = 1;
-	for (i = 0; i < 10000; i++) {
-		val = ldpc_rand(0x7FFFFFFF);
-	}
-	if (val != 1043618065) {
-		fprintf(stderr,"ldpc_rand: ERROR, invalid PRNG, 10,000th value is %d\n", val);
-		exit(-1);
-	} else {
-		fprintf(stderr,"ldpc_rand: okay, PRNG is valid, 10,000th value is %d\n", val);
-	}
-}
-#endif
-
 /**
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.
@@ -241,10 +218,6 @@ void ldpc_srand (unsigned long s)
 		fprintf(stderr,"ldpc_rand: ERROR, seed (%lu) out of range\n", seed);
 		exit(-1);
 	}
-#if 0
-	check_PRNG();
-	seed = s;
-#endif
 }
 
 /**

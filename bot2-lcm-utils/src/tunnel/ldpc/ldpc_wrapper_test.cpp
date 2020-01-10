@@ -68,7 +68,6 @@ int main(int argc, char * argv[])
   for (int r = 0; r < numRuns; r++) {
     uint8_t * message = (uint8_t *) calloc(messageSize, 1);
     for (unsigned int i = 0; i < messageSize; i++) {
-      //    dataE[i] = (uint8_t) rand() % 255;
       message[i] = (uint8_t) rand();
     }
 
@@ -78,8 +77,6 @@ int main(int argc, char * argv[])
     ldpc_dec = new ldpc_dec_wrapper(messageSize, packetSize, fec_rate);
     t2 += getTime();
 
-    //    printf("enc_init time=%f, dec_init = %f\n", t1 - t0, t2 - t1);
-
     uint8_t * pkt = (uint8_t *) calloc(packetSize, 1);
     int sentCount = 0;
     int recCount = 0;
@@ -88,11 +85,7 @@ int main(int argc, char * argv[])
       sentCount++;
       int16_t ESI;
       int enc_done = ldpc_enc->getNextPacket(pkt,&ESI);
-      //      if (enc_done) {
-      //        printf("sentlast packet\n");
-      //      }
       if (rand() % 10000 < 10000* dropfrac ) {
-        //      printf("dropped\n");
         if (enc_done)
           break;
         else
@@ -101,11 +94,9 @@ int main(int argc, char * argv[])
       recCount++;
       int dec_done = ldpc_dec->processPacket(pkt, ESI);
       if (dec_done == 1) {
-        //        printf("successfully decoded \n");
         decoded = true;
       }
       if (dec_done || enc_done) {
-        //        printf("%d packets sent, and %d packets rec of %d possible\n", sentCount, recCount, ldpc_enc->getNumPackets());
         break;
       }
     }
@@ -115,7 +106,6 @@ int main(int argc, char * argv[])
     if (decoded) {
       ldpc_dec->getObject(dataD);
       if (memcmp(message, dataD, messageSize) == 0) {
-        //      printf("Great success!\n");
         numSuccess++;
 
         printf("%d) success\n", r);

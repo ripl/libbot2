@@ -168,12 +168,6 @@ int procman_start_cmd (procman_t *pm, procman_cmd_t *p)
 
         int pid = forkpty(&p->stdin_fd, NULL, NULL, NULL);
         if (0 == pid) {
-//            // block SIGINT (only allow the procman to kill the process now)
-//            sigset_t toblock;
-//            sigemptyset (&toblock);
-//            sigaddset (&toblock, SIGINT);
-//            sigprocmask (SIG_BLOCK, &toblock, NULL);
-
             // set environment variables from the beginning of the command
             for (int i=0;i<p->envc;i++){
                 setenv(p->envp[i][0],p->envp[i][1],1);

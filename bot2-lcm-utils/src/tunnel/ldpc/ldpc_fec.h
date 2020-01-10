@@ -473,10 +473,6 @@ protected:
 					// each parity symbol is included
 	void**		m_parity_symbol_canvas; //Canvas of stored parity symbols.
 
-#if 0
-	uintptr_t* 	m_builtSymbol; 	// symbol built by decoder, used for
-					// recursive calls of DecodingStepWithSymbol
-#endif
 	bool		m_triangleWithSmallFECRatio;
 					// with LDGM Triangle and a small FEC
 					// ratio (ie. < 2), some specific

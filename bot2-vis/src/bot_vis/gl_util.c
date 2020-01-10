@@ -323,36 +323,6 @@ bot_gl_draw_ortho_circles_3d()
   glPopMatrix();
 }
 
-//void
-//bot_gl_draw_text (double x, double y, const char *text)
-//{
-//    glRasterPos2f(x,y);
-//
-//    for (int i=0;i<strlen(text);i++) {
-//        glutBitmapCharacter (GLUT_BITMAP_8_BY_13, text[i]);
-//    }
-//}
-//
-//void
-//bot_gl_draw_text_window (double x, double y, const char *text, int w, int h)
-//{
-//    glMatrixMode(GL_PROJECTION);
-//    glPushMatrix();
-//    glLoadIdentity();
-//    gluOrtho2D(0,w,0,h);
-//
-//    glMatrixMode(GL_MODELVIEW);
-//    glPushMatrix();
-//    glLoadIdentity();
-//
-//    bot_gl_draw_text (x, y, text);
-//
-//    glMatrixMode(GL_PROJECTION);
-//    glPopMatrix();
-//    glMatrixMode(GL_MODELVIEW);
-//    glPopMatrix();
-//}
-
 void
 bot_gl_draw_arrow_2d (double length, double head_width, double head_length,
         double body_width, int fill)
@@ -598,7 +568,6 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
     }
 
     // draw text
-//    glColor4f(1,1,1,1);
     // winxy is now the center of the draw.
     for (int i = 0; i < text_lines->len; i++) {
         unsigned char *line = g_ptr_array_index(text_lines, i);
@@ -614,7 +583,6 @@ void bot_gl_draw_text (const double xyz[3], void *font, const char *text, int fl
         if (flags & BOT_GL_DRAW_TEXT_JUSTIFY_CENTER)
             x = winxy[0] - thiswidth/2;
 
-//        printf("drawtext: %15f,%15f %15f,%15f %d,%d\n", xyz[0], xyz[1], winxy[0], winxy[1], x, y);
         glRasterPos2f(x,y);
         bot_glutBitmapString(font, line);
     }

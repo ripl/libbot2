@@ -94,12 +94,6 @@ static inline uint64_t lcmgl_decode_u64(lcmgl_decoder_t *ldec)
     return v;
 }
 
-//static inline void lcmgl_decode_raw(lcmgl_decoder_t *ldec, int datalen, void *result)
-//{
-//    memcpy(result, ldec->datapos, datalen);
-//    ldec->datapos += datalen;
-//}
-
 static inline float lcmgl_decode_float(lcmgl_decoder_t *ldec)
 {
     union fu32 u;

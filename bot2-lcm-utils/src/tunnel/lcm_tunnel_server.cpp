@@ -140,7 +140,6 @@ int LcmTunnelServer::disconnectClient(LcmTunnel * client){
   fprintf(stderr,"disconnecting client: %s\n",client->name);
   delete client;
   if (params.startedAsClient && clients_list.size()==0){
-//    if (params.verbose)
       fprintf(stderr,"All clients disconnected, exiting\n");
     destroyServer();
   }

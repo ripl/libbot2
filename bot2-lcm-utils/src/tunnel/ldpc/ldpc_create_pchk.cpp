@@ -23,10 +23,6 @@
 mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, int leftDegree, int seed, bool no4cycle, SessionType type, int verbosity )
 {
 	mod2entry *e;
-#if 0
-	mod2entry *f, *g, *h;	/* using by no4cycle mode */
-	int elim4;
-#endif
 	int added, uneven;
 	int i, j, k, t;
 	int *u;
@@ -47,13 +43,6 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 		fprintf(stderr, "ERROR, Number of checks per bit (%d) is greater than total checks (%d)\n", leftDegree, nbRows);
 		return NULL;
 	}
-#if 0
-	if (leftDegree==nbRows && nbCols>1 && no4cycle)
-	{
-		fprintf(stderr,	"ERROR, Can't eliminate cycles of length four with this many checks per bit\n");
-		return NULL;
-	}
-#endif
 	if (no4cycle) {
 		fprintf(stderr, "ERROR: no4cycle mode is no longer supported!\n");
 		exit(-1);
@@ -175,61 +164,6 @@ mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, 
 			fprintf(stderr, "Added %d extra bit-checks to try to avoid problems from even column counts\n", a);
 		}
 	}
-
-#if 0
-	/* Eliminate cycles of length four, if asked, and if possible. */
-	if(no4cycle)
-	{
-		elim4 = 0;
-
-		for(t = 0; t<10; t++)
-		{
-			k = 0;
-			for(j = 0; j<nbCols; j++)
-			{
-				for( e=mod2sparse_first_in_col(pchkMatrix,j); !mod2sparse_at_end(e); e=mod2sparse_next_in_col(e) )
-				{
-					for( f=mod2sparse_first_in_row(pchkMatrix,mod2sparse_row(e)); !mod2sparse_at_end(f); f=mod2sparse_next_in_row(f) )
-					{
-						if(f==e) continue;
-						for(g=mod2sparse_first_in_col(pchkMatrix,mod2sparse_col(f)); !mod2sparse_at_end(g); g=mod2sparse_next_in_col(g) )
-						{
-							if(g==f) continue;
-							for( h=mod2sparse_first_in_row(pchkMatrix,mod2sparse_row(g)); !mod2sparse_at_end(h); h = mod2sparse_next_in_row(h) )
-							{
-								if(mod2sparse_col(h)==j)
-								{
-									do
-									{
-										i = ldpc_rand(nbRows);
-									}
-									while (mod2sparse_find(pchkMatrix,i,j));
-									mod2sparse_delete(pchkMatrix,e);
-									mod2sparse_insert(pchkMatrix,i,j);
-									elim4 += 1;
-									k += 1;
-									goto nextj;
-								}
-							}
-						}
-					}
-				}
-nextj: ;
-			}
-			if(k==0) break;
-		}
-
-		if(elim4>0)
-		{
-			fprintf(stderr, "Eliminated %d cycles of length four by moving checks within column\n", elim4);
-		}
-
-		if(t==10)
-		{
-			fprintf(stderr, "Couldn't eliminate all cycles of length four in 10 passes\n");
-		}
-	}
-#endif
 
 	switch (type) {
 	case TypeLDGM:

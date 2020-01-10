@@ -94,7 +94,6 @@ on_button_press( GtkWidget *widget, GdkEventButton *event, void *user_data )
 static gboolean
 on_button_release( GtkWidget *widget, GdkEventButton *event, void *user_data )
 {
-//    state_t *self = (state_t*) user_data;
     g_print("button %d released\n", event->button);
     return TRUE;
 }

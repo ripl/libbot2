@@ -57,8 +57,6 @@ void bot_gl_console_destroy(BotGlConsole *console);
  */
 void bot_gl_console_set_glut_font(BotGlConsole *console, void *font);
 
-//void bot_gl_console_set_pos (BotGlConsole *console, double x, double y);
-
 /**
  * Sets how quickly text will fade away.
  */

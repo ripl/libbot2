@@ -93,8 +93,6 @@ int bot_gl_scrollplot2d_set_text_color (BotGlScrollPlot2d *self,
  */
 void bot_gl_scrollplot2d_set_show_title (BotGlScrollPlot2d *self, int val);
 
-//void bot_gl_scrollplot2d_set_show_ylim (BotGlScrollPlot2d *self, int val);
-
 /**
  * Sets the plot background color.
  * @param r red

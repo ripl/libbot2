@@ -221,19 +221,6 @@ bot_gl_view_look_at(BotGlView *self,
     _recompute(self);
 }
 
-//void
-//    public void fit2D(double xy0[], double xy1[])
-//    {
-//	this.lookAt = new double[] {(xy0[0]+xy1[0])/2.0,
-//				    (xy0[1]+xy1[1])/2.0,
-//				    0};
-//	this.up = new double[] {0, 1, 0};
-//	double dist = Math.sqrt(Math.pow(xy0[0]-xy1[0],2) + Math.pow(xy0[1]-xy1[1],2));
-//	this.eye = new double[] {lookAt[0], lookAt[1], dist};
-//
-//	recompute();
-//    }
-
 void
 bot_gl_view_follow(BotGlView *self,
         double lastPos[3],

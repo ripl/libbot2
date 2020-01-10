@@ -43,7 +43,7 @@
  *
  */
 static inline void lcm_sleep(lcm_t * lcm, double sleeptime)
-{ //
+{
   int lcm_fileno = lcm_get_fileno(lcm);
 
   fd_set rfds;

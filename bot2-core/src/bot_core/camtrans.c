@@ -156,7 +156,6 @@ static int
 angular_lookup_distort_func(const void *data, const double ray[3],
                             double *x, double *y)
 {
-/*     AngularLookupDistortionParams *dist = (AngularLookupDistortionParams*)data; */
     //TODO
     return 0;
 }
@@ -496,12 +495,6 @@ bot_camtrans_compute_matrices (BotCamTrans *self)
         fprintf (stderr, "WARNING: camera matrix is singular (%s:%d)\n",
                  __FILE__, __LINE__);
     }
-/*     printf("inv_matx = [%lf %lf %lf\n" */
-/*            "            %lf %lf %lf\n" */
-/*            "            %lf %lf %lf\n\n", */
-/*            self->inv_matx[0], self->inv_matx[1], self->inv_matx[2], */
-/*            self->inv_matx[3], self->inv_matx[4], self->inv_matx[5], */
-/*            self->inv_matx[6], self->inv_matx[7], self->inv_matx[8]); */
 }
 
 void

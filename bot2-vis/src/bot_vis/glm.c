@@ -383,20 +383,6 @@ glmReadMTL(GLMmodel* model, char* name)
             rem = fgets(buf, sizeof(buf), file);
             break;
         case 'n':               /* newmtl */
-#if 0
-            __glmWarning("name=%s; Ns=%g; Ka=%g,%g,%g; Kd=%g,%g,%g; Ks=%g,%g,%g",
-                         model->materials[nummaterials].name,
-                         model->materials[nummaterials].shininess/128.0*GLM_MAX_SHININESS,
-                         model->materials[nummaterials].ambient[0],
-                         model->materials[nummaterials].ambient[1],
-                         model->materials[nummaterials].ambient[2],
-                         model->materials[nummaterials].diffuse[0],
-                         model->materials[nummaterials].diffuse[1],
-                         model->materials[nummaterials].diffuse[2],
-                         model->materials[nummaterials].specular[0],
-                         model->materials[nummaterials].specular[1],
-                         model->materials[nummaterials].specular[2]);
-#endif
             if(strncmp(buf, "newmtl", 6) != 0)
                 __glmFatalError("glmReadMTL: Got \"%s\" instead of \"newmtl\" in file \"%s\"", buf, filename);
             rem = fgets(buf, sizeof(buf), file);
@@ -942,15 +928,6 @@ glmSecondPass(GLMmodel* model, FILE* file)
                 break;
     }
   }
-
-#if 0
-  /* announce the memory requirements */
-  __glmWarning(" Memory: %d bytes",
-      numvertices  * 3*sizeof(GLfloat) +
-      numnormals   * 3*sizeof(GLfloat) * (numnormals ? 1 : 0) +
-      numtexcoords * 3*sizeof(GLfloat) * (numtexcoords ? 1 : 0) +
-      numtriangles * sizeof(GLMtriangle));
-#endif
 }
 
 /* public functions */
@@ -1431,11 +1408,6 @@ glmLinearTexture(GLMmodel* model)
         }
         group = group->next;
     }
-
-#if 0
-    __glmWarning("glmLinearTexture(): generated %d linear texture coordinates",
-		 model->numtexcoords);
-#endif
 }
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
@@ -1881,9 +1853,6 @@ glmDraw(GLMmodel* model, GLuint mode)
         mode &= ~GLM_SMOOTH;
     }
     if (mode & GLM_TEXTURE && !model->texcoords) {
-        // Warnings ignored for DRC project
-        //__glmWarning("glmDraw() warning: texture render mode requested "
-	//	     "with no texture coordinates defined.");
         mode &= ~GLM_TEXTURE;
     }
     if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
@@ -1897,9 +1866,6 @@ glmDraw(GLMmodel* model, GLuint mode)
         mode &= ~GLM_COLOR;
     }
     if (mode & GLM_MATERIAL && !model->materials) {
-        // Warnings ignored for DRC project
-        //__glmWarning("glmDraw() warning: material render mode requested "
-	//	     "with no materials defined.");
         mode &= ~GLM_MATERIAL;
     }
     if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
@@ -2082,11 +2048,6 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
     vectors  = model->vertices;
     copies = glmWeldVectors(vectors, &numvectors, epsilon);
 
-#if 0
-    __glmWarning("glmWeld(): %d redundant vertices.",
-		 model->numvertices - numvectors - 1);
-#endif
-
     for (i = 0; i < model->numtriangles; i++) {
         T(i).vindices[0] = (GLuint)vectors[3 * T(i).vindices[0] + 0];
         T(i).vindices[1] = (GLuint)vectors[3 * T(i).vindices[1] + 0];
@@ -2153,99 +2114,13 @@ GLvoid glmFlipModelTextures(GLMmodel* model)
             glmFlipTexture(material->image, material->width, material->height);
 
             glBindTexture(_glmTextureTarget, model->materials[group->material].t_id[0]);
-            //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	    //glTexImage2D(_glmTextureTarget, 0, GL_RGB, model->materials[nummaterials].width,
-            //             model->materials[nummaterials].height, 0, GL_RGBA, GL_UNSIGNED_BYTE, model->materials[nummaterials]->image);
             gluBuild2DMipmaps(_glmTextureTarget, 3, model->materials[group->material].width, model->materials[group->material].height,
                               GL_RGB, GL_UNSIGNED_BYTE,  model->materials[group->material].image);
-	    //glTexParameterf(_glmTextureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	    //glTexParameterf(_glmTextureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         }
 
         group = group->next;
     }
 }
 //AVL END Flip Model Textures
-#endif
-
-#if 0
-/* normals */
-if (model->numnormals) {
-    numvectors = model->numnormals;
-    vectors  = model->normals;
-    copies = glmOptimizeVectors(vectors, &numvectors);
-
-    __glmWarning("glmOptimize(): %d redundant normals.",
-		 model->numnormals - numvectors);
-
-    for (i = 0; i < model->numtriangles; i++) {
-        T(i).nindices[0] = (GLuint)vectors[3 * T(i).nindices[0] + 0];
-        T(i).nindices[1] = (GLuint)vectors[3 * T(i).nindices[1] + 0];
-        T(i).nindices[2] = (GLuint)vectors[3 * T(i).nindices[2] + 0];
-    }
-
-    /* free space for old normals */
-    free(vectors);
-
-    /* allocate space for the new normals */
-    model->numnormals = numvectors;
-    model->normals = (GLfloat*)malloc(sizeof(GLfloat) *
-				      3 * (model->numnormals + 1));
-
-    /* copy the optimized vertices into the actual vertex list */
-    for (i = 1; i <= model->numnormals; i++) {
-        model->normals[3 * i + 0] = copies[3 * i + 0];
-        model->normals[3 * i + 1] = copies[3 * i + 1];
-        model->normals[3 * i + 2] = copies[3 * i + 2];
-    }
-
-    free(copies);
-}
-
-/* texcoords */
-if (model->numtexcoords) {
-    numvectors = model->numtexcoords;
-    vectors  = model->texcoords;
-    copies = glmOptimizeVectors(vectors, &numvectors);
-
-    __glmWarning("glmOptimize(): %d redundant texcoords.",
-		 model->numtexcoords - numvectors);
-
-    for (i = 0; i < model->numtriangles; i++) {
-        for (j = 0; j < 3; j++) {
-            T(i).tindices[j] = (GLuint)vectors[3 * T(i).tindices[j] + 0];
-        }
-    }
-
-    /* free space for old texcoords */
-    free(vectors);
-
-    /* allocate space for the new texcoords */
-    model->numtexcoords = numvectors;
-    model->texcoords = (GLfloat*)malloc(sizeof(GLfloat) *
-					2 * (model->numtexcoords + 1));
-
-    /* copy the optimized vertices into the actual vertex list */
-    for (i = 1; i <= model->numtexcoords; i++) {
-        model->texcoords[2 * i + 0] = copies[2 * i + 0];
-        model->texcoords[2 * i + 1] = copies[2 * i + 1];
-    }
-
-    free(copies);
-}
-#endif
-
-#if 0
-/* look for unused vertices */
-/* look for unused normals */
-/* look for unused texcoords */
-for (i = 1; i <= model->numvertices; i++) {
-    for (j = 0; j < model->numtriangles; i++) {
-        if (T(j).vindices[0] == i ||
-            T(j).vindices[1] == i ||
-            T(j).vindices[1] == i)
-            break;
-    }
-}
 #endif

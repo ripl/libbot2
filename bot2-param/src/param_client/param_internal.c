@@ -405,23 +405,6 @@ static void free_element(BotParamElement * el)
   free(el);
 }
 
-#if 0
-/* Debugging function that prints all tokens sequentially from a file */
-static int
-print_all_tokens (Parser * p)
-{
-  BotParamToken tok;
-  char str[256];
-
-  while (get_token (p, &tok, str, sizeof (str)) == 0) {
-    printf ("tok %d: %s\n", tok, str);
-    if (tok == TokEOF)
-    return 0;
-  }
-  return -1;
-}
-#endif
-
 /* Appends child to the list of el's children. */
 static int add_child(Parser * p, BotParamElement * el, BotParamElement * child)
 {
@@ -545,7 +528,6 @@ static int parse_container(Parser * p, BotParamElement * cont, BotParamToken end
   int child_exists = 0;
 
   while (get_token(p, &tok, str, sizeof(str)) == 0) {
-    //printf ("t %d: %s\n", tok, str);
     if (!child && tok == TokIdentifier) {
       BotParamElement* existing_el = find_key(cont, str, 0);
       if (NULL == existing_el) {
@@ -768,8 +750,6 @@ static void _on_param_update(const lcm_recv_buf_t *rbuf, const char * channel, c
   if (msg->server_id == param->server_id) {
     if (msg->sequence_number <= param->sequence_number)
       return;
-    //    else
-    //	fprintf(stderr, "received NEW params from server:\n");
   }
   else {
     fprintf(stderr, "WARNING: Got params from a different server! Ignoring them\n");
@@ -1229,8 +1209,6 @@ void bot_param_get_int_array_or_fail(BotParam * param, const char * key, int * v
     fprintf(stderr, "ERROR: BotParam: only read %d of %d integer values for key: %s\n", res, len, key);
     abort();
   }
-
-  return;
 }
 
 int bot_param_get_boolean_array(BotParam * param, const char * key, int * vals, int len)
@@ -1269,8 +1247,6 @@ void bot_param_get_boolean_array_or_fail(BotParam * param, const char * key, int
     fprintf(stderr, "ERROR: BotParam: only read %d of %d boolean values for key: %s\n", res, len, key);
     abort();
   }
-
-  return;
 }
 
 int bot_param_get_double_array(BotParam * param, const char * key, double * vals, int len)
@@ -1308,8 +1284,6 @@ void bot_param_get_double_array_or_fail(BotParam * param, const char * key, doub
     fprintf(stderr, "ERROR: BotParam: only read %d of %d double values for key: %s\n\n", res, len, key);
     abort();
   }
-
-  return;
 }
 
 int bot_param_get_array_len(BotParam *param, const char * key)

@@ -197,7 +197,6 @@ bot_viewer_stop_recording (BotViewer *self)
     self->is_recording = 0;
     gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (self->record_button),
                                        FALSE);
-//    gtk_window_set_resizable(GTK_WINDOW(self->window), TRUE);
 }
 
 static void update_status_bar(BotViewer *viewer)
@@ -409,7 +408,6 @@ check_gl_errors (const char *label) {
 static void
 render_scene (BotViewer *self)
 {
-//    glClearColor (0.0, 0.0, 0.0, 1.0);
     glClearColor(self->backgroundColor[0], self->backgroundColor[1],
                  self->backgroundColor[2], self->backgroundColor[3]);
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -484,17 +482,6 @@ on_gl_expose (GtkWidget *widget, GdkEventExpose *event, void *user_data)
     // set this to 1 in order to cause viewer to exit cleanly after a
     // few hundred frames: useful for generating gprof output.
     g_draws++;
-    if (0) {
-        int thresh = 300;
-
-        // for profiling PROFILE
-        if (g_draws%50 == 0)
-            printf("draws: %5i / %i\n", g_draws, thresh);
-        if (g_draws == thresh) {
-            printf("Profiling is enabled: exiting now\n");
-            exit(0);
-        }
-    }
 
     // we're going to actually draw.
 
@@ -895,14 +882,6 @@ on_screenshot_clicked (GtkToolButton *ssbt, void *user_data)
     free (fname);
 }
 
-/*
-static gboolean
-on_screenshot_timer (BotViewer * self)
-{
-    return take_screenshot (self, "viewer.ppm");
-}
-*/
-
 static void
 on_record_toggled (GtkToggleToolButton *tb, void *user_data)
 {
@@ -1181,21 +1160,6 @@ void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priori
     return bot_viewer_add_renderer_on_side (self, renderer, priority, 1);
 }
 
-/*
-static void
-destroy_plugins (BotViewer *self)
-{
-    for (unsigned int ridx = 0; ridx < g_ptr_array_size(self->renderers); ridx++) {
-        BotRenderer *renderer = g_ptr_array_index(self->renderers, ridx);
-
-        if (renderer->destroy)
-            renderer->destroy(renderer);
-    }
-
-    g_ptr_array_free(self->plugins, TRUE);
-}
-*/
-
 static void
 make_menus(BotViewer *viewer, GtkWidget *parent)
 {
@@ -1219,32 +1183,30 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
     viewer->renderers_menu = gtk_menu_new();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(renderers_menuitem), viewer->renderers_menu);
 
-    if (1) {
         // tearoff
-        GtkWidget *tearoff = gtk_tearoff_menu_item_new();
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), tearoff);
-        gtk_widget_show (tearoff);
+        GtkWidget *tearoff_renderers = gtk_tearoff_menu_item_new();
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), tearoff_renderers);
+        gtk_widget_show (tearoff_renderers);
 
         // separator
-        GtkWidget *sep = gtk_separator_menu_item_new ();
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), sep);
-        gtk_widget_show (sep);
+        GtkWidget *sep_renderers = gtk_separator_menu_item_new ();
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), sep_renderers);
+        gtk_widget_show (sep_renderers);
 
         // select all item
-        GtkWidget *select_all_mi = gtk_menu_item_new_with_mnemonic ("Select _All");
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), select_all_mi);
-        gtk_widget_show (select_all_mi);
+        GtkWidget *select_all_mi_renderers = gtk_menu_item_new_with_mnemonic ("Select _All");
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), select_all_mi_renderers);
+        gtk_widget_show (select_all_mi_renderers);
 
         // remove all item
-        GtkWidget *select_none_mi =
+        GtkWidget *select_none_mi_renderers =
             gtk_menu_item_new_with_mnemonic ("Select _None");
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), select_none_mi);
-        gtk_widget_show (select_none_mi);
-        g_signal_connect (G_OBJECT (select_all_mi), "activate",
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->renderers_menu), select_none_mi_renderers);
+        gtk_widget_show (select_none_mi_renderers);
+        g_signal_connect (G_OBJECT (select_all_mi_renderers), "activate",
                           G_CALLBACK (on_select_all_renderers_activate), viewer);
-        g_signal_connect (G_OBJECT (select_none_mi), "activate",
+        g_signal_connect (G_OBJECT (select_none_mi_renderers), "activate",
                           G_CALLBACK (on_select_no_renderers_activate), viewer);
-    }
 
     /////////////////////
     GtkWidget *event_handlers_menuitem = gtk_menu_item_new_with_mnemonic("_Input");
@@ -1253,32 +1215,30 @@ make_menus(BotViewer *viewer, GtkWidget *parent)
     viewer->event_handlers_menu = gtk_menu_new();
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(event_handlers_menuitem), viewer->event_handlers_menu);
 
-    if (1) {
         // tearoff
-        GtkWidget *tearoff = gtk_tearoff_menu_item_new();
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), tearoff);
-        gtk_widget_show (tearoff);
+        GtkWidget *tearoff_event_handlers = gtk_tearoff_menu_item_new();
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), tearoff_event_handlers);
+        gtk_widget_show (tearoff_event_handlers);
 
         // separator
-        GtkWidget *sep = gtk_separator_menu_item_new ();
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), sep);
-        gtk_widget_show (sep);
+        GtkWidget *sep_event_handlers = gtk_separator_menu_item_new ();
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), sep_event_handlers);
+        gtk_widget_show (sep_event_handlers);
 
         // select all item
-        GtkWidget *select_all_mi = gtk_menu_item_new_with_mnemonic ("Select _All");
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), select_all_mi);
-        gtk_widget_show (select_all_mi);
+        GtkWidget *select_all_mi_event_handlers = gtk_menu_item_new_with_mnemonic ("Select _All");
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), select_all_mi_event_handlers);
+        gtk_widget_show (select_all_mi_event_handlers);
 
         // remove all item
-        GtkWidget *select_none_mi =
+        GtkWidget *select_none_mi_event_handlers =
             gtk_menu_item_new_with_mnemonic ("Select _None");
-        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), select_none_mi);
-        gtk_widget_show (select_none_mi);
-        g_signal_connect (G_OBJECT (select_all_mi), "activate",
+        gtk_menu_shell_append (GTK_MENU_SHELL(viewer->event_handlers_menu), select_none_mi_event_handlers);
+        gtk_widget_show (select_none_mi_event_handlers);
+        g_signal_connect (G_OBJECT (select_all_mi_event_handlers), "activate",
                           G_CALLBACK (on_select_all_event_handlers_activate), viewer);
-        g_signal_connect (G_OBJECT (select_none_mi), "activate",
+        g_signal_connect (G_OBJECT (select_none_mi_event_handlers), "activate",
                           G_CALLBACK (on_select_no_event_handlers_activate), viewer);
-    }
 
     //add perspective and orthographic controls...
     GtkWidget *view_menuitem = gtk_menu_item_new_with_mnemonic("_View");
@@ -1491,12 +1451,6 @@ bot_viewer_init (BotViewer *viewer)
     for(int bk_ind=0; bk_ind<priv->num_bookmarks; bk_ind++) {
         priv->bookmarks[bk_ind].viewer = viewer;
         priv->bookmarks[bk_ind].index = bk_ind + 1;
-        //default views
-        //for (int i=0; i<3; i++) {
-        //  priv->bookmarks[bk_ind].eye[i] = *(defaultbmview_eye+i);
-        //  priv->bookmarks[bk_ind].lookat[i] = *(defaultbmview_lookat+i);
-        //  priv->bookmarks[bk_ind].up[i] = *(defaultbmview_up+i);
-        // }
     }
 
     viewer->prettier_flag = (getenv("BOT_VIEWER_PRETTIER") != NULL &&

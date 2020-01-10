@@ -307,9 +307,6 @@ on_timer(void *user_data)
 
     int64_t now = timestamp_now();
     if(now > app->next_report_utime) {
-//        int nhosts = g_hash_table_size(app->hosts);
-//        printf("%d host%s transmitting\n", nhosts, nhosts == 1 ? "" : "s");
-
         app->next_report_utime = now + app->report_interval_usec;
     }
     return TRUE;

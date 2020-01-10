@@ -281,12 +281,6 @@ bot_gtk_gl_drawing_area_realize (GtkWidget * widget)
     GTK_WIDGET_CLASS (bot_gtk_gl_drawing_area_parent_class)->realize (widget);
     priv->dpy = GDK_WINDOW_XDISPLAY(gtk_widget_get_window (widget));
 
-#if 0
-    priv->visual = glXChooseVisual (priv->dpy,
-            GDK_SCREEN_XNUMBER (gdk_drawable_get_screen (GDK_DRAWABLE (gtk_widget_get_window (widget)))),
-            //DefaultScreen (priv->dpy),
-            attr_list);
-#endif
     GdkWindow * window = gtk_widget_get_window (widget);
     GdkScreen * screen = gdk_window_get_screen (window);
     int screen_num = GDK_SCREEN_XNUMBER (screen);

@@ -68,14 +68,8 @@ GPtrArray * bot_g_hash_table_get_vals_array (GHashTable *hash_table);
 #define bot_g_ptr_array_size(ptrarray) ((ptrarray)->len)
 #endif
 
-//
-//#ifndef g_ptr_array_set
-//#define g_ptr_array_set(ptrarray, idx, val) (ptrarray)->pdata[(idx)] = (val);
-//#endif
-//
 int bot_g_ptr_array_find_index(GPtrArray *a, gconstpointer v);
-//#define gu_ptr_array_find_index g_ptr_array_find_index
-//
+
 guint bot_pint64_hash(gconstpointer _key);
 gboolean bot_pint64_equal(gconstpointer _a, gconstpointer _b);
 
