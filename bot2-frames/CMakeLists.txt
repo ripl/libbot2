@@ -18,6 +18,12 @@ include(CheckCCompilerFlag)
 check_c_compiler_flag(-D_FORTIFY_SOURCE=2
   C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2
 )
+check_c_compiler_flag(-fno-common
+  C_COMPILER_SUPPORTS_FNO_COMMON
+)
+check_c_compiler_flag(-fsanitize=safe-stack
+  C_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK
+)
 check_c_compiler_flag(-fstack-protector
   C_COMPILER_SUPPORTS_FSTACK_PROTECTOR
 )
@@ -26,6 +32,9 @@ check_c_compiler_flag(-fstack-protector-strong
 )
 check_c_compiler_flag(-Wall
   C_COMPILER_SUPPORTS_WALL
+)
+check_c_compiler_flag(-Wformat-security
+  C_COMPILER_SUPPORTS_WFORMAT_SECURITY
 )
 check_c_compiler_flag(-Werror=format-security
   C_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY
@@ -37,6 +46,9 @@ check_c_compiler_flag(-Wno-unused
 if(C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
 endif()
+if(C_COMPILER_SUPPORTS_FNO_COMMON)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-common")
+endif()
 if(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
 elseif(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
@@ -44,6 +56,9 @@ elseif(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
 endif()
 if(C_COMPILER_SUPPORTS_WALL)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+endif()
+if(C_COMPILER_SUPPORTS_WFORMAT_SECURITY)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wformat-security")
 endif()
 if(C_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror=format-security")
@@ -57,6 +72,12 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag(-D_FORTIFY_SOURCE=2
   CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2
 )
+check_cxx_compiler_flag(-fno-common
+  CXX_COMPILER_SUPPORTS_FNO_COMMON
+)
+check_cxx_compiler_flag(-fsanitize=safe-stack
+  CXX_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK
+)
 check_cxx_compiler_flag(-fstack-protector
   CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR
 )
@@ -65,6 +86,9 @@ check_cxx_compiler_flag(-fstack-protector-strong
 )
 check_cxx_compiler_flag(-Wall
   CXX_COMPILER_SUPPORTS_WALL
+)
+check_cxx_compiler_flag(-Wformat-security
+  CXX_COMPILER_SUPPORTS_WFORMAT_SECURITY
 )
 check_cxx_compiler_flag(-Werror=format-security
   CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY
@@ -76,6 +100,9 @@ check_cxx_compiler_flag(-Wno-unused
 if(CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
 endif()
+if(CXX_COMPILER_SUPPORTS_FNO_COMMON)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common")
+endif()
 if(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
 elseif(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR)
@@ -84,6 +111,9 @@ endif()
 if(CXX_COMPILER_SUPPORTS_WALL)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 endif()
+if(CXX_COMPILER_SUPPORTS_WFORMAT_SECURITY)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wformat-security")
+endif()
 if(CXX_COMPILER_SUPPORTS_WERROR_FORMAT_SECURITY)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=format-security")
 endif()
@@ -91,10 +121,15 @@ if(CXX_COMPILER_SUPPORTS_WNO_UNUSED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused")
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 include(CheckLinkerFlag)
 
 check_linker_flag(-Wl,-Bsymbolic-functions LINKER_SUPPORTS_BSYMBOLIC_FUNCTIONS)
+check_linker_flag(-fsanitize=safe-stack LINKER_SUPPORTS_FSANITIZE_SAFE_STACK)
 check_linker_flag(-Wl,-z,defs LINKER_SUPPORTS_Z_DEFS)
+check_linker_flag(-Wl,-z,noexecheap LINKER_SUPPORTS_Z_NOEXECHEAP)
+check_linker_flag(-Wl,-z,noexecstack LINKER_SUPPORTS_Z_NOEXECSTACK)
 check_linker_flag(-Wl,-z,now LINKER_SUPPORTS_Z_NOW)
 check_linker_flag(-Wl,-z,relro LINKER_SUPPORTS_Z_RELRO)
 
@@ -106,9 +141,29 @@ if(LINKER_SUPPORTS_BSYMBOLIC_FUNCTIONS)
     "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-Bsymbolic-functions"
   )
 endif()
+if(C_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK AND 
+  CXX_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK AND
+  LINKER_SUPPORTS_FSANITIZE_SAFE_STACK
+)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=safe-stack")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=safe-stack")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=safe-stack")
+endif()
 if(LINKER_SUPPORTS_Z_DEFS)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,defs")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
+endif()
+if(LINKER_SUPPORTS_Z_NOEXECHEAP)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,noexecheap")
+  set(CMAKE_SHARED_LINKER_FLAGS 
+    "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,noexecheap"
+  )
+endif()
+if(LINKER_SUPPORTS_Z_NOEXECSTACK)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,noexecstack")
+  set(CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,noexecstack"
+  )
 endif()
 if(LINKER_SUPPORTS_Z_NOW)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,now")
@@ -119,13 +174,13 @@ if(LINKER_SUPPORTS_Z_RELRO)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
 endif()
 
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH ON)
+
 # pull in the pods macros. See cmake/pods.cmake for documentation
 set(NAMESPACE libbot2::)
 
 option(BUILD_SHARED_LIBS "Build libraries as shared libraries" OFF)
-if(NOT BUILD_SHARED_LIBS)
-  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-endif()
 
 include(cmake/pods.cmake)
 
