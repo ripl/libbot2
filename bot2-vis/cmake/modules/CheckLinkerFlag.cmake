@@ -52,6 +52,27 @@ include(CheckCSourceCompiles)
 include(CMakeCheckCompilerFlagCommonPatterns)
 
 function(check_linker_flag FLAG VAR)
+  _check_linker_flag(-Wl,--fatal-warnings LINKER_SUPPORTS__FATAL_WARNINGS)
+  _check_linker_flag(-Wl,-fatal_warnings LINKER_SUPPORTS_FATAL_WARNINGS)
+
+  if(LINKER_SUPPORTS__FATAL_WARNINGS)
+    set(FATAL_WARNINGS_FLAG -Wl,--fatal-warnings)
+  elseif(LINKER_SUPPORTS_FATAL_WARNINGS)
+    set(FATAL_WARNINGS_FLAG -Wl,-fatal_warnings)
+  else()
+    set(FATAL_WARNINGS_FLAG)
+  endif()
+
+  _check_linker_flag("${FLAG}" ${VAR} "${FATAL_WARNINGS_FLAG}")
+
+  set(${VAR} "${${VAR}}" PARENT_SCOPE)
+endfunction()
+
+function(_check_linker_flag FLAG VAR)
+  if(ARGC GREATER 2)
+    list(INSERT FLAG 0 "${ARGV2}")
+  endif()
+
   if(CMAKE_VERSION VERSION_LESS 3.14)
     set(CMAKE_REQUIRED_LIBRARIES "${FLAG}")
   else()
