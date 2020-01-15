@@ -1,0 +1,74 @@
+# This file is part of libbot2.
+#
+# libbot2 is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# libbot2 is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with libbot2. If not, see <https://www.gnu.org/licenses/>.
+
+[attr]whitespace-2              whitespace=tab-in-indent,tabwidth=2,trailing-space
+[attr]whitespace-4              whitespace=tab-in-indent,tabwidth=4,trailing-space
+
+*                               text=auto
+
+*.c                             diff=cpp text whitespace-2
+*.cfg                           text whitespace-2
+*.cmake                         text whitespace-2
+*.cmake.in                      text whitespace-2
+*.cpp                           diff=cpp text whitespace-2
+*.glade                         text whitespace-2
+*.h                             diff=cpp text whitespace-2
+*.hpp                           diff=cpp text whitespace-2
+*.html                          diff=html text
+*.imp                           text whitespace-2
+*.java                          diff=java text whitespace-4
+*.lcm                           text whitespace-2
+*.md                            text whitespace=-blank-at-eol,blank-at-eof
+*.png                           binary
+*.py                            diff=python text whitespace-4
+*.py.in                         diff=python text whitespace-4
+*.sh                            eol=lf text whitespace-2
+*.sh.in                         eol=lf text whitespace-2
+*.txt                           text whitespace=trailing-space
+*.xml                           text whitespace-2
+*.yml                           text whitespace-2
+LICENSE.*                       text whitespace=trailing-space
+
+.clang-format                   text whitespace-2
+.clang-tidy                     text whitespace-2
+.dockerignore                   text whitespace-2
+.editorconfig                   text whitespace-2
+.gitattributes                  export-ignore text whitespace-2
+.gitignore                      export-ignore text whitespace-2
+Brewfile                        diff=ruby text whitespace-2
+CMakeLists.txt                  text whitespace-2
+Dockerfile                      text whitespace-2
+Doxyfile                        text whitespace-2
+LICENSE                         text whitespace=trailing-space
+README                          text whitespace=trailing-space
+
+bot-ppmsgz                      diff=python text whitespace-4
+bot-procman-sheriff             diff=python text whitespace-4
+bot-procman-sheriff.in          eol=lf text whitespace-2
+install_prereqs                 eol=lf text whitespace-2
+package                         eol=lf text whitespace-2
+bot-log2mat.in                  eol=lf text whitespace-2
+
+CMakeFindDependencyMacro.cmake  linguist-vendored -whitespace
+FindJPEG.cmake                  linguist-vendored -whitespace
+FindOpenGL.cmake                linguist-vendored -whitespace
+FindPkgConfig.cmake             linguist-vendored -whitespace
+FindPNG.cmake                   linguist-vendored -whitespace
+FindX11.cmake                   linguist-vendored -whitespace
+signal_slot.py                  linguist-vendored
+
+.github/**                      export-ignore
+bot2-procman/doc/**             linguist-documentation
+doc/**                          linguist-documentation
