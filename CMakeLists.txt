@@ -42,7 +42,7 @@ find_package(Java 1.8 MODULE)
 find_package(PkgConfig MODULE REQUIRED)
 set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL MODULE REQUIRED)
-find_package(PythonInterp 3.6 MODULE REQUIRED)
+find_package(PythonInterp 3.6 MODULE)
 
 # Look for the gdkx.h header to decide whether the local gtk3 install has
 # X11 support or not.

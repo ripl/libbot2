@@ -211,7 +211,12 @@ add_subdirectory(src/logfilter)
 add_subdirectory(src/logsplice)
 add_subdirectory(src/who)
 add_subdirectory(src/tunnel)
-add_subdirectory(python)
+
+find_package(PythonInterp 3.6 MODULE)
+if(PYTHONINTERP_FOUND)
+  add_subdirectory(python)
+endif()
+
 if(TARGET ${LCM_NAMESPACE}lcm)
   get_target_property(LCM_INCLUDE_DIRS ${LCM_NAMESPACE}lcm
     INTERFACE_INCLUDE_DIRECTORIES)

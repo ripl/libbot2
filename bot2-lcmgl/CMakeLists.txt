@@ -224,7 +224,11 @@ else()
   message(STATUS "Configuring without bot2-vis")
 endif()
 add_subdirectory(java)
-add_subdirectory(python)
+
+find_package(PythonInterp 3.6 MODULE)
+if(PYTHONINTERP_FOUND)
+  add_subdirectory(python)
+endif()
 
 set(EXPORT_FILE ${PROJECT_NAME}-targets.cmake)
 set(JAVA_EXPORT_FILE ${PROJECT_NAME}-java-targets.cmake)

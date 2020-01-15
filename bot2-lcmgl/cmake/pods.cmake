@@ -147,6 +147,9 @@ endfunction()
 #
 # Otherwise the script searches for and installs any python packages in <src_dir>
 function(pods_install_python_packages py_src_dir)
+    if(NOT PYTHON_INSTALL_PATH)
+        message(FATAL_ERROR "PYTHON_INSTALL_PATH is NOT set")
+    endif()
     get_filename_component(py_src_abs_dir ${py_src_dir} ABSOLUTE)
     if(ARGC GREATER 1)
         #install each module seperately
@@ -176,9 +179,13 @@ endfunction()
 # Set where headers should be output locally
 set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
 
-find_package(PythonInterp 3.6 MODULE REQUIRED)
-execute_process(
-  COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
-  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-set(PYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
+find_package(PythonInterp 3.6 MODULE)
+if(PYTHONINTERP_FOUND)
+  execute_process(
+    COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
+    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(PYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
+else()
+  set(PYTHON_INSTALL_PATH)
+endif()

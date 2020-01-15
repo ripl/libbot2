@@ -11,9 +11,6 @@ include_guard(GLOBAL)
 # C/C++
 #   pods_install_headers(...)
 #
-# Python
-#   pods_install_python_packages(...)
-#
 # ----
 # File: pods.cmake
 # Distributed with pods version: 12.09.21
@@ -115,70 +112,5 @@ function(pods_install_pkg_config_file)
     install(FILES ${pc_fname} DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 endfunction()
 
-# _pods_install_python_package(<py_src_dir> <py_module_name>)
-#
-# Internal helper function
-# Install python module in <py_src_dir> to lib/pythonX.Y/dist-packages/<py_module_name>,
-# where X.Y refers to the current python version (e.g., 2.6)
-#
-function(_pods_install_python_package py_src_dir py_module_name)
-    if(EXISTS "${py_src_dir}/__init__.py")
-        #install the single module
-        file(GLOB_RECURSE py_files   ${py_src_dir}/*.py)
-        foreach(py_file ${py_files})
-            file(RELATIVE_PATH __tmp_path ${py_src_dir} ${py_file})
-            get_filename_component(__tmp_dir ${__tmp_path} PATH)
-            install(FILES ${py_file}
-                DESTINATION "${PYTHON_INSTALL_PATH}/${py_module_name}/${__tmp_dir}")
-        endforeach()
-    else()
-        message(FATAL_ERROR "${py_src_dir} is not a python package!\n")
-    endif()
-endfunction()
-
-# pods_install_python_packages(<src_dir1> ...)
-#
-# Install python packages to lib/pythonX.Y/dist-packages, where X.Y refers to
-# the current python version (e.g., 2.6)
-#
-# For each <src_dir> pass in, it will do the following:
-# If <src_dir> is a python package (it has a __init__.py file) it will be installed
-# along with any .py files in subdirectories
-#
-# Otherwise the script searches for and installs any python packages in <src_dir>
-function(pods_install_python_packages py_src_dir)
-    get_filename_component(py_src_abs_dir ${py_src_dir} ABSOLUTE)
-    if(ARGC GREATER 1)
-        #install each module seperately
-        foreach(py_module ${ARGV})
-            pods_install_python_packages(${py_module})
-        endforeach()
-    elseif(EXISTS "${py_src_abs_dir}/__init__.py")
-        #install the single module by name
-        get_filename_component(py_module_name ${py_src_abs_dir} NAME)
-        _pods_install_python_package(${py_src_abs_dir} ${py_module_name})
-    else()
-        # install any packages within the passed in py_src_dir
-        set(_installed_a_package FALSE)
-        file(GLOB sub-dirs RELATIVE ${py_src_abs_dir} ${py_src_abs_dir}/*)
-        foreach(sub-dir ${sub-dirs})
-            if(EXISTS "${py_src_abs_dir}/${sub-dir}/__init__.py")
-                _pods_install_python_package(${py_src_abs_dir}/${sub-dir} ${sub-dir})
-                set(_installed_a_package TRUE)
-            endif()
-        endforeach()
-        if (NOT _installed_a_package)
-            message(FATAL_ERROR "${py_src_dir} does not contain any python packages!\n")
-        endif()
-    endif()
-endfunction()
-
 # Set where headers should be output locally
 set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
-
-find_package(PythonInterp 3.6 MODULE REQUIRED)
-execute_process(
-  COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
-  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-set(PYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")
