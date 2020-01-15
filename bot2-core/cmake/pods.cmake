@@ -68,7 +68,7 @@ function(pods_install_pkg_config_file)
     set(pc_requires "")
     set(pc_libs "")
     set(pc_cflags "")
-    set(pc_fname "${PKG_CONFIG_OUTPUT_PATH}/${pc_name}.pc")
+    set(pc_fname "${CMAKE_CURRENT_BINARY_DIR}/${pc_name}.pc")
 
     set(modewords LIBS CFLAGS REQUIRES VERSION DESCRIPTION)
     set(curmode "")
@@ -173,20 +173,8 @@ function(pods_install_python_packages py_src_dir)
     endif()
 endfunction()
 
-# Setup include, linker, and pkg-config paths according to the pods core
-# policy.
-
-# Set where files should be output locally
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+# Set where headers should be output locally
 set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
-set(PKG_CONFIG_OUTPUT_PATH ${LIBRARY_OUTPUT_PATH}/pkgconfig)
-
-# Set where files should be installed to
-set(LIBRARY_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-set(EXECUTABLE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR})
-set(INCLUDE_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-set(PKG_CONFIG_INSTALL_PATH ${LIBRARY_INSTALL_PATH}/pkgconfig)
 
 find_package(PythonInterp 3.6 MODULE REQUIRED)
 execute_process(
