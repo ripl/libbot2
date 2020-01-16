@@ -18,11 +18,17 @@ include(CheckCCompilerFlag)
 check_c_compiler_flag(-D_FORTIFY_SOURCE=2
   C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2
 )
+check_c_compiler_flag(-fcf-protection
+  C_COMPILER_SUPPORTS_FCF_PROTECTION
+)
 check_c_compiler_flag(-fno-common
   C_COMPILER_SUPPORTS_FNO_COMMON
 )
 check_c_compiler_flag(-fsanitize=safe-stack
   C_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK
+)
+check_c_compiler_flag(-fstack-clash-protection
+  C_COMPILER_SUPPORTS_FSTACK_CLASH_PROTECTION
 )
 check_c_compiler_flag(-fstack-protector
   C_COMPILER_SUPPORTS_FSTACK_PROTECTOR
@@ -43,11 +49,19 @@ check_c_compiler_flag(-Wno-unused
   C_COMPILER_SUPPORTS_WNO_UNUSED
 )
 
-if(C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
+if(C_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2 AND
+  NOT CMAKE_C_FLAGS MATCHES "-fsanitize=(address|thread|undefined)"
+)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_FORTIFY_SOURCE=2")
+endif()
+if(C_COMPILER_SUPPORTS_FCF_PROTECTION)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcf-protection")
 endif()
 if(C_COMPILER_SUPPORTS_FNO_COMMON)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-common")
+endif()
+if(C_COMPILER_SUPPORTS_FSTACK_CLASH_PROTECTION)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-clash-protection")
 endif()
 if(C_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
@@ -72,11 +86,17 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag(-D_FORTIFY_SOURCE=2
   CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2
 )
+check_cxx_compiler_flag(-fcf-protection
+  CXX_COMPILER_SUPPORTS_FCF_PROTECTION
+)
 check_cxx_compiler_flag(-fno-common
   CXX_COMPILER_SUPPORTS_FNO_COMMON
 )
 check_cxx_compiler_flag(-fsanitize=safe-stack
   CXX_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK
+)
+check_cxx_compiler_flag(-fstack-clash-protection
+  CXX_COMPILER_SUPPORTS_FSTACK_CLASH_PROTECTION
 )
 check_cxx_compiler_flag(-fstack-protector
   CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR
@@ -97,11 +117,19 @@ check_cxx_compiler_flag(-Wno-unused
   CXX_COMPILER_SUPPORTS_WNO_UNUSED
 )
 
-if(CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2)
+if(CXX_COMPILER_SUPPORTS_D_FORTIFY_SOURCE_2 AND
+  NOT CMAKE_CXX_FLAGS MATCHES "-fsanitize=(address|thread|undefined)"
+)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FORTIFY_SOURCE=2")
+endif()
+if(CXX_COMPILER_SUPPORTS_FCF_PROTECTION)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcf-protection")
 endif()
 if(CXX_COMPILER_SUPPORTS_FNO_COMMON)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-common")
+endif()
+if(CXX_COMPILER_SUPPORTS_FSTACK_CLASH_PROTECTION)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-clash-protection")
 endif()
 if(CXX_COMPILER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
@@ -149,7 +177,12 @@ if(C_COMPILER_SUPPORTS_FSANITIZE_SAFE_STACK AND
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=safe-stack")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=safe-stack")
 endif()
-if(LINKER_SUPPORTS_Z_DEFS)
+if(LINKER_SUPPORTS_Z_DEFS AND
+  NOT CMAKE_C_FLAGS MATCHES -fsanitize=address AND
+  NOT CMAKE_CXX_FLAGS MATCHES -fsanitize=address AND
+  NOT CMAKE_EXE_LINKER_FLAGS MATCHES -fsanitize=address AND
+  NOT CMAKE_SHARED_LINKER_FLAGS MATCHES -fsanitize=address
+)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,defs")
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
 endif()

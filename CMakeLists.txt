@@ -6,13 +6,21 @@ project(libbot2
   LANGUAGES C CXX
 )
 
+list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
+
+include(CheckCCompilerFlag)
+include(CheckCXXCompilerFlag)
+include(CheckLinkerFlag)
+include(CMakeDependentOption)
+include(CMakePackageConfigHelpers)
+include(ExternalProject)
+include(GNUInstallDirs)
+
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install" CACHE STRING
     "Install path prefix, prepended onto install directories" FORCE
   )
 endif()
-
-include(GNUInstallDirs)
 
 option(PACKAGE_LIBBOT2 "Set install prefix to package libbot2 on linux" OFF)
 if(PACKAGE_LIBBOT2)
@@ -32,10 +40,6 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 
-list(INSERT CMAKE_MODULE_PATH 0 "${PROJECT_SOURCE_DIR}/cmake/modules")
-
-include(CMakePackageConfigHelpers)
-
 find_package(lcm 1.4 CONFIG REQUIRED)
 find_package(GLib2 2.32 MODULE REQUIRED)
 find_package(Java 1.8 MODULE)
@@ -47,35 +51,204 @@ find_package(PythonInterp 3.6 MODULE)
 # Look for the gdkx.h header to decide whether the local gtk3 install has
 # X11 support or not.
 find_file(GDKX_HEADER gdkx.h PATH_SUFFIXES gtk-3.0/gdk)
-
 if(GDKX_HEADER)
   message(STATUS "gdkx.h found, system appears to have GTK+ X11 support")
 else()
   message(STATUS "gdkx.h not found, system does not appear to have GTK+ X11 support")
 endif()
-
 mark_as_advanced(GDKX_HEADER)
-
-include(CMakeDependentOption)
 
 cmake_dependent_option(WITH_BOT_VIS "Build with bot2-vis" ON GDKX_HEADER OFF)
 
-include(ExternalProject)
-
-set(SubprojectBinary_dir
-${CMAKE_SYSTEM_PREFIX_PATH}
-${CMAKE_PREFIX_PATH}
-${PROJECT_BINARY_DIR}/bot2-core
-${PROJECT_BINARY_DIR}/bot2-procman
-${PROJECT_BINARY_DIR}/bot2-lcm-utils
-${PROJECT_BINARY_DIR}/bot2-param
-${PROJECT_BINARY_DIR}/bot2-vis
-${PROJECT_BINARY_DIR}/bot2-lcmgl
-${PROJECT_BINARY_DIR}/bot2-frames
+cmake_dependent_option(ADDRESS_SANITIZER "Enable AddressSanitizer" OFF
+  THREAD_SANITIZER OFF
 )
-string(REPLACE ";" ":::" SubprojectBinary_dir "${SubprojectBinary_dir}")
+if(ADDRESS_SANITIZER)
+  check_c_compiler_flag(-fsanitize=address
+    C_COMPILER_SUPPORTS_FSANITIZE_ADDRESS
+  )
+  if(NOT C_COMPILER_SUPPORTS_FSANITIZE_ADDRESS)
+    message(FATAL_ERROR "C compiler does NOT support flag -fsanitize=address")
+  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+  check_c_compiler_flag(-fsanitize-address-use-after-scope
+    C_COMPILER_SUPPORTS_FSANITIZE_ADDRESS_USE_AFTER_SCOPE
+  )
+  if(C_COMPILER_SUPPORTS_FSANITIZE_ADDRESS_USE_AFTER_SCOPE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize-address-use-after-scope")
+  endif()
+  check_c_compiler_flag(-fsanitize=pointer-compare
+    C_COMPILER_SUPPORTS_FSANITIZE_POINTER_COMPARE
+  )
+  if(C_COMPILER_SUPPORTS_FSANITIZE_POINTER_COMPARE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=pointer-compare")
+  endif()
+  check_c_compiler_flag(-fsanitize=pointer-subtract
+    C_COMPILER_SUPPORTS_FSANITIZE_POINTER_SUBTRACT
+  )
+  if(C_COMPILER_SUPPORTS_FSANITIZE_POINTER_SUBTRACT)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=pointer-subtract")
+  endif()
+  check_c_compiler_flag(-fsanitize-recover=address
+    C_COMPILER_SUPPORTS_FSANITIZE_RECOVER_ADDRESS
+  )
+  if(C_COMPILER_SUPPORTS_FSANITIZE_RECOVER_ADDRESS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize-recover=address")
+  endif()
+  check_cxx_compiler_flag(-fsanitize=address
+    CXX_COMPILER_SUPPORTS_FSANITIZE_ADDRESS
+  )
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
+  if(NOT CXX_COMPILER_SUPPORTS_FSANITIZE_ADDRESS)
+    message(FATAL_ERROR "C++ compiler does NOT support flag -fsanitize=address")
+  endif()
+  check_cxx_compiler_flag(-fsanitize-address-use-after-scope
+    CXX_COMPILER_SUPPORTS_FSANITIZE_ADDRESS_USE_AFTER_SCOPE
+  )
+  if(CXX_COMPILER_SUPPORTS_FSANITIZE_ADDRESS_USE_AFTER_SCOPE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-address-use-after-scope")
+  endif()
+  check_cxx_compiler_flag(-fsanitize=pointer-compare
+    CXX_COMPILER_SUPPORTS_FSANITIZE_POINTER_COMPARE
+  )
+  if(CXX_COMPILER_SUPPORTS_FSANITIZE_POINTER_COMPARE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=pointer-compare")
+  endif()
+  check_cxx_compiler_flag(-fsanitize=pointer-subtract
+    CXX_COMPILER_SUPPORTS_FSANITIZE_POINTER_SUBTRACT
+  )
+  if(CXX_COMPILER_SUPPORTS_FSANITIZE_POINTER_SUBTRACT)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=pointer-subtract")
+  endif()
+  check_cxx_compiler_flag(-fsanitize-recover=address
+    CXX_COMPILER_SUPPORTS_FSANITIZE_RECOVER_ADDRESS
+  )
+  if(CXX_COMPILER_SUPPORTS_FSANITIZE_RECOVER_ADDRESS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=address")
+  endif()
+  check_linker_flag(-fsanitize=address LINKER_SUPPORTS_FSANITIZE_ADDRESS)
+  if(NOT LINKER_SUPPORTS_FSANITIZE_ADDRESS)
+    message(FATAL_ERROR "linker does NOT support flag -fsanitize=address")
+  endif()
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=address")
+  set(CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address"
+  )
+  if(CMAKE_EXE_LINKER_FLAGS MATCHES "-Wl,-z,defs" OR
+    CMAKE_SHARED_LINKER_FLAGS MATCHES "-Wl,-z,defs"
+  )
+    message(FATAL_ERROR "-Wl,-z,defs is NOT compatible with -fsanitize=address")
+  endif()
+endif()
 
-# pass thru certain cmake variables.
+cmake_dependent_option(THREAD_SANITIZER "Enable ThreadSanitizer" OFF
+  "ADDRESS_SANITIZER OR UNDEFINED_BEHAVIOR_SANITIZER" OFF
+)
+if(THREAD_SANITIZER)
+  check_c_compiler_flag(-fsanitize=thread
+    C_COMPILER_SUPPORTS_FSANITIZE_THREAD
+  )
+  if(NOT C_COMPILER_SUPPORTS_FSANITIZE_THREAD)
+    message(FATAL_ERROR "C compiler does NOT support flag -fsanitize=thread")
+  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread")
+  check_cxx_compiler_flag(-fsanitize=thread
+    CXX_COMPILER_SUPPORTS_FSANITIZE_THREAD
+  )
+  if(NOT CXX_COMPILER_SUPPORTS_FSANITIZE_THREAD)
+    message(FATAL_ERROR "C++ compiler does NOT support flag -fsanitize=thread")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread")
+  check_linker_flag(-fsanitize=thread LINKER_SUPPORTS_FSANITIZE_THREAD)
+  if(NOT LINKER_SUPPORTS_FSANITIZE_THREAD)
+    message(FATAL_ERROR "linker does NOT support flag -fsanitize=thread")
+  endif()
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=thread")
+  set(CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=thread"
+  )
+endif()
+
+cmake_dependent_option(UNDEFINED_BEHAVIOR_SANITIZER
+  "Enable UndefinedBehaviorSanitizer" OFF THREAD_SANITIZER OFF
+)
+if(UNDEFINED_BEHAVIOR_SANITIZER)
+  check_c_compiler_flag(-fsanitize=undefined
+    C_COMPILER_SUPPORTS_FSANITIZE_UNDEFINED
+  )
+  if(NOT C_COMPILER_SUPPORTS_FSANITIZE_UNDEFINED)
+    message(FATAL_ERROR "C compiler does NOT support flag -fsanitize=undefined")
+  endif()
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=undefined")
+  check_c_compiler_flag(-fsanitize-recover=undefined
+    C_COMPILER_SUPPORTS_FSANITIZE_RECOVER_UNDEFINED
+  )
+  if(C_COMPILER_SUPPORTS_FSANITIZE_RECOVER_UNDEFINED)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize-recover=undefined")
+  endif()
+  check_cxx_compiler_flag(-fsanitize=undefined
+    CXX_COMPILER_SUPPORTS_FSANITIZE_UNDEFINED
+  )
+  if(NOT CXX_COMPILER_SUPPORTS_FSANITIZE_UNDEFINED)
+    message(FATAL_ERROR
+      "C++ compiler does NOT support flag -fsanitize=undefined"
+    )
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+  check_cxx_compiler_flag(-fsanitize-recover=undefined
+    CXX_COMPILER_SUPPORTS_FSANITIZE_RECOVER_UNDEFINED
+  )
+  if(CXX_COMPILER_SUPPORTS_FSANITIZE_RECOVER_UNDEFINED)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=undefined")
+  endif()
+  check_linker_flag(-fsanitize=undefined LINKER_SUPPORTS_FSANITIZE_UNDEFINED)
+  if(NOT LINKER_SUPPORTS_FSANITIZE_UNDEFINED)
+    message(FATAL_ERROR "linker does NOT support flag -fsanitize=undefined")
+  endif()
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
+  set(CMAKE_SHARED_LINKER_FLAGS
+    "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=undefined"
+  )
+endif()
+
+if(ADDRESS_SANITIZER OR THREAD_SANITIZER OR UNDEFINED_BEHAVIOR_SANITIZER)
+  check_c_compiler_flag(-fno-omit-frame-pointer
+    C_COMPILER_SUPPORTS_FNO_OMIT_FRAME_POINTER
+  )
+  if(C_COMPILER_SUPPORTS_FNO_OMIT_FRAME_POINTER)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
+  endif()
+  check_cxx_compiler_flag(-fno-omit-frame-pointer
+    CXX_COMPILER_SUPPORTS_FNO_OMIT_FRAME_POINTER
+  )
+  if(CXX_COMPILER_SUPPORTS_FNO_OMIT_FRAME_POINTER)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer")
+  endif()
+  check_c_compiler_flag(-fno-optimize-sibling-calls
+    C_COMPILER_SUPPORTS_FNO_OPTIMIZE_SIBLING_CALLS
+  )
+  if(C_COMPILER_SUPPORTS_FNO_OPTIMIZE_SIBLING_CALLS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-optimize-sibling-calls")
+  endif()
+  check_cxx_compiler_flag(-fno-optimize-sibling-calls
+    CXX_COMPILER_SUPPORTS_FNO_OPTIMIZE_SIBLING_CALLS
+  )
+  if(CXX_COMPILER_SUPPORTS_FNO_OPTIMIZE_SIBLING_CALLS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-optimize-sibling-calls")
+  endif()
+endif()
+
+list(APPEND CMAKE_PREFIX_PATH
+  "${PROJECT_BINARY_DIR}/bot2-core"
+  "${PROJECT_BINARY_DIR}/bot2-procman"
+  "${PROJECT_BINARY_DIR}/bot2-lcm-utils"
+  "${PROJECT_BINARY_DIR}/bot2-param"
+  "${PROJECT_BINARY_DIR}/bot2-vis"
+  "${PROJECT_BINARY_DIR}/bot2-lcmgl"
+  "${PROJECT_BINARY_DIR}/bot2-frames"
+)
+string(REPLACE ";" ":::" PREFIX_PATH "${CMAKE_PREFIX_PATH}")
+
 set(COMMON_CMAKE_ARGS
   -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
   -DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=${CMAKE_BUILD_WITH_INSTALL_RPATH}
@@ -89,16 +262,31 @@ set(COMMON_CMAKE_ARGS
   "-DCMAKE_EXE_LINKER_FLAGS:STRING=${CMAKE_EXE_LINKER_FLAGS}"
   "-DCMAKE_INSTALL_NAME_DIR:STRING=${CMAKE_INSTALL_NAME_DIR}"
   "-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}"
-  "-DCMAKE_PREFIX_PATH:PATH=${SubprojectBinary_dir}"
+  "-DCMAKE_PREFIX_PATH:STRING=${PREFIX_PATH}"
   "-DCMAKE_SHARED_LINKER_FLAGS:STRING=${CMAKE_SHARED_LINKER_FLAGS}"
   -DCMAKE_SKIP_INSTALL_RPATH:BOOL=${CMAKE_SKIP_INSTALL_RPATH}
   -DCMAKE_SKIP_RPATH:BOOL=${CMAKE_SKIP_RPATH}
   "-DCMAKE_STATIC_LINKER_FLAGS:STRING=${CMAKE_STATIC_LINKER_FLAGS}"
-  -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
   "-DJava_JAVA_EXECUTABLE:FILEPATH=${Java_JAVA_EXECUTABLE}"
   "-Dlcm_DIR:PATH=${lcm_DIR}"
   "-DPYTHON_EXECUTABLE:FILEPATH=${PYTHON_EXECUTABLE}"
+)
+if(DEFINED CMAKE_COLOR_MAKEFILE)
+  list(APPEND COMMON_CMAKE_ARGS
+    -DCMAKE_COLOR_MAKEFILE:BOOL=${CMAKE_COLOR_MAKEFILE}
   )
+endif()
+if(CMAKE_SYSTEM_PREFIX_PATH)
+  string(REPLACE ";" ":::" SYSTEM_PREFIX_PATH "${CMAKE_SYSTEM_PREFIX_PATH}")
+  list(APPEND COMMON_CMAKE_ARGS
+    "-DCMAKE_SYSTEM_PREFIX_PATH:STRING=${SYSTEM_PREFIX_PATH}"
+  )
+endif()
+if(DEFINED CMAKE_VERBOSE_MAKEFILE)
+  list(APPEND COMMON_CMAKE_ARGS
+    -DCMAKE_VERBOSE_MAKEFILE:BOOL=${CMAKE_VERBOSE_MAKEFILE}
+  )
+endif()
 
 option(CLANG_TIDY "Run the clang-tidy tool during the build" OFF)
 if(CLANG_TIDY)
@@ -147,6 +335,7 @@ if(CMAKE_CXX_CPPCHECK)
     "-DCMAKE_CXX_CPPCHECK:STRING=${CXX_CPPCHECK}"
   )
 endif()
+
 option(CPPLINT "Run the cpplint tool during the build" OFF)
 if(CPPLINT)
   find_program(CPPLINT_EXECUTABLE NAMES cpplint.py cpplint)
@@ -211,7 +400,6 @@ if(LINK_WHAT_YOU_USE)
     message(FATAL_ERROR "ldd was NOT found (missing: LDD_EXECUTABLE)")
   endif()
   mark_as_advanced(LDD_EXECUTABLE)
-  include(CheckLinkerFlag)
   check_linker_flag(-Wl,--no-as-needed LINKER_SUPPORTS_NO_AS_NEEDED)
   if(NOT LINKER_SUPPORTS_NO_AS_NEEDED)
     message(FATAL_ERROR "linker does NOT support flag --no-as-needed")
