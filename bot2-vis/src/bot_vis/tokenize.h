@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -20,38 +23,45 @@
 
 #include <stdio.h>
 
-typedef struct tokenize
-{
-    // current token
-    char *token;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-    // position where last token started
-    int line, column;
+typedef struct tokenize {
+  // current token
+  char* token;
 
-    // position where next token starts
-    int nextline, nextcolumn;
+  // position where last token started
+  int line, column;
 
-    // used to track accurate positions wrt ungetc
-    int save_line, save_column;
-    int unget_char; // the char that was unget'd, or -1
+  // position where next token starts
+  int nextline, nextcolumn;
 
-    // current position of parser (end of last token, usually)
-    int in_line, in_column;
+  // used to track accurate positions wrt ungetc
+  int save_line, save_column;
+  int unget_char;  // the char that was unget'd, or -1
 
-    // the current line
-    char *line_buffer;
-    int  line_pos, line_len;
+  // current position of parser (end of last token, usually)
+  int in_line, in_column;
 
-    char *path;
-    FILE *f;
+  // the current line
+  char* line_buffer;
+  int line_pos, line_len;
 
-    // do we have a token ready?
-    int hasnext;
+  char* path;
+  FILE* f;
+
+  // do we have a token ready?
+  int hasnext;
 } tokenize_t;
 
-tokenize_t *tokenize_create(const char *path);
-void tokenize_destroy(tokenize_t *t);
-int tokenize_next(tokenize_t *t);
-int tokenize_peek(tokenize_t *t);
+tokenize_t* tokenize_create(const char* path);
+void tokenize_destroy(tokenize_t* t);
+int tokenize_next(tokenize_t* t);
+int tokenize_peek(tokenize_t* t);
 
-#endif  /* BOT2_VIS_BOT_VIS_TOKENIZE_H_ */
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // BOT2_VIS_BOT_VIS_TOKENIZE_H_

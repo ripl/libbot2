@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -34,54 +37,50 @@ extern "C" {
 
 #include <glib.h>
 
-typedef struct _bot_rwx_vertex
-{
-    double pos[3];
-    int id;
+typedef struct _bot_rwx_vertex {
+  double pos[3];
+  int id;
 } BotRwxVertex;
 
-typedef struct _bot_rwx_triangle
-{
-    int vertices[3];
+typedef struct _bot_rwx_triangle {
+  int vertices[3];
 } BotRwxTriangle;
 
-typedef struct _bot_rwx_clump
-{
-    double color[3];
-    double diffuse;
-    double specular;
-    double opacity;
-    double ambient;
-    char *name;
-    BotRwxVertex *vertices;
-    BotRwxTriangle *triangles;
-    int nvertices;
-    int ntriangles;
+typedef struct _bot_rwx_clump {
+  double color[3];
+  double diffuse;
+  double specular;
+  double opacity;
+  double ambient;
+  char* name;
+  BotRwxVertex* vertices;
+  BotRwxTriangle* triangles;
+  int nvertices;
+  int ntriangles;
 } BotRwxClump;
 
-typedef struct _bot_rwx_model
-{
-    GList *clumps;
-    int nclumps;
+typedef struct _bot_rwx_model {
+  GList* clumps;
+  int nclumps;
 } BotRwxModel;
 
-BotRwxModel * bot_rwx_model_create( const char *fname );
+BotRwxModel* bot_rwx_model_create(const char* fname);
 
-void bot_rwx_model_destroy( BotRwxModel *model );
+void bot_rwx_model_destroy(BotRwxModel* model);
 
-void bot_rwx_model_apply_transform( BotRwxModel *model, double m[16]);
+void bot_rwx_model_apply_transform(BotRwxModel* model, double m[16]);
 
-void bot_rwx_model_gl_draw( BotRwxModel *model );
+void bot_rwx_model_gl_draw(BotRwxModel* model);
 
-void bot_rwx_model_get_extrema (BotRwxModel * model,
-        double minv[3], double maxv[3]);
+void bot_rwx_model_get_extrema(BotRwxModel* model, double minv[3],
+                               double maxv[3]);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif  /* BOT2_VIS_BOT_VIS_RWX_H_ */
+#endif  // BOT2_VIS_BOT_VIS_RWX_H_

@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -56,30 +59,33 @@ extern "C" {
  * @extension: Filename extension to be used.  Use NULL if no extension
  *    is desired.
  */
-char *
-bot_fileutils_get_unique_filename (const char * path, const char * basename,
-        uint8_t time_prefix, const char * extension);
+char* bot_fileutils_get_unique_filename(const char* path, const char* basename,
+                                        uint8_t time_prefix,
+                                        const char* extension);
 
-int bot_fileutils_write_fully(int fd, const void *b, int len);
-int bot_fileutils_read_fully(int fd, void *b, int len);
-int bot_fileutils_read_timeout(int fd, void *buf, int maxlen, int msTimeout);
-int bot_fileutils_read_fully_timeout(int fd, void *bufin, int len, int msTimeout);
-int bot_fileutils_read_line_timeout(int fd, void *buf, int maxlen, int msTimeout);
-int bot_fileutils_read_line_timeout_ex(int fd, void *buf_in, int maxlen, int msTimeout, int *timed_out);
+int bot_fileutils_write_fully(int fd, const void* b, int len);
+int bot_fileutils_read_fully(int fd, void* b, int len);
+int bot_fileutils_read_timeout(int fd, void* buf, int maxlen, int msTimeout);
+int bot_fileutils_read_fully_timeout(int fd, void* bufin, int len,
+                                     int msTimeout);
+int bot_fileutils_read_line_timeout(int fd, void* buf, int maxlen,
+                                    int msTimeout);
+int bot_fileutils_read_line_timeout_ex(int fd, void* buf_in, int maxlen,
+                                       int msTimeout, int* timed_out);
 int bot_fileutils_read_available(int fd);
 void bot_fileutils_read_flush(int fd);
 
-int bot_fileutils_fwrite32(FILE *f, int32_t v);
-int bot_fileutils_fwrite64(FILE *f, int64_t v64);
-int bot_fileutils_fread32(FILE *f, int32_t *v32);
-int bot_fileutils_fread64(FILE *f, int64_t *v64);
+int bot_fileutils_fwrite32(FILE* f, int32_t v);
+int bot_fileutils_fwrite64(FILE* f, int64_t v64);
+int bot_fileutils_fread32(FILE* f, int32_t* v32);
+int bot_fileutils_fread64(FILE* f, int64_t* v64);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif  /* BOT2_CORE_BOT_CORE_FILEUTILS_H_ */
+#endif  // BOT2_CORE_BOT_CORE_FILEUTILS_H_

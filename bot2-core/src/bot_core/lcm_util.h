@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -54,7 +57,7 @@ extern "C" {
  *
  * Returns: 0 on success, -1 on failure
  */
-int bot_glib_mainloop_attach_lcm(lcm_t *lcm);
+int bot_glib_mainloop_attach_lcm(lcm_t* lcm);
 
 /**
  * bot_glib_mainloop_detach_lcm:
@@ -66,7 +69,7 @@ int bot_glib_mainloop_attach_lcm(lcm_t *lcm);
  *
  * Returns: 0 on success, -1 on failure.
  */
-int bot_glib_mainloop_detach_lcm(lcm_t *lcm);
+int bot_glib_mainloop_detach_lcm(lcm_t* lcm);
 
 /**
  * bot_glib_mainloop_attach_lcm_full:
@@ -80,8 +83,8 @@ int bot_glib_mainloop_detach_lcm(lcm_t *lcm);
  *
  * Returns: 0 on success, -1 on failure.
  */
-int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
-        gboolean quit_on_lcm_fail);
+int bot_glib_mainloop_attach_lcm_full(GMainLoop* mainloop, lcm_t* lcm,
+                                      gboolean quit_on_lcm_fail);
 
 /**
  * bot_lcm_get_global:
@@ -97,7 +100,7 @@ int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
  *
  * Returns: pointer to lcm_t
  */
-lcm_t *bot_lcm_get_global(const char *provider);
+lcm_t* bot_lcm_get_global(const char* provider);
 
 /**
  * bot_lcm_handle_or_timeout:
@@ -106,12 +109,11 @@ lcm_t *bot_lcm_get_global(const char *provider);
  *
  *  Waits for up to @timeout seconds for an LCM message to arrive.
  *  It handles the first message if one arrives.
- *
  */
-void bot_lcm_handle_or_timeout(lcm_t * lcm, int64_t timeout);
+void bot_lcm_handle_or_timeout(lcm_t* lcm, int64_t timeout);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_LCM_UTIL_H_ */
+#endif  // BOT2_CORE_BOT_CORE_LCM_UTIL_H_

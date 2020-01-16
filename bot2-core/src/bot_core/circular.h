@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -42,45 +45,40 @@ extern "C" {
  * @{
  */
 typedef struct _BotCircular {
-    int len;
-    int capacity;
-    int element_size;
-    int head;
-    void * array;
+  int len;
+  int capacity;
+  int element_size;
+  int head;
+  void* array;
 } BotCircular;
 
-BotCircular *
-bot_circular_new (int capacity, int element_size);
-void
-bot_circular_free (BotCircular * circular);
-void
-bot_circular_clear (BotCircular * circular);
-int
-bot_circular_push_head (BotCircular * circular, const void * data);
-int
-bot_circular_pop_tail (BotCircular * circular, void * data);
-int
-bot_circular_pop_head (BotCircular * circular, void * data);
+BotCircular* bot_circular_new(int capacity, int element_size);
+void bot_circular_free(BotCircular* circular);
+void bot_circular_clear(BotCircular* circular);
+int bot_circular_push_head(BotCircular* circular, const void* data);
+int bot_circular_pop_tail(BotCircular* circular, void* data);
+int bot_circular_pop_head(BotCircular* circular, void* data);
 
 /**
  * bot_circular_size:
  * Returns: the number of valid elements.
  */
-int bot_circular_size(BotCircular *circular);
+int bot_circular_size(BotCircular* circular);
 
 #define bot_circular_is_empty(a) ((a)->len == 0)
 
 #define bot_circular_is_full(a) ((a)->len >= (a)->capacity)
 
-#define bot_circular_peek_nth(a,i) \
-    ((void*)((char*)(a)->array + (((a)->head + (i)) % (a)->capacity) * (a)->element_size))
+#define bot_circular_peek_nth(a, i) \
+  ((void*)((char*)(a)->array +      \
+           (((a)->head + (i)) % (a)->capacity) * (a)->element_size))
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_CIRCULAR_H_ */
+#endif  // BOT2_CORE_BOT_CORE_CIRCULAR_H_

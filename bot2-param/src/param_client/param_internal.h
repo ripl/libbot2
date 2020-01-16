@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-param.
  *
@@ -25,6 +28,10 @@
 #define BOT_PARAM_SET_CHANNEL "PARAM_SET"
 #define BOT_PARAM_INCLUDE_KEYWORD "INCLUDE"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * bot_param_set_int:
  * @param: The configuration.
@@ -36,10 +43,7 @@
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_int (BotParam * param,
-                const char * key,
-                int val);
+int bot_param_set_int(BotParam* param, const char* key, int val);
 
 /**
  * bot_param_set_boolean:
@@ -52,10 +56,7 @@ bot_param_set_int (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_boolean (BotParam * param,
-                    const char * key,
-                    int val);
+int bot_param_set_boolean(BotParam* param, const char* key, int val);
 
 /**
  * bot_param_set_double:
@@ -68,10 +69,7 @@ bot_param_set_boolean (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_double (BotParam * param,
-                   const char * key,
-                   double val);
+int bot_param_set_double(BotParam* param, const char* key, double val);
 
 /**
  * bot_param_set_str:
@@ -84,10 +82,7 @@ bot_param_set_double (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_str (BotParam * param,
-                const char * key,
-                const char * val);
+int bot_param_set_str(BotParam* param, const char* key, const char* val);
 
 /**
  * bot_param_set_int_array:
@@ -101,11 +96,8 @@ bot_param_set_str (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_int_array (BotParam * param,
-                      const char * key,
-                      int * vals,
-                      int len);
+int bot_param_set_int_array(BotParam* param, const char* key, int* vals,
+                            int len);
 
 /**
  * bot_param_set_boolean_array:
@@ -119,11 +111,8 @@ bot_param_set_int_array (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_boolean_array (BotParam * param,
-                          const char * key,
-                          int * vals,
-                          int len);
+int bot_param_set_boolean_array(BotParam* param, const char* key, int* vals,
+                                int len);
 
 /**
  * bot_param_set_double_array:
@@ -137,11 +126,8 @@ bot_param_set_boolean_array (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_double_array (BotParam * param,
-                         const char * key,
-                         double * vals,
-                         int len);
+int bot_param_set_double_array(BotParam* param, const char* key, double* vals,
+                               int len);
 
 /**
  * bot_param_set_str_array:
@@ -155,10 +141,11 @@ bot_param_set_double_array (BotParam * param,
  *
  * Returns: 0 on success, -1 on failure.
  */
-int
-bot_param_set_str_array (BotParam * param,
-                      const char * key,
-                      const char ** vals,
-                      int len);
+int bot_param_set_str_array(BotParam* param, const char* key, const char** vals,
+                            int len);
 
-#endif  /* BOT2_PARAM_BOT_PARAM_PARAM_INTERNAL_H_ */
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // BOT2_PARAM_BOT_PARAM_PARAM_INTERNAL_H_

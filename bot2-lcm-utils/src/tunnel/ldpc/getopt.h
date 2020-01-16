@@ -12,6 +12,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // function prototypes
-int GetOption (int argc, char** argv, char* pszValidOpts, char** ppszParam);
+int GetOption(int argc, char** argv, char* pszValidOpts, char** ppszParam);
 
 #endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_GETOPT_H_

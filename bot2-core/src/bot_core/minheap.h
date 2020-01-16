@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -38,29 +41,29 @@ extern "C" {
 typedef struct _BotMinheap BotMinheap;
 typedef struct _BotMinheapNode BotMinheapNode;
 
-BotMinheap *bot_minheap_new(void);
+BotMinheap* bot_minheap_new(void);
 
-BotMinheap *bot_minheap_sized_new(int capacity);
+BotMinheap* bot_minheap_sized_new(int capacity);
 
-void bot_minheap_free(BotMinheap *mh);
+void bot_minheap_free(BotMinheap* mh);
 
-BotMinheapNode *bot_minheap_add (BotMinheap *mh, void *data, double score);
+BotMinheapNode* bot_minheap_add(BotMinheap* mh, void* data, double score);
 
-void bot_minheap_decrease_score (BotMinheap *mh, BotMinheapNode *node,
-        double score);
+void bot_minheap_decrease_score(BotMinheap* mh, BotMinheapNode* node,
+                                double score);
 
-void *bot_minheap_remove_min (BotMinheap *mh, double *score);
+void* bot_minheap_remove_min(BotMinheap* mh, double* score);
 
-int bot_minheap_size (BotMinheap *mh);
+int bot_minheap_size(BotMinheap* mh);
 
-gboolean bot_minheap_is_empty (BotMinheap *mh);
+gboolean bot_minheap_is_empty(BotMinheap* mh);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif  /* BOT2_CORE_BOT_CORE_MINHEAP_H_ */
+#endif  // BOT2_CORE_BOT_CORE_MINHEAP_H_

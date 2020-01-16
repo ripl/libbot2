@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-lcmgl.
  *
@@ -18,7 +21,7 @@
 #ifndef BOT2_LCMGL_LCMGL_VIEWER_UDP_UTIL_H_
 #define BOT2_LCMGL_LCMGL_VIEWER_UDP_UTIL_H_
 
-#include <string.h>  /* IWYU pragma: keep */
+#include <string.h>  // IWYU pragma: keep
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,12 +38,13 @@ int udp_socket_get_port(int sock);
 
 // convenience method that sends a one-off udp message
 // return 0 on success
-int udp_send(const char *ipaddr, int port, const void *data, int datalen);
+int udp_send(const char* ipaddr, int port, const void* data, int datalen);
 
-#define udp_send_string(ipaddr, port, string) udp_send(ipaddr, port, string, strlen(string))
+#define udp_send_string(ipaddr, port, string) \
+  udp_send(ipaddr, port, string, strlen(string))
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_LCMGL_LCMGL_VIEWER_UDP_UTIL_H_ */
+#endif  // BOT2_LCMGL_LCMGL_VIEWER_UDP_UTIL_H_

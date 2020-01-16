@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -24,31 +27,40 @@
 #include <GL/gl.h>
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern GLenum _glmTextureTarget;
 
-/* private routines from glm_util.c */
-extern char * __glmStrStrip(const char *string);
+// private routines from glm_util.c
+extern char* __glmStrStrip(const char* string);
 #ifdef HAVE_STRDUP
 #define __glmStrdup strdup
 #else
-extern char * __glmStrdup(const char *string);
+extern char* __glmStrdup(const char* string);
 #endif
-extern void __glmWarning(char *format,...);
-extern void __glmFatalError(char *format,...);
-extern void __glmFatalUsage(char *format,...);
+extern void __glmWarning(char* format, ...);
+extern void __glmFatalError(char* format, ...);
+extern void __glmFatalUsage(char* format, ...);
 extern char* __glmDirName(char* path);
 void __glmReportErrors(void);
 
 #ifdef DEBUG
-#define DBG_(_x)       ((void)(_x))
+#define DBG_(_x) ((void)(_x))
 #else
-#define DBG_(_x)       ((void)0)
+#define DBG_(_x) ((void)0)
 #endif
 
 #ifdef GLDEBUG
-#define GLDBG_(_x)       { GLenum ret = (_x); if(ret != GL_NO_ERROR) __glmWarning("OpenGL error at %d : %s",__LINE__,gluErrorString(ret)); }
+#define GLDBG_(_x)                                                            \
+  {                                                                           \
+    GLenum ret = (_x);                                                        \
+    if (ret != GL_NO_ERROR)                                                   \
+      __glmWarning("OpenGL error at %d : %s", __LINE__, gluErrorString(ret)); \
+  }
 #else
-#define GLDBG_(_x)       ((void)0)
+#define GLDBG_(_x) ((void)0)
 #endif
 
 #ifndef GL_BGR
@@ -65,4 +77,8 @@ GLubyte* glmReadPNG(const char*, GLboolean, int*, int*, int*);
 GLubyte* glmReadSDL(const char*, GLboolean, int*, int*, int*);
 GLubyte* glmReadSimage(const char*, GLboolean, int*, int*, int*);
 
-#endif  /* BOT2_VIS_BOT_VIS_GLMINT_H_ */
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // BOT2_VIS_BOT_VIS_GLMINT_H_

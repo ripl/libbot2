@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -35,18 +38,18 @@ extern "C" {
 
 // calls func on every element of the specified list, and then
 // frees the list
-void bot_g_list_free_with_func (GList *list, GDestroyNotify func);
+void bot_g_list_free_with_func(GList* list, GDestroyNotify func);
 
 // calls func on every element of the specified queue, and then
 // frees the queue
-void bot_g_queue_free_with_func (GQueue *queue, GDestroyNotify func);
+void bot_g_queue_free_with_func(GQueue* queue, GDestroyNotify func);
 
 // calls func on every element of the specified pointer array, and then
 // frees the pointer array.
-void bot_g_ptr_array_free_with_func (GPtrArray *a, GDestroyNotify func);
+void bot_g_ptr_array_free_with_func(GPtrArray* a, GDestroyNotify func);
 
 // creates a newly allocated copy of a GPtrArray
-GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a);
+GPtrArray* bot_g_ptr_array_new_copy(const GPtrArray* a);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -55,26 +58,26 @@ GPtrArray * bot_g_ptr_array_new_copy (const GPtrArray *a);
  *          0 if time1 and time2 are equal
  *         -1 if time1 is before time2
  */
-int bot_g_time_val_compare (const GTimeVal *time1, const GTimeVal *time2);
+int bot_g_time_val_compare(const GTimeVal* time1, const GTimeVal* time2);
 #pragma GCC diagnostic pop
 
-GList * bot_g_hash_table_get_keys (GHashTable *hash_table);
+GList* bot_g_hash_table_get_keys(GHashTable* hash_table);
 
-GList * bot_g_hash_table_get_vals (GHashTable *hash_table);
+GList* bot_g_hash_table_get_vals(GHashTable* hash_table);
 
-GPtrArray * bot_g_hash_table_get_vals_array (GHashTable *hash_table);
+GPtrArray* bot_g_hash_table_get_vals_array(GHashTable* hash_table);
 
 #ifndef bot_g_ptr_array_size
 #define bot_g_ptr_array_size(ptrarray) ((ptrarray)->len)
 #endif
 
-int bot_g_ptr_array_find_index(GPtrArray *a, gconstpointer v);
+int bot_g_ptr_array_find_index(GPtrArray* a, gconstpointer v);
 
 guint bot_pint64_hash(gconstpointer _key);
 gboolean bot_pint64_equal(gconstpointer _a, gconstpointer _b);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_GLIB_UTIL_H_ */
+#endif  // BOT2_CORE_BOT_CORE_GLIB_UTIL_H_

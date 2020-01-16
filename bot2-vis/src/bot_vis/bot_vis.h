@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -18,7 +21,7 @@
 #ifndef BOT2_VIS_BOT_VIS_BOT_VIS_H_
 #define BOT2_VIS_BOT_VIS_BOT_VIS_H_
 
-/* IWYU pragma: begin_exports */
+// IWYU pragma: begin_exports
 #include "batch_gl.h"
 #include "console.h"
 #include "default_view_handler.h"
@@ -34,7 +37,7 @@
 #include "view.h"
 #include "viewer.h"
 #include "wavefront.h"
-/* IWYU pragma: end_exports */
+// IWYU pragma: end_exports
 
 /**
  * @defgroup BotVis Bot Vis
@@ -59,4 +62,4 @@
  * @ingroup BotVis
  */
 
-#endif  /* BOT2_VIS_BOT_VIS_BOT_VIS_H_ */
+#endif  // BOT2_VIS_BOT_VIS_BOT_VIS_H_

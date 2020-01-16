@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-lcmgl.
  *
@@ -43,14 +46,14 @@ extern "C" {
  * Decodes a block of LCMGL data, and executes the OpenGL commands with
  * the current OpenGL context.
  */
-void bot_lcmgl_decode(uint8_t *data, int datalen);
+void bot_lcmgl_decode(uint8_t* data, int datalen);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_LCMGL_BOT_LCMGL_RENDER_LCMGL_DECODE_H_ */
+#endif  // BOT2_LCMGL_BOT_LCMGL_RENDER_LCMGL_DECODE_H_

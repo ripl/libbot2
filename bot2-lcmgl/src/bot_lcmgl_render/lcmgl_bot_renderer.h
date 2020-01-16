@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-lcmgl.
  *
@@ -38,14 +41,15 @@
 extern "C" {
 #endif
 
-void bot_lcmgl_add_renderer_to_viewer(BotViewer* viewer, lcm_t* lcm, int priority);
+void bot_lcmgl_add_renderer_to_viewer(BotViewer* viewer, lcm_t* lcm,
+                                      int priority);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_LCMGL_BOT_LCMGL_RENDER_BOT_LCMGL_RENDERER_H_ */
+#endif  // BOT2_LCMGL_BOT_LCMGL_RENDER_BOT_LCMGL_RENDERER_H_

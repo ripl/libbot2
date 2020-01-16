@@ -32,74 +32,72 @@
 #include <stdlib.h>  // IWYU pragma: keep
 #include <sys/time.h>
 
-/****** general macros ******/
+// general macros
 
-/*
- * print to stdout
- */
-#define PRINT(a) { printf a; fflush(stdout); }
+// print to stdout
+#define PRINT(a)    \
+  {                 \
+    printf a;       \
+    fflush(stdout); \
+  }
 
-/*
- * same with a verbosity level
- */
-#define PRINT_LVL(l, a) if (verbosity >= (l)) {				\
-				printf a;				\
-				fflush(stdout);				\
-			}
+// same with a verbosity level
+#define PRINT_LVL(l, a)   \
+  if (verbosity >= (l)) { \
+    printf a;             \
+    fflush(stdout);       \
+  }
 
-/*
- * Trace with a level in DEBUG mode only
- */
+// Trace with a level in DEBUG mode only
 #ifdef DEBUG
-#define TRACE_LVL(l, a) if (m_verbosity >= (l)) {				\
-				printf a;				\
-				fflush(stdout);				\
-			}
+#define TRACE_LVL(l, a)     \
+  if (m_verbosity >= (l)) { \
+    printf a;               \
+    fflush(stdout);         \
+  }
 #else
 #define TRACE_LVL(l, a)
 #endif
 
-/*
- * print and exit
- */
-#define EXIT(a) { printf a; fflush(stdout); exit(-1); }
+// print and exit
+#define EXIT(a)     \
+  {                 \
+    printf a;       \
+    fflush(stdout); \
+    exit(-1);       \
+  }
 
-/*
- * conversion
- */
-#define BUFFER_TO_INT32(x) ((*(x)<<24) + (*(x+1)<<16) + (*(x+2)<<8) + (*(x+3)))
+// conversion
+#define BUFFER_TO_INT32(x) \
+  ((*(x) << 24) + (*(x + 1) << 16) + (*(x + 2) << 8) + (*(x + 3)))
 
-/*
- * timeval structure management
- */
+// timeval structure management
 #ifdef timersub
 #undef timersub
 #endif
-#define timersub(a, b, result)						\
-	do {								\
-		(result).tv_sec = (a).tv_sec - (b).tv_sec;		\
-		(result).tv_usec = (a).tv_usec - (b).tv_usec;		\
-		if ((result).tv_usec < 0) {				\
-			--(result).tv_sec;				\
-			(result).tv_usec += 1000000;			\
-		}							\
-	} while (0)
+#define timersub(a, b, result)                    \
+  do {                                            \
+    (result).tv_sec = (a).tv_sec - (b).tv_sec;    \
+    (result).tv_usec = (a).tv_usec - (b).tv_usec; \
+    if ((result).tv_usec < 0) {                   \
+      --(result).tv_sec;                          \
+      (result).tv_usec += 1000000;                \
+    }                                             \
+  } while (0)
 
-/*
- * assertion in DEBUG mode
- */
+// assertion in DEBUG mode
 #ifdef ASSERT
 #undef ASSERT
 #endif
 #ifdef DEBUG
-#define ASSERT(c)	if (!(c)) { \
-				fprintf(stderr, "ASSERT [%s:%d] failed\n", \
-					__FILE__, __LINE__);		\
-				fflush(stderr);				\
-				exit(-1);				\
-			}
-#else /* DEBUG */
+#define ASSERT(c)                                                   \
+  if (!(c)) {                                                       \
+    fprintf(stderr, "ASSERT [%s:%d] failed\n", __FILE__, __LINE__); \
+    fflush(stderr);                                                 \
+    exit(-1);                                                       \
+  }
+#else  // DEBUG
 #define ASSERT(c)
-#endif /* DEBUG */
+#endif  // DEBUG
 
 #endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_MACROS_H_

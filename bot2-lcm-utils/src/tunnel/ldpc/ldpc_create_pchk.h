@@ -17,20 +17,19 @@
 
 #include "ldpc_matrix_sparse.h"
 
-typedef enum make_method_enum
-{
-	Evencol, 	/* Uniform number of bits per column, with number specified */
-	Evenboth 	/* Uniform (as possible) over both columns and rows */
+typedef enum make_method_enum {
+  Evencol,  // Uniform number of bits per column, with number specified
+  Evenboth  // Uniform (as possible) over both columns and rows
 } make_method;
 
-typedef enum SessionType_enum
-{
-	TypeLDGM,
-	TypeSTAIRS,
-	TypeTRIANGLE
+typedef enum SessionType_enum {
+  TypeLDGM,
+  TypeSTAIRS,
+  TypeTRIANGLE
 } SessionType;
 
-mod2sparse* CreatePchkMatrix (  int nbRows, int nbCols, make_method makeMethod, int leftDegree, int seed, bool no4cycle, SessionType type, int verbosity );
+mod2sparse* CreatePchkMatrix(int nbRows, int nbCols, make_method makeMethod,
+                             int leftDegree, int seed, bool no4cycle,
+                             SessionType type, int verbosity);
 
 #endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_CREATE_PCHK_H_
-

@@ -264,7 +264,7 @@ LDPCFecSession::SetCallbackFunctions (
 	m_context_4_callback = context_4_callback;
 	return LDPC_OK;
 }
-#endif /* !EXTERNAL_MEMORY_MGMT_SUPPORT */
+#endif  /* !EXTERNAL_MEMORY_MGMT_SUPPORT */
 
 /******************************************************************************
  * EndSession : Ends the LDPC session, and cleans up everything.
@@ -279,7 +279,7 @@ LDPCFecSession::EndSession()
 
 		mod2sparse_free(m_pchkMatrix);
 		free(m_pchkMatrix);	/* mod2sparse_free does not free it! */
-#endif // #if defined(DECODER_ITERATIVE)
+#endif  // #if defined(DECODER_ITERATIVE)
 
 		if (m_checkValues != NULL) {
 			for (int i = 0; i < m_nbCheck; i++) {
@@ -436,7 +436,7 @@ LDPCFecSession::AddToSymbol	(void	*to,
 #endif
 		}
 	}
-#endif //defined (__LP64__) || (__WORDSIZE == 64) }
+#endif  //defined (__LP64__) || (__WORDSIZE == 64) }
 }
 
 /******************************************************************************

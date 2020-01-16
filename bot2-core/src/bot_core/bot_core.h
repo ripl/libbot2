@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -18,7 +21,7 @@
 #ifndef BOT2_CORE_BOT_CORE_BOT_CORE_H_
 #define BOT2_CORE_BOT_CORE_BOT_CORE_H_
 
-/* IWYU pragma: begin_exports */
+// IWYU pragma: begin_exports
 #include "camtrans.h"
 #include "circular.h"
 #include "color_util.h"
@@ -44,16 +47,16 @@
 #include "timespec.h"
 #include "timestamp.h"
 #include "trans.h"
-/* IWYU pragma: end_exports */
+// IWYU pragma: end_exports
 
-#include "lcmtypes/bot_core_image_metadata_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_image_sync_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_image_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_planar_lidar_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_pose_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_raw_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_rigid_transform_t.h"  /* IWYU pragma: keep */
-#include "lcmtypes/bot_core_sensor_status_t.h"  /* IWYU pragma: keep */
+#include "lcmtypes/bot_core_image_metadata_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_image_sync_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_image_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_planar_lidar_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_pose_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_raw_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_rigid_transform_t.h"  // IWYU pragma: keep
+#include "lcmtypes/bot_core_sensor_status_t.h"  // IWYU pragma: keep
 
 /**
  * @defgroup BotCore Bot Core
@@ -75,7 +78,8 @@
 /**
  * @defgroup BotCoreIO I/O
  * @ingroup BotCore
- * @brief I/O routines (files, sockets, etc.) and reading/writing certain file formats.
+ * @brief I/O routines (files, sockets, etc.) and reading/writing certain file
+ * formats.
  */
 
 /**
@@ -84,4 +88,4 @@
  * @brief Time keeping
  */
 
-#endif  /* BOT2_CORE_BOT_CORE_BOT_CORE_H_ */
+#endif  // BOT2_CORE_BOT_CORE_BOT_CORE_H_

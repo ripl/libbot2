@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-param.
  *
@@ -18,20 +21,22 @@
 #ifndef BOT2_PARAM_BOT_PARAM_MISC_UTILS_H_
 #define BOT2_PARAM_BOT_PARAM_MISC_UTILS_H_
 
-/*
- * misc_utils.h
- *
- *  Created on: Oct 2, 2010
- *      Author: abachrac
- */
+// misc_utils.h
+//
+//  Created on: Oct 2, 2010
+//      Author: abachrac
 
 #include <stdint.h>
 #include <stdio.h>
 #include <sys/select.h>
 #include <sys/time.h>
-/* IWYU pragma: no_forward_declare timeval */
+// IWYU pragma: no_forward_declare timeval
 
 #include <lcm/lcm.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * lcm_sleep:
@@ -40,10 +45,8 @@
  *
  *  Waits for up to @sleeptime seconds for an LCM message to arrive.
  *  It handles the first message if one arrives.
- *
  */
-static inline void lcm_sleep(lcm_t * lcm, double sleeptime)
-{
+static inline void lcm_sleep(lcm_t* lcm, double sleeptime) {
   int lcm_fileno = lcm_get_fileno(lcm);
 
   fd_set rfds;
@@ -51,8 +54,8 @@ static inline void lcm_sleep(lcm_t * lcm, double sleeptime)
   FD_ZERO(&rfds);
   FD_SET(lcm_fileno, &rfds);
   struct timeval tv;
-  tv.tv_sec = (int) sleeptime;
-  tv.tv_usec = (int) ((sleeptime - tv.tv_sec) * 1.0e6);
+  tv.tv_sec = (int)sleeptime;
+  tv.tv_usec = (int)((sleeptime - tv.tv_sec) * 1.0e6);
   retval = select(lcm_fileno + 1, &rfds, NULL, NULL, &tv);
   if (retval == -1) {
     fprintf(stderr, "bot_lcm_poll: select() failed!\n");
@@ -65,11 +68,14 @@ static inline void lcm_sleep(lcm_t * lcm, double sleeptime)
   }
 }
 
-static inline int64_t _timestamp_now()
-{
+static inline int64_t _timestamp_now() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
+  return (int64_t)tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
-#endif  /* BOT2_PARAM_BOT_PARAM_MISC_UTILS_H_ */
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // BOT2_PARAM_BOT_PARAM_MISC_UTILS_H_

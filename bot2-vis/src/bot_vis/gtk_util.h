@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -41,11 +44,11 @@ extern "C" {
 int bot_gtk_quit_on_interrupt(void);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif  /* BOT2_VIS_BOT_VIS_GTK_UTIL_H_ */
+#endif  // BOT2_VIS_BOT_VIS_GTK_UTIL_H_

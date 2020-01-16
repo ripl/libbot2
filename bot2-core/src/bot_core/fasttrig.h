@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -34,7 +37,7 @@ extern "C" {
 #endif
 
 void bot_fasttrig_init(void);
-void bot_fasttrig_sincos(double theta, double *s, double *c);
+void bot_fasttrig_sincos(double theta, double* s, double* c);
 double bot_fasttrig_atan2(double y, double x);
 
 /**
@@ -42,7 +45,7 @@ double bot_fasttrig_atan2(double y, double x);
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_FASTTRIG_H_ */
+#endif  // BOT2_CORE_BOT_CORE_FASTTRIG_H_

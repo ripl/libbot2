@@ -245,7 +245,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 								m_context_4_callback,
 								m_symbolSize);
 				} else
-#endif //EXTERNAL_MEMORY_MGMT_SUPPORT
+#endif  //EXTERNAL_MEMORY_MGMT_SUPPORT
 				{
 					m_parity_symbol_canvas[new_symbol_seqno - m_nbSourceSymbols] =
 							(void *)malloc(m_symbolSize);
@@ -259,7 +259,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 					m_storeData_callback(m_context_4_callback,
 							m_parity_symbol_canvas[new_symbol_seqno - m_nbSourceSymbols]);
 				}
-#endif //EXTERNAL_MEMORY_MGMT_SUPPORT
+#endif  //EXTERNAL_MEMORY_MGMT_SUPPORT
 			} else {
 				// Parity symbol will only be added to partial sums
 				keep_symbol = false;
@@ -292,7 +292,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 								m_context_4_callback,
 								m_symbolSize);
 				} else
-#endif //EXTERNAL_MEMORY_MGMT_SUPPORT
+#endif  //EXTERNAL_MEMORY_MGMT_SUPPORT
 				{
 					m_parity_symbol_canvas[new_symbol_seqno - m_nbSourceSymbols] =
 							(void *)malloc(m_symbolSize);
@@ -306,7 +306,7 @@ LDPCFecSession::DecodingStepWithSymbol(	void*	symbol_canvas[],
 					m_storeData_callback(m_context_4_callback,
 							m_parity_symbol_canvas[new_symbol_seqno - m_nbSourceSymbols]);
 				}
-#endif //EXTERNAL_MEMORY_MGMT_SUPPORT
+#endif  //EXTERNAL_MEMORY_MGMT_SUPPORT
 			}
 			// else parity symbol will only be added to partial sums
 		}
@@ -589,4 +589,4 @@ no_mem:
 	return LDPC_ERROR;
 }
 
-#endif // #if defined(DECODER_ITERATIVE) /* } */
+#endif  // #if defined(DECODER_ITERATIVE) /* } */

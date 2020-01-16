@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -62,7 +65,7 @@ typedef struct _BotCTransLink BotCTransLink;
  * Constructor.
  * Returns: a newly allocated BotCTrans.
  */
-BotCTrans * bot_ctrans_new(void);
+BotCTrans* bot_ctrans_new(void);
 
 /**
  * bot_ctrans_destroy:
@@ -70,7 +73,7 @@ BotCTrans * bot_ctrans_new(void);
  * Releases memory used by a BotCTrans.  Automatically destroys all
  * BotCTransFrame and BotCTransLink structures related to the BotCTrans.
  */
-void bot_ctrans_destroy(BotCTrans *ctrans);
+void bot_ctrans_destroy(BotCTrans* ctrans);
 
 /**
  * bot_ctrans_add_frame:
@@ -78,7 +81,7 @@ void bot_ctrans_destroy(BotCTrans *ctrans);
  *
  * Returns: 1 on success, 0 if the coordinate frame already exists
  */
-int bot_ctrans_add_frame(BotCTrans * ctrans, const char *id);
+int bot_ctrans_add_frame(BotCTrans* ctrans, const char* id);
 
 /**
  * bot_ctrans_get_trans:
@@ -90,8 +93,9 @@ int bot_ctrans_add_frame(BotCTrans * ctrans, const char *id);
  *
  * Returns: 1 on success, 0 on failure
  */
-int bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame, int64_t timestamp, BotTrans *result);
+int bot_ctrans_get_trans(BotCTrans* ctrans, const char* from_frame,
+                         const char* to_frame, int64_t timestamp,
+                         BotTrans* result);
 
 /**
  * bot_ctrans_get_trans_latest:
@@ -101,16 +105,16 @@ int bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
  *
  * Returns: 1 on success, 0 on failure
  */
-int bot_ctrans_get_trans_latest(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame, BotTrans *result);
+int bot_ctrans_get_trans_latest(BotCTrans* ctrans, const char* from_frame,
+                                const char* to_frame, BotTrans* result);
 
 /**
  * bot_ctrans_have_trans:
  *
  * Returns: 1 if the specified transformation is available, 0 if not.
  */
-int bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame);
+int bot_ctrans_have_trans(BotCTrans* ctrans, const char* from_frame,
+                          const char* to_frame);
 
 /**
  * bot_ctrans_get_trans_latest_timestamp:
@@ -128,8 +132,10 @@ int bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
  *
  * Returns: 1 on success, 0 on failure.
  */
-int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
-        const char *from_frame, const char *to_frame, int64_t *timestamp);
+int bot_ctrans_get_trans_latest_timestamp(BotCTrans* ctrans,
+                                          const char* from_frame,
+                                          const char* to_frame,
+                                          int64_t* timestamp);
 
 /**
  * bot_ctrans_link_frames:
@@ -142,9 +148,10 @@ int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
  * %from_frame_id to %to_frame_id, or NULL if either of the coordinate frames
  * is invalid.
  */
-BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans,
-        const char *from_frame_id, const char *to_frame_id,
-        int history_maxlen);
+BotCTransLink* bot_ctrans_link_frames(BotCTrans* ctrans,
+                                      const char* from_frame_id,
+                                      const char* to_frame_id,
+                                      int history_maxlen);
 
 /**
  * bot_ctrans_get_link:
@@ -160,8 +167,8 @@ BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans,
  * Returns: the BotCTransLink that represents the link between the two
  * coordinate frames, or NULL if there is no such link.
  */
-BotCTransLink * bot_ctrans_get_link(BotCTrans * ctrans,
-        const char *frame_a_id, const char * frame_b_id);
+BotCTransLink* bot_ctrans_get_link(BotCTrans* ctrans, const char* frame_a_id,
+                                   const char* frame_b_id);
 
 /**
  * bot_ctrans_link_update:
@@ -173,15 +180,15 @@ BotCTransLink * bot_ctrans_get_link(BotCTrans * ctrans,
  * is older than the timestamp for any previous update, then the entire
  * transformation history is discarded before saving the update.
  */
-void bot_ctrans_link_update(BotCTransLink * link,
-        const BotTrans *transformation, int64_t timestamp);
+void bot_ctrans_link_update(BotCTransLink* link, const BotTrans* transformation,
+                            int64_t timestamp);
 
 /**
  * bot_ctrans_link_get_n_trans:
  *
  * Returns: the number of transformations stored for this link.
  */
-int bot_ctrans_link_get_n_trans(const BotCTransLink * link);
+int bot_ctrans_link_get_n_trans(const BotCTransLink* link);
 
 /**
  * bot_ctrans_link_get_nth_trans:
@@ -196,18 +203,18 @@ int bot_ctrans_link_get_n_trans(const BotCTransLink * link);
  *
  * Returns: 1 on success, 0 if the requested transformation is not available.
  */
-int bot_ctrans_link_get_nth_trans(BotCTransLink * link,
-        int index, BotTrans *transformation, int64_t *timestamp);
+int bot_ctrans_link_get_nth_trans(BotCTransLink* link, int index,
+                                  BotTrans* transformation, int64_t* timestamp);
 
-const char * bot_ctrans_link_get_from_frame(BotCTransLink *link);
-const char * bot_ctrans_link_get_to_frame(BotCTransLink *link);
+const char* bot_ctrans_link_get_from_frame(BotCTransLink* link);
+const char* bot_ctrans_link_get_to_frame(BotCTransLink* link);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_CTRANS_H_ */
+#endif  // BOT2_CORE_BOT_CORE_CTRANS_H_

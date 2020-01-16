@@ -31,7 +31,7 @@
 
 #include <limits.h>  // IWYU pragma: keep
 
-/****** GENERAL SETUP OPTIONS; EDIT AS APPROPRIATE ****************************/
+// GENERAL SETUP OPTIONS; EDIT AS APPROPRIATE
 
 /**
  * Choose the type of decoder: the trivial iterative decoding algo or the Gauss
@@ -67,7 +67,7 @@
  * creates additional processing at the decoder. So use this optimization
  * only in DECODER_ITERATIVE mode.
  */
-//#define SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
+// #define SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
 #endif
 
 /**
@@ -84,10 +84,10 @@
  * With LP64 architectures, padding will be needed, adding 32 more bits,
  * which makes this optimization useless...
  */
-#if defined (__LP64__) || (__WORDSIZE == 64)
+#if defined(__LP64__) || (__WORDSIZE == 64)
 // useless with 64-bit architectures
 #else
-//#define SPARSE_MATRIX_OPT_SMALL_INDEX
+// #define SPARSE_MATRIX_OPT_SMALL_INDEX
 #endif
 
 /**

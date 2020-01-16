@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-lcm-utils.
  *
@@ -29,19 +32,20 @@ typedef struct _introspect_t introspect_t;
 /**
  * introspection only works for udpm LCM networks
  */
-introspect_t * introspect_new(lcm_t * lcm);
+introspect_t* introspect_new(lcm_t* lcm);
 
 void introspect_send_introspection_packet(introspect_t* ipi);
 
-void introspect_destroy(introspect_t *ipi);
+void introspect_destroy(introspect_t* ipi);
 
-int introspect_is_message_from_self(introspect_t * ipi,
-        const lcm_recv_buf_t * rbuf, const char *channel);
+int introspect_is_message_from_self(introspect_t* ipi,
+                                    const lcm_recv_buf_t* rbuf,
+                                    const char* channel);
 
-int introspect_is_ready(const introspect_t * ipi);
+int introspect_is_ready(const introspect_t* ipi);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_LCM_UTILS_TUNNEL_INTROSPECT_H_ */
+#endif  // BOT2_LCM_UTILS_TUNNEL_INTROSPECT_H_

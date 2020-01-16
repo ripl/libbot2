@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -38,39 +41,39 @@
 extern "C" {
 #endif
 
-int bot_ppm_read (FILE *fp, uint8_t **pixels,
-        int *width, int *height, int *rowstride);
+int bot_ppm_read(FILE* fp, uint8_t** pixels, int* width, int* height,
+                 int* rowstride);
 
-int bot_ppm_read_fname(const char* fname, uint8_t** pixels,
-        int* width, int* height, int* rowstride);
+int bot_ppm_read_fname(const char* fname, uint8_t** pixels, int* width,
+                       int* height, int* rowstride);
 
-int bot_ppm_write (FILE *fp, const uint8_t *pixels,
-        int width, int height, int rowstride);
+int bot_ppm_write(FILE* fp, const uint8_t* pixels, int width, int height,
+                  int rowstride);
 
-int bot_ppm_write_fname(const char* fname, const uint8_t* pixels,
-        int width, int height, int rowstride);
+int bot_ppm_write_fname(const char* fname, const uint8_t* pixels, int width,
+                        int height, int rowstride);
 
-int bot_ppm_write_bottom_up (FILE *fp, uint8_t *pixels,
-        int width, int height, int rowstride);
+int bot_ppm_write_bottom_up(FILE* fp, uint8_t* pixels, int width, int height,
+                            int rowstride);
 
-int bot_pgm_read (FILE *fp, uint8_t **pixels,
-        int *width, int *height, int *rowstride);
+int bot_pgm_read(FILE* fp, uint8_t** pixels, int* width, int* height,
+                 int* rowstride);
 
-int bot_pgm_read_fname(const char *fname, uint8_t **pixels,
-        int *width, int *height, int *rowstrde);
+int bot_pgm_read_fname(const char* fname, uint8_t** pixels, int* width,
+                       int* height, int* rowstride);
 
-int bot_pgm_write (FILE *fp, const uint8_t *pixels,
-        int width, int height, int rowstride);
+int bot_pgm_write(FILE* fp, const uint8_t* pixels, int width, int height,
+                  int rowstride);
 
-int bot_pgm_write_fname(const char *fname, const uint8_t * pixels,
-        int width, int height, int rowstrde);
+int bot_pgm_write_fname(const char* fname, const uint8_t* pixels, int width,
+                        int height, int rowstride);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif  /* BOT2_CORE_BOT_CORE_PPM_H_ */
+#endif  // BOT2_CORE_BOT_CORE_PPM_H_

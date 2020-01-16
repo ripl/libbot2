@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -18,12 +21,16 @@
 #ifndef BOT2_VIS_BOT_VIS_FBGL_DRAWING_AREA_H_
 #define BOT2_VIS_BOT_VIS_FBGL_DRAWING_AREA_H_
 
-#include <glib.h>
 #include <glib-object.h>
+#include <glib.h>
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
 #include <GL/gl.h>
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 /**
@@ -38,37 +45,45 @@
  * @{
  */
 
-G_BEGIN_DECLS
-
-#define BOT_TYPE_FBGL_DRAWING_AREA            (bot_fbgl_drawing_area_get_type ())
-#define BOT_FBGL_DRAWING_AREA(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), BOT_TYPE_FBGL_DRAWING_AREA, BotFbglDrawingArea))
-#define BOT_FBGL_DRAWING_AREA_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), BOT_TYPE_FBGL_DRAWING_AREA, BotFbglDrawingAreaClass))
-#define FB_IS_GL_DRAWING_AREA(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), BOT_TYPE_FBGL_DRAWING_AREA))
-#define FB_IS_GL_DRAWING_AREA_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), BOT_TYPE_FBGL_DRAWING_AREA))
-#define BOT_FBGL_DRAWING_AREA_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), BOT_TYPE_FBGL_DRAWING_AREA, BotFbglDrawingAreaClass))
+#define BOT_TYPE_FBGL_DRAWING_AREA (bot_fbgl_drawing_area_get_type())
+#define BOT_FBGL_DRAWING_AREA(obj)                               \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), BOT_TYPE_FBGL_DRAWING_AREA, \
+                              BotFbglDrawingArea))
+#define BOT_FBGL_DRAWING_AREA_CLASS(klass)                      \
+  (G_TYPE_CHECK_CLASS_CAST((klass), BOT_TYPE_FBGL_DRAWING_AREA, \
+                           BotFbglDrawingAreaClass))
+#define FB_IS_GL_DRAWING_AREA(obj) \
+  (G_TYPE_CHECK_INSTANCE_TYPE((obj), BOT_TYPE_FBGL_DRAWING_AREA))
+#define FB_IS_GL_DRAWING_AREA_CLASS(klass) \
+  (G_TYPE_CHECK_CLASS_TYPE((klass), BOT_TYPE_FBGL_DRAWING_AREA))
+#define BOT_FBGL_DRAWING_AREA_GET_CLASS(obj)                    \
+  (G_TYPE_INSTANCE_GET_CLASS((obj), BOT_TYPE_FBGL_DRAWING_AREA, \
+                             BotFbglDrawingAreaClass))
 
 typedef struct _BotFbglDrawingArea {
-    GObject parent;
+  GObject parent;
 
-    int width, height;
+  int width, height;
 } BotFbglDrawingArea;
 
 typedef struct _BotFbglDrawingAreaClass {
-    GObjectClass parent;
+  GObjectClass parent;
 } BotFbglDrawingAreaClass;
 
-GType       bot_fbgl_drawing_area_get_type (void);
-BotFbglDrawingArea * bot_fbgl_drawing_area_new (gboolean new_context,
-        int width, int height, GLenum format);
-void        bot_fbgl_drawing_area_swap_buffers (BotFbglDrawingArea * glarea);
-int         bot_fbgl_drawing_area_begin (BotFbglDrawingArea * glarea);
-int         bot_fbgl_drawing_area_end (BotFbglDrawingArea * glarea);
-int         bot_fbgl_drawing_area_flush (BotFbglDrawingArea * glarea);
-
-G_END_DECLS
+GType bot_fbgl_drawing_area_get_type(void);
+BotFbglDrawingArea* bot_fbgl_drawing_area_new(gboolean new_context, int width,
+                                              int height, GLenum format);
+void bot_fbgl_drawing_area_swap_buffers(BotFbglDrawingArea* glarea);
+int bot_fbgl_drawing_area_begin(BotFbglDrawingArea* glarea);
+int bot_fbgl_drawing_area_end(BotFbglDrawingArea* glarea);
+int bot_fbgl_drawing_area_flush(BotFbglDrawingArea* glarea);
 
 /**
  * @}
  */
 
-#endif  /* BOT2_VIS_BOT_VIS_FBGL_DRAWING_AREA_H_ */
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // BOT2_VIS_BOT_VIS_FBGL_DRAWING_AREA_H_

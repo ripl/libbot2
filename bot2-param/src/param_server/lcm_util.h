@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-param.
  *
@@ -34,12 +37,12 @@ extern "C" {
  *
  * returns 0 on success, -1 on failure
  */
-int lcmu_glib_mainloop_attach_lcm (lcm_t *lcm);
+int lcmu_glib_mainloop_attach_lcm(lcm_t* lcm);
 
-int lcmu_glib_mainloop_detach_lcm (lcm_t *lcm);
+int lcmu_glib_mainloop_detach_lcm(lcm_t* lcm);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_PARAM_PARAM_SERVER_LCM_UTIL_H_ */
+#endif  // BOT2_PARAM_PARAM_SERVER_LCM_UTIL_H_

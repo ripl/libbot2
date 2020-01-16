@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-core.
  *
@@ -33,22 +36,23 @@
 extern "C" {
 #endif
 
-typedef struct _BotGPSLinearize
-{
-    double lon0_deg, lat0_deg;
-    double radius_ns, radius_ew;
+typedef struct _BotGPSLinearize {
+  double lon0_deg, lat0_deg;
+  double radius_ns, radius_ew;
 } BotGPSLinearize;
 
-void bot_gps_linearize_init(BotGPSLinearize *gl, const double ll_deg[2]);
-int bot_gps_linearize_to_xy(BotGPSLinearize *gl, const double ll_deg[2], double xy[2]);
-int bot_gps_linearize_to_lat_lon(BotGPSLinearize *gl, const double xy[2], double ll_deg[2]);
+void bot_gps_linearize_init(BotGPSLinearize* gl, const double ll_deg[2]);
+int bot_gps_linearize_to_xy(BotGPSLinearize* gl, const double ll_deg[2],
+                            double xy[2]);
+int bot_gps_linearize_to_lat_lon(BotGPSLinearize* gl, const double xy[2],
+                                 double ll_deg[2]);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif  /* BOT2_CORE_BOT_CORE_GPS_LINEARIZE_H_ */
+#endif  // BOT2_CORE_BOT_CORE_GPS_LINEARIZE_H_

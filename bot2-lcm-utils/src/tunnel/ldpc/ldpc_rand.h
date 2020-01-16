@@ -32,18 +32,18 @@
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.
  */
-void		ldpc_srand (unsigned long s);
+void ldpc_srand(unsigned long s);
 
 /**
  * Returns a random integer between 0 and maxv-1 inclusive.
  * Derived from rand31pmc, Robin Whittle, Sept 20th 2005.
  * http://www.firstpr.com.au/dsp/rand31/
- *	16807		multiplier constant (7^^5)
- *	0x7FFFFFFF	modulo constant (2^^31-1)
+ *  16807       multiplier constant (7^^5)
+ *  0x7FFFFFFF  modulo constant (2^^31-1)
  * The inner PRNG produces a value between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.
  * This value is then scaled between 0 and maxv-1 inclusive.
  */
-unsigned long	ldpc_rand (unsigned long	maxv);
+unsigned long ldpc_rand(unsigned long maxv);
 
 #endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_RAND_H_
