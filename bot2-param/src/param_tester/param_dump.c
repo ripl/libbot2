@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-param.
  *
@@ -21,21 +24,23 @@
 #include <lcm/lcm.h>
 
 #include "lcmtypes/bot_param_update_t.h"
+// clang-format off
 #include "../param_client/param_internal.h"
+// clang-format on
 
-static void _on_param_update(const lcm_recv_buf_t *rbuf, const char * channel, const bot_param_update_t * msg,
-    void * user)
-{
+static void _on_param_update(const lcm_recv_buf_t* rbuf, const char* channel,
+                             const bot_param_update_t* msg, void* user) {
   printf("%s", msg->params);
   exit(1);
 }
 
-int main()
-{
-  lcm_t * lcm = lcm_create(NULL);
+int main() {
+  lcm_t* lcm = lcm_create(NULL);
 
-  bot_param_update_t_subscribe(lcm, BOT_PARAM_UPDATE_CHANNEL, _on_param_update, NULL);
+  bot_param_update_t_subscribe(lcm, BOT_PARAM_UPDATE_CHANNEL, _on_param_update,
+                               NULL);
 
-  while (1)
+  while (1) {
     lcm_handle(lcm);
+  }
 }

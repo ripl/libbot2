@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-vis.
  *
@@ -28,34 +31,34 @@
 
 #include "bot_vis/viewer.h"
 
-void setup_renderer_rwx(BotViewer *viewer, int render_priority, const char *rwx_fname);
+void setup_renderer_rwx(BotViewer* viewer, int render_priority,
+                        const char* rwx_fname);
 
-int main(int argc, char *argv[])
-{
-    gtk_init(&argc, &argv);
-    glutInit(&argc, argv);
+int main(int argc, char* argv[]) {
+  gtk_init(&argc, &argv);
+  glutInit(&argc, argv);
 
-    if(argc < 2) {
-        fprintf(stderr, "usage: %s <rwx_filename>\n",
-                g_path_get_basename(argv[0]));
-        exit(1);
-    }
+  if (argc < 2) {
+    fprintf(stderr, "usage: %s <rwx_filename>\n", g_path_get_basename(argv[0]));
+    exit(1);
+  }
 
-    const char *rwx_fname = argv[1];
+  const char* rwx_fname = argv[1];
 
-    BotViewer* viewer = bot_viewer_new("RWX Viewer");
+  BotViewer* viewer = bot_viewer_new("RWX Viewer");
 
-    char *fname = g_build_filename(g_get_user_config_dir(), ".rwx-viewerrc", NULL);
+  char* fname =
+      g_build_filename(g_get_user_config_dir(), ".rwx-viewerrc", NULL);
 
-    bot_viewer_load_preferences(viewer, fname);
+  bot_viewer_load_preferences(viewer, fname);
 
-    // setup renderers
-    bot_viewer_add_stock_renderer(viewer, BOT_VIEWER_STOCK_RENDERER_GRID, 1);
-    setup_renderer_rwx(viewer, 1, rwx_fname);
+  // setup renderers
+  bot_viewer_add_stock_renderer(viewer, BOT_VIEWER_STOCK_RENDERER_GRID, 1);
+  setup_renderer_rwx(viewer, 1, rwx_fname);
 
-    gtk_main();
+  gtk_main();
 
-    bot_viewer_save_preferences(viewer, fname);
+  bot_viewer_save_preferences(viewer, fname);
 
-    bot_viewer_unref(viewer);
+  bot_viewer_unref(viewer);
 }

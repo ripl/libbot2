@@ -204,44 +204,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-unsigned long	seed;
+unsigned long seed;
 
 /**
  * Initialize the PRNG with a seed between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.
  */
-void ldpc_srand (unsigned long s)
-{
-	if ((s >= 1) && (s <= 0x7FFFFFFE))
-		seed = s;
-	else {
-		fprintf(stderr,"ldpc_rand: ERROR, seed (%lu) out of range\n", seed);
-		exit(-1);
-	}
+void ldpc_srand(unsigned long s) {
+  if ((s >= 1) && (s <= 0x7FFFFFFE)) {
+    seed = s;
+  } else {
+    fprintf(stderr, "ldpc_rand: ERROR, seed (%lu) out of range\n", seed);
+    exit(-1);
+  }
 }
 
 /**
  * Returns a random integer between 0 and maxv-1 inclusive.
  * Derived from rand31pmc, Robin Whittle, Sept 20th 2005.
  * http://www.firstpr.com.au/dsp/rand31/
- *	16807		multiplier constant (7^^5)
- *	0x7FFFFFFF	modulo constant (2^^31-1)
+ *  16807       multiplier constant (7^^5)
+ *  0x7FFFFFFF  modulo constant (2^^31-1)
  * The inner PRNG produces a value between 1 and 0x7FFFFFFE
  * (2^^31-2) inclusive.
  * This value is then scaled between 0 and maxv-1 inclusive.
  */
-unsigned long
-ldpc_rand (unsigned long	maxv)
-{
-	unsigned long	hi, lo;
-	lo = 16807 * (seed & 0xFFFF);
-	hi = 16807 * (seed >> 16);
-	lo += (hi & 0x7FFF) << 16;
-	lo += hi >> 15;
-	if (lo > 0x7FFFFFFF)
-		lo -= 0x7FFFFFFF;
-	seed = (long) lo;
-	return ((unsigned long)
-		((double)seed * (double)maxv / (double)0x7FFFFFFF));
+unsigned long ldpc_rand(unsigned long maxv) {
+  unsigned long hi;
+  unsigned long lo;
+  lo = 16807 * (seed & 0xFFFF);
+  hi = 16807 * (seed >> 16);
+  lo += (hi & 0x7FFF) << 16;
+  lo += hi >> 15;
+  if (lo > 0x7FFFFFFF) {
+    lo -= 0x7FFFFFFF;
+  }
+  seed = (long)lo;
+  return ((unsigned long)((double)seed * (double)maxv / (double)0x7FFFFFFF));
 }
-

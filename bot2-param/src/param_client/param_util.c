@@ -1,3 +1,6 @@
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
  * This file is part of bot2-param.
  *
@@ -32,50 +35,50 @@
 #define PLANAR_LIDAR_PREFIX "planar_lidars"
 #define CAMERA_PREFIX "cameras"
 
-//utility functions for cameras and lidars
-//get all sensor names
-char**
-bot_param_get_all_camera_names(BotParam *param)
-{
+// utility functions for cameras and lidars
+// get all sensor names
+char** bot_param_get_all_camera_names(BotParam* param) {
   return bot_param_get_subkeys(param, CAMERA_PREFIX);
 }
-char**
-bot_param_get_all_planar_lidar_names(BotParam *param)
-{
+char** bot_param_get_all_planar_lidar_names(BotParam* param) {
   return bot_param_get_subkeys(param, PLANAR_LIDAR_PREFIX);
 }
 
-//get prefix for the sensors
-int bot_param_get_camera_prefix(BotParam *param, const char *cam_name, char *result, int result_size)
-{
+// get prefix for the sensors
+int bot_param_get_camera_prefix(BotParam* param, const char* cam_name,
+                                char* result, int result_size) {
   int n = snprintf(result, result_size, "%s.%s", CAMERA_PREFIX, cam_name);
-  if (n >= result_size)
+  if (n >= result_size) {
     return -1;
-  if (param)
+  }
+  if (param) {
     return bot_param_has_key(param, result) ? 0 : -1;
-  else
-    return 0;
+  }
+  return 0;
 }
 
-int bot_param_get_planar_lidar_prefix(BotParam *param, const char *plidar_name, char *result, int result_size)
-{
-  int n = snprintf(result, result_size, "%s.%s", PLANAR_LIDAR_PREFIX, plidar_name);
-  if (n >= result_size)
+int bot_param_get_planar_lidar_prefix(BotParam* param, const char* plidar_name,
+                                      char* result, int result_size) {
+  int n =
+      snprintf(result, result_size, "%s.%s", PLANAR_LIDAR_PREFIX, plidar_name);
+  if (n >= result_size) {
     return -1;
-  if (param)
+  }
+  if (param) {
     return bot_param_has_key(param, result) ? 0 : -1;
-  else
-    return 0;
+  }
+  return 0;
 }
 
-char * bot_param_get_sensor_name_from_lcm_channel(BotParam *param, const char * prefix, const char *channel)
-{
-  char * sensor_name = NULL;
-  char **sensor_names = bot_param_get_subkeys(param, prefix);
+char* bot_param_get_sensor_name_from_lcm_channel(BotParam* param,
+                                                 const char* prefix,
+                                                 const char* channel) {
+  char* sensor_name = NULL;
+  char** sensor_names = bot_param_get_subkeys(param, prefix);
   for (int i = 0; sensor_names && sensor_names[i]; i++) {
     char key[2048];
     snprintf(key, sizeof(key), "%s.%s.lcm_channel", prefix, sensor_names[i]);
-    char *lcm_channel_str = NULL;
+    char* lcm_channel_str = NULL;
     int key_status = bot_param_get_str(param, key, &lcm_channel_str);
 
     if ((0 == key_status) && (0 == strcmp(channel, lcm_channel_str))) {
@@ -83,62 +86,65 @@ char * bot_param_get_sensor_name_from_lcm_channel(BotParam *param, const char * 
       free(lcm_channel_str);
       break;
     }
-    else {
-      free(lcm_channel_str);
-    }
+    free(lcm_channel_str);
   }
   g_strfreev(sensor_names);
 
   return sensor_name;
 }
 
-char * bot_param_get_camera_name_from_lcm_channel(BotParam *param, const char *channel)
-{
-  return bot_param_get_sensor_name_from_lcm_channel(param, CAMERA_PREFIX, channel);
+char* bot_param_get_camera_name_from_lcm_channel(BotParam* param,
+                                                 const char* channel) {
+  return bot_param_get_sensor_name_from_lcm_channel(param, CAMERA_PREFIX,
+                                                    channel);
 }
 
-char * bot_param_get_planar_lidar_name_from_lcm_channel(BotParam *param, const char *channel)
-{
-  return bot_param_get_sensor_name_from_lcm_channel(param, PLANAR_LIDAR_PREFIX, channel);
+char* bot_param_get_planar_lidar_name_from_lcm_channel(BotParam* param,
+                                                       const char* channel) {
+  return bot_param_get_sensor_name_from_lcm_channel(param, PLANAR_LIDAR_PREFIX,
+                                                    channel);
 }
 
-//get coord frame name
-char * bot_param_get_sensor_coord_frame(BotParam *bot_param, const char * sensor_prefix, const char *sensor_name)
-{
+// get coord frame name
+char* bot_param_get_sensor_coord_frame(BotParam* bot_param,
+                                       const char* sensor_prefix,
+                                       const char* sensor_name) {
   char key[1024];
   snprintf(key, sizeof(key), "%s.%s.coord_frame", sensor_prefix, sensor_name);
   return bot_param_get_str_or_fail(bot_param, key);
 }
-char *
-bot_param_get_camera_coord_frame(BotParam *bot_param, const char *camera_name)
-{
-  return bot_param_get_sensor_coord_frame(bot_param, CAMERA_PREFIX, camera_name);
+char* bot_param_get_camera_coord_frame(BotParam* bot_param,
+                                       const char* camera_name) {
+  return bot_param_get_sensor_coord_frame(bot_param, CAMERA_PREFIX,
+                                          camera_name);
 }
-char *
-bot_param_get_planar_lidar_coord_frame(BotParam *bot_param, const char *lidar_name)
-{
-  return bot_param_get_sensor_coord_frame(bot_param, PLANAR_LIDAR_PREFIX, lidar_name);
+char* bot_param_get_planar_lidar_coord_frame(BotParam* bot_param,
+                                             const char* lidar_name) {
+  return bot_param_get_sensor_coord_frame(bot_param, PLANAR_LIDAR_PREFIX,
+                                          lidar_name);
 }
 
-//get lcm channel
-char * bot_param_get_sensor_lcm_channel(BotParam *bot_param, const char * sensor_prefix, const char *sensor_name)
-{
+// get lcm channel
+char* bot_param_get_sensor_lcm_channel(BotParam* bot_param,
+                                       const char* sensor_prefix,
+                                       const char* sensor_name) {
   char key[1024];
   snprintf(key, sizeof(key), "%s.%s.lcm_channel", sensor_prefix, sensor_name);
   return bot_param_get_str_or_fail(bot_param, key);
 }
-char * bot_param_get_camera_lcm_channel(BotParam *bot_param, const char *camera_name)
-{
-  return bot_param_get_sensor_lcm_channel(bot_param, CAMERA_PREFIX, camera_name);
+char* bot_param_get_camera_lcm_channel(BotParam* bot_param,
+                                       const char* camera_name) {
+  return bot_param_get_sensor_lcm_channel(bot_param, CAMERA_PREFIX,
+                                          camera_name);
 }
-char * bot_param_get_planar_lidar_lcm_channel(BotParam *bot_param, const char *lidar_name)
-{
-  return bot_param_get_sensor_lcm_channel(bot_param, PLANAR_LIDAR_PREFIX, lidar_name);
+char* bot_param_get_planar_lidar_lcm_channel(BotParam* bot_param,
+                                             const char* lidar_name) {
+  return bot_param_get_sensor_lcm_channel(bot_param, PLANAR_LIDAR_PREFIX,
+                                          lidar_name);
 }
 
-/* ================ general ============== */
-int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
-{
+// ================ general ==============
+int bot_param_get_quat(BotParam* param, const char* name, double quat[4]) {
   char key[2048];
   snprintf(key, sizeof(key), "%s.quat", name);
   if (bot_param_has_key(param, key)) {
@@ -152,8 +158,9 @@ int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
     double rpy[3];
     int sz = bot_param_get_double_array(param, key, rpy, 3);
     assert(sz == 3);
-    for (int i = 0; i < 3; i++)
-      rpy[i] = bot_to_radians (rpy[i]);
+    for (int i = 0; i < 3; i++) {
+      rpy[i] = bot_to_radians(rpy[i]);
+    }
     bot_roll_pitch_yaw_to_quat(rpy, quat);
     return 0;
   }
@@ -179,8 +186,8 @@ int bot_param_get_quat(BotParam *param, const char *name, double quat[4])
   return -1;
 }
 
-int bot_param_get_translation(BotParam *param, const char *name, double translation[3])
-{
+int bot_param_get_translation(BotParam* param, const char* name,
+                              double translation[3]) {
   char key[2048];
   snprintf(key, sizeof(key), "%s.translation", name);
   if (bot_param_has_key(param, key)) {
@@ -192,92 +199,107 @@ int bot_param_get_translation(BotParam *param, const char *name, double translat
   return -1;
 }
 
-int bot_param_get_trans(BotParam *param, const char *name, BotTrans * trans)
-{
-  if (bot_param_get_quat(param, name, trans->rot_quat))
+int bot_param_get_trans(BotParam* param, const char* name, BotTrans* trans) {
+  if (bot_param_get_quat(param, name, trans->rot_quat)) {
     return -1;
+  }
 
-  if (bot_param_get_translation(param, name, trans->trans_vec))
+  if (bot_param_get_translation(param, name, trans->trans_vec)) {
     return -1;
+  }
 
   return 0;
 }
 
-BotCamTrans*
-bot_param_get_new_camtrans(BotParam *param, const char *cam_name)
-{
+BotCamTrans* bot_param_get_new_camtrans(BotParam* param, const char* cam_name) {
   char prefix[2048];
-  snprintf(prefix, sizeof(prefix), "%s.%s.intrinsic_cal", CAMERA_PREFIX, cam_name);
-  if (!bot_param_has_key(param, prefix))
+  snprintf(prefix, sizeof(prefix), "%s.%s.intrinsic_cal", CAMERA_PREFIX,
+           cam_name);
+  if (!bot_param_has_key(param, prefix)) {
     goto fail;
+  }
 
   char key[2048];
   double width;
   snprintf(key, sizeof(key), "%s.width", prefix);
-  if (0 != bot_param_get_double(param, key, &width))
+  if (0 != bot_param_get_double(param, key, &width)) {
     goto fail;
+  }
 
   double height;
   snprintf(key, sizeof(key), "%s.height", prefix);
-  if (0 != bot_param_get_double(param, key, &height))
+  if (0 != bot_param_get_double(param, key, &height)) {
     goto fail;
+  }
 
   double pinhole_params[5];
   snprintf(key, sizeof(key), "%s.pinhole", prefix);
-  if (5 != bot_param_get_double_array(param, key, pinhole_params, 5))
+  if (5 != bot_param_get_double_array(param, key, pinhole_params, 5)) {
     goto fail;
+  }
   double fx = pinhole_params[0];
   double fy = pinhole_params[1];
   double cx = pinhole_params[3];
   double cy = pinhole_params[4];
   double skew = pinhole_params[2];
 
-  char * distortion_model;
+  char* distortion_model;
   snprintf(key, sizeof(key), "%s.distortion_model", prefix);
-  if (0 != bot_param_get_str(param, key, &distortion_model))
+  if (0 != bot_param_get_str(param, key, &distortion_model)) {
     goto fail;
+  }
 
   if (strcmp(distortion_model, "null") == 0) {
     BotDistortionObj* null_dist = bot_null_distortion_create();
-    BotCamTrans* null_camtrans = bot_camtrans_new(cam_name, width, height, fx, fy, cx, cy, skew, null_dist);
+    BotCamTrans* null_camtrans = bot_camtrans_new(cam_name, width, height, fx,
+                                                  fy, cx, cy, skew, null_dist);
     return null_camtrans;
   }
-  else if (strcmp(distortion_model, "spherical") == 0) {
+  if (strcmp(distortion_model, "spherical") == 0) {
     double distortion_param;
     snprintf(key, sizeof(key), "%s.distortion_params", prefix);
-    if (1 != bot_param_get_double_array(param, key, &distortion_param, 1))
+    if (1 != bot_param_get_double_array(param, key, &distortion_param, 1)) {
       goto fail;
+    }
 
-    BotDistortionObj* sph_dist = bot_spherical_distortion_create(distortion_param);
-    BotCamTrans* sph_camtrans = bot_camtrans_new(cam_name, width, height, fx, fy, cx, cy, skew, sph_dist);
+    BotDistortionObj* sph_dist =
+        bot_spherical_distortion_create(distortion_param);
+    BotCamTrans* sph_camtrans = bot_camtrans_new(cam_name, width, height, fx,
+                                                 fy, cx, cy, skew, sph_dist);
     return sph_camtrans;
-  }
-  else if (strcmp(distortion_model, "plumb-bob") == 0) {
+  } else if (strcmp(distortion_model, "plumb-bob") == 0) {
     double dist_k[3];
     snprintf(key, sizeof(key), "%s.distortion_k", prefix);
-    if (3 != bot_param_get_double_array(param, key, dist_k, 3))
+    if (3 != bot_param_get_double_array(param, key, dist_k, 3)) {
       goto fail;
+    }
 
     double dist_p[2];
     snprintf(key, sizeof(key), "%s.distortion_p", prefix);
-    if (2 != bot_param_get_double_array(param, key, dist_p, 2))
+    if (2 != bot_param_get_double_array(param, key, dist_p, 2)) {
       goto fail;
+    }
 
-    BotDistortionObj* pb_dist = bot_plumb_bob_distortion_create(dist_k[0], dist_k[1], dist_k[2], dist_p[0], dist_p[1]);
-    BotCamTrans* pb_camtrans = bot_camtrans_new(cam_name, width, height, fx, fy, cx, cy, skew, pb_dist);
+    BotDistortionObj* pb_dist = bot_plumb_bob_distortion_create(
+        dist_k[0], dist_k[1], dist_k[2], dist_p[0], dist_p[1]);
+    BotCamTrans* pb_camtrans = bot_camtrans_new(cam_name, width, height, fx, fy,
+                                                cx, cy, skew, pb_dist);
     return pb_camtrans;
-  }
-  else if (strcmp(distortion_model, "angular-poly") == 0) {
+  } else if (strcmp(distortion_model, "angular-poly") == 0) {
     double coeffs[64];
     snprintf(key, sizeof(key), "%s.distortion_coeffs", prefix);
     int num_coeffs = bot_param_get_double_array(param, key, coeffs, -1);
-    if (0 >= num_coeffs)
+    if (0 >= num_coeffs) {
       goto fail;
+    }
 
-    BotDistortionObj* ang_dist = bot_angular_poly_distortion_create(coeffs, num_coeffs);
-    BotCamTrans* ang_camtrans = bot_camtrans_new(cam_name, width, height, fx, fy, cx, cy, skew, ang_dist);
+    BotDistortionObj* ang_dist =
+        bot_angular_poly_distortion_create(coeffs, num_coeffs);
+    BotCamTrans* ang_camtrans = bot_camtrans_new(cam_name, width, height, fx,
+                                                 fy, cx, cy, skew, ang_dist);
     return ang_camtrans;
   }
 
-  fail: return NULL;
+fail:
+  return NULL;
 }
