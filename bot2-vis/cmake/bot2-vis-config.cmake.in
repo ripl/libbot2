@@ -1,3 +1,6 @@
+# -*- mode: cmake -*-
+# vim: set filetype=cmake :
+
 #[=============================================================================[
 This file is part of @PROJECT_NAME@.
 

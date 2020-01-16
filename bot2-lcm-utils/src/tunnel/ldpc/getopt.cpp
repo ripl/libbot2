@@ -2,13 +2,15 @@
 //
 //  FILE: getopt.c
 //
-//      GetOption function
+//      GetOption function definition
 //
 //  FUNCTIONS:
 //
 //      GetOption() - Get next command line option and parameter
 //
 //  COMMENTS:
+//
+//      Copyright (C) 1992 - 1996 Microsoft Corporation
 //
 ///////////////////////////////////////////////////////////////////////////////
 
