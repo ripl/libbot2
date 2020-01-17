@@ -162,13 +162,13 @@ static int angular_lookup_undistort_func(const void* data, const double x,
     return -1;
   }
 
-  // TODO
+  // TODO(ashuang)
   return 0;
 }
 
 static int angular_lookup_distort_func(const void* data, const double ray[3],
                                        double* x, double* y) {
-  // TODO
+  // TODO(ashuang)
   return 0;
 }
 

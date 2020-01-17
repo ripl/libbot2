@@ -62,7 +62,7 @@ typedef struct my_error_mgr* my_error_ptr;
 static void my_error_exit(j_common_ptr cinfo) {
   my_error_ptr myerr = (my_error_ptr)cinfo->err;
 
-  // FIXME: get error messahe from jpeglib
+  // TODO(ashuang): get error messahe from jpeglib
 
   // Return control to the setjmp point
   longjmp(myerr->setjmp_buffer, 1);

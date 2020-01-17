@@ -635,7 +635,7 @@ static void update_cpu_times(procman_deputy_t* s) {
         mi->cpu_time[1].vsize = 0;
         mi->cpu_time[1].rss = 0;
         perror("update_cpu_times - procinfo_read_proc_cpu_mem");
-        // TODO handle this error
+        // TODO(ashuang): handle this error
       } else {
         proc_cpu_mem_t* pa = &mi->cpu_time[1];
         proc_cpu_mem_t* pb = &mi->cpu_time[0];
@@ -1235,7 +1235,7 @@ int main(int argc, char** argv) {
 
   // set deputy hostname to the system hostname
   if (hostname_override) {
-    strcpy(pmd->hostname, hostname_override);
+    snprintf(pmd->hostname, sizeof(pmd->hostname), "%s", hostname_override);
     free(hostname_override);
   } else {
     gethostname(pmd->hostname, sizeof(pmd->hostname));

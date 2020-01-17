@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 
 static int64_t _timestamp_now() {
   struct timeval tv;
@@ -200,9 +201,10 @@ static inline void bot_fasttrig_sincos_test() {
 
   //    int limit = 30000000;
   int limit = INT32_MAX;
+  unsigned int seed = time(NULL);
 
   for (int iters = 0; iters < limit; iters++) {
-    double theta = rand() / 1000.0;
+    double theta = rand_r(&seed) / 1000.0;
     double s = sin(theta);
     double c = cos(theta);
     double s2;

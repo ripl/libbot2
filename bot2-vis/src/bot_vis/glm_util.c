@@ -54,7 +54,7 @@ char* __glmStrdup(const char* string) {
   if (copy == NULL) {
     return NULL;
   }
-  strcpy(copy, string);
+  snprintf(copy, strlen(string), "%s", string);
   return copy;
 }
 #endif

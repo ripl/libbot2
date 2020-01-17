@@ -39,8 +39,6 @@ extern "C" {
  * @ingroup BotVisGl
  * @include: bot_vis/bot_vis.h
  *
- * TODO
- *
  * Linking: `pkg-config --libs bot2-vis`
  * @{
  */

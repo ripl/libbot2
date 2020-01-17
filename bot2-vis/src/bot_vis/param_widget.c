@@ -865,7 +865,7 @@ static void _param_load_from_keyfile(void* key, void* value, void* user_data) {
       bot_gtk_param_widget_set_enum(data->pw, param_name, val);
     }
   } else {
-    // TODO
+    // TODO(ashuang)
   }
   if (gerr) {
     g_error_free(gerr);
@@ -898,7 +898,7 @@ static void _param_save_to_keyfile(void* key, void* value, void* user_data) {
     int val = bot_gtk_param_widget_get_enum(data->pw, param_name);
     g_key_file_set_integer(data->keyfile, data->group_name, param_name, val);
   } else {
-    // TODO
+    // TODO(ashuang)
   }
 }
 

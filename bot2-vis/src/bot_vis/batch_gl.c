@@ -225,9 +225,15 @@ DECL_BGL_4(glRotatef, rotatef, float, float, float, float)
     g_ptr_array_add(bgl->back_buffer, cmd);                              \
   }
 
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glVertex2dv, vertex2dv, double, 2)
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glVertex3dv, vertex3dv, double, 3)
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glVertex2fv, vertex2fv, float, 2)
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glVertex3fv, vertex3fv, float, 3)
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glMultMatrixd, mult_matrixd, double, 16)
+// NOLINTNEXTLINE(readability/fn_size)
 DECL_BGL_1V(glMultMatrixf, mult_matrixf, float, 16)

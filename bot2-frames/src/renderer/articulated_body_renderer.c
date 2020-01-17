@@ -116,8 +116,8 @@ static void frames_update_handler(BotFrames* bot_frames, const char* frame,
   RendererArticulated* self = (RendererArticulated*)user;
   int ii;
   // loop through all frames for bodies and request redraw if any are updated
-  // FIXME this will cause redundant redrawing as frame updates trickle through,
-  // not sure how to handle
+  // TODO(ashuang): this will cause redundant redrawing as frame updates trickle
+  // through, not sure how to handle
   for (ii = 0; ii < self->num_bodies; ii++) {
     if (strcmp(self->body_properties[ii].frame_name, frame) == 0) {
       bot_viewer_request_redraw(self->viewer);
@@ -269,7 +269,8 @@ void configure_body(RendererArticulated* self, BodyProperties* body_properties,
   }
   body_properties->frame_name = (char*)calloc(256, sizeof(char));
   if (bot_param_get_str(self->param, key_name, &body_properties->frame_name) ==
-      -1) {  // FIXME no error checking currently to see if the frame exists
+      -1) {
+    // TODO(ashuang): no error checking currently to see if the frame exists
     goto fail;
   }
 
@@ -392,7 +393,8 @@ void bot_frames_add_articulated_body_renderer_to_viewer(
   self->param = param;
   self->frames = frames;
   self->viewer = viewer;
-  strcpy(self->articulated_name, param_articulated_name);
+  snprintf(self->articulated_name, sizeof(self->articulated_name), "%s",
+           param_articulated_name);
 
   bot_frames_add_update_subscriber(self->frames, frames_update_handler,
                                    (void*)self);

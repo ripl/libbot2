@@ -649,7 +649,7 @@ void bot_lcmgl_decode(uint8_t* data, int datalen) {
         textures[ntextures - 1] = tex;
 
         if (id != ntextures) {
-          // TODO emit warning...
+          // TODO(ashuang): emit warning...
         }
 #else
         fprintf(stderr, "ERROR, unsupported client request BOT_LCMGL_TEX_2D\n");

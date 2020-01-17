@@ -99,7 +99,7 @@ static int bot_signal_handler_glib(GIOChannel* source, GIOCondition condition,
 }
 
 void bot_signal_pipe_add_signal(int sig) {
-  // TODO use sigaction instead of signal()
+  // TODO(ashuang): use sigaction instead of signal()
   signal(sig, bot_signal_handler);
 }
 

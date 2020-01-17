@@ -436,7 +436,7 @@ int bot_quaternion_test() {
   bot_quat_rotate(q3, rvec);
   fprintf(stderr, "by q2*q: [ %.2f, %.2f, %.2f ]\n", rvec[0], rvec[1], rvec[2]);
 
-  // TODO
+  // TODO(ashuang)
 
 #undef FAIL_TEST
 

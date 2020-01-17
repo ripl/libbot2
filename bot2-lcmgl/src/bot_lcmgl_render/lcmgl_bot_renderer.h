@@ -27,8 +27,6 @@
  * @brief BotVis Viewer renderer plugin
  * @include bot_lcmgl_render/lcmgl_bot_renderer.h
  *
- * TODO
- *
  * Linking: `pkg-config --libs bot2-lcmgl-renderer`
  * @{
  */

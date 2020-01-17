@@ -37,7 +37,7 @@
 //   - added blending support, from GLM_AVL
 //     http://www.avl.iu.edu/projects/GLM_AVL/
 //
-// TODO:
+// TODO(ashuang):
 //   - allow CR, CRLF, or LF as end-of-line in input obj and mtl
 //   - glmVertexNormals(): have an option to add normals only where undefined
 
@@ -259,8 +259,7 @@ static GLuint glmFindOrAddTexture(GLMmodel* model, const char* name) {
 
   dir = __glmDirName(model->pathname);
   filename = (char*)malloc(sizeof(char) * (strlen(dir) + strlen(name) + 1));
-  strcpy(filename, dir);
-  strcat(filename, name);
+  snprintf(filename, strlen(dir) + strlen(name), "%s%s", dir, name);
   free(dir);
 
   // didn't find the name, so print a warning and return the default
@@ -296,8 +295,7 @@ static GLvoid glmReadMTL(GLMmodel* model, char* name) {
 
   dir = __glmDirName(model->pathname);
   filename = (char*)malloc(sizeof(char) * (strlen(dir) + strlen(name) + 1));
-  strcpy(filename, dir);
-  strcat(filename, name);
+  snprintf(filename, strlen(dir) + strlen(name), "%s%s", dir, name);
 
   file = fopen(filename, "r");
   if (!file) {
@@ -503,8 +501,7 @@ static GLvoid glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname) {
   dir = __glmDirName(modelpath);
   filename =
       (char*)malloc(sizeof(char) * (strlen(dir) + strlen(mtllibname) + 1));
-  strcpy(filename, dir);
-  strcat(filename, mtllibname);
+  snprintf(filename, strlen(dir) + strlen(mtllibname), "%s%s", dir, mtllibname);
   free(dir);
 
   // open the file

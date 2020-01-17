@@ -425,7 +425,7 @@ static inline void bot_matrix_multiply(const double* a, int a_nrows,
 
 static inline int bot_matrix_rigid_body_transform_inverse_4x4d(
     const double m[16], double inv[16]) {
-  // TODO handle case where m[15] != 1
+  // TODO(ashuang): handle case where m[15] != 1
 
   double rot_inv_1[3] = {m[0], m[4], m[8]};
   double rot_inv_2[3] = {m[1], m[5], m[9]};

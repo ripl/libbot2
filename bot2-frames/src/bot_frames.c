@@ -166,7 +166,7 @@ static void on_frames_update(const lcm_recv_buf_t* rbuf, const char* channel,
     frame_handle->was_updated = 1;
     bot_ctrans_link_update(frame_handle->ctrans_link, &link_transf, msg->utime);
   } else {
-    // invalid update TODO: rate limit spewing? probably not worth it
+    // invalid update. TODO(ashuang): rate limit spewing? probably not worth it
     fprintf(
         stderr,
         "Ignoring link update %s->%s, frame was constructed relative to %s\n",

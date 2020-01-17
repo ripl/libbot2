@@ -312,7 +312,7 @@ DONE:
       "gl_max_texture_size=%d / width=%d / xSize2=%d / height=%d / ySize2 = %d",
       gl_max_texture_size, width, xSize2, height, ySize2));
   if ((width != xSize2) || (height != ySize2)) {
-    // TODO: use glTexSubImage2D instead
+    // TODO(ashuang): use glTexSubImage2D instead
     DBG_(__glmWarning("scaling texture"));
     rdata = (GLubyte*)malloc(sizeof(GLubyte) * xSize2 * ySize2 * pixelsize);
     if (!rdata) {

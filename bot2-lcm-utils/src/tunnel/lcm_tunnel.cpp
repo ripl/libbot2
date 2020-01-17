@@ -1131,8 +1131,8 @@ int main(int argc, char** argv) {
   params.tcp_max_age_ms = 10000;
   params.max_delay_ms = 0;
   params.fec = 0;
-  strcpy(params.channels_recv, ".*");
-  strcpy(params.channels_send, ".*");
+  snprintf(params.channels_recv, sizeof(params.channels_recv), ".*");
+  snprintf(params.channels_send, sizeof(params.channels_send), ".*");
   memset(params.lcm_url, 0, sizeof(params.lcm_url));
 
   struct option long_opts[] = {{"help", no_argument, 0, 'h'},
@@ -1174,14 +1174,16 @@ int main(int argc, char** argv) {
           fprintf(stderr, "recv channels string too long\n");
           return 1;
         }
-        strcpy(params.channels_recv, optarg);
+        snprintf(params.channels_recv, sizeof(params.channels_recv), "%s",
+                 optarg);
         break;
       case 's':
         if (strlen(optarg) > sizeof(params.channels_send) - 1) {
           fprintf(stderr, "send channels string too long\n");
           return 1;
         }
-        strcpy(params.channels_send, optarg);
+        snprintf(params.channels_send, sizeof(params.channels_send), "%s",
+                 optarg);
         break;
 
       case 'R':
@@ -1209,7 +1211,7 @@ int main(int argc, char** argv) {
           fprintf(stderr, "LCM URL string too long\n");
           return 1;
         }
-        strcpy(params.lcm_url, optarg);
+        snprintf(params.lcm_url, sizeof(params.lcm_url), "%s", optarg);
         break;
       case 'm': {
         char* e;
@@ -1265,11 +1267,12 @@ int main(int argc, char** argv) {
   }
   params.connectToServer = (optind == argc - 1);
   if (params.connectToServer) {
-    strcpy(params.server_addr_str, argv[optind]);
     if (strlen(argv[optind]) > sizeof(params.server_addr_str) - 1) {
       fprintf(stderr, "server address string too long\n");
       return 1;
     }
+    snprintf(params.server_addr_str, sizeof(params.server_addr_str), "%s",
+             argv[optind]);
     // pull out the server's port if its specified
     char* colon = strchr(params.server_addr_str, ':');
     if (colon != NULL) {
@@ -1299,7 +1302,8 @@ int main(int argc, char** argv) {
   tunnel_server_params_t serv_params;
   serv_params.startedAsClient = params.connectToServer;
   serv_params.port = params.port;
-  strcpy(serv_params.lcm_url, params.lcm_url);
+  snprintf(serv_params.lcm_url, sizeof(serv_params.lcm_url), "%s",
+           params.lcm_url);
   serv_params.verbose = params.verbose;
   if (!LcmTunnelServer::initializeServer(&serv_params)) {
     exit(1);

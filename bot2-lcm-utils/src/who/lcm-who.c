@@ -259,9 +259,10 @@ static int on_message_ready(GIOChannel* source, GIOCondition cond,
   }
   int64_t recv_utime = timestamp_now();
   time_t recv_t = recv_utime / 1000000;
-  struct tm* recv_tm = localtime(&recv_t);
+  struct tm recv_tm;
+  localtime_r(&recv_t, &recv_tm);
   char recv_tm_buf[200];
-  strftime(recv_tm_buf, sizeof(recv_tm_buf), "%b %d %H:%M:%S", recv_tm);
+  strftime(recv_tm_buf, sizeof(recv_tm_buf), "%b %d %H:%M:%S", &recv_tm);
 
   int* key = (int*)&from.sin_addr.s_addr;
   host_t* host = g_hash_table_lookup(app->hosts, key);

@@ -152,7 +152,7 @@ int procman_check_for_dead_children(procman_t* pm, procman_cmd_t** dead_child);
 
 int procman_close_dead_pipes(procman_t* pm, procman_cmd_t* cmd);
 
-// returns 0  TODO
+// returns 0. TODO(ashuang).
 int32_t procman_get_cmd_status(procman_t* pm, procman_cmd_t* cmd);
 
 // Changes the command that will be executed for a procman_cmd_t

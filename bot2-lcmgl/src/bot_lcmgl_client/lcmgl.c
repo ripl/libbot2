@@ -161,12 +161,13 @@ void bot_lcmgl_switch_buffer(bot_lcmgl_t* lcmgl) {
 }
 
 bot_lcmgl_t* bot_lcmgl_init(lcm_t* lcm, const char* name) {
+  const unsigned int channel_name_max_length = 128;
   bot_lcmgl_t* lcmgl = (bot_lcmgl_t*)calloc(1, sizeof(bot_lcmgl_t));
 
   lcmgl->lcm = lcm;
   lcmgl->name = strdup(name);
   lcmgl->scene = _timestamp_now();
-  lcmgl->channel_name = malloc(128);
+  lcmgl->channel_name = malloc(channel_name_max_length);
 
   lcmgl->data = malloc(INITIAL_ALLOC);
   lcmgl->data_alloc = INITIAL_ALLOC;
@@ -174,7 +175,8 @@ bot_lcmgl_t* bot_lcmgl_init(lcm_t* lcm, const char* name) {
   lcmgl->texture_count = 0;
 
   // XXX sanitize BOT_LCMGL channel name?
-  snprintf(lcmgl->channel_name, 128, "LCMGL_%s", lcmgl->name);
+  snprintf(lcmgl->channel_name, channel_name_max_length, "LCMGL_%s",
+           lcmgl->name);
 
   return lcmgl;
 }

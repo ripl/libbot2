@@ -106,7 +106,7 @@ static int signal_handler_glib(GIOChannel* source, GIOCondition condition,
 }
 
 static void signal_pipe_add_signal(int sig) {
-  // TODO use sigaction instead of signal()
+  // TODO(ashuang): use sigaction instead of signal()
   signal(sig, signal_handler);
 }
 

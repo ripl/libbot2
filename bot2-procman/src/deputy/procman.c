@@ -112,7 +112,7 @@ procman_t* procman_create(const procman_params_t* params) {
 
   // add the bin path to the PATH environment variable
   //
-  // TODO check and see if it's already there
+  // TODO(ashuang): check and see if it's already there
   char* path = getenv("PATH");
   int newpathlen = strlen(path) + strlen(params->bin_path) + 2;
   char* newpath = calloc(1, newpathlen);
@@ -499,7 +499,8 @@ static void procman_cmd_split_str(procman_cmd_t* pcmd, GHashTable* variables) {
     pcmd->envp = NULL;
   }
 
-  // TODO don't use g_shell_parse_argv... it's not good with escape characters
+  // TODO(ashuang): don't use g_shell_parse_argv... it's not good with escape
+  // characters
   char** argv = NULL;
   int argc = -1;
   GError* err = NULL;
@@ -589,8 +590,8 @@ procman_cmd_t* procman_add_cmd(procman_t* pm, const char* cmd_str,
   // pick a suitable ID
   int32_t cmd_id;
 
-  // TODO make this more efficient (i.e. sort the existing cmd_ids)
-  //      this implementation is O (n^2)
+  // TODO(ashuang): make this more efficient (i.e. sort the existing cmd_ids)
+  // this implementation is O (n^2)
   for (cmd_id = 1; cmd_id < INT_MAX; cmd_id++) {
     int collision = 0;
     GList* iter;

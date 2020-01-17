@@ -108,6 +108,8 @@ class LcmTunnel {
   static void on_lcm_message(const lcm_recv_buf_t* rbuf, const char* channel,
                              void* user_data);
   static gpointer sendThreadFunc(gpointer user_data);
+
+  // NOLINTNEXTLINE(runtime/references)
   bool send_lcm_messages(std::deque<TunnelLcmMessage*>& msgQueue,
                          uint32_t bytesInQueue);
   static int on_tcp_data(GIOChannel* source, GIOCondition cond,

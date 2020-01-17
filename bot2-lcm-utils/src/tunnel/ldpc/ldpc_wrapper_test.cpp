@@ -43,7 +43,7 @@ static inline double getTime(void) {
 }
 
 int main(int argc, char* argv[]) {
-  srand(time(NULL));
+  unsigned int seed = time(NULL);
   int numRuns = 1000;
   int numSuccess = 0;
 
@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
   for (int r = 0; r < numRuns; r++) {
     uint8_t* message = (uint8_t*)calloc(messageSize, 1);
     for (unsigned int i = 0; i < messageSize; i++) {
-      message[i] = (uint8_t)rand();
+      message[i] = (uint8_t)rand_r(&seed);
     }
 
     t0 += getTime();
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
       sentCount++;
       int16_t ESI;
       int enc_done = ldpc_enc->getNextPacket(pkt, &ESI);
-      if (rand() % 10000 < 10000 * dropfrac) {
+      if (rand_r(&seed) % 10000 < 10000 * dropfrac) {
         if (enc_done) {
           break;
         }

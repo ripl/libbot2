@@ -29,8 +29,6 @@
  * @ingroup BotCoreDataStructures
  * @include: bot_core/bot_core.h
  *
- * TODO
- *
  * Linking: `pkg-config --libs bot2-core`
  *
  * @{

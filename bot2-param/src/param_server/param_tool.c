@@ -40,7 +40,7 @@
 // clang-format on
 
 int main(int argc, char** argv) {
-  lcm_t* lcm = lcm_create(NULL);  // TODO: provider options?
+  lcm_t* lcm = lcm_create(NULL);  // TODO(ashuang): provider options?
 
   if (argc != 3) {
     fprintf(stderr, "usage:\n %s <key> <param>\n", argv[0]);

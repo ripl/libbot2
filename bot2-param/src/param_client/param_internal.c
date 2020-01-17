@@ -330,8 +330,8 @@ static int get_token(Parser* p, BotParamToken* tok, char* str, int len) {
     escape = '\\';
   }
   // A cast always starts with an open paren.
-  // TODO: this will need to be tokenized further once the cast is actually
-  // used for something.
+  // TODO(ashuang): this will need to be tokenized further once the cast is
+  // actually used for something.
   if (ch == '(') {
     c--;
     *tok = TokCast;
@@ -801,7 +801,7 @@ BotParam* bot_param_new_from_named_server(lcm_t* lcm, const char* server_name,
   bot_param_update_t_subscription_t* sub = bot_param_update_t_subscribe(
       lcm, update_channel, _on_param_update, (void*)param);
 
-  // TODO: is there a way to be sure nothing else is subscribed???
+  // TODO(ashuang): is there a way to be sure nothing else is subscribed???
   int64_t utime_start = _timestamp_now();
   int64_t last_print_utime = -1;
   while ((_timestamp_now() - utime_start) < 3e6) {
@@ -1423,12 +1423,13 @@ int bot_param_set_int_array(BotParam* param, const char* key, int* vals,
                             int len) {
   char* str;
   char single_val[16];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
     if (i < len - 1) {
       snprintf(single_val, sizeof(single_val), "%d,", vals[i]);
@@ -1436,8 +1437,8 @@ int bot_param_set_int_array(BotParam* param, const char* key, int* vals,
       snprintf(single_val, sizeof(single_val), "%d", vals[i]);
     }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1450,23 +1451,24 @@ int bot_param_set_boolean_array(BotParam* param, const char* key, int* vals,
                                 int len) {
   char* str;
   char single_val[16];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
   char val_str[8];
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
-    strcpy(val_str, (vals[i] == 0 ? "false" : "true"));
+    snprintf(val_str, sizeof(val_str), "%s", (vals[i] == 0 ? "false" : "true"));
     if (i < len - 1) {
       snprintf(single_val, sizeof(single_val), "%s,", val_str);
     } else {
       snprintf(single_val, sizeof(single_val), "%s", val_str);
     }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1479,12 +1481,13 @@ int bot_param_set_double_array(BotParam* param, const char* key, double* vals,
                                int len) {
   char* str;
   char single_val[32];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
     if (i < len - 1) {
       snprintf(single_val, sizeof(single_val), "%f,", vals[i]);
@@ -1492,8 +1495,8 @@ int bot_param_set_double_array(BotParam* param, const char* key, double* vals,
       snprintf(single_val, sizeof(single_val), "%f", vals[i]);
     }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1506,12 +1509,13 @@ int bot_param_set_str_array(BotParam* param, const char* key, const char** vals,
                             int len) {
   char* str;
   char single_val[256];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
     if (i < len - 1) {
       snprintf(single_val, sizeof(single_val), "%s,", vals[i]);
@@ -1519,8 +1523,8 @@ int bot_param_set_str_array(BotParam* param, const char* key, const char** vals,
       snprintf(single_val, sizeof(single_val), "%s", vals[i]);
     }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 

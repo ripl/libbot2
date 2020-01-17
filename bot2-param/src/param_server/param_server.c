@@ -78,7 +78,7 @@ void on_param_update(const lcm_recv_buf_t* rbuf, const char* channel,
                      const bot_param_update_t* msg, void* user) {
   param_server_t* self = (param_server_t*)user;
   if (msg->server_id != self->id) {
-    // TODO: deconfliction of multiple param servers
+    // TODO(ashuang): deconfliction of multiple param servers
     fprintf(stderr, "WARNING: Multiple param servers detected!\n");
   }
 }

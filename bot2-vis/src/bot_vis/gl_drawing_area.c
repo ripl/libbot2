@@ -184,7 +184,7 @@ static void* swap_thread(void* arg) {
   int minimal_attr_list[] = {GLX_RGBA, None};
   /// We need to create a separate connection to the display since
   // GLX is not thread-safe.
-  // TODO: get the DISPLAY string from gtk
+  // TODO(ashuang): get the DISPLAY string from gtk
   Display* display = XOpenDisplay(getenv("DISPLAY"));
   XVisualInfo* visual =
       glXChooseVisual(display, DefaultScreen(display), minimal_attr_list);
@@ -332,7 +332,7 @@ static void bot_gtk_gl_drawing_area_realize(GtkWidget* widget) {
   // signal back to this thread by writing to a file descriptor
   // when each vblank occurs.
 
-  // TODO: check extension list
+  // TODO(ashuang): check extension list
 
   GetVideoSyncSGI = (PFNGLXGETVIDEOSYNCSGIPROC)glXGetProcAddressARB(
       (unsigned char*)"glXGetVideoSyncSGI");

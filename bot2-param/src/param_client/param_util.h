@@ -35,7 +35,7 @@ extern "C" {
 // quat, rpy (in degrees!), rodrigues, angleaxis
 int bot_param_get_trans(BotParam* param, const char* name, BotTrans* trans);
 
-// TODO: should these be public?
+// TODO(ashuang): should these be public?
 
 // Get the translation subcomponent of the block "name"
 int bot_param_get_translation(BotParam* param, const char* name,

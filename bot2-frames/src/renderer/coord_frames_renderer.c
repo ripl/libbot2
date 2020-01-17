@@ -389,7 +389,7 @@ static void frames_update_handler(BotFrames* bot_frames, const char* frame,
                                   const char* relative_to, int64_t utime,
                                   void* user) {
   RendererFrames* self = (RendererFrames*)user;
-  // TODO: handle adding coordinate frames!
+  // TODO(ashuang): handle adding coordinate frames!
   bot_viewer_request_redraw(self->viewer);
 }
 

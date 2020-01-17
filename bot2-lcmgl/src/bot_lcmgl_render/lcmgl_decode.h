@@ -29,8 +29,6 @@
  * @brief Executing OpenGL commands received via LCMGL
  * @include bot_lcmgl_render/lcmgl_decode.h
  *
- * TODO
- *
  * Linking: `pkg-config --libs bot2-lcmgl-renderer`
  *
  * @{

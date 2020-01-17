@@ -31,8 +31,6 @@
  * @brief Hierarchical key/value configuration files
  * @include: bot_param/param_client.h
  *
- * TODO
- *
  * Linking: -lparam_client
  * @{
  */
@@ -471,7 +469,7 @@ BotParam* bot_param_get_global(lcm_t* lcm, int keep_updated);
  */
 int bot_param_override_local_param(
     BotParam* param, const char* key,
-    const char* val);  // TODO: add typed versions?
+    const char* val);  // TODO(ashuang): add typed versions?
 
 /**
  * bot_param_override_local_params:

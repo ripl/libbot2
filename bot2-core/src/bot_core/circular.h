@@ -36,7 +36,7 @@ extern "C" {
  * from the other.  It acts like a GArray in the sense that its contents
  * are statically allocated rather than pointers to user-allocated buffers.
  * For this reason, its size is fixed and allocated when the BotCircular
- * is created (TODO: set_size function).  If a new element is pushed
+ * is created (TODO(ashuang): set_size function).  If a new element is pushed
  * when the BotCircular is already full, the last element on the tail is
  * automatically overwritten.
  *

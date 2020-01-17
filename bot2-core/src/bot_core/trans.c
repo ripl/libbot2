@@ -43,7 +43,7 @@ void bot_trans_copy(BotTrans* dest, const BotTrans* src) {
 
 void bot_trans_set_from_quat_trans(BotTrans* btrans, const double rot_quat[4],
                                    const double trans_vec[3]) {
-  // TODO check that rot_quat is a valid quaternion
+  // TODO(ashuang): check that rot_quat is a valid quaternion
   memcpy(btrans->rot_quat, rot_quat, 4 * sizeof(double));
   memcpy(btrans->trans_vec, trans_vec, 3 * sizeof(double));
 }

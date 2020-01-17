@@ -97,7 +97,7 @@ static int parse_vertex(tokenize_t* tok, BotRwxVertex* v) {
   parse_double(tok, &v->pos[2]);
 
   if (!strcmp(tok->token, "UV")) {
-    // TODO
+    // TODO(ashuang)
     tokenize_next(tok);
     double uv;
     parse_double(tok, &uv);
