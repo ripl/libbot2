@@ -390,14 +390,14 @@ if (UNIX)
     set(X11_FOUND 1)
   endif ()
 
-  include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+  include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(X11
     REQUIRED_VARS X11_X11_INCLUDE_PATH X11_X11_LIB
     HANDLE_COMPONENTS)
 
   if(X11_FOUND)
-    include(${CMAKE_CURRENT_LIST_DIR}/CheckFunctionExists.cmake)
-    include(${CMAKE_CURRENT_LIST_DIR}/CheckLibraryExists.cmake)
+    include(CheckFunctionExists)
+    include(CheckLibraryExists)
 
     # Translated from an autoconf-generated configure script.
     # See libs.m4 in autoconf's m4 directory.
