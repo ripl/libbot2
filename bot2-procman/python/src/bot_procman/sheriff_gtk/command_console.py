@@ -137,10 +137,7 @@ class SheriffCommandConsole(Gtk.ScrolledWindow):
 
     def set_font(self, font_str):
         self.font_str = font_str
-        text_buffer = self.stdout_textview.get_buffer()
-        text_tag = text_buffer.create_tag(font=font_str)
-        text_buffer.apply_tag(text_tag, text_buffer.get_start_iter(),
-                              text_buffer.get_end_iter())
+        self.stdout_textview.modify_font(Pango.FontDescription(font_str))
 
     def _stdout_rate_limit_upkeep(self):
         for cmd in self.sheriff.get_all_commands():
