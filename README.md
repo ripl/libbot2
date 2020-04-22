@@ -61,6 +61,11 @@ dependencies for all sub-projects to your system:
 
 [scripts/setup/linux/ubuntu/bionic/install_prereqs](https://github.com/RobotLocomotion/libbot2/tree/drake/scripts/setup/linux/ubuntu/bionic)
 
+#### Ubuntu 20.04 "Focal"
+
+[scripts/setup/linux/ubuntu/focal/install_prereqs](https://github.com/RobotLocomotion/libbot2/tree/drake/scripts/setup/linux/ubuntu/focal)
+
+
 You will also need to manually install LCM from <https://lcm-proj.github.io/>.
 
 ## Build and Install

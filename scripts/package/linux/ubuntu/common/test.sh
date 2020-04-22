@@ -27,6 +27,7 @@ fi
 
 pushd /tmp
 # installs packages
+export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install --no-install-recommends -y devscripts gdebi
 gdebi -n lcm_1.4.0-2_amd64.deb
