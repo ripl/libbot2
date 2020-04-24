@@ -114,5 +114,5 @@ cmake -DPACKAGE_LIBBOT2:BOOL=ON \
 make
 cpack -G DEB
 popd
-mv libbot2-build/packages/libbot2_0.0.1.${timestamp}-1_amd64.deb libbot2_0.0.1.${timestamp}-1_amd64.deb
+mv libbot2-build/packages/"libbot2_0.0.1.${timestamp}-1_amd64.deb" "libbot2_0.0.1.${timestamp}-1_amd64.deb"
 rm -rf libbot2-build
