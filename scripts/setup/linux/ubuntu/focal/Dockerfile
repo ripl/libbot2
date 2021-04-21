@@ -15,8 +15,6 @@
 
 FROM ubuntu:20.04
 COPY ./install_prereqs /tmp/install_prereqs
-ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
-ARG DEBIAN_FRONTEND=noninteractive
-RUN yes | /tmp/install_prereqs \
+RUN /tmp/install_prereqs \
   && rm -rf /var/lib/apt/lists/* \
   && rm -f /tmp/install_prereqs
