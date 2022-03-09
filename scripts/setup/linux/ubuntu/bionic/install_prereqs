@@ -23,7 +23,7 @@ if [[ "${EUID}" -ne 0 ]]; then
 fi
 
 apt-get update -qq
-apt-get install --no-install-recommends lsb-release
+apt-get install --no-install-recommends -y lsb-release
 
 if [[ "$(lsb_release -sc)" != 'bionic' ]]; then
   echo 'This script requires Ubuntu 18.04 (Bionic)' >&2
