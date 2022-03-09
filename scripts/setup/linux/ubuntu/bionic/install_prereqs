@@ -30,7 +30,7 @@ if [[ "$(lsb_release -sc)" != 'bionic' ]]; then
   exit 2
 fi
 
-apt-get install --no-install-recommends \
+apt-get install --no-install-recommends -y \
   cmake \
   doxygen \
   dpkg-dev \
