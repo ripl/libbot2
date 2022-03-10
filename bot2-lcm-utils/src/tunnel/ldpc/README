@@ -5,8 +5,8 @@ It was modified by Abraham Bachrach to add a wrapper class. This code is in ldpc
 
 It is licensed with the LGPL:
 =====
-This codec is: 
-  Copyright (c) 2002-2006 INRIA - All rights reserved. 
+This codec is:
+  Copyright (c) 2002-2006 INRIA - All rights reserved.
   Copyright (c) 1995-2003 by Radford M. Neal
 
 It includes large portions of code written by Radford Neal and available here.
@@ -18,6 +18,5 @@ The code coming from INRIA is distributed under the GNU/LGPL licence, with the f
 
 This copyright notice must be retained and prominently displayed, along with a note saying that the original programs are available from Vincent Roca’s web page, and note is made of any changes made to these programs.
 This FEC library can therefore freely be used in any program, commercial or not, open-source or not.
-
 
 ===

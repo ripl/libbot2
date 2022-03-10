@@ -1,7 +1,30 @@
-#ifndef __bot_lcm_util_h__
-#define __bot_lcm_util_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
+
+/*
+ * This file is part of bot2-core.
+ *
+ * bot2-core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-core is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-core. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_CORE_BOT_CORE_LCM_UTIL_H_
+#define BOT2_CORE_BOT_CORE_LCM_UTIL_H_
+
+#include <stdint.h>
 
 #include <glib.h>
+#include <lcm/lcm.h>
 
 /**
  * @defgroup BotCoreLcmUtil LcmUtil
@@ -15,8 +38,6 @@
  *
  * Linking: `pkg-config --libs bot2-core`
  */
-
-#include <lcm/lcm.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,7 +57,7 @@ extern "C" {
  *
  * Returns: 0 on success, -1 on failure
  */
-int bot_glib_mainloop_attach_lcm(lcm_t *lcm);
+int bot_glib_mainloop_attach_lcm(lcm_t* lcm);
 
 /**
  * bot_glib_mainloop_detach_lcm:
@@ -48,7 +69,7 @@ int bot_glib_mainloop_attach_lcm(lcm_t *lcm);
  *
  * Returns: 0 on success, -1 on failure.
  */
-int bot_glib_mainloop_detach_lcm(lcm_t *lcm);
+int bot_glib_mainloop_detach_lcm(lcm_t* lcm);
 
 /**
  * bot_glib_mainloop_attach_lcm_full:
@@ -62,26 +83,24 @@ int bot_glib_mainloop_detach_lcm(lcm_t *lcm);
  *
  * Returns: 0 on success, -1 on failure.
  */
-int bot_glib_mainloop_attach_lcm_full(GMainLoop * mainloop, lcm_t *lcm,
-        gboolean quit_on_lcm_fail);
-
+int bot_glib_mainloop_attach_lcm_full(GMainLoop* mainloop, lcm_t* lcm,
+                                      gboolean quit_on_lcm_fail);
 
 /**
  * bot_lcm_get_global:
  * @provider: The string specifying the LCM network provider. If %NULL, the
  * environment variable "LCM_DEFAULT_URL" is used if it is defined, otherwise
  * the lcm_create default settings are used.
- * 
+ *
  * The first time this function is invoked, it instantiates and returns new
  * lcm_t instance via lcm_create(provider). Every subsequent call just returns
  * the same lcm_t instance.
  *
- * This function is thread-safe, if g_thread_init() has been called.
+ * This function is thread-safe.
  *
  * Returns: pointer to lcm_t
  */
-lcm_t *bot_lcm_get_global(const char *provider);
-
+lcm_t* bot_lcm_get_global(const char* provider);
 
 /**
  * bot_lcm_handle_or_timeout:
@@ -90,12 +109,11 @@ lcm_t *bot_lcm_get_global(const char *provider);
  *
  *  Waits for up to @timeout seconds for an LCM message to arrive.
  *  It handles the first message if one arrives.
- *
  */
-void bot_lcm_handle_or_timeout(lcm_t * lcm, int64_t timeout);
+void bot_lcm_handle_or_timeout(lcm_t* lcm, int64_t timeout);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif
+#endif  // BOT2_CORE_BOT_CORE_LCM_UTIL_H_

@@ -1,0 +1,182 @@
+# This file is part of libbot2.
+#
+# libbot2 is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# libbot2 is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with libbot2. If not, see <https://www.gnu.org/licenses/>.
+
+---
+name: CI
+
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+  push:
+    branches:
+      - drake
+
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  macos:
+    name: macOS Latest
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install prerequisites
+        run: ./scripts/setup/mac/install_prereqs
+        shell: zsh -f {0}
+      - name: Build and install
+        run: |
+          mkdir build
+          pushd build
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_FLAGS=-DGL_SILENCE_DEPRECATION=1 \
+            -DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION=1 \
+            -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
+            -DWITH_BOT_VIS=OFF \
+            ..
+          make install
+          popd
+        shell: zsh -f {0}
+
+  ubuntu-1804:
+    name: Ubuntu 18.04 Bionic
+    runs-on: ubuntu-latest
+    container: ubuntu:18.04
+    steps:
+      - name: Install Git
+        run: |
+          apt-get update -qq
+          apt-get autoremove -qq
+          apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy \
+              --no-install-recommends install \
+            ca-certificates \
+            git
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install prerequisites
+        run: |
+          ./scripts/setup/linux/ubuntu/bionic/install_prereqs
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+      - name: Download, build, and install LCM
+        run: |
+          wget -nv https://github.com/lcm-proj/lcm/archive/v1.4.0.tar.gz
+          tar -xf v1.4.0.tar.gz
+          rm -f v1.4.0.tar.gz
+          pushd lcm-1.4.0
+          mkdir build
+          pushd build
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_FLAGS=-w \
+            -DCMAKE_CXX_FLAGS=-w \
+            -DCMAKE_INSTALL_PREFIX=/opt/lcm \
+            -DLCM_ENABLE_EXAMPLES=OFF \
+            -DLCM_ENABLE_GO=OFF \
+            -DLCM_ENABLE_LUA=OFF \
+            -DLCM_ENABLE_TESTS=OFF \
+            -DLCM_INSTALL_M4MACROS=OFF \
+            -DLCM_INSTALL_PKGCONFIG=OFF \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            ..
+          make install
+          popd
+          popd
+          rm -rf lcm-1.4.0
+        shell: bash
+      - name: Build and install
+        run: |
+          mkdir build
+          pushd build
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_SYSTEM_PREFIX_PATH=/opt/lcm \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            ..
+          make install
+          popd
+        shell: bash
+
+  ubuntu-2004:
+    name: Ubuntu 20.04 Focal
+    runs-on: ubuntu-latest
+    container: ubuntu:20.04
+    steps:
+      - name: Install Git
+        run: |
+          apt-get update -qq
+          apt-get autoremove -qq
+          apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy \
+              --no-install-recommends install \
+            ca-certificates \
+            git
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+        env:
+          DEBIAN_FRONTEND: noninteractive
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install prerequisites
+        run: |
+          ./scripts/setup/linux/ubuntu/focal/install_prereqs
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+      - name: Download, build, and install LCM
+        run: |
+          wget -nv https://github.com/lcm-proj/lcm/archive/v1.4.0.tar.gz
+          tar -xf v1.4.0.tar.gz
+          rm -f v1.4.0.tar.gz
+          pushd lcm-1.4.0
+          mkdir build
+          pushd build
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_FLAGS=-w \
+            -DCMAKE_CXX_FLAGS=-w \
+            -DCMAKE_INSTALL_PREFIX=/opt/lcm \
+            -DLCM_ENABLE_EXAMPLES=OFF \
+            -DLCM_ENABLE_GO=OFF \
+            -DLCM_ENABLE_LUA=OFF \
+            -DLCM_ENABLE_TESTS=OFF \
+            -DLCM_INSTALL_M4MACROS=OFF \
+            -DLCM_INSTALL_PKGCONFIG=OFF \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            ..
+          make install
+          popd
+          popd
+          rm -rf lcm-1.4.0
+        shell: bash
+      - name: Build and install
+        run: |
+          mkdir build
+          pushd build
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_SYSTEM_PREFIX_PATH=/opt/lcm \
+            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+            ..
+          make install
+          popd
+        shell: bash

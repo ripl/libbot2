@@ -1,3 +1,20 @@
+/*
+ * This file is part of bot2-core.
+ *
+ * bot2-core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-core is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-core. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package bot_core;
 
 // image_sync_t is used by libcam plugins to synchronize playback of a libcam
@@ -5,18 +22,17 @@ package bot_core;
 //
 // The expected usage scenario is when an image stream is recorded to a libcam
 // log file, and a lcm-syncpub unit is in the libcam chain that publishes
-// image_sync_t messages to an LCM network, where they may be logged to the
-// an LCM logfile.
+// image_sync_t messages to an LCM network, where they may be logged to the an
+// LCM logfile.
 //
 // Later, when playing back an LCM log file, the image_sync_t messages can be
-// used by a libcam log playback unit to synchronize its playback of the
-// libcam log file with the LCM log file.
+// used by a libcam log playback unit to synchronize its playback of the libcam
+// log file with the LCM log file.
 //
 // The existence of this message type is largely predicated on the notion that
-// we may not always want full resolution image data in an LCM log file, and
-// may instead store it in a dedicated libcam log file.
+// we may not always want full resolution image data in an LCM log file, and may
+// instead store it in a dedicated libcam log file.
 
-struct image_sync_t
-{
-    int64_t utime;
+struct image_sync_t {
+    int64_t  utime;
 }

@@ -1,12 +1,30 @@
+/*
+ * This file is part of bot2-param.
+ *
+ * bot2-param is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-param is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-param. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package bot_param;
 
-struct set_t
-{
-        int64_t utime; 
-        
-        int64_t server_id;       //The unique identifier for this param-server, 
-        int32_t sequence_number; //The version number of the last_param_file seen by sender
-	
-		int32_t numEntries; 			//number of keys that should be set
-		bot_param.entry_t entries[numEntries];  //the key,value pairs to set
+struct set_t {
+    int64_t  utime;
+
+    int64_t  server_id;                     // Unique identifier for this
+                                            // param-server
+    int32_t  sequence_number;               // Version number of the
+                                            // last_param_file seen by sender
+
+    int32_t  numEntries;                    // Number of keys that should be set
+    bot_param.entry_t entries[numEntries];  // Key-value pairs to set
 }

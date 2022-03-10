@@ -1,39 +1,62 @@
-/* param.c:
+// -*- mode: c -*-
+// vim: set filetype=c :
+
+/*
+ * This file is part of bot2-param.
  *
- * A parser for a configuration file format with c-like syntax.  Tokens
- * are nested within higher level structures denoted by { or }.  Every
- * token is an array of strings, with simplified syntax for arrays of length
- * one.
+ * bot2-param is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-param is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-param. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <stdarg.h>
-#include <ctype.h>
-#include <assert.h>
-#include <bot_core/lcm_util.h>
-#include "param_client.h"
+// param.c:
+//
+// A parser for a configuration file format with c-like syntax.  Tokens
+// are nested within higher level structures denoted by { or }.  Every
+// token is an array of strings, with simplified syntax for arrays of length
+// one.
+
 #include "param_internal.h"
-#include "misc_utils.h"
-#include <lcmtypes/bot2_param.h>
+
+#include <assert.h>
+#include <ctype.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+
 #include <glib.h>
+#include <lcm/lcm.h>
+
+#include <bot_core/lcm_util.h>
+
+#include "lcmtypes/bot_param_request_t.h"
+#include "lcmtypes/bot_param_update_t.h"
+#include "misc_utils.h"
+#include "param_client.h"
+
+// IWYU pragma: no_forward_declare _BotParamElement
+// IWYU pragma: no_forward_declare _Parser
 
 #define err(args...) fprintf(stderr, args)
 
 #define MAX_REFERENCES ((1LL << 60))
 
+typedef enum { ParserTypeFile, ParserTypeString } ParserType;
+
 typedef struct _Parser Parser;
-typedef struct _ParserFile ParserFile;
-typedef struct _ParserString ParserString;
-typedef struct _BotParamElement BotParamElement;
-
-typedef int (*GetChFunc)(Parser *);
-
-typedef enum {
-  ParserTypeFile, ParserTypeString
-} ParserType;
+typedef int (*GetChFunc)(Parser*);
 
 struct _Parser {
   ParserType type;
@@ -41,24 +64,24 @@ struct _Parser {
   int extra_ch;
 };
 
-struct _ParserFile {
+typedef struct _ParserFile {
   Parser p;
-  const char * filename;
-  FILE * file;
+  const char* filename;
+  FILE* file;
   int row;
   int col;
   int in_comment;
-};
+} ParserFile;
 
-struct _ParserString {
+typedef struct _ParserString {
   Parser p;
-  const char * string;
+  const char* string;
   int length;
   int ind;
   int row;
   int col;
   int in_comment;
-};
+} ParserString;
 
 typedef enum {
   TokInvalid,
@@ -75,107 +98,108 @@ typedef enum {
   TokEOF,
 } BotParamToken;
 
-typedef enum {
-  BotParamContainer, BotParamArray
-} BotParamType;
+typedef enum { BotParamContainer, BotParamArray } BotParamType;
 
 typedef enum {
-  BotParamDataString, BotParamDataInt, BotParamDataBool, BotParamDataDouble
+  BotParamDataString,
+  BotParamDataInt,
+  BotParamDataBool,
+  BotParamDataDouble
 } BotParamDataType;
 
+typedef struct _BotParamElement BotParamElement;
 struct _BotParamElement {
   BotParamType type;
   BotParamDataType data_type;
-  BotParamElement * parent;
-  char * name;
-  BotParamElement * next;
-  BotParamElement * children;
+  BotParamElement* parent;
+  char* name;
+  BotParamElement* next;
+  BotParamElement* children;
   int num_values;
-  char ** values;
+  char** values;
 };
 
 struct _BotParam {
-  BotParamElement * root;
-  GMutex * lock;
+  BotParamElement* root;
+  GMutex* lock;
   int64_t server_id;
   int64_t sequence_number;
 
-  GList * update_callbacks;
-
+  GList* update_callbacks;
 };
 
 typedef struct {
-  bot_param_update_handler_t * callback_func;
-  void * user;
+  bot_param_update_handler_t* callback_func;
+  void* user;
 } update_handler_t;
 
+static BotParamElement* find_key(BotParamElement* el, const char* key,
+                                 int inherit);
 
-static BotParamElement *
-find_key(BotParamElement * el, const char * key, int inherit);
-
-/* Prints an error message, preceeded by useful context information from the
- * parser (i.e. line number). */
-static int print_msg(Parser * p, char * format, ...)
-{
+// Prints an error message, preceeded by useful context information from the
+// parser (i.e. line number).
+static int print_msg(Parser* p, char* format, ...) {
   va_list args;
   if (p->type == ParserTypeFile) {
-    ParserFile * pf = (ParserFile *) p;
-    const char * fname = strrchr(pf->filename, '/');
-    if (fname)
+    ParserFile* pf = (ParserFile*)p;
+    const char* fname = strrchr(pf->filename, '/');
+    if (fname) {
       fname++;
-    else
+    } else {
       fname = pf->filename;
+    }
     fprintf(stderr, "%s:%d ", fname, pf->row + 1);
-    va_start (args, format);
+    va_start(args, format);
     vfprintf(stderr, format, args);
-    va_end (args);
+    va_end(args);
     return 0;
   }
-  else if (p->type == ParserTypeFile) {
-    ParserString * ps = (ParserString *) p;
+  if (p->type == ParserTypeFile) {
+    ParserString* ps = (ParserString*)p;
     fprintf(stderr, "%s:%d ", "STRING_BUFFER", ps->row + 1);
-    va_start (args, format);
+    va_start(args, format);
     vfprintf(stderr, format, args);
-    va_end (args);
+    va_end(args);
     return 0;
   }
   return -1;
 }
 
-/* Get the next character from a file, while converting all forms of
- * whitespace into plain spaces and stripping comments.
- *
- * Returns the next printable character on success, 0 on EOF, -1 on
- * error.
- */
-static int get_ch_file(Parser * p)
-{
-  ParserFile * pf = (ParserFile *) p;
+// Get the next character from a file, while converting all forms of
+// whitespace into plain spaces and stripping comments.
+//
+// Returns the next printable character on success, 0 on EOF, -1 on
+// error.
+static int get_ch_file(Parser* p) {
+  ParserFile* pf = (ParserFile*)p;
   int ch;
 
-  /* If a character has been put back with unget_ch, get it. */
+  // If a character has been put back with unget_ch, get it.
   if (p->extra_ch) {
     ch = p->extra_ch;
     p->extra_ch = 0;
     return ch;
   }
 
-  while ((ch = getc (pf->file)) != EOF) {
+  while ((ch = getc(pf->file)) != EOF) {
     if (ch == '\n') {
       pf->row++;
       pf->col = 0;
       pf->in_comment = 0;
       return ' ';
     }
-    if (ch == '#')
+    if (ch == '#') {
       pf->in_comment = 1;
-    if (pf->in_comment)
+    }
+    if (pf->in_comment) {
       continue;
+    }
 
     pf->col++;
-    if (isspace (ch))
+    if (isspace(ch)) {
       return ' ';
-    if (!isprint (ch)) {
+    }
+    if (!isprint(ch)) {
       print_msg(p, "Error: Non-printable character 0x%02x\n", ch);
       return -1;
     }
@@ -184,18 +208,16 @@ static int get_ch_file(Parser * p)
   return 0;
 }
 
-/* Get the next character from the string buffer, while converting all forms of
- * whitespace into plain spaces and stripping comments.
- *
- * Returns the next printable character on success, 0 on EOF, -1 on
- * error.
- */
-static int get_ch_string(Parser * p)
-{
-  ParserString * ps = (ParserString *) p;
+// Get the next character from the string buffer, while converting all forms of
+// whitespace into plain spaces and stripping comments.
+//
+// Returns the next printable character on success, 0 on EOF, -1 on
+// error.
+static int get_ch_string(Parser* p) {
+  ParserString* ps = (ParserString*)p;
   int ch;
 
-  /* If a character has been put back with unget_ch, get it. */
+  // If a character has been put back with unget_ch, get it.
   if (p->extra_ch) {
     ch = p->extra_ch;
     p->extra_ch = 0;
@@ -210,15 +232,18 @@ static int get_ch_string(Parser * p)
       ps->in_comment = 0;
       return ' ';
     }
-    if (ch == '#')
+    if (ch == '#') {
       ps->in_comment = 1;
-    if (ps->in_comment)
+    }
+    if (ps->in_comment) {
       continue;
+    }
 
     ps->col++;
-    if (isspace (ch))
+    if (isspace(ch)) {
       return ' ';
-    if (!isprint (ch)) {
+    }
+    if (!isprint(ch)) {
       print_msg(p, "Error: Non-printable character 0x%02x\n", ch);
       return -1;
     }
@@ -227,32 +252,34 @@ static int get_ch_string(Parser * p)
   return 0;
 }
 
-/* Returns a previously gotten character to the buffer, so it will be gotten
- * next.  This function cannot be used more than once before getting the
- * next character. */
-static int unget_ch(Parser * p, int ch)
-{
+// Returns a previously gotten character to the buffer, so it will be gotten
+// next.  This function cannot be used more than once before getting the
+// next character.
+static int unget_ch(Parser* p, int ch) {
   p->extra_ch = ch;
   return 0;
 }
 
-/* Get the next token from the parser.  All information about what constitutes
- * a token is expressed in this function.
- *
- * The type of token is stored in tok.  The actual text of the token is stored
- * in str, a buffer of length len passed by the caller.
- */
-static int get_token(Parser * p, BotParamToken * tok, char * str, int len)
-{
-  int ch, end_ch = 0, c = 0, escape = 0;
+// Get the next token from the parser.  All information about what constitutes
+// a token is expressed in this function.
+//
+// The type of token is stored in tok.  The actual text of the token is stored
+// in str, a buffer of length len passed by the caller.
+static int get_token(Parser* p, BotParamToken* tok, char* str, int len) {
+  int ch;
+  int end_ch = 0;
+  int c = 0;
+  int escape = 0;
   *tok = TokInvalid;
 
-  /* Skip whitespace (all whitespace converted to ' ' already) */
-  while ((ch = p->get_ch(p)) == ' ')
-    ;
+  // Skip whitespace (all whitespace converted to ' ' already)
+  while ((ch = p->get_ch(p)) == ' ') {
+    continue;
+  }
 
-  if (ch == -1)
+  if (ch == -1) {
     return -1;
+  }
 
   if (len < 4) {
     fprintf(stderr, "Error: not enough space to store token\n");
@@ -295,24 +322,24 @@ static int get_token(Parser * p, BotParamToken * tok, char * str, int len)
     goto finish;
   }
 
-  /* A string always starts with a double quote */
+  // A string always starts with a double quote
   if (ch == '\"') {
     c--;
     *tok = TokString;
     end_ch = '\"';
     escape = '\\';
   }
-  /* A cast always starts with an open paren.
-   * TODO: this will need to be tokenized further once the cast is actually
-   * used for something. */
+  // A cast always starts with an open paren.
+  // TODO(ashuang): this will need to be tokenized further once the cast is
+  // actually used for something.
   if (ch == '(') {
     c--;
     *tok = TokCast;
     end_ch = ')';
     escape = 0;
   }
-  /* An identifier starts with alpha-numeric text or a few symbols */
-  if (isalnum (ch) || ch == '_' || ch == '-' || ch == '.' || ch == '+') {
+  // An identifier starts with alpha-numeric text or a few symbols
+  if (isalnum(ch) || ch == '_' || ch == '-' || ch == '.' || ch == '+') {
     *tok = TokIdentifier;
     end_ch = 0;
     escape = 0;
@@ -323,25 +350,28 @@ static int get_token(Parser * p, BotParamToken * tok, char * str, int len)
     return -1;
   }
 
-  /* Read the remaining text of a string, cast, or identifier */
+  // Read the remaining text of a string, cast, or identifier
   int prev_ch = 0;
   while (1) {
     ch = p->get_ch(p);
-    /* An identifier is terminated as soon as we see a character which
-     * itself cannot be part of an identifier. */
-    if (*tok == TokIdentifier && !isalnum (ch) && ch != '_' && ch != '-' && ch != '.' && ch != '+') {
-      if (ch != 0)
+    // An identifier is terminated as soon as we see a character which
+    // itself cannot be part of an identifier.
+    if (*tok == TokIdentifier && !isalnum(ch) && ch != '_' && ch != '-' &&
+        ch != '.' && ch != '+') {
+      if (ch != 0) {
         unget_ch(p, ch);
+      }
       goto finish;
     }
     if (ch == 0) {
       print_msg(p, "Error: Expected '%c' but got end-of-file\n", end_ch);
       return -1;
     }
-    /* Strings or casts are terminated when their respective end
-     * characters are read, as long as the character is not escaped. */
-    if (ch == end_ch && prev_ch != escape)
+    // Strings or casts are terminated when their respective end
+    // characters are read, as long as the character is not escaped.
+    if (ch == end_ch && prev_ch != escape) {
       goto finish;
+    }
     prev_ch = ch;
     str[c++] = ch;
 
@@ -350,156 +380,142 @@ static int get_token(Parser * p, BotParamToken * tok, char * str, int len)
       return -1;
     }
   }
-  finish: str[c] = '\0';
+finish:
+  str[c] = '\0';
   return 0;
 }
 
-static BotParamElement *
-new_element(const char * name)
-{
-  BotParamElement * el;
+static BotParamElement* new_element(const char* name) {
+  BotParamElement* el;
 
   el = malloc(sizeof(BotParamElement));
   memset(el, 0, sizeof(BotParamElement));
-  if (name)
+  if (name) {
     el->name = strdup(name);
+  }
   el->data_type = BotParamDataString;
 
   return el;
 }
 
-static void free_element(BotParamElement * el)
-{
+static void free_element(BotParamElement* el) {
   free(el->name);
-  BotParamElement * child, *next;
+  BotParamElement* child;
+  BotParamElement* next;
   for (child = el->children; child; child = next) {
     next = child->next;
     free_element(child);
   }
   int i;
-  for (i = 0; i < el->num_values; i++)
+  for (i = 0; i < el->num_values; i++) {
     free(el->values[i]);
+  }
   free(el->values);
   free(el);
 }
 
-#if 0
-/* Debugging function that prints all tokens sequentially from a file */
-static int
-print_all_tokens (Parser * p)
-{
-  BotParamToken tok;
-  char str[256];
-
-  while (get_token (p, &tok, str, sizeof (str)) == 0) {
-    printf ("tok %d: %s\n", tok, str);
-    if (tok == TokEOF)
-    return 0;
+// Appends child to the list of el's children.
+static int add_child(Parser* p, BotParamElement* el, BotParamElement* child) {
+  BotParamElement** nptr;
+  for (nptr = &el->children; *nptr != NULL; nptr = &((*nptr)->next)) {
+    continue;
   }
-  return -1;
-}
-#endif
-
-/* Appends child to the list of el's children. */
-static int add_child(Parser * p, BotParamElement * el, BotParamElement * child)
-{
-  BotParamElement ** nptr;
-  for (nptr = &el->children; *nptr != NULL; nptr = &((*nptr)->next))
-    ;
   *nptr = child;
   child->next = NULL;
   child->parent = el;
   return 0;
 }
 
-/* Appends str to the list of el's values. */
-static int add_value(Parser * p, BotParamElement * el, const char * str)
-{
+// Appends str to the list of el's values.
+static int add_value(Parser* p, BotParamElement* el, const char* str) {
   int n = el->num_values;
-  el->values = realloc(el->values, (n + 1) * sizeof(char *));
+  el->values = realloc(el->values, (n + 1) * sizeof(char*));
   el->values[n] = strdup(str);
   el->num_values = n + 1;
   return 0;
 }
 
-/* Parses the interior portion of an array (the part after the leading "["),
- * adding any values to the array's list of values.  Terminates when the
- * trailing "]" is found.
- */
-static int parse_array(Parser * p, BotParamElement * el)
-{
+// Parses the interior portion of an array (the part after the leading "["),
+// adding any values to the array's list of values.  Terminates when the
+// trailing "]" is found.
+static int parse_array(Parser* p, BotParamElement* el) {
   BotParamToken tok;
   char str[256];
 
   while (1) {
-    if (get_token(p, &tok, str, sizeof(str)) < 0)
+    if (get_token(p, &tok, str, sizeof(str)) < 0) {
       goto fail;
+    }
 
     if (tok == TokIdentifier || tok == TokString) {
       add_value(p, el, str);
-    }
-    else if (tok == TokCloseArray) {
+    } else if (tok == TokCloseArray) {
       return 0;
-    }
-    else {
-      print_msg(p, "Error: unexpected token \"%s\", expected value or "
-        "end of array\n", str);
+    } else {
+      print_msg(p,
+                "Error: unexpected token \"%s\", expected value or "
+                "end of array\n",
+                str);
       goto fail;
     }
 
-    if (get_token(p, &tok, str, sizeof(str)) < 0)
+    if (get_token(p, &tok, str, sizeof(str)) < 0) {
       goto fail;
+    }
 
     if (tok == TokArraySep) {
-      /* do nothing */
-    }
-    else if (tok == TokCloseArray) {
+      // do nothing
+    } else if (tok == TokCloseArray) {
       return 0;
-    }
-    else {
-      print_msg(p, "Error: unexpected token \"%s\", expected comma or "
-        "end of array\n", str);
+    } else {
+      print_msg(p,
+                "Error: unexpected token \"%s\", expected comma or "
+                "end of array\n",
+                str);
       goto fail;
     }
   }
 
-  fail: return -1;
+fail:
+  return -1;
 }
 
-/* Parses the right-hand side of an assignment (after the equal sign).
- * Checks for any preceeding optional cast, and then parses the value of the
- * assignment.  Terminates when the trailing semicolon is found.
- */
-static int parse_right_side(Parser * p, BotParamElement * el)
-{
+// Parses the right-hand side of an assignment (after the equal sign).
+// Checks for any preceeding optional cast, and then parses the value of the
+// assignment.  Terminates when the trailing semicolon is found.
+static int parse_right_side(Parser* p, BotParamElement* el) {
   BotParamToken tok;
   char str[256];
 
-  if (get_token(p, &tok, str, sizeof(str)) != 0)
+  if (get_token(p, &tok, str, sizeof(str)) != 0) {
     goto fail;
+  }
 
-  /* Allow an optional cast preceeding the right-hand side */
+  // Allow an optional cast preceeding the right-hand side
   if (tok == TokCast) {
-    /* Cast is currently ignored */
-    if (get_token(p, &tok, str, sizeof(str)) != 0)
+    // Cast is currently ignored
+    if (get_token(p, &tok, str, sizeof(str)) != 0) {
       goto fail;
+    }
   }
 
   if (tok == TokIdentifier || tok == TokString) {
     add_value(p, el, str);
-  }
-  else if (tok == TokOpenArray) {
-    if (parse_array(p, el) < 0)
+  } else if (tok == TokOpenArray) {
+    if (parse_array(p, el) < 0) {
       goto fail;
-  }
-  else {
-    print_msg(p, "Error: unexpected token \"%s\", expected right-hand "
-      "side\n", str);
+    }
+  } else {
+    print_msg(p,
+              "Error: unexpected token \"%s\", expected right-hand "
+              "side\n",
+              str);
     goto fail;
   }
 
-  if (get_token(p, &tok, str, sizeof(str)) != 0)
+  if (get_token(p, &tok, str, sizeof(str)) != 0) {
     goto fail;
+  }
 
   if (tok != TokEndStatement) {
     print_msg(p, "Error: unexpected token \"%s\", expected semicolon\n", str);
@@ -508,76 +524,77 @@ static int parse_right_side(Parser * p, BotParamElement * el)
 
   return 0;
 
-  fail: return -1;
+fail:
+  return -1;
 }
 
-/* Parses the interior a container (the portion after the "{").  Any
- * assignment statements or enclosed containers are recursively parsed.
- * Terminates when end_token is found, which should be TokEOF for the
- * top-level container and TokCloseStruct for everything else. */
-static int parse_container(Parser * p, BotParamElement * cont, BotParamToken end_token)
-{
+// Parses the interior a container (the portion after the "{").  Any
+// assignment statements or enclosed containers are recursively parsed.
+// Terminates when end_token is found, which should be TokEOF for the
+// top-level container and TokCloseStruct for everything else.
+static int parse_container(Parser* p, BotParamElement* cont,
+                           BotParamToken end_token) {
   BotParamToken tok;
   char str[256];
-  BotParamElement * child = NULL;
+  BotParamElement* child = NULL;
   int child_exists = 0;
 
   while (get_token(p, &tok, str, sizeof(str)) == 0) {
-    //printf ("t %d: %s\n", tok, str);
     if (!child && tok == TokIdentifier) {
       BotParamElement* existing_el = find_key(cont, str, 0);
       if (NULL == existing_el) {
         child = new_element(str);
         child_exists = 0;
-      }
-      else {
+      } else {
         child = existing_el;
         child_exists = 1;
       }
-    }
-    else if (child && tok == TokAssign) {
+    } else if (child && tok == TokAssign) {
       child->type = BotParamArray;
-      if (parse_right_side(p, child) < 0)
+      if (parse_right_side(p, child) < 0) {
         goto fail;
-      if (!child_exists)
+      }
+      if (!child_exists) {
         add_child(p, cont, child);
+      }
       child = NULL;
-    }
-    else if (child && tok == TokOpenStruct) {
+    } else if (child && tok == TokOpenStruct) {
       child->type = BotParamContainer;
-      if (parse_container(p, child, TokCloseStruct) < 0)
+      if (parse_container(p, child, TokCloseStruct) < 0) {
         goto fail;
-      if (!child_exists)
+      }
+      if (!child_exists) {
         add_child(p, cont, child);
+      }
       child = NULL;
-    }
-    else if (!child && tok == end_token)
+    } else if (!child && tok == end_token) {
       return 0;
-    else {
+    } else {
       print_msg(p, "Error: unexpected token \"%s\"\n", str);
       goto fail;
     }
   }
 
-  fail: if (child) {
+fail:
+  if (child) {
     free_element(child);
   }
   return -1;
 }
 
-static int write_array(BotParamElement * el, int indent, FILE * f)
-{
-  if (el->num_values == 1)
+static int write_array(BotParamElement* el, int indent, FILE* f) {
+  if (el->num_values == 1) {
     fprintf(f, "%*s%s = \"%s\";\n", indent, "", el->name, el->values[0]);
-  else {
+  } else {
     fprintf(f, "%*s%s = [", indent, "", el->name);
 
-    if (el->num_values == 0)
+    if (el->num_values == 0) {
       fprintf(f, "];\n");
-    else {
+    } else {
       int i;
-      for (i = 0; i < (el->num_values - 1); i++)
+      for (i = 0; i < (el->num_values - 1); i++) {
         fprintf(f, "\"%s\", ", el->values[i]);
+      }
 
       fprintf(f, "\"%s\"];\n", el->values[i]);
     }
@@ -585,18 +602,17 @@ static int write_array(BotParamElement * el, int indent, FILE * f)
   return 0;
 }
 
-static int write_container(BotParamElement * el, int indent, FILE * f)
-{
-  BotParamElement * child;
+static int write_container(BotParamElement* el, int indent, FILE* f) {
+  BotParamElement* child;
 
   fprintf(f, "%*s%s {\n", indent, "", el->name);
 
   for (child = el->children; child; child = child->next) {
-    if (child->type == BotParamContainer)
+    if (child->type == BotParamContainer) {
       write_container(child, indent + 4, f);
-    else if (child->type == BotParamArray)
+    } else if (child->type == BotParamArray) {
       write_array(child, indent + 4, f);
-    else {
+    } else {
       fprintf(stderr, "Error: unknown child (%d)\n", child->type);
       return -1;
     }
@@ -606,21 +622,21 @@ static int write_container(BotParamElement * el, int indent, FILE * f)
   return 0;
 }
 
-/* Prints the contents of a configuration file's parse tree to the file handle
- * f. */
-int bot_param_write(BotParam * param, FILE * f)
-{
+// Prints the contents of a configuration file's parse tree to the file handle
+// f.
+int bot_param_write(BotParam* param, FILE* f) {
   g_mutex_lock(param->lock);
-  BotParamElement * child, *root;
+  BotParamElement* child;
+  BotParamElement* root;
 
   root = param->root;
 
   for (child = root->children; child; child = child->next) {
-    if (child->type == BotParamContainer)
+    if (child->type == BotParamContainer) {
       write_container(child, 0, f);
-    else if (child->type == BotParamArray)
+    } else if (child->type == BotParamArray) {
       write_array(child, 0, f);
-    else {
+    } else {
       fprintf(stderr, "Error: unknown child (%d)\n", child->type);
       g_mutex_unlock(param->lock);
       return -1;
@@ -630,16 +646,14 @@ int bot_param_write(BotParam * param, FILE * f)
   return 0;
 }
 
-/* Writes the contents of a configuration file's parse tree to the
- * string s. */
-int bot_param_write_to_string(BotParam * param, char ** s)
-{
-  /* Somewhat circuitous way of writing to a string:
-   * write to a tmpfile and read back from it.
-   * fmemopen and open_memstream could be used but they are
-   * GNU extensions.
-   */
-  FILE *tmpF = tmpfile();
+// Writes the contents of a configuration file's parse tree to the
+// string s.
+int bot_param_write_to_string(BotParam* param, char** s) {
+  // Somewhat circuitous way of writing to a string:
+  // write to a tmpfile and read back from it.
+  // fmemopen and open_memstream could be used but they are
+  // GNU extensions.
+  FILE* tmpF = tmpfile();
   if (tmpF == NULL) {
     fprintf(stderr, "ERROR: could not open temp file\n");
     return -1;
@@ -651,17 +665,17 @@ int bot_param_write_to_string(BotParam * param, char ** s)
     return ret;
   }
 
-  /* obtain the number of characters that were written */
+  // obtain the number of characters that were written
   int lSize = ftell(tmpF);
   rewind(tmpF);
-  /* allocate memory to contain the whole file */
-  *s = (char *) calloc(1, lSize+1);
-  if (*s==NULL) {
+  // allocate memory to contain the whole file
+  *s = (char*)calloc(1, lSize + 1);
+  if (*s == NULL) {
     fprintf(stderr, "ERROR: allocating memory for the param string output.\n");
     return -1;
   }
 
-  /* copy the file into the buffer: */
+  // copy the file into the buffer:
   int result = fread(*s, 1, lSize, tmpF);
   if (result != lSize) {
     fprintf(stderr, "ERROR: reading back temp file\n");
@@ -673,41 +687,34 @@ int bot_param_write_to_string(BotParam * param, char ** s)
   return 0;
 }
 
-/*
- * only used internally
- */
-static BotParam * _bot_param_new(void)
-{
-  BotParamElement * root;
+// only used internally
+static BotParam* _bot_param_new(void) {
+  BotParamElement* root;
   root = new_element(NULL);
   root->type = BotParamContainer;
 
-  if (!g_thread_supported ())
-    g_thread_init (NULL);
-
-
-  BotParam * param;
+  BotParam* param;
   param = calloc(1, sizeof(BotParam));
   param->root = root;
-  param->lock = g_mutex_new();
+  param->lock = g_new(GMutex, 1);
+  g_mutex_init(param->lock);
   param->server_id = -1;
   param->sequence_number = 0;
 
-  //create the callback lists
+  // create the callback lists
   param->update_callbacks = NULL;
 
   return param;
 }
 
-static void _update_handler_t_destroy(void * data, void * user)
-{
+static void _update_handler_t_destroy(void* data, void* user) {
   g_slice_free(update_handler_t, data);
 }
 
-void bot_param_destroy(BotParam * param)
-{
+void bot_param_destroy(BotParam* param) {
   free_element(param->root);
-  g_mutex_free(param->lock);
+  g_mutex_clear(param->lock);
+  g_free(param->lock);
 
   if (param->update_callbacks != NULL) {
     g_list_foreach(param->update_callbacks, _update_handler_t_destroy, NULL);
@@ -717,87 +724,84 @@ void bot_param_destroy(BotParam * param)
   free(param);
 }
 
-void bot_param_add_update_subscriber(BotParam *param,
-    bot_param_update_handler_t * callback_func, void * user)
-{
-  update_handler_t * uh = g_slice_new0(update_handler_t);
+void bot_param_add_update_subscriber(BotParam* param,
+                                     bot_param_update_handler_t* callback_func,
+                                     void* user) {
+  update_handler_t* uh = g_slice_new0(update_handler_t);
   uh->callback_func = callback_func;
   uh->user = user;
   g_mutex_lock(param->lock);
   param->update_callbacks = g_list_append(param->update_callbacks, uh);
   g_mutex_unlock(param->lock);
-
 }
 
-static void _dispatch_update_callbacks(BotParam * old_param, BotParam * new_param, int64_t utime)
-{
-  GList * p = old_param->update_callbacks;
-  for ( ; p != NULL; p = g_list_next(p)) {
-    update_handler_t * uh = (update_handler_t *) p->data;
+static void _dispatch_update_callbacks(BotParam* old_param, BotParam* new_param,
+                                       int64_t utime) {
+  GList* p = old_param->update_callbacks;
+  for (; p != NULL; p = g_list_next(p)) {
+    update_handler_t* uh = (update_handler_t*)p->data;
     uh->callback_func(old_param, new_param, utime, uh->user);
   }
 }
 
-static void _on_param_update(const lcm_recv_buf_t *rbuf, const char * channel, const bot_param_update_t * msg,
-    void * user)
-{
-  BotParam * param = (BotParam *) user;
+static void _on_param_update(const lcm_recv_buf_t* rbuf, const char* channel,
+                             const bot_param_update_t* msg, void* user) {
+  BotParam* param = (BotParam*)user;
   if (param->server_id <= 0) {
     param->server_id = msg->server_id;
     param->sequence_number = msg->sequence_number - 1;
   }
   if (msg->server_id == param->server_id) {
-    if (msg->sequence_number <= param->sequence_number)
+    if (msg->sequence_number <= param->sequence_number) {
       return;
-    //    else
-    //	fprintf(stderr, "received NEW params from server:\n");
-  }
-  else {
-    fprintf(stderr, "WARNING: Got params from a different server! Ignoring them\n");
+    }
+  } else {
+    fprintf(stderr,
+            "WARNING: Got params from a different server! Ignoring them\n");
     return;
   }
 
-  BotParam * new_params = bot_param_new_from_string(msg->params, strlen(msg->params));
+  BotParam* new_params =
+      bot_param_new_from_string(msg->params, strlen(msg->params));
   if (new_params == NULL) {
     fprintf(stderr, "WARNING: Could not parse params from the server!\n");
     return;
   }
 
-  _dispatch_update_callbacks(param,new_params, rbuf->recv_utime);
+  _dispatch_update_callbacks(param, new_params, rbuf->recv_utime);
 
-  //swap the root;
+  // swap the root;
   g_mutex_lock(param->lock);
   param->sequence_number = msg->sequence_number;
-  BotParamElement * root = new_params->root;
+  BotParamElement* root = new_params->root;
   new_params->root = param->root;
   param->root = root;
   bot_param_destroy(new_params);
   g_mutex_unlock(param->lock);
-
-
 }
 
-BotParam * bot_param_new_from_server(lcm_t * lcm, int keep_updated)
-{
-  BotParam * param = bot_param_new_from_named_server (lcm, NULL, keep_updated);
+BotParam* bot_param_new_from_server(lcm_t* lcm, int keep_updated) {
+  BotParam* param = bot_param_new_from_named_server(lcm, NULL, keep_updated);
   return param;
 }
 
-BotParam * bot_param_new_from_named_server (lcm_t * lcm, const char * server_name, int keep_updated)
-{
-  BotParam * param = _bot_param_new();
+BotParam* bot_param_new_from_named_server(lcm_t* lcm, const char* server_name,
+                                          int keep_updated) {
+  BotParam* param = _bot_param_new();
 
-  const char *param_prefix = server_name; 
-  if (!param_prefix) param_prefix = getenv ("BOT_PARAM_SERVER_NAME");
-  gchar *update_channel = update_channel = g_strconcat (param_prefix ? : "", 
-          BOT_PARAM_UPDATE_CHANNEL, NULL); 
-  gchar *request_channel = request_channel = g_strconcat (param_prefix ? : "", 
-          BOT_PARAM_REQUEST_CHANNEL, NULL); 
+  const char* param_prefix = server_name;
+  if (!param_prefix) {
+    param_prefix = getenv("BOT_PARAM_SERVER_NAME");
+  }
+  gchar* update_channel = update_channel =
+      g_strconcat(param_prefix ?: "", BOT_PARAM_UPDATE_CHANNEL, NULL);
+  gchar* request_channel = request_channel =
+      g_strconcat(param_prefix ?: "", BOT_PARAM_REQUEST_CHANNEL, NULL);
 
-  bot_param_update_t_subscription_t * sub = bot_param_update_t_subscribe(lcm, update_channel, _on_param_update,
-      (void *) param);
+  bot_param_update_t_subscription_t* sub = bot_param_update_t_subscribe(
+      lcm, update_channel, _on_param_update, (void*)param);
 
-  //TODO: is there a way to be sure nothing else is subscribed???
+  // TODO(ashuang): is there a way to be sure nothing else is subscribed???
   int64_t utime_start = _timestamp_now();
   int64_t last_print_utime = -1;
   while ((_timestamp_now() - utime_start) < 3e6) {
@@ -806,29 +810,31 @@ BotParam * bot_param_new_from_named_server (lcm_t * lcm, const char * server_nam
     bot_param_request_t_publish(lcm, request_channel, &req);
 
     lcm_sleep(lcm, .25);
-    if (param->root->children != NULL)
+    if (param->root->children != NULL) {
       break;
+    }
     int64_t now = _timestamp_now();
     if (now - utime_start > 5e5) {
       if (last_print_utime < 0) {
-        fprintf(stderr, "bot_param waiting to get parameters from param-server...");
+        fprintf(stderr,
+                "bot_param waiting to get parameters from param-server...");
         last_print_utime = now;
-      }
-      else if (now - last_print_utime > 5e5) {
+      } else if (now - last_print_utime > 5e5) {
         fprintf(stderr, ".");
         last_print_utime = now;
       }
     }
   }
-  g_free (update_channel);
-  g_free (request_channel);
+  g_free(update_channel);
+  g_free(request_channel);
 
   if (last_print_utime > 0) {
     fprintf(stderr, "\n");
   }
   if (param->root->children == NULL) {
     fprintf(stderr,
-        "WARNING: bot_param could not get parameters from the param-server!\n Did you forget to start one?\n");
+            "WARNING: bot_param could not get parameters from the "
+            "param-server!\n Did you forget to start one?\n");
     return NULL;
   }
 
@@ -839,12 +845,11 @@ BotParam * bot_param_new_from_named_server (lcm_t * lcm, const char * server_nam
   return param;
 }
 
-static BotParam * _new_from_file(const char * filename)
-{
+static BotParam* _new_from_file(const char* filename) {
   ParserFile pf;
-  FILE * f = fopen(filename, "r");
+  FILE* f = fopen(filename, "r");
   if (f == NULL) {
-    err("could not open param file: %s\n",filename);
+    err("could not open param file: %s\n", filename);
     return NULL;
   }
 
@@ -854,82 +859,82 @@ static BotParam * _new_from_file(const char * filename)
   pf.file = f;
   pf.filename = filename;
 
-  BotParam * param = _bot_param_new();
+  BotParam* param = _bot_param_new();
   if (parse_container(&pf.p, param->root, TokEOF) < 0) {
     bot_param_destroy(param);
     return NULL;
   }
-  else {
-    return param;
+  return param;
+}
+
+BotParam* bot_param_new_from_file(const char* filename) {
+  BotParam* param_parent = _new_from_file(filename);
+  if (!param_parent) {
+    return NULL;
   }
-}
 
-BotParam * bot_param_new_from_file (const char *filename)
-{
-    BotParam *param_parent = _new_from_file (filename);
-    if (!param_parent)
-        return NULL;
+  char** include =
+      bot_param_get_str_array_alloc(param_parent, BOT_PARAM_INCLUDE_KEYWORD);
+  if (!include) {
+    return param_parent;
+  }  // nothing to include
 
-    char **include = bot_param_get_str_array_alloc (param_parent, BOT_PARAM_INCLUDE_KEYWORD);
-    if (!include)
-        return param_parent; // nothing to include
+  char* contents;
+  GError* error;
+  gsize len;
+  if (!g_file_get_contents(filename, &contents, &len, &error)) {
+    fprintf(stderr, "%s: [%s]", __func__, error->message);
+    g_error_free(error);
+    bot_param_str_array_free(include);
+    return param_parent;
+  }
 
-    char *contents;  GError *error; gsize len;
-    if (!g_file_get_contents (filename, &contents, &len, &error)) {
-        fprintf (stderr, "%s: [%s]", __func__, error->message);
-        g_error_free (error);
-        bot_param_str_array_free (include);
-        return param_parent;
+  char* param_str = contents;
+  gsize param_len = len;
+  char* param_dir = g_path_get_dirname(filename);
+
+  for (char** child = include; *child; child++) {
+    char* child_filename = NULL;
+    if (g_path_is_absolute(*child)) {
+      child_filename = g_strdup(*child);
+    } else if (g_str_has_prefix(*child, "~")) {
+      child_filename = g_build_filename(g_get_home_dir(), *child + 1, NULL);
+    } else {
+      child_filename = g_build_filename(param_dir, *child, NULL);
     }
 
-    char *param_str = contents;
-    gsize param_len = len;
-    char *param_dir = g_path_get_dirname (filename);
-
-    for (char **child=include; *child; child++) {
-        char *child_filename = NULL;
-        if (g_path_is_absolute (*child))
-            child_filename = g_strdup (*child);
-        else if (g_str_has_prefix (*child, "~"))
-            child_filename = g_build_filename (g_get_home_dir (), *child+1, NULL);
-        else
-            child_filename = g_build_filename (param_dir, *child, NULL);
-
-        if (!g_file_test (child_filename, G_FILE_TEST_EXISTS)) {
-            fprintf (stderr, "%s: can't include [%s], file does not exist\n", 
-                     __func__, child_filename);
-            abort ();
-        }
-        else {
-            if (!g_file_get_contents (child_filename, &contents, &len, &error)) {
-                fprintf (stderr, "%s: can't include [%s], unable to read file [%s]\n",
-                         __func__, child_filename, error->message);
-                abort ();
-            }
-            char *tmp = param_str;
-            param_str = g_strconcat (tmp, contents, NULL);
-            param_len += len;
-            g_free (tmp);
-            g_free (child_filename);
-            g_free (contents);
-        }
+    if (!g_file_test(child_filename, G_FILE_TEST_EXISTS)) {
+      fprintf(stderr, "%s: can't include [%s], file does not exist\n", __func__,
+              child_filename);
+      abort();
+    } else {
+      if (!g_file_get_contents(child_filename, &contents, &len, &error)) {
+        fprintf(stderr, "%s: can't include [%s], unable to read file [%s]\n",
+                __func__, child_filename, error->message);
+        abort();
+      }
+      char* tmp = param_str;
+      param_str = g_strconcat(tmp, contents, NULL);
+      param_len += len;
+      g_free(tmp);
+      g_free(child_filename);
+      g_free(contents);
     }
+  }
 
-    BotParam *param = bot_param_new_from_string (param_str, param_len);
-    assert (param);
+  BotParam* param = bot_param_new_from_string(param_str, param_len);
+  assert(param);
 
-    // clean up
-    bot_param_destroy (param_parent);
-    bot_param_str_array_free (include);
-    g_free (param_str);
-    g_free (param_dir);
+  // clean up
+  bot_param_destroy(param_parent);
+  bot_param_str_array_free(include);
+  g_free(param_str);
+  g_free(param_dir);
 
-    return param;
+  return param;
 }
 
-
-BotParam * bot_param_new_from_string(const char * string, int length)
-{
+BotParam* bot_param_new_from_string(const char* string, int length) {
   ParserString ps;
 
   memset(&ps, 0, sizeof(ParserString));
@@ -938,99 +943,101 @@ BotParam * bot_param_new_from_string(const char * string, int length)
   ps.string = string;
   ps.length = length;
 
-  BotParam * param = _bot_param_new();
+  BotParam* param = _bot_param_new();
   if (parse_container(&ps.p, param->root, TokEOF) < 0) {
     bot_param_destroy(param);
     return NULL;
   }
-  else {
-    return param;
-  }
+  return param;
 }
 
-static BotParamElement *
-find_key(BotParamElement * el, const char * key, int inherit)
-{
+static BotParamElement* find_key(BotParamElement* el, const char* key,
+                                 int inherit) {
   size_t len = strcspn(key, ".");
   char str[len + 1];
   memcpy(str, key, len);
   str[len] = '\0';
 
-  const char * remainder = NULL;
-  if (key[len] == '.')
+  const char* remainder = NULL;
+  if (key[len] == '.') {
     remainder = key + len + 1;
+  }
 
-  BotParamElement * child;
+  BotParamElement* child;
   for (child = el->children; child; child = child->next) {
     if (!strcmp(str, child->name)) {
-      if (remainder)
+      if (remainder) {
         return find_key(child, remainder, inherit);
-      else
-        return child;
+      }
+      return child;
     }
   }
-  if (inherit && !remainder && el->parent)
+  if (inherit && !remainder && el->parent) {
     return find_key(el->parent, str, inherit);
-  else
-    return NULL;
+  }
+  return NULL;
 }
 
-static int cast_to_int(const char * key, const char * val, int * out)
-{
-  char * end;
+static int cast_to_int(const char* key, const char* val, int* out) {
+  char* end;
   *out = strtol(val, &end, 0);
   if (end == val || *end != '\0') {
-    fprintf(stderr, "Error: key \"%s\" (\"%s\") did not cast "
-      "properly to int\n", key, val);
+    fprintf(stderr,
+            "Error: key \"%s\" (\"%s\") did not cast "
+            "properly to int\n",
+            key, val);
     return -1;
   }
   return 0;
 }
 
-static int cast_to_boolean(const char * key, const char * val, int * out)
-{
-  if (!strcasecmp(val, "y") || !strcasecmp(val, "yes") || !strcasecmp(val, "true") || !strcmp(val, "1"))
+static int cast_to_boolean(const char* key, const char* val, int* out) {
+  if (!strcasecmp(val, "y") || !strcasecmp(val, "yes") ||
+      !strcasecmp(val, "true") || !strcmp(val, "1")) {
     *out = 1;
-  else if (!strcasecmp(val, "n") || !strcasecmp(val, "no") || !strcasecmp(val, "false") || !strcmp(val, "0"))
+  } else if (!strcasecmp(val, "n") || !strcasecmp(val, "no") ||
+             !strcasecmp(val, "false") || !strcmp(val, "0")) {
     *out = 0;
-  else {
-    fprintf(stderr, "Error: key \"%s\" (\"%s\") did not cast "
-      "properly to boolean\n", key, val);
+  } else {
+    fprintf(stderr,
+            "Error: key \"%s\" (\"%s\") did not cast "
+            "properly to boolean\n",
+            key, val);
     return -1;
   }
   return 0;
 }
 
-static double cast_to_double(const char * key, const char * val, double * out)
-{
-  char * end;
+static double cast_to_double(const char* key, const char* val, double* out) {
+  char* end;
   *out = strtod(val, &end);
   if (end == val || *end != '\0') {
-    fprintf(stderr, "Error: key \"%s\" (\"%s\") did not cast "
-      "properly to double\n", key, val);
+    fprintf(stderr,
+            "Error: key \"%s\" (\"%s\") did not cast "
+            "properly to double\n",
+            key, val);
     return -1;
   }
   return 0;
 }
 
 #define PRINT_KEY_NOT_FOUND(key) \
-    err("WARNING: BotParam: could not find key %s!\n", (key));
+  err("WARNING: BotParam: could not find key %s!\n", (key));
 
-int bot_param_has_key(BotParam *param, const char *key)
-{
+int bot_param_has_key(BotParam* param, const char* key) {
   g_mutex_lock(param->lock);
   int ret = (find_key(param->root, key, 1) != NULL);
   g_mutex_unlock(param->lock);
   return ret;
 }
 
-int bot_param_get_num_subkeys(BotParam * param, const char * containerKey)
-{
+int bot_param_get_num_subkeys(BotParam* param, const char* containerKey) {
   g_mutex_lock(param->lock);
 
   BotParamElement* el = param->root;
-  if ((NULL != containerKey) && (0 < strlen(containerKey)))
+  if ((NULL != containerKey) && (0 < strlen(containerKey))) {
     el = find_key(param->root, containerKey, 1);
+  }
   if (NULL == el) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1038,22 +1045,22 @@ int bot_param_get_num_subkeys(BotParam * param, const char * containerKey)
 
   int count = 0;
   BotParamElement* child;
-  for (child = el->children; child; child = child->next)
+  for (child = el->children; child; child = child->next) {
     ++count;
+  }
 
   g_mutex_unlock(param->lock);
 
   return count;
 }
 
-char **
-bot_param_get_subkeys(BotParam * param, const char * containerKey)
-{
+char** bot_param_get_subkeys(BotParam* param, const char* containerKey) {
   g_mutex_lock(param->lock);
 
   BotParamElement* el = param->root;
-  if ((NULL != containerKey) && (0 < strlen(containerKey)))
+  if ((NULL != containerKey) && (0 < strlen(containerKey))) {
     el = find_key(param->root, containerKey, 1);
+  }
   if (NULL == el) {
     g_mutex_unlock(param->lock);
     return NULL;
@@ -1061,10 +1068,11 @@ bot_param_get_subkeys(BotParam * param, const char * containerKey)
 
   int count = 0;
   BotParamElement* child;
-  for (child = el->children; child; child = child->next, ++count)
-    ;
+  for (child = el->children; child; child = child->next, ++count) {
+    continue;
+  }
 
-  char **result = calloc(count + 1, sizeof(char*));
+  char** result = calloc(count + 1, sizeof(char*));
 
   int i = 0;
   for (child = el->children; child; child = child->next) {
@@ -1075,11 +1083,10 @@ bot_param_get_subkeys(BotParam * param, const char * containerKey)
   return result;
 }
 
-int bot_param_get_int(BotParam * param, const char * key, int * val)
-{
+int bot_param_get_int(BotParam* param, const char* key, int* val) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray || el->num_values < 1) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1090,10 +1097,9 @@ int bot_param_get_int(BotParam * param, const char * key, int * val)
   return ret;
 }
 
-int bot_param_get_boolean(BotParam * param, const char * key, int * val)
-{
+int bot_param_get_boolean(BotParam* param, const char* key, int* val) {
   g_mutex_lock(param->lock);
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray || el->num_values < 1) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1104,11 +1110,10 @@ int bot_param_get_boolean(BotParam * param, const char * key, int * val)
   return ret;
 }
 
-int bot_param_get_double(BotParam * param, const char * key, double * val)
-{
+int bot_param_get_double(BotParam* param, const char* key, double* val) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray || el->num_values < 1) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1119,11 +1124,10 @@ int bot_param_get_double(BotParam * param, const char * key, double * val)
   return ret;
 }
 
-int bot_param_get_str(BotParam * param, const char * key, char ** val)
-{
+int bot_param_get_str(BotParam* param, const char* key, char** val) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray || el->num_values < 1) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1133,63 +1137,56 @@ int bot_param_get_str(BotParam * param, const char * key, char ** val)
   return 0;
 }
 
-int bot_param_get_int_or_fail(BotParam * param, const char * key)
-{
+int bot_param_get_int_or_fail(BotParam* param, const char* key) {
   int val;
-  if (bot_param_get_int(param, key, &val) == 0)
+  if (bot_param_get_int(param, key, &val) == 0) {
     return val;
-  else {
-    fprintf(stderr, "Missing config key: %s\n", key);
-    abort();
   }
+  fprintf(stderr, "Missing config key: %s\n", key);
+  abort();
 }
 
-int bot_param_get_boolean_or_fail(BotParam * param, const char * key)
-{
+int bot_param_get_boolean_or_fail(BotParam* param, const char* key) {
   int val;
-  if (bot_param_get_boolean(param, key, &val) == 0)
+  if (bot_param_get_boolean(param, key, &val) == 0) {
     return val;
-  else {
-    fprintf(stderr, "Missing config key: %s\n", key);
-    abort();
   }
+  fprintf(stderr, "Missing config key: %s\n", key);
+  abort();
 }
 
-double bot_param_get_double_or_fail(BotParam *param, const char *key)
-{
+double bot_param_get_double_or_fail(BotParam* param, const char* key) {
   double val;
-  if (bot_param_get_double(param, key, &val) == 0)
+  if (bot_param_get_double(param, key, &val) == 0) {
     return val;
-  else {
-    fprintf(stderr, "Missing config key: %s\n", key);
-    abort();
   }
+  fprintf(stderr, "Missing config key: %s\n", key);
+  abort();
 }
 
-char *bot_param_get_str_or_fail(BotParam *param, const char *key)
-{
-  char * str;
-  if (bot_param_get_str(param, key, &str) == 0)
+char* bot_param_get_str_or_fail(BotParam* param, const char* key) {
+  char* str;
+  if (bot_param_get_str(param, key, &str) == 0) {
     return str;
-  else {
-    fprintf(stderr, "Missing config key: %s\n", key);
-    abort();
   }
+  fprintf(stderr, "Missing config key: %s\n", key);
+  abort();
 }
 
-int bot_param_get_int_array(BotParam * param, const char * key, int * vals, int len)
-{
+int bot_param_get_int_array(BotParam* param, const char* key, int* vals,
+                            int len) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return -1;
   }
   int i;
   for (i = 0; i < el->num_values; i++) {
-    if (len != -1 && i == len)
+    if (len != -1 && i == len) {
       break;
+    }
     if (cast_to_int(key, el->values[i], vals + i) < 0) {
       err("WARNING: BotParam: cast error parsing int array %s\n", key);
       g_mutex_unlock(param->lock);
@@ -1198,7 +1195,8 @@ int bot_param_get_int_array(BotParam * param, const char * key, int * vals, int 
   }
   if (i < len) {
     err("WARNING: BotParam: only read %d of %d values for integer array\n"
-        "         %s\n", i, len, key);
+        "         %s\n",
+        i, len, key);
   }
 
   g_mutex_unlock(param->lock);
@@ -1206,30 +1204,31 @@ int bot_param_get_int_array(BotParam * param, const char * key, int * vals, int 
   return i;
 }
 
-void bot_param_get_int_array_or_fail(BotParam * param, const char * key, int * vals, int len)
-{
+void bot_param_get_int_array_or_fail(BotParam* param, const char* key,
+                                     int* vals, int len) {
   int res = bot_param_get_int_array(param, key, vals, len);
   if (res != len) {
-    fprintf(stderr, "ERROR: BotParam: only read %d of %d integer values for key: %s\n", res, len, key);
+    fprintf(stderr,
+            "ERROR: BotParam: only read %d of %d integer values for key: %s\n",
+            res, len, key);
     abort();
   }
-
-  return;
 }
 
-int bot_param_get_boolean_array(BotParam * param, const char * key, int * vals, int len)
-{
+int bot_param_get_boolean_array(BotParam* param, const char* key, int* vals,
+                                int len) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return -1;
   }
   int i;
   for (i = 0; i < el->num_values; i++) {
-    if (len != -1 && i == len)
+    if (len != -1 && i == len) {
       break;
+    }
     if (cast_to_boolean(key, el->values[i], vals + i) < 0) {
       err("WARNING: BotParam: cast error parsing boolean array %s\n", key);
       g_mutex_unlock(param->lock);
@@ -1238,7 +1237,8 @@ int bot_param_get_boolean_array(BotParam * param, const char * key, int * vals, 
   }
   if (i < len) {
     err("WARNING: BotParam: only read %d of %d values for boolean array\n"
-        "         %s\n", i, len, key);
+        "         %s\n",
+        i, len, key);
   }
 
   g_mutex_unlock(param->lock);
@@ -1246,30 +1246,31 @@ int bot_param_get_boolean_array(BotParam * param, const char * key, int * vals, 
   return i;
 }
 
-void bot_param_get_boolean_array_or_fail(BotParam * param, const char * key, int * vals, int len)
-{
+void bot_param_get_boolean_array_or_fail(BotParam* param, const char* key,
+                                         int* vals, int len) {
   int res = bot_param_get_boolean_array(param, key, vals, len);
   if (res != len) {
-    fprintf(stderr, "ERROR: BotParam: only read %d of %d boolean values for key: %s\n", res, len, key);
+    fprintf(stderr,
+            "ERROR: BotParam: only read %d of %d boolean values for key: %s\n",
+            res, len, key);
     abort();
   }
-
-  return;
 }
 
-int bot_param_get_double_array(BotParam * param, const char * key, double * vals, int len)
-{
+int bot_param_get_double_array(BotParam* param, const char* key, double* vals,
+                               int len) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return -1;
   }
   int i;
   for (i = 0; i < el->num_values; i++) {
-    if (len != -1 && i == len)
+    if (len != -1 && i == len) {
       break;
+    }
     if (cast_to_double(key, el->values[i], vals + i) < 0) {
       err("WARNING: BotParam: cast error parsing double array %s\n", key);
       g_mutex_unlock(param->lock);
@@ -1278,28 +1279,28 @@ int bot_param_get_double_array(BotParam * param, const char * key, double * vals
   }
   if (i < len) {
     err("WARNING: BotParam: only read %d of %d values for double array\n"
-        "         %s\n", i, len, key);
+        "         %s\n",
+        i, len, key);
   }
 
   g_mutex_unlock(param->lock);
   return i;
 }
 
-void bot_param_get_double_array_or_fail(BotParam * param, const char * key, double * vals, int len)
-{
+void bot_param_get_double_array_or_fail(BotParam* param, const char* key,
+                                        double* vals, int len) {
   int res = bot_param_get_double_array(param, key, vals, len);
   if (res != len) {
-    fprintf(stderr, "ERROR: BotParam: only read %d of %d double values for key: %s\n\n", res, len, key);
+    fprintf(stderr,
+            "ERROR: BotParam: only read %d of %d double values for key: %s\n\n",
+            res, len, key);
     abort();
   }
-
-  return;
 }
 
-int bot_param_get_array_len(BotParam *param, const char * key)
-{
+int bot_param_get_array_len(BotParam* param, const char* key) {
   g_mutex_lock(param->lock);
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return -1;
@@ -1310,19 +1311,17 @@ int bot_param_get_array_len(BotParam *param, const char * key)
   return ret;
 }
 
-char **
-bot_param_get_str_array_alloc(BotParam * param, const char * key)
-{
+char** bot_param_get_str_array_alloc(BotParam* param, const char* key) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 1);
+  BotParamElement* el = find_key(param->root, key, 1);
   if (!el || el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return NULL;
   }
 
   // + 1 so that the list is null terminated.
-  char **data = calloc(el->num_values + 1, sizeof(char*));
+  char** data = calloc(el->num_values + 1, sizeof(char*));
 
   int i;
   for (i = 0; i < el->num_values; i++) {
@@ -1334,34 +1333,33 @@ bot_param_get_str_array_alloc(BotParam * param, const char * key)
   return data;
 }
 
-void bot_param_str_array_free(char **data)
-{
+void bot_param_str_array_free(char** data) {
   int idx = 0;
-  while (data[idx] != NULL)
+  while (data[idx] != NULL) {
     free(data[idx++]);
+  }
 
   free(data);
 }
 
-static BotParamElement *
-create_key(BotParamElement * el, const char * key)
-{
+static BotParamElement* create_key(BotParamElement* el, const char* key) {
   size_t len = strcspn(key, ".");
   char str[len + 1];
   memcpy(str, key, len);
   str[len] = '\0';
 
-  const char * remainder = NULL;
-  if (key[len] == '.')
+  const char* remainder = NULL;
+  if (key[len] == '.') {
     remainder = key + len + 1;
+  }
 
-  BotParamElement * child;
+  BotParamElement* child;
   for (child = el->children; child; child = child->next) {
     if (!strcmp(str, child->name)) {
-      if (remainder)
+      if (remainder) {
         return create_key(child, remainder);
-      else
-        return child;
+      }
+      return child;
     }
   }
 
@@ -1371,31 +1369,26 @@ create_key(BotParamElement * el, const char * key)
     child->type = BotParamContainer;
     return create_key(child, remainder);
   }
-  else {
-    child->type = BotParamArray;
-    return child;
-  }
+  child->type = BotParamArray;
+  return child;
 }
 
-/*
- * Functions for setting key/value pairs
- */
+// Functions for setting key/value pairs
 
-static int set_value(BotParam * param, const char * key, const char * val)
-{
+static int set_value(BotParam* param, const char* key, const char* val) {
   g_mutex_lock(param->lock);
 
-  BotParamElement * el = find_key(param->root, key, 0);
-  if (el == NULL)
+  BotParamElement* el = find_key(param->root, key, 0);
+  if (el == NULL) {
     el = create_key(param->root, key);
-  else if (el->type != BotParamArray) {
+  } else if (el->type != BotParamArray) {
     g_mutex_unlock(param->lock);
     return -1;
   }
 
-  if (el->num_values < 1)
+  if (el->num_values < 1) {
     add_value(NULL, el, val);
-  else {
+  } else {
     free(el->values[0]);
     el->values[0] = strdup(val);
   }
@@ -1404,52 +1397,48 @@ static int set_value(BotParam * param, const char * key, const char * val)
   return 1;
 }
 
-int bot_param_set_int(BotParam * param, const char * key, int val)
-{
+int bot_param_set_int(BotParam* param, const char* key, int val) {
   char str[16];
-  sprintf(str, "%d", val);
+  snprintf(str, sizeof(str), "%d", val);
   return set_value(param, key, str);
 }
 
-int bot_param_set_boolean(BotParam * param, const char * key, int val)
-{
+int bot_param_set_boolean(BotParam* param, const char* key, int val) {
   return set_value(param, key, (val == 0 ? "false" : "true"));
 }
 
-int bot_param_set_double(BotParam * param, const char * key, double val)
-{
+int bot_param_set_double(BotParam* param, const char* key, double val) {
   char str[32];
-  sprintf(str, "%f", val);
+  snprintf(str, sizeof(str), "%f", val);
   return set_value(param, key, str);
 }
 
-int bot_param_set_str(BotParam * param, const char * key, const char * val)
-{
+int bot_param_set_str(BotParam* param, const char* key, const char* val) {
   return set_value(param, key, val);
 }
 
-/*
- * Functions for setting array of values
- */
+// Functions for setting array of values
 
-int bot_param_set_int_array(BotParam * param, const char * key, int * vals, int len)
-{
+int bot_param_set_int_array(BotParam* param, const char* key, int* vals,
+                            int len) {
   char* str;
   char single_val[16];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
-    if (i < len - 1)
-      sprintf(single_val, "%d,", vals[i]);
-    else
-      sprintf(single_val, "%d", vals[i]);
+    if (i < len - 1) {
+      snprintf(single_val, sizeof(single_val), "%d,", vals[i]);
+    } else {
+      snprintf(single_val, sizeof(single_val), "%d", vals[i]);
+    }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1458,26 +1447,28 @@ int bot_param_set_int_array(BotParam * param, const char * key, int * vals, int 
   return ret_val;
 }
 
-int bot_param_set_boolean_array(BotParam * param, const char * key, int * vals, int len)
-{
+int bot_param_set_boolean_array(BotParam* param, const char* key, int* vals,
+                                int len) {
   char* str;
   char single_val[16];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
   char val_str[8];
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
-    strcpy(val_str, (vals[i] == 0 ? "false" : "true"));
-    if (i < len - 1)
-      sprintf(single_val, "%s,", val_str);
-    else
-      sprintf(single_val, "%s", val_str);
+    snprintf(val_str, sizeof(val_str), "%s", (vals[i] == 0 ? "false" : "true"));
+    if (i < len - 1) {
+      snprintf(single_val, sizeof(single_val), "%s,", val_str);
+    } else {
+      snprintf(single_val, sizeof(single_val), "%s", val_str);
+    }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1486,24 +1477,26 @@ int bot_param_set_boolean_array(BotParam * param, const char * key, int * vals, 
   return ret_val;
 }
 
-int bot_param_set_double_array(BotParam * param, const char * key, double * vals, int len)
-{
+int bot_param_set_double_array(BotParam* param, const char* key, double* vals,
+                               int len) {
   char* str;
   char single_val[32];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
-    if (i < len - 1)
-      sprintf(single_val, "%f,", vals[i]);
-    else
-      sprintf(single_val, "%f", vals[i]);
+    if (i < len - 1) {
+      snprintf(single_val, sizeof(single_val), "%f,", vals[i]);
+    } else {
+      snprintf(single_val, sizeof(single_val), "%f", vals[i]);
+    }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1512,24 +1505,26 @@ int bot_param_set_double_array(BotParam * param, const char * key, double * vals
   return ret_val;
 }
 
-int bot_param_set_str_array(BotParam * param, const char * key, const char ** vals, int len)
-{
+int bot_param_set_str_array(BotParam* param, const char* key, const char** vals,
+                            int len) {
   char* str;
   char single_val[256];
-  int string_len = 1;
+  int string_len;
   int single_len;
   int i;
 
   str = malloc(1);
   str[0] = '\0';
+  string_len = strlen(str);
   for (i = 0; i < len; ++i) {
-    if (i < len - 1)
-      sprintf(single_val, "%s,", vals[i]);
-    else
-      sprintf(single_val, "%s", vals[i]);
+    if (i < len - 1) {
+      snprintf(single_val, sizeof(single_val), "%s,", vals[i]);
+    } else {
+      snprintf(single_val, sizeof(single_val), "%s", vals[i]);
+    }
     single_len = strlen(single_val);
-    str = realloc(str, string_len + single_len);
-    strcat(str, single_val);
+    str = realloc(str, string_len + single_len + 1);
+    snprintf(str, string_len + single_len, "%s%s", str, single_val);
     string_len += single_len;
   }
 
@@ -1538,107 +1533,117 @@ int bot_param_set_str_array(BotParam * param, const char * key, const char ** va
   return ret_val;
 }
 
-int64_t bot_param_get_server_id(BotParam * param)
-{
+int64_t bot_param_get_server_id(BotParam* param) {
   g_mutex_lock(param->lock);
   int64_t ret = param->server_id;
   g_mutex_unlock(param->lock);
   return ret;
 }
 
-int bot_param_get_seqno(BotParam * param)
-{
+int bot_param_get_seqno(BotParam* param) {
   g_mutex_lock(param->lock);
   int ret = param->sequence_number;
   g_mutex_unlock(param->lock);
   return ret;
 }
 
-static BotParam *global_param = NULL;
-static GStaticMutex bot_param_global_mutex = G_STATIC_MUTEX_INIT;
+static BotParam* global_param = NULL;
+static GMutex bot_param_global_mutex;
 
-BotParam*
-bot_param_get_global(lcm_t * lcm, int keep_updated)
-{
-  g_static_mutex_lock(&bot_param_global_mutex);
+BotParam* bot_param_get_global(lcm_t* lcm, int keep_updated) {
+  g_mutex_lock(&bot_param_global_mutex);
 
-  if (lcm == NULL)
+  if (lcm == NULL) {
     lcm = bot_lcm_get_global(NULL);
-
-  if (global_param == NULL) {
-    if (keep_updated)
-      global_param = bot_param_new_from_server(lcm, 1);
-    else
-      global_param = bot_param_new_from_server(lcm, 0);
-
-    if (!global_param)
-      goto fail;
   }
 
-  BotParam *result = global_param;
-  g_static_mutex_unlock(&bot_param_global_mutex);
+  if (global_param == NULL) {
+    if (keep_updated) {
+      global_param = bot_param_new_from_server(lcm, 1);
+    } else {
+      global_param = bot_param_new_from_server(lcm, 0);
+    }
+
+    if (!global_param) {
+      goto fail;
+    }
+  }
+
+  BotParam* result = global_param;
+  g_mutex_unlock(&bot_param_global_mutex);
   return result;
 
-  fail: g_static_mutex_unlock(&bot_param_global_mutex);
+fail:
+  g_mutex_unlock(&bot_param_global_mutex);
   fprintf(stderr, "ERROR: Could not get global BotParam!\n");
   return NULL;
 }
 
-
-int bot_param_override_local_param(BotParam * param, const char * key, const char * val)
-{
+int bot_param_override_local_param(BotParam* param, const char* key,
+                                   const char* val) {
   g_mutex_lock(param->lock);
   if (param->server_id > 0) {
     fprintf(stderr,
-        "ERROR: bot_param_local_override() with key: %s and val %s called on server that is subscribed to updates!\n",
-        key, val);
+            "ERROR: bot_param_local_override() with key: %s and val %s called "
+            "on server that is subscribed to updates!\n",
+            key, val);
     g_mutex_unlock(param->lock);
     return -1;
   }
   g_mutex_unlock(param->lock);
 
-  if (bot_param_has_key(param, key))
-    fprintf(stderr, "BotParam overriding param key:%s with value %s\n", key, val);
-  else
+  if (bot_param_has_key(param, key)) {
+    fprintf(stderr, "BotParam overriding param key:%s with value %s\n", key,
+            val);
+  } else {
     fprintf(stderr, "BotParam Adding param key:%s with value %s\n", key, val);
+  }
   return bot_param_set_str(param, key, val);
 }
 
-
-int bot_param_override_local_params(BotParam * param, const char * override_params)
-{
+int bot_param_override_local_params(BotParam* param,
+                                    const char* override_params) {
   int ret = 0;
-  char * tmp_orig = (char *) calloc(strlen(override_params) + 2, sizeof(char));
-  sprintf(tmp_orig, "%s|", override_params);
+  char* tmp_orig = (char*)calloc(strlen(override_params) + 2, sizeof(char));
+  snprintf(tmp_orig, strlen(override_params) + 2, "%s|", override_params);
 
-  char * tmpP = tmp_orig;
+  char* tmpP = tmp_orig;
   while (strlen(tmpP) != 0) {
     size_t bar_pos = strcspn(tmpP, "|:");
     if (bar_pos == strlen(tmpP)) {
-      fprintf(stderr, "Error overriding params: tmpstr %s does not have an '|' sign\n", tmpP);
+      fprintf(stderr,
+              "Error overriding params: tmpstr %s does not have an '|' sign\n",
+              tmpP);
       ret = -1;
     }
-    char * chunk = tmpP;
+    char* chunk = tmpP;
     tmpP[bar_pos] = '\0';
     if (strlen(chunk) > 0) {
       size_t eq_pos = strcspn(chunk, "=");
       if (eq_pos == strlen(chunk)) {
-        fprintf(stderr, "Error overriding params: chunk %s does not have an '=' sign\n", chunk);
+        fprintf(stderr,
+                "Error overriding params: chunk %s does not have an '=' sign\n",
+                chunk);
         ret = -1;
         goto cleanup;
       }
       chunk[eq_pos] = '\0';
-      char * key = chunk;
-      char * val = chunk + eq_pos + 1;
+      char* key = chunk;
+      char* val = chunk + eq_pos + 1;
       if (strlen(key) == 0 || strlen(val) == 0) {
-        fprintf(stderr, "ERROR ovveriding params: chunk %s does not have a valid key=value pair", chunk);
+        fprintf(stderr,
+                "ERROR ovveriding params: chunk %s does not have a valid "
+                "key=value pair",
+                chunk);
         ret = -1;
         goto cleanup;
       }
       ret = bot_param_override_local_param(param, key, val);
       if (ret <= 0) {
-        fprintf(stderr, "ERROR bot_param_local_override_str with key: %s and val %s return %d",
-            key, val, ret);
+        fprintf(stderr,
+                "ERROR bot_param_local_override_str with key: %s and val %s "
+                "return %d",
+                key, val, ret);
         ret = -1;
         goto cleanup;
       }
@@ -1647,7 +1652,7 @@ int bot_param_override_local_params(BotParam * param, const char * override_para
     tmpP = tmpP + bar_pos + 1;
   }
 
-  cleanup:
+cleanup:
   free(tmp_orig);
   return ret;
 }

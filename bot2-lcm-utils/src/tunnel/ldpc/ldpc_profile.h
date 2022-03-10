@@ -1,16 +1,15 @@
-/* $Id: ldpc_profile.h,v 1.11 2006/09/06 14:36:49 roca Exp $ */
-/* 
+/*
  *  LDPC/LDGM FEC Library.
  *  (c) Copyright 2002-2006 INRIA - All rights reserved
  *  Main authors: Christoph Neumann (christoph.neumann@inrialpes.fr)
  *                Vincent Roca      (vincent.roca@inrialpes.fr)
- *		  Laurent Fazio     (STMicroelectronics)
- *		  Julien Laboure    (julien.laboure@inrialpes.fr)
+ *                Laurent Fazio     (STMicroelectronics)
+ *                Julien Laboure    (julien.laboure@inrialpes.fr)
  *
  *  This copyright notice must be retained and prominently displayed,
  *  along with a note saying that the original programs are available from
  *  Vincent Roca's web page, and note is made of any changes made to these
- *  programs.  
+ *  programs.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -27,8 +26,12 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_PROFILE_H_
+#define BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_PROFILE_H_
 
-/****** GENERAL SETUP OPTIONS; EDIT AS APPROPRIATE ****************************/
+#include <limits.h>  // IWYU pragma: keep
+
+// GENERAL SETUP OPTIONS; EDIT AS APPROPRIATE
 
 /**
  * Choose the type of decoder: the trivial iterative decoding algo or the Gauss
@@ -37,7 +40,6 @@
  */
 #define DECODER_ITERATIVE
 
-
 /**
  * Enable the partial sum optimization during decoding.
  * This optimization is effective but adds some more complexity
@@ -45,19 +47,17 @@
  */
 #define PART_SUM_OPTIMIZATION
 
-
 /**
  * Enable/disable external memory management support.
  */
 #define EXTERNAL_MEMORY_MGMT_SUPPORT
-
 
 #ifdef DECODER_ITERATIVE
 /**
  * This define reduces significantly the memory consumption of sparse matrices
  * (the matrix size is decreased by 1/6). See ldpc_matrix_sparse.h|cpp files.
  *
- * But there is a drawback... With LDPC-Triangle, the initialization time 
+ * But there is a drawback... With LDPC-Triangle, the initialization time
  * becomes quite important when activating this option!!!
  * In all other cases (LDGM and LDPC-Staircase) we did not noticed any impact
  * on init/encoding/decoding times. So use it unless you are interested in the
@@ -67,9 +67,8 @@
  * creates additional processing at the decoder. So use this optimization
  * only in DECODER_ITERATIVE mode.
  */
-//#define SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
+// #define SPARSE_MATRIX_OPT_FOR_LDPC_STAIRCASE
 #endif
-
 
 /**
  * This define reduces significantly the memory consumption of sparse matrices
@@ -85,12 +84,11 @@
  * With LP64 architectures, padding will be needed, adding 32 more bits,
  * which makes this optimization useless...
  */
-#if defined (__LP64__) || (__WORDSIZE == 64)
+#if defined(__LP64__) || (__WORDSIZE == 64)
 // useless with 64-bit architectures
 #else
-//#define SPARSE_MATRIX_OPT_SMALL_INDEX
+// #define SPARSE_MATRIX_OPT_SMALL_INDEX
 #endif
-
 
 /**
  * Enable the count of XOR operations, for performance monitoring.
@@ -99,4 +97,4 @@
  */
 #define PERF_COUNT_XOR
 
-
+#endif  // BOT2_LCM_UTILS_TUNNEL_LDPC_LDPC_PROFILE_H_

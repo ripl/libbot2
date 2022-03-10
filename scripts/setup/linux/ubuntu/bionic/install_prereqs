@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# Copyright (C) 2018 Massachusetts Institute of Technology.
+# This file is part of libbot2.
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
+# libbot2 is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
 #
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-# details.
+# libbot2 is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU Lesser General Public License
+# along with libbot2. If not, see <https://www.gnu.org/licenses/>.
 
 set -euo pipefail
 
@@ -22,38 +22,47 @@ if [[ "${EUID}" -ne 0 ]]; then
   exit 1
 fi
 
-apt-get update -qq
-apt-get install --no-install-recommends -y lsb-release
+export DEBIAN_FRONTEND=noninteractive
 
-if [[ "$(lsb_release -sc)" != 'bionic' ]]; then
+apt-get -qq update || (sleep 15; apt-get -qq update)
+apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy --no-install-recommends install \
+  lsb-release
+
+if [[ "$(lsb_release -cs)" != 'bionic' ]]; then
   echo 'This script requires Ubuntu 18.04 (Bionic)' >&2
   exit 2
 fi
 
-apt-get install --no-install-recommends -y \
-  cmake \
+apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy --no-install-recommends install \
+  build-essential \
+  ca-certificates \
+  default-jdk \
   doxygen \
-  dpkg-dev \
   file \
   freeglut3-dev \
-  g++ \
-  gcc \
   git \
+  gnupg \
   libglib2.0-dev \
-  libgtk2.0-dev \
+  libgtk-3-dev \
   libjpeg8-dev \
   libpng-dev \
   libxmu-dev \
-  make \
-  openjdk-8-jdk \
   pkg-config \
-  python-dev \
-  python-gtk2 \
-  python-numpy \
-  python-scipy \
   python3-dev \
+  python3-gi \
   python3-numpy \
   python3-scipy \
+  wget \
   zlib1g-dev
+
+wget -qO- https://apt.kitware.com/keys/kitware-archive-latest.asc \
+  | gpg --dearmor > /etc/apt/trusted.gpg.d/kitware.gpg
+
+echo 'deb https://apt.kitware.com/ubuntu/ bionic main' \
+  > /etc/apt/sources.list.d/kitware.list
+
+apt-get -qq update || (sleep 15; apt-get -qq update)
+apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy --no-install-recommends install \
+  cmake
 
 # TODO: Install a compatible version of LCM.

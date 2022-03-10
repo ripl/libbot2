@@ -1,5 +1,25 @@
-#ifndef __bot_ctrans_h__
-#define __bot_ctrans_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
+
+/*
+ * This file is part of bot2-core.
+ *
+ * bot2-core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-core is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-core. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_CORE_BOT_CORE_CTRANS_H_
+#define BOT2_CORE_BOT_CORE_CTRANS_H_
 
 #include <stdint.h>
 
@@ -43,9 +63,9 @@ typedef struct _BotCTransLink BotCTransLink;
  * bot_ctrans_new:
  *
  * Constructor.
- * Returns: a newly allocated BotCTrans.  
+ * Returns: a newly allocated BotCTrans.
  */
-BotCTrans * bot_ctrans_new(void);
+BotCTrans* bot_ctrans_new(void);
 
 /**
  * bot_ctrans_destroy:
@@ -53,7 +73,7 @@ BotCTrans * bot_ctrans_new(void);
  * Releases memory used by a BotCTrans.  Automatically destroys all
  * BotCTransFrame and BotCTransLink structures related to the BotCTrans.
  */
-void bot_ctrans_destroy(BotCTrans *ctrans);
+void bot_ctrans_destroy(BotCTrans* ctrans);
 
 /**
  * bot_ctrans_add_frame:
@@ -61,7 +81,7 @@ void bot_ctrans_destroy(BotCTrans *ctrans);
  *
  * Returns: 1 on success, 0 if the coordinate frame already exists
  */
-int bot_ctrans_add_frame(BotCTrans * ctrans, const char *id);
+int bot_ctrans_add_frame(BotCTrans* ctrans, const char* id);
 
 /**
  * bot_ctrans_get_trans:
@@ -73,8 +93,9 @@ int bot_ctrans_add_frame(BotCTrans * ctrans, const char *id);
  *
  * Returns: 1 on success, 0 on failure
  */
-int bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame, int64_t timestamp, BotTrans *result);
+int bot_ctrans_get_trans(BotCTrans* ctrans, const char* from_frame,
+                         const char* to_frame, int64_t timestamp,
+                         BotTrans* result);
 
 /**
  * bot_ctrans_get_trans_latest:
@@ -84,16 +105,16 @@ int bot_ctrans_get_trans(BotCTrans *ctrans, const char *from_frame,
  *
  * Returns: 1 on success, 0 on failure
  */
-int bot_ctrans_get_trans_latest(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame, BotTrans *result);
+int bot_ctrans_get_trans_latest(BotCTrans* ctrans, const char* from_frame,
+                                const char* to_frame, BotTrans* result);
 
 /**
  * bot_ctrans_have_trans:
  *
  * Returns: 1 if the specified transformation is available, 0 if not.
  */
-int bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
-        const char *to_frame);
+int bot_ctrans_have_trans(BotCTrans* ctrans, const char* from_frame,
+                          const char* to_frame);
 
 /**
  * bot_ctrans_get_trans_latest_timestamp:
@@ -102,17 +123,19 @@ int bot_ctrans_have_trans(BotCTrans *ctrans, const char *from_frame,
  * @to_frame: destination coordinate frame
  * @timestamp: output parameter
  *
- * Retrieves the timestamp of the most recent rigid body transformation 
+ * Retrieves the timestamp of the most recent rigid body transformation
  * relating two coordinate frames.
  *
- * Since there may be many links relating two coordinate frames, this 
+ * Since there may be many links relating two coordinate frames, this
  * retrieves the timestamp of the most recently updated link.  For information
  * about a specific link, use bot_ctrans_link_get_nth_trans()
- * 
+ *
  * Returns: 1 on success, 0 on failure.
  */
-int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans, 
-        const char *from_frame, const char *to_frame, int64_t *timestamp);
+int bot_ctrans_get_trans_latest_timestamp(BotCTrans* ctrans,
+                                          const char* from_frame,
+                                          const char* to_frame,
+                                          int64_t* timestamp);
 
 /**
  * bot_ctrans_link_frames:
@@ -125,9 +148,10 @@ int bot_ctrans_get_trans_latest_timestamp(BotCTrans *ctrans,
  * %from_frame_id to %to_frame_id, or NULL if either of the coordinate frames
  * is invalid.
  */
-BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans, 
-        const char *from_frame_id, const char *to_frame_id, 
-        int history_maxlen);
+BotCTransLink* bot_ctrans_link_frames(BotCTrans* ctrans,
+                                      const char* from_frame_id,
+                                      const char* to_frame_id,
+                                      int history_maxlen);
 
 /**
  * bot_ctrans_get_link:
@@ -143,28 +167,28 @@ BotCTransLink * bot_ctrans_link_frames(BotCTrans * ctrans,
  * Returns: the BotCTransLink that represents the link between the two
  * coordinate frames, or NULL if there is no such link.
  */
-BotCTransLink * bot_ctrans_get_link(BotCTrans * ctrans,
-        const char *frame_a_id, const char * frame_b_id);
+BotCTransLink* bot_ctrans_get_link(BotCTrans* ctrans, const char* frame_a_id,
+                                   const char* frame_b_id);
 
 /**
  * bot_ctrans_link_update:
  * @link: The link to update
  * @transformation: The rigid body transformation describing the link
- * @timestamp:  timestamp of the transformation. 
+ * @timestamp:  timestamp of the transformation.
  *
  * Updates the link between two coordinate frames.  If the specified timestamp
  * is older than the timestamp for any previous update, then the entire
  * transformation history is discarded before saving the update.
  */
-void bot_ctrans_link_update(BotCTransLink * link,
-        const BotTrans *transformation, int64_t timestamp);
+void bot_ctrans_link_update(BotCTransLink* link, const BotTrans* transformation,
+                            int64_t timestamp);
 
 /**
  * bot_ctrans_link_get_n_trans:
  *
  * Returns: the number of transformations stored for this link.
  */
-int bot_ctrans_link_get_n_trans(const BotCTransLink * link);
+int bot_ctrans_link_get_n_trans(const BotCTransLink* link);
 
 /**
  * bot_ctrans_link_get_nth_trans:
@@ -172,25 +196,25 @@ int bot_ctrans_link_get_n_trans(const BotCTransLink * link);
  *         to older transformations.
  * @transformation: Output parameter.  If not NULL, the desired transformation
  *                  will be stored here.
- * @timestamp: Output parameter.  If not NULL, the timestamp corresponding to 
+ * @timestamp: Output parameter.  If not NULL, the timestamp corresponding to
  *             the desired transformattion will be stored here.
  *
  * Retrieves the nth most recent transformation for this link.
  *
  * Returns: 1 on success, 0 if the requested transformation is not available.
  */
-int bot_ctrans_link_get_nth_trans(BotCTransLink * link,
-        int index, BotTrans *transformation, int64_t *timestamp);
+int bot_ctrans_link_get_nth_trans(BotCTransLink* link, int index,
+                                  BotTrans* transformation, int64_t* timestamp);
 
-const char * bot_ctrans_link_get_from_frame(BotCTransLink *link);
-const char * bot_ctrans_link_get_to_frame(BotCTransLink *link);
+const char* bot_ctrans_link_get_from_frame(BotCTransLink* link);
+const char* bot_ctrans_link_get_to_frame(BotCTransLink* link);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif
+#endif  // BOT2_CORE_BOT_CORE_CTRANS_H_

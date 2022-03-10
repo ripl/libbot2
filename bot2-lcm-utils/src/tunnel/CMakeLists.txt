@@ -1,4 +1,6 @@
-set(ldpc_sources 
+find_package(M MODULE REQUIRED)
+
+set(ldpc_sources
     ldpc/getopt.cpp
     ldpc/ldpc_create_pchk.cpp
     ldpc/ldpc_fec.cpp
@@ -12,24 +14,23 @@ set(ldpc_sources
 
 add_executable(bot-lcm-tunnel
     introspect.c
-    lcm_tunnel_params_t.c
-    lcm_tunnel_sub_msg_t.c
-    lcm_tunnel_udp_msg_t.c
-    lcm_tunnel_disconnect_msg_t.c
     ssocket.c
     lcm_tunnel.cpp
     lcm_tunnel_server.cpp
-    signal_pipe.c 
+    signal_pipe.c
     lcm_util.c
     ${ldpc_sources}
     )
+target_link_libraries(bot-lcm-tunnel
+  PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm M::M lcmtypes_bot2-lcm-utils
+)
 
 add_executable(ldpc-wrapper-test
     ldpc/ldpc_wrapper_test.cpp
     ${ldpc_sources}
     )
-set_target_properties(bot-lcm-tunnel PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
 
-target_link_libraries(bot-lcm-tunnel ${LCM_NAMESPACE}lcm GLib2::glib)
-
-pods_install_executables(EXPORT ${POD_NAME} bot-lcm-tunnel)
+install(TARGETS bot-lcm-tunnel
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

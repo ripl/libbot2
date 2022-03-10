@@ -1,15 +1,35 @@
-#ifndef __bot_param_client_h__
-#define __bot_param_client_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
 
+/*
+ * This file is part of bot2-param.
+ *
+ * bot2-param is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-param is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-param. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_PARAM_BOT_PARAM_PARAM_CLIENT_H_
+#define BOT2_PARAM_BOT_PARAM_PARAM_CLIENT_H_
+
+#include <stdint.h>
 #include <stdio.h>
+
 #include <lcm/lcm.h>
 
 /**
  * @defgroup: BotParam Bot Param
  * @brief Hierarchical key/value configuration files
  * @include: bot_param/param_client.h
- *
- * TODO
  *
  * Linking: -lparam_client
  * @{
@@ -26,18 +46,16 @@ typedef struct _BotParam BotParam;
  * @param lcm         Handle to the lcm object to be used.
  * @param keep_update Keep listening for parameter updates.
  *
- * Gets the params for the param-server, and parse them. Returns a handle to the contents.
- * Checks the environment variable BOT_PARAM_SERVER_NAME. If no parameters are received within 
- * 5seconds, returns with an error.
+ * Gets the params for the param-server, and parse them. Returns a handle to the
+ * contents. Checks the environment variable BOT_PARAM_SERVER_NAME. If no
+ * parameters are received within 5seconds, returns with an error.
  *
- * WARNING: This calls lcm_handle internally, so make sure that you create the param_client
- * BEFORE you subscribe with handlers that may use it!
+ * WARNING: This calls lcm_handle internally, so make sure that you create the
+ * param_client BEFORE you subscribe with handlers that may use it!
  *
  * @return A handle to a newly-allocated %BotParam or %NULL on error.
  */
-BotParam *
-bot_param_new_from_server (lcm_t * lcm, int keep_updated);
-
+BotParam* bot_param_new_from_server(lcm_t* lcm, int keep_updated);
 
 /**
  * bot_param_new_from_named_server:
@@ -45,18 +63,18 @@ bot_param_new_from_server (lcm_t * lcm, int keep_updated);
  * @param server_name Name of param server
  * @param keep_update Keep listening for parameter updates.
  *
- * Gets the params for the named param-server, and parse them. Returns a handle to the contents.  
- * If server_name is NULL, checks for environment variable BOT_PARAM_SERVER_NAME. If no parameters 
- * are received within 5seconds, returns with an error.
+ * Gets the params for the named param-server, and parse them. Returns a handle
+ * to the contents. If server_name is NULL, checks for environment variable
+ * BOT_PARAM_SERVER_NAME. If no parameters are received within 5seconds, returns
+ * with an error.
  *
- * WARNING: This calls lcm_handle internally, so make sure that you create the param_client
- * BEFORE you subscribe with handlers that may use it!
+ * WARNING: This calls lcm_handle internally, so make sure that you create the
+ * param_client BEFORE you subscribe with handlers that may use it!
  *
  * @return A handle to a newly-allocated %BotParam or %NULL on error.
  */
-BotParam *
-bot_param_new_from_named_server (lcm_t * lcm, const char * server_name, int keep_updated);
-
+BotParam* bot_param_new_from_named_server(lcm_t* lcm, const char* server_name,
+                                          int keep_updated);
 
 /**
  * bot_param_update_handler_t
@@ -67,7 +85,9 @@ bot_param_new_from_named_server (lcm_t * lcm, const char * server_name, int keep
  * new_param: The new BotParam structure with updated parameters from the server
  * user: user data that was passed to the function
  */
-typedef void(bot_param_update_handler_t)(BotParam * old_param,BotParam * new_param, int64_t utime, void *user);
+typedef void(bot_param_update_handler_t)(BotParam* old_param,
+                                         BotParam* new_param, int64_t utime,
+                                         void* user);
 
 /**
  * bot_param_add_update_subscriber
@@ -79,9 +99,9 @@ typedef void(bot_param_update_handler_t)(BotParam * old_param,BotParam * new_par
  * callback_func: function to call when new params are recieved
  * user: user data to be passed to the function
  */
-void bot_param_add_update_subscriber(BotParam *param,
-    bot_param_update_handler_t * callback_func, void * user);
-
+void bot_param_add_update_subscriber(BotParam* param,
+                                     bot_param_update_handler_t* callback_func,
+                                     void* user);
 
 /**
  * bot_param_new_from_file:
@@ -109,8 +129,7 @@ void bot_param_add_update_subscriber(BotParam *param,
  *
  * @return A handle to a newly-allocated %BotParam or %NULL on parse error.
  */
-BotParam *
-bot_param_new_from_file (const char * filename);
+BotParam* bot_param_new_from_file(const char* filename);
 
 /**
  * bot_param_new_from_string:
@@ -121,8 +140,7 @@ bot_param_new_from_file (const char * filename);
  *
  * @return A handle to a newly-allocated %BotParam or %NULL on parse error.
  */
-BotParam *
-bot_param_new_from_string (const char * string, int length);
+BotParam* bot_param_new_from_string(const char* string, int length);
 
 /**
  * bot_param_alloc:
@@ -131,8 +149,7 @@ bot_param_new_from_string (const char * string, int length);
  *
  * @return An uninitialized %BotParam object.
  */
-BotParam *
-bot_param_new( void );
+BotParam* bot_param_new(void);
 
 /**
  * bot_param_destroy:
@@ -141,8 +158,7 @@ bot_param_new( void );
  * Frees the memory used by a BotParam and destroys its
  * constituents.
  */
-void
-bot_param_destroy (BotParam * param);
+void bot_param_destroy(BotParam* param);
 
 /**
  * bot_param_write:
@@ -153,8 +169,7 @@ bot_param_destroy (BotParam * param);
  *
  * @return -1 on error, 0 on success.
  */
-int
-bot_param_write (BotParam * param, FILE * f);
+int bot_param_write(BotParam* param, FILE* f);
 
 /**
  * bot_param_write_to_string:
@@ -166,8 +181,7 @@ bot_param_write (BotParam * param, FILE * f);
  *
  * return -1 on error, 0 on success.
  */
-int
-bot_param_write_to_string (BotParam * param, char ** s);
+int bot_param_write_to_string(BotParam* param, char** s);
 
 /**
  * bot_param_print:
@@ -177,9 +191,8 @@ bot_param_write_to_string (BotParam * param, char ** s);
  *
  * @return -1 on error, 0 on success.
  */
-static inline int
-bot_param_print (BotParam * param){
-  return bot_param_write (param, stdout);
+static inline int bot_param_print(BotParam* param) {
+  return bot_param_write(param, stdout);
 }
 
 /**
@@ -191,7 +204,7 @@ bot_param_print (BotParam * param){
  *
  * @return 1 if the key is present, 0 if not
  */
-int bot_param_has_key (BotParam *param, const char *key);
+int bot_param_has_key(BotParam* param, const char* key);
 
 /**
  * bot_param_get_num_subkeys:
@@ -203,8 +216,7 @@ int bot_param_has_key (BotParam *param, const char *key);
  * @return The number of top-level keys in container named by containerKey or
  * -1 if container key not found.
  */
-int
-bot_param_get_num_subkeys (BotParam * param, const char * containerKey);
+int bot_param_get_num_subkeys(BotParam* param, const char* containerKey);
 
 /**
  * bot_param_get_subkeys:
@@ -216,8 +228,7 @@ bot_param_get_num_subkeys (BotParam * param, const char * containerKey);
  * @return a newly allocated, %NULL-terminated, array of strings.  This array
  * should be freed by the caller (e.g. with g_strfreev)
  */
-char **
-bot_param_get_subkeys (BotParam * param, const char * containerKey);
+char** bot_param_get_subkeys(BotParam* param, const char* containerKey);
 
 /**
  * bot_param_get_int:
@@ -232,8 +243,7 @@ bot_param_get_subkeys (BotParam * param, const char * containerKey);
  *
  * @return 0 on success, -1 on failure.
  */
-int
-bot_param_get_int (BotParam * param, const char * key, int * val);
+int bot_param_get_int(BotParam* param, const char* key, int* val);
 
 /**
  * bot_param_get_boolean:
@@ -245,8 +255,7 @@ bot_param_get_int (BotParam * param, const char * key, int * val);
  *
  * @return 0 on success, -1, on failure.
  */
-int
-bot_param_get_boolean (BotParam * param, const char * key, int * val);
+int bot_param_get_boolean(BotParam* param, const char* key, int* val);
 
 /**
  * bot_param_get_double:
@@ -258,8 +267,7 @@ bot_param_get_boolean (BotParam * param, const char * key, int * val);
  *
  * @return 0 on success, -1, on failure.
  */
-int
-bot_param_get_double (BotParam * param, const char * key, double * val);
+int bot_param_get_double(BotParam* param, const char* key, double* val);
 
 /**
  * bot_param_get_str:
@@ -268,13 +276,12 @@ bot_param_get_double (BotParam * param, const char * key, double * val);
  * @param val   Return value.
  *
  * Same as bot_param_get_int(), only for a string.
- * NOTE: this function returns a DUPLICATE of the string value, which should be freed!
+ * NOTE: this function returns a DUPLICATE of the string value, which should be
+ * freed!
  *
  * @return 0 on success, -1, on failure.
  */
-int
-bot_param_get_str (BotParam * param, const char * key, char ** val);
-
+int bot_param_get_str(BotParam* param, const char* key, char** val);
 
 /**
  * bot_param_get_int_or_fail:
@@ -285,8 +292,7 @@ bot_param_get_str (BotParam * param, const char * key, char ** val);
  *
  * @return The int value at @key.
  */
-int
-bot_param_get_int_or_fail(BotParam *param, const char *key);
+int bot_param_get_int_or_fail(BotParam* param, const char* key);
 
 /**
  * bot_param_get_boolean_or_fail:
@@ -297,8 +303,7 @@ bot_param_get_int_or_fail(BotParam *param, const char *key);
  *
  * @return The boolean value (1 or 0) at @key.
  */
-int
-bot_param_get_boolean_or_fail(BotParam * param, const char * key);
+int bot_param_get_boolean_or_fail(BotParam* param, const char* key);
 
 /**
  * bot_param_get_double_or_fail:
@@ -309,7 +314,7 @@ bot_param_get_boolean_or_fail(BotParam * param, const char * key);
  *
  * @return The double value at @key.
  */
-double bot_param_get_double_or_fail (BotParam *param, const char *key);
+double bot_param_get_double_or_fail(BotParam* param, const char* key);
 
 /**
  * bot_param_get_str_or_fail:
@@ -317,12 +322,12 @@ double bot_param_get_double_or_fail (BotParam *param, const char *key);
  * @param key   The key to get the string value for.
  *
  * Like bot_param_get_double_or_fail(), except with a string instead.
- * NOTE: this function returns a DUPLICATE of the string value, which should be freed!
+ * NOTE: this function returns a DUPLICATE of the string value, which should be
+ * freed!
  *
  * @return The string value at @key.
  */
-char
-*bot_param_get_str_or_fail (BotParam *param, const char *key);
+char* bot_param_get_str_or_fail(BotParam* param, const char* key);
 
 /**
  * bot_param_get_int_array:
@@ -335,8 +340,8 @@ char
  *
  * @return Number of elements read or -1 on error.
  */
-int
-bot_param_get_int_array (BotParam * param, const char * key, int * vals, int len);
+int bot_param_get_int_array(BotParam* param, const char* key, int* vals,
+                            int len);
 
 /**
  * bot_param_get_int_array_or_fail:
@@ -347,11 +352,9 @@ bot_param_get_int_array (BotParam * param, const char * key, int * vals, int len
  *
  * Same as bot_param_get_int_or_fail(), except for an array. Calls abort() if
  * the number of elements read is less than len.
- *
  */
-void
-bot_param_get_int_array_or_fail (BotParam * param, const char * key, int * vals, int len);
-
+void bot_param_get_int_array_or_fail(BotParam* param, const char* key,
+                                     int* vals, int len);
 
 /**
  * bot_param_get_boolean_array:
@@ -364,9 +367,8 @@ bot_param_get_int_array_or_fail (BotParam * param, const char * key, int * vals,
  *
  * @return Number of elements read or -1 on error.
  */
-int
-bot_param_get_boolean_array (BotParam * param, const char * key, int * vals, int len);
-
+int bot_param_get_boolean_array(BotParam* param, const char* key, int* vals,
+                                int len);
 
 /**
  * bot_param_get_boolean_array_or_fail:
@@ -375,13 +377,11 @@ bot_param_get_boolean_array (BotParam * param, const char * key, int * vals, int
  * @param vals  An array of booleans (return values).
  * @param len   Number of elements in %vals array.
  *
- * Same as bot_param_get_boolean_or_fail(), except for an array. Calls abort() if
- * the number of elements read is less than len. 
- *
+ * Same as bot_param_get_boolean_or_fail(), except for an array. Calls abort()
+ * if the number of elements read is less than len.
  */
-void
-bot_param_get_boolean_array_or_fail (BotParam * param, const char * key, int * vals, int len);
-
+void bot_param_get_boolean_array_or_fail(BotParam* param, const char* key,
+                                         int* vals, int len);
 
 /**
  * bot_param_get_double_array:
@@ -394,9 +394,8 @@ bot_param_get_boolean_array_or_fail (BotParam * param, const char * key, int * v
  *
  * @return Number of elements read or -1 on error.
  */
-int
-bot_param_get_double_array (BotParam * param, const char * key, double * vals, int len);
-
+int bot_param_get_double_array(BotParam* param, const char* key, double* vals,
+                               int len);
 
 /**
  * bot_param_get_double_array_or_fail:
@@ -406,12 +405,10 @@ bot_param_get_double_array (BotParam * param, const char * key, double * vals, i
  * @param len   Number of elements in %vals array.
  *
  * Same as bot_param_get_double(), except for an array. Calls abort() if
- * the number of elements read is less than len. 
- *
+ * the number of elements read is less than len.
  */
-void
-bot_param_get_double_array_or_fail (BotParam * param, const char * key, double * vals, int len);
-
+void bot_param_get_double_array_or_fail(BotParam* param, const char* key,
+                                        double* vals, int len);
 
 /**
  * bot_param_get_array_len:
@@ -423,7 +420,7 @@ bot_param_get_double_array_or_fail (BotParam * param, const char * key, double *
  * @return the number of elements in the specified array, or -1 if key
  * does not correspond to an array
  */
-int bot_param_get_array_len (BotParam *param, const char * key);
+int bot_param_get_array_len(BotParam* param, const char* key);
 
 /**
  * bot_param_get_str_array_alloc:
@@ -435,8 +432,7 @@ int bot_param_get_array_len (BotParam *param, const char * key);
  *
  * @return A newly-allocated, %NULL-terminated array of strings.
  */
-char **
-bot_param_get_str_array_alloc (BotParam * param, const char * key);
+char** bot_param_get_str_array_alloc(BotParam* param, const char* key);
 
 /**
  * bot_param_str_array_free:
@@ -444,8 +440,7 @@ bot_param_get_str_array_alloc (BotParam * param, const char * key);
  *
  * Frees a %NULL-terminated array of strings.
  */
-void bot_param_str_array_free ( char **data);
-
+void bot_param_str_array_free(char** data);
 
 /**
  * bot_param_get_global:
@@ -461,10 +456,7 @@ void bot_param_str_array_free ( char **data);
  *
  * @return pointer to BotParam
  */
-BotParam*
-bot_param_get_global(lcm_t * lcm,int keep_updated);
-
-
+BotParam* bot_param_get_global(lcm_t* lcm, int keep_updated);
 
 /**
  * bot_param_local_override:
@@ -472,9 +464,12 @@ bot_param_get_global(lcm_t * lcm,int keep_updated);
  * @param key   The param key to set
  * @param val   The value to set it to
  *
- * Note: This method is ONLY valid if the param object is not subscribing to updates!
+ * Note: This method is ONLY valid if the param object is not subscribing to
+ * updates!
  */
-int bot_param_override_local_param(BotParam * param, const char * key, const char * val); //TODO: add typed versions?
+int bot_param_override_local_param(
+    BotParam* param, const char* key,
+    const char* val);  // TODO(ashuang): add typed versions?
 
 /**
  * bot_param_override_local_params:
@@ -484,22 +479,22 @@ int bot_param_override_local_param(BotParam * param, const char * key, const cha
  * This function should make it easier to script programs that
  * depend on botParam to get most of their settings
  *
- * Note: This method is ONLY valid if the param object is not subscribing to updates!
+ * Note: This method is ONLY valid if the param object is not subscribing to
+ * updates!
  */
-int bot_param_override_local_params(BotParam * param, const char * override_params);
+int bot_param_override_local_params(BotParam* param,
+                                    const char* override_params);
 
-int64_t bot_param_get_server_id(BotParam * param);
+int64_t bot_param_get_server_id(BotParam* param);
 
-int bot_param_get_seqno(BotParam * param);
-
-
+int bot_param_get_seqno(BotParam* param);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif
+#endif  // BOT2_PARAM_BOT_PARAM_PARAM_CLIENT_H_

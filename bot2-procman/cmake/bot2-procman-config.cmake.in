@@ -1,71 +1,51 @@
-# - Config file for the @POD_NAME@ package
+# -*- mode: cmake -*-
+# vim: set filetype=cmake :
 
-if(CMAKE_MAJOR_VERSION LESS 3)
-  message(FATAL_ERROR "CMake >= 3.0 required")
-endif()
-cmake_policy(PUSH)
-cmake_policy(VERSION 3.0)
-set(CMAKE_IMPORT_FILE_VERSION 1)
+#[=============================================================================[
+This file is part of @PROJECT_NAME@.
 
-if(CMAKE_VERSION VERSION_LESS 3.9.0)
-  # Imported from CMake 3.9.0
-  macro(find_dependency dep)
-    if (NOT ${dep}_FOUND)
-      set(cmake_fd_quiet_arg)
-      if(${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
-        set(cmake_fd_quiet_arg QUIET)
-      endif()
-      set(cmake_fd_required_arg)
-      if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
-        set(cmake_fd_required_arg REQUIRED)
-      endif()
+@PROJECT_NAME@ is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
 
-      get_property(cmake_fd_alreadyTransitive GLOBAL PROPERTY
-        _CMAKE_${dep}_TRANSITIVE_DEPENDENCY
-      )
+@PROJECT_NAME@ is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
 
-      find_package(${dep} ${ARGN}
-        ${cmake_fd_quiet_arg}
-        ${cmake_fd_required_arg}
-      )
+You should have received a copy of the GNU Lesser General Public License
+along with @PROJECT_NAME@. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
 
-      if(NOT DEFINED cmake_fd_alreadyTransitive OR cmake_fd_alreadyTransitive)
-        set_property(GLOBAL PROPERTY _CMAKE_${dep}_TRANSITIVE_DEPENDENCY TRUE)
-      endif()
+@PACKAGE_INIT@
 
-      if (NOT ${dep}_FOUND)
-        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "${CMAKE_FIND_PACKAGE_NAME} could not be found because dependency ${dep} could not be found.")
-        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
-        return()
-      endif()
-      set(cmake_fd_required_arg)
-      set(cmake_fd_quiet_arg)
-      set(cmake_fd_exact_arg)
-    endif()
-  endmacro()
-else()
-  include(CMakeFindDependencyMacro)
-endif()
-
-# Import targets that were generated with custom commands.
-if(NOT TARGET @NAMESPACE@lcmtypes_bot2-procman-java)
-  add_library(@NAMESPACE@lcmtypes_bot2-procman-java STATIC IMPORTED)
-  set_target_properties(@NAMESPACE@lcmtypes_bot2-procman-java PROPERTIES
-    IMPORTED_LOCATION @JAVA_INSTALL_DIR@/lcmtypes_bot2-procman.jar
-    JAR_FILE @JAVA_INSTALL_DIR@/lcmtypes_bot2-procman.jar
+if(CMAKE_VERSION VERSION_LESS 3.1)
+  message(FATAL_ERROR
+    "CMake 3.1 or higher is required to use @PROJECT_NAME@. "
+    "You are running version ${CMAKE_VERSION}."
   )
 endif()
+
+cmake_policy(PUSH)
+cmake_policy(VERSION 3.1)
+set(CMAKE_IMPORT_FILE_VERSION 1)
+
+# Import targets that were generated with custom commands.
 if(NOT TARGET @NAMESPACE@bot-procman-sheriff)
   add_executable(@NAMESPACE@bot-procman-sheriff IMPORTED)
   set_target_properties(@NAMESPACE@bot-procman-sheriff PROPERTIES
-    IMPORTED_LOCATION "@RUNTIME_INSTALL_DIR@/bot-procman-sheriff"
+    IMPORTED_LOCATION "@PACKAGE_RUNTIME_INSTALL_DIR@/bot-procman-sheriff"
   )
 endif()
-# Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@bot-procman-deputy)
-  include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
+
+include("${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@")
+
+if(NOT TARGET @NAMESPACE@lcmtypes_@PROJECT_NAME@-java)
+  include("${CMAKE_CURRENT_LIST_DIR}/@JAVA_EXPORT_FILE@" OPTIONAL)
 endif()
 
-unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)
+check_required_components(@PROJECT_NAME@)
+
 unset(CMAKE_IMPORT_FILE_VERSION)
 cmake_policy(POP)

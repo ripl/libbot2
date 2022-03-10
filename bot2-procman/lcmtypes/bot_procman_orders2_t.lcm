@@ -1,20 +1,35 @@
+/*
+ * This file is part of bot2-procman.
+ *
+ * bot2-procman is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-procman is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-procman. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package bot_procman;
 
-/*
-   message sent by the procman sheriff to provide instructions for a procman
-   deputy.  As long as the deputy reports a status inconsistent with the
-   orders, the orders will periodically be transmitted
-*/
+// Message sent by the procman sheriff to provide instructions for a procman
+// deputy. As long as the deputy reports a status inconsistent with the
+// orders, the orders will periodically be transmitted.
 
 struct orders2_t {
-    int64_t utime;
-    string host;
-    string sheriff_name;
+    int64_t  utime;
+    string   host;
+    string   sheriff_name;
 
-    int32_t ncmds;
+    int32_t  ncmds;
     sheriff_cmd2_t cmds[ncmds];
 
-    int32_t num_options;
-    string option_names[num_options];
-    string option_values[num_options];
+    int32_t  num_options;
+    string   option_names[num_options];
+    string   option_values[num_options];
 }

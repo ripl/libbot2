@@ -1,6 +1,10 @@
 add_executable(bot-lcm-logfilter
     lcm-logfilter.c)
-set_property(TARGET bot-lcm-logfilter PROPERTY C_STANDARD 99)
-target_link_libraries(bot-lcm-logfilter ${LCM_NAMESPACE}lcm GLib2::glib)
+target_link_libraries(bot-lcm-logfilter
+  PRIVATE GLib2::glib ${LCM_NAMESPACE}lcm
+)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcm-logfilter)
+install(TARGETS bot-lcm-logfilter
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
