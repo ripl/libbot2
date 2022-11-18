@@ -1,7 +1,22 @@
 add_executable(bot-rwx-viewer
     main.c
     renderer_rwx.c)
-target_link_libraries(bot-rwx-viewer bot2-vis ${GTK2_LIBRARIES} OpenGL::GL ${GLUT_LIBRARIES})
-set_property(TARGET bot-rwx-viewer PROPERTY C_STANDARD 99)
+if(APPLE)
+  target_compile_definitions(bot-rwx-viewer
+    PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
+target_link_libraries(bot-rwx-viewer
+  PRIVATE
+    GLUT::GLUT
+    GLib2::glib
+    GLib2::gobject
+    OpenGL::GL
+    PkgConfig::GTK3
+    bot2-vis
+)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-rwx-viewer)
+install(TARGETS bot-rwx-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

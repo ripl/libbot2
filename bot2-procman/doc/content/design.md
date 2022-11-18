@@ -17,7 +17,6 @@ The deputy is essentially a daemon process that manages other commands.  It is
 not interactive, does not have a GUI, and simply carries out orders that it
 receives from a sheriff.
 
-
 _Sheriffs_ tell deputies what to do.  A single sheriff can command many
 deputies.  Any process can be a sheriff as long as it implements the
 sheriff/deputy communications protocol, but the most commonly used sheriff is

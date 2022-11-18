@@ -1,0 +1,44 @@
+# This file is part of libbot2.
+#
+# libbot2 is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
+#
+# libbot2 is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with libbot2. If not, see <https://www.gnu.org/licenses/>.
+
+---
+name: Stale
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: '0 5 * * *'
+
+jobs:
+  stale:
+    name: Stale
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v3
+        with:
+          days-before-close: 7
+          days-before-stale: 60
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-label: stale
+          stale-issue-message: >
+            Thank you for your contribution. This issue has been open for 60
+            days without activity and so is considered stale. It will be
+            automatically closed in 7 days unless you comment or remove the
+            "stale" label.
+          stale-pr-message: >
+            Thank you for your contribution. This pull request has been open for
+            60 days without activity and so is considered stale. It will be
+            automatically closed in 7 days unless you comment or remove the
+            "stale" label.
+          stale-pr-label: stale

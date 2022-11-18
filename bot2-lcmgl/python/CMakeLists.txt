@@ -1,8 +1,5 @@
-find_package(PythonInterp REQUIRED)
+find_package(PythonInterp 3.6 MODULE)
 
-# install all python packages in the src/ directory
-pods_install_python_packages(${CMAKE_CURRENT_SOURCE_DIR}/src)
-
-# executable scripts:
-#pods_install_python_script(script-name python-module)
-
+if(PYTHONINTERP_FOUND)
+  pods_install_python_packages(${CMAKE_CURRENT_SOURCE_DIR}/src)
+endif()

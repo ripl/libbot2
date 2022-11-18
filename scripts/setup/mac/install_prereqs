@@ -1,19 +1,19 @@
-#!/bin/bash
+#!/bin/zsh
 
-# Copyright (C) 2018 Massachusetts Institute of Technology.
+# This file is part of libbot2.
 #
-# This program is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
+# libbot2 is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by the
+# Free Software Foundation, either version 3 of the License, or (at your
+# option) any later version.
 #
-# This program is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-# details.
+# libbot2 is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+# License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU Lesser General Public License
+# along with libbot2. If not, see <https://www.gnu.org/licenses/>.
 
 set -euo pipefail
 
@@ -22,40 +22,17 @@ if [[ "${EUID}" -eq 0 ]]; then
   exit 1
 fi
 
-if ! command -v javac &>/dev/null; then
-  echo 'Java is NOT installed' >&2
-  exit 2
-fi
-
-if [[ ! -f /opt/X11/include/X11/Xlib.h ]]; then
-  echo 'XQuartz is NOT installed' >&2
-  exit 3
-fi
+export HOMEBREW_CURL_RETRIES=4
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_EMOJI=1
+export HOMEBREW_NO_GITHUB_API=1
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_NO_INSTALL_CLEANUP=1
 
 if ! command -v brew &>/dev/null; then
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(/usr/bin/curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-if [[ ! -f /usr/include/zlib.h ]]; then
-  echo 'Command Line Tools for Xcode are NOT installed' >&2
-  exit 4
-fi
-
-brew tap robotlocomotion/director
-brew update
-brew upgrade
-brew install \
-  cmake \
-  doxygen \
-  glib \
-  gtk+ \
-  jpeg \
-  libpng \
-  numpy \
-  pkg-config \
-  pygtk \
-  python \
-  python3 \
-  scipy
-
-# TODO: Install a compatible version of LCM.
+brew update || (sleep 15; brew update)
+brew bundle --file="$(dirname ${(%):-%x})/Brewfile"

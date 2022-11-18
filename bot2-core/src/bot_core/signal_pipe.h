@@ -1,5 +1,25 @@
-#ifndef __bot_signal_pipe_h__
-#define __bot_signal_pipe_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
+
+/*
+ * This file is part of bot2-core.
+ *
+ * bot2-core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-core is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-core. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_CORE_BOT_CORE_SIGNAL_PIPE_H_
+#define BOT2_CORE_BOT_CORE_SIGNAL_PIPE_H_
 
 /**
  * @defgroup BotCoreSignalPipe Signals to pipes
@@ -39,36 +59,36 @@
 extern "C" {
 #endif
 
-typedef void (*bot_signal_pipe_glib_handler_t) (int signal, void *user_data);
+typedef void (*bot_signal_pipe_glib_handler_t)(int signal, void* user_data);
 
 // initializes signal_pipe.  call this once per process.
-int bot_signal_pipe_init (void);
+int bot_signal_pipe_init(void);
 
 // cleans up resources used by the signal_pipe
-int bot_signal_pipe_cleanup (void);
+int bot_signal_pipe_cleanup(void);
 
-// specifies that signal should be caught by signal_pipe and converted to a 
+// specifies that signal should be caught by signal_pipe and converted to a
 // glib event
-void bot_signal_pipe_add_signal (int signal);
+void bot_signal_pipe_add_signal(int signal);
 
 // sets a handler function that is called when a signal is caught by
 // signal_pipe.  The first argument to the user_func function is the number of
 // the signal caught.  The second is the user_data parameter passed in here.
-int bot_signal_pipe_attach_glib (bot_signal_pipe_glib_handler_t user_func, 
-        gpointer user_data);
+int bot_signal_pipe_attach_glib(bot_signal_pipe_glib_handler_t user_func,
+                                gpointer user_data);
 
 // convenience function to setup a signal handler that calls
 // signal_pipe_init, and adds a signal handler that automatically call
 // g_main_loop_quit (mainloop) on receiving SIGTERM, SIGINT, or SIGHUP.
 // also invokes signal_pipe_cleanup() on receiving these signals.
-int bot_signal_pipe_glib_quit_on_kill (GMainLoop *mainloop);
+int bot_signal_pipe_glib_quit_on_kill(GMainLoop* mainloop);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif
+#endif  // BOT2_CORE_BOT_CORE_SIGNAL_PIPE_H_

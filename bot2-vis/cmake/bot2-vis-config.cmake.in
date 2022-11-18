@@ -1,66 +1,127 @@
-# - Config file for the @POD_NAME@ package
+# -*- mode: cmake -*-
+# vim: set filetype=cmake :
 
-if(CMAKE_MAJOR_VERSION LESS 3)
-  message(FATAL_ERROR "CMake >= 3.0 required")
+#[=============================================================================[
+This file is part of @PROJECT_NAME@.
+
+@PROJECT_NAME@ is free software: you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+@PROJECT_NAME@ is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with @PROJECT_NAME@. If not, see <https://www.gnu.org/licenses/>.
+#]=============================================================================]
+
+@PACKAGE_INIT@
+
+if(CMAKE_VERSION VERSION_LESS 3.1)
+  message(FATAL_ERROR
+    "CMake 3.1 or higher is required to use @PROJECT_NAME@. "
+    "You are running version ${CMAKE_VERSION}."
+  )
 endif()
+
 cmake_policy(PUSH)
-cmake_policy(VERSION 3.0)
+cmake_policy(VERSION 3.1)
 set(CMAKE_IMPORT_FILE_VERSION 1)
 
-if(CMAKE_VERSION VERSION_LESS 3.9.0)
-  # Imported from CMake 3.9.0
-  macro(find_dependency dep)
-    if (NOT ${dep}_FOUND)
-      set(cmake_fd_quiet_arg)
-      if(${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
-        set(cmake_fd_quiet_arg QUIET)
-      endif()
-      set(cmake_fd_required_arg)
-      if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
-        set(cmake_fd_required_arg REQUIRED)
-      endif()
-
-      get_property(cmake_fd_alreadyTransitive GLOBAL PROPERTY
-        _CMAKE_${dep}_TRANSITIVE_DEPENDENCY
-      )
-
-      find_package(${dep} ${ARGN}
-        ${cmake_fd_quiet_arg}
-        ${cmake_fd_required_arg}
-      )
-
-      if(NOT DEFINED cmake_fd_alreadyTransitive OR cmake_fd_alreadyTransitive)
-        set_property(GLOBAL PROPERTY _CMAKE_${dep}_TRANSITIVE_DEPENDENCY TRUE)
-      endif()
-
-      if (NOT ${dep}_FOUND)
-        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE "${CMAKE_FIND_PACKAGE_NAME} could not be found because dependency ${dep} could not be found.")
-        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND False)
-        return()
-      endif()
-      set(cmake_fd_required_arg)
-      set(cmake_fd_quiet_arg)
-      set(cmake_fd_exact_arg)
-    endif()
-  endmacro()
-else()
-  include(CMakeFindDependencyMacro)
+if(CMAKE_VERSION VERSION_LESS 3.9)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.9")
+endif()
+include(CMakeFindDependencyMacro)
+if(CMAKE_VERSION VERSION_LESS 3.9)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
 endif()
 
+find_dependency(bot2-core CONFIG
+  HINTS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_LIBDIR@/cmake/bot2-core"
+)
+
 list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules")
-find_dependency(bot2-core CONFIG HINTS "${${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX}/lib/cmake/bot2-core")
-find_dependency(GTK2)
-find_dependency(GLib2)
-find_dependency(GLUT)
-find_dependency(OpenGL)
-# Clean CMAKE_MODULE_PATH: remove added path
+find_dependency(GLib2 2.32 MODULE)
+find_dependency(M MODULE)
 list(REMOVE_AT CMAKE_MODULE_PATH 0)
 
+find_dependency(GLUT MODULE)
+
+if(CMAKE_VERSION VERSION_LESS 3.12)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.12")
+endif()
+find_dependency(JPEG MODULE)
+if(CMAKE_VERSION VERSION_LESS 3.12)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
+
+find_dependency(lcm 1.4 CONFIG
+  HINTS "${PACKAGE_PREFIX_DIR}/lib/cmake/lcm"
+)
+
+if(CMAKE_VERSION VERSION_LESS 3.10)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.10")
+endif()
+set(OpenGL_GL_PREFERENCE LEGACY)
+find_dependency(OpenGL MODULE)
+unset(OpenGL_GL_PREFERENCE)
+if(CMAKE_VERSION VERSION_LESS 3.10)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
+
+if(CMAKE_VERSION VERSION_LESS 3.6)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.6")
+endif()
+find_dependency(PkgConfig MODULE QUIET)
+set(_${CMAKE_FIND_PACKAGE_NAME}_QUIET_ARGUMENT)
+if(${CMAKE_FIND_PACKAGE_NAME}_FIND_QUIETLY)
+  set(_${CMAKE_FIND_PACKAGE_NAME}_QUIET_ARGUMENT QUIET)
+endif()
+set(_${CMAKE_FIND_PACKAGE_NAME}_REQUIRED_ARGUMENT)
+if(${CMAKE_FIND_PACKAGE_NAME}_FIND_REQUIRED)
+  set(_${CMAKE_FIND_PACKAGE_NAME}_REQUIRED_ARGUMENT REQUIRED)
+endif()
+pkg_check_modules(GDK3 ${_${CMAKE_FIND_PACKAGE_NAME}_REQUIRED_ARGUMENT}
+  ${_${CMAKE_FIND_PACKAGE_NAME}_QUIET_ARGUMENT} IMPORTED_TARGET gdk-3.0
+)
+pkg_check_modules(GTK3 ${_${CMAKE_FIND_PACKAGE_NAME}_REQUIRED_ARGUMENT}
+  ${_${CMAKE_FIND_PACKAGE_NAME}_QUIET_ARGUMENT} IMPORTED_TARGET gtk+-3.0
+)
+unset(_${CMAKE_FIND_PACKAGE_NAME}_REQUIRED_ARGUMENT)
+unset(_${CMAKE_FIND_PACKAGE_NAME}_QUIET_ARGUMENT)
+if(CMAKE_VERSION VERSION_LESS 3.6)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
+
+if(CMAKE_VERSION VERSION_LESS 3.5)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.5")
+endif()
+find_dependency(PNG MODULE)
+if(CMAKE_VERSION VERSION_LESS 3.5)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
+
+find_dependency(Threads MODULE)
+
+if(CMAKE_VERSION VERSION_LESS 3.14)
+  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_LIST_DIR}/modules/3.14")
+endif()
+find_dependency(X11 MODULE)
+if(CMAKE_VERSION VERSION_LESS 3.14)
+  list(REMOVE_AT CMAKE_MODULE_PATH 0)
+endif()
+
+find_dependency(ZLIB MODULE)
+
 # Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET @NAMESPACE@@POD_NAME@)
+if(NOT TARGET @NAMESPACE@@PROJECT_NAME@)
   include(${CMAKE_CURRENT_LIST_DIR}/@EXPORT_FILE@)
 endif()
 
-unset(${CMAKE_FIND_PACKAGE_NAME}_IMPORT_PREFIX)
+check_required_components(@PROJECT_NAME@)
+
 unset(CMAKE_IMPORT_FILE_VERSION)
 cmake_policy(POP)

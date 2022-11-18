@@ -1,20 +1,48 @@
-#ifndef __bot2_viewer_h__
-#define __bot2_viewer_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
 
-#include <inttypes.h>
-#include <gtk/gtk.h>
+/*
+ * This file is part of bot2-vis.
+ *
+ * bot2-vis is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-vis is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-vis. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_VIS_BOT_VIS_VIEWER_H_
+#define BOT2_VIS_BOT_VIS_VIEWER_H_
+
+#include <stdint.h>
+
+#include <gdk/gdk.h>
 #include <glib-object.h>
-
+#include <glib.h>
+#include <gtk/gtk.h>
 #include <zlib.h>
 
-#include "gtk_util.h"
+#include "gl_drawing_area.h"
+
+// IWYU pragma: no_forward_declare _BotEventHandler
+// IWYU pragma: no_forward_declare _BotRenderer
+// IWYU pragma: no_forward_declare _BotViewer
+// IWYU pragma: no_forward_declare _BotViewerClass
+// IWYU pragma: no_forward_declare _BotViewHandler
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Uncomment to build with left-hand renderer controls box support enabled
-//#define CONTROLS_BOX_LEFT_ENABLED
+// #define CONTROLS_BOX_LEFT_ENABLED
 
 /**
  * @defgroup BotViewer BotViewer
@@ -32,65 +60,56 @@ typedef struct _BotViewer BotViewer;
 typedef struct _BotViewHandler BotViewHandler;
 typedef struct _BotEventHandler BotEventHandler;
 
-/**
- */
-struct BotViewerMode
-{
-    int           mode;
-    const char   *name;
-    GtkMenuItem  *menu_item;
+struct BotViewerMode {
+  int mode;
+  const char* name;
+  GtkMenuItem* menu_item;
 };
 
-/*
- * follow_mode bit flags
- */
+// follow_mode bit flags
 #define BOT_FOLLOW_POS 1
 #define BOT_FOLLOW_YAW 2
 #define BOT_FOLLOW_ORIENTATION 4
 
-typedef enum {
-  BOT_VIEW_ORTHOGRAPHIC,
-  BOT_VIEW_PERSPECTIVE
-} BotProjectionMode;
+typedef enum { BOT_VIEW_ORTHOGRAPHIC, BOT_VIEW_PERSPECTIVE } BotProjectionMode;
 
-/*
- * View updating methods.
- */
-struct _BotViewHandler
-{
-    void (*update_gl_matrices)  (BotViewer *viewer, BotViewHandler *vhandler);
+// View updating methods.
+struct _BotViewHandler {
+  void (*update_gl_matrices)(BotViewer* viewer, BotViewHandler* vhandler);
 
-    void (*get_eye_look)        (BotViewHandler *vhandler, double eye[3], 
-                                 double lookat[3], double up[3]);
+  void (*get_eye_look)(BotViewHandler* vhandler, double eye[3],
+                       double lookat[3], double up[3]);
 
-    void (*update_follow_target)(BotViewHandler *vhandler, const double pos[3], 
-                                 const double quat[4]);
-  
-  void (*set_look_at_smooth) (BotViewHandler *vhandler, const double eye[3], const double lookat[3], const double up[3], double duration_ms);
-   
-    void (*set_look_at)         (BotViewHandler *vhandler, const double eye[3], 
-                                 const double lookat[3], const double up[3]);
-    
-    void (*set_camera_perspective) (BotViewHandler *vhandler, double fov_degrees);
+  void (*update_follow_target)(BotViewHandler* vhandler, const double pos[3],
+                               const double quat[4]);
 
-    void (*set_camera_orthographic) (BotViewHandler *vhandler);
+  void (*set_look_at_smooth)(BotViewHandler* vhandler, const double eye[3],
+                             const double lookat[3], const double up[3],
+                             double duration_ms);
 
-    BotProjectionMode (*get_projection_mode)    (BotViewHandler *vhandler);
+  void (*set_look_at)(BotViewHandler* vhandler, const double eye[3],
+                      const double lookat[3], const double up[3]);
+
+  void (*set_camera_perspective)(BotViewHandler* vhandler, double fov_degrees);
+
+  void (*set_camera_orthographic)(BotViewHandler* vhandler);
+
+  BotProjectionMode (*get_projection_mode)(BotViewHandler* vhandler);
   /**
-  * returns the vertical FOV when the camera is in perspective mode.
-  * Results undefined when the camera is in orthographic mode.
-  */
-    double (*get_perspective_fov)(BotViewHandler *vhandler);
-    
-    void (*destroy)             (BotViewHandler *vhandler);
+   * returns the vertical FOV when the camera is in perspective mode.
+   * Results undefined when the camera is in orthographic mode.
+   */
+  double (*get_perspective_fov)(BotViewHandler* vhandler);
 
-    int  follow_mode;
-    void *user;
+  void (*destroy)(BotViewHandler* vhandler);
+
+  int follow_mode;
+  void* user;
 };
 
 /**
  * BotEventHandler:
- * @name: a name used in the menu 
+ * @name: a name used in the menu
  * @enabled: Completely enable/disable the event handler.
  * @priority: Higher priority handlers are updated first. Do not set this
  * directly; only via set_priority.
@@ -104,7 +123,7 @@ struct _BotViewHandler
  * compete for the sequence of events that follow. The BotEventHandler that
  * returns the smallest distance will receive a pick_notify event.  Return < 0
  * if the renderer has no object to pick.
- * @hover_query: can usually be the same function pointer as pick_query. 
+ * @hover_query: can usually be the same function pointer as pick_query.
  * @mouse_press: Event handling methods. Return non-zero if the event was
  * consumed by this handler (and further processing should stop).
  * @mouse_release: If you register a pick_query handler, you should almost
@@ -127,7 +146,7 @@ struct _BotViewHandler
  * when the mouse is merely moved, and does not affect the routing
  * of events. This allows a renderer to display an object
  * differently, so that the user knows the object can be clicked
- * on (thus causing the object to be "picked"). 
+ * on (thus causing the object to be "picked").
  *
  * Both "picking" and "hovering" call a query function; it should
  * return the distance from the click to an object. The event
@@ -148,54 +167,53 @@ struct _BotViewHandler
  * If no one is picking, and the event is mouse_motion, the
  * hover_query methods are called, and the winning event handler
  * has its "hovering" flag set.
- * 
+ *
  * Finally, we find an event handler to consume the event. The
  * picking event handler, if any, gets first dibs. All other
  * handlers are then called in order of decreasing priority.
- * 
+ *
  * Only one handler "consumes" an event: if an event handler
  * returns TRUE, it ends the event processing.
  */
-struct _BotEventHandler
-{
-    char *name;
-    int enabled;
-    int priority;
-    int picking;
-    int hovering;
+struct _BotEventHandler {
+  char* name;
+  int enabled;
+  int priority;
+  int picking;
+  int hovering;
 
-    double (*pick_query)(BotViewer *viewer, BotEventHandler *ehandler, 
-            const double ray_start[3], const double ray_dir[3]);
+  double (*pick_query)(BotViewer* viewer, BotEventHandler* ehandler,
+                       const double ray_start[3], const double ray_dir[3]);
 
-    double (*hover_query)(BotViewer *viewer, BotEventHandler *ehandler, 
-            const double ray_start[3], const double ray_dir[3]);
+  double (*hover_query)(BotViewer* viewer, BotEventHandler* ehandler,
+                        const double ray_start[3], const double ray_dir[3]);
 
-    int (*mouse_press)   (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
-                          const GdkEventButton *event);
+  int (*mouse_press)(BotViewer* viewer, BotEventHandler* ehandler,
+                     const double ray_start[3], const double ray_dir[3],
+                     const GdkEventButton* event);
 
-    int (*mouse_release) (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
-                          const GdkEventButton *event);
+  int (*mouse_release)(BotViewer* viewer, BotEventHandler* ehandler,
+                       const double ray_start[3], const double ray_dir[3],
+                       const GdkEventButton* event);
 
-    int (*mouse_motion)  (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3], 
-                          const GdkEventMotion *event);
+  int (*mouse_motion)(BotViewer* viewer, BotEventHandler* ehandler,
+                      const double ray_start[3], const double ray_dir[3],
+                      const GdkEventMotion* event);
 
-    int (*mouse_scroll)  (BotViewer *viewer, BotEventHandler *ehandler,
-                          const double ray_start[3], const double ray_dir[3],
-                          const GdkEventScroll *event);
+  int (*mouse_scroll)(BotViewer* viewer, BotEventHandler* ehandler,
+                      const double ray_start[3], const double ray_dir[3],
+                      const GdkEventScroll* event);
 
-    int  (*key_press)     (BotViewer *viewer, BotEventHandler *ehandler, 
-            const GdkEventKey  *event);
+  int (*key_press)(BotViewer* viewer, BotEventHandler* ehandler,
+                   const GdkEventKey* event);
 
-    int  (*key_release)     (BotViewer *viewer, BotEventHandler *ehandler, 
-            const GdkEventKey  *event);
+  int (*key_release)(BotViewer* viewer, BotEventHandler* ehandler,
+                     const GdkEventKey* event);
 
-    void (*destroy)       (BotEventHandler *ehandler);
+  void (*destroy)(BotEventHandler* ehandler);
 
-    void *user;
-    GtkWidget         *cmi;
+  void* user;
+  GtkWidget* cmi;
 };
 
 /**
@@ -249,25 +267,25 @@ struct _BotEventHandler
  */
 typedef struct _BotRenderer BotRenderer;
 struct _BotRenderer {
+  int enabled;
 
-    int        enabled;
+  int priority;
 
-    int        priority;
+  char* name;
+  GtkWidget* widget;
 
-    char       *name;
-    GtkWidget  *widget;
+  void (*draw)(BotViewer* viewer, BotRenderer* renderer);
+  void (*destroy)(BotRenderer* renderer);
+  void* user;
 
-    void (*draw)      (BotViewer *viewer, BotRenderer *renderer);
-    void (*destroy)   (BotRenderer *renderer);
-    void *user;
-
-    int expanded;
-    GtkWidget         *cmi;
-    GtkWidget         *expander;
-    GtkWidget         *control_frame;
+  int expanded;
+  GtkWidget* cmi;
+  GtkWidget* expander;
+  GtkWidget* control_frame;
 };
 
-#define BOT_VIEWER(obj)  (G_TYPE_CHECK_INSTANCE_CAST((obj), bot_viewer_get_type(), BotViewer))
+#define BOT_VIEWER(obj) \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), bot_viewer_get_type(), BotViewer))
 
 typedef struct _BotViewerClass BotViewerClass;
 
@@ -276,7 +294,6 @@ typedef struct _BotViewerClass BotViewerClass;
  * @parent:
  * @backgroundColor:
  * @gl_area:
- * @tips:
  * @event_handlers: Event handlers sorted by priority (decreasing).
  * @event_handlers_sorted:
  * @picking_handler: The last-known picking handler (also a member of
@@ -318,82 +335,79 @@ typedef struct _BotViewerClass BotViewerClass;
  * @status_bar_message:
  */
 struct _BotViewer {
-    GObject parent;
+  GObject parent;
 
-    float backgroundColor[4];
+  float backgroundColor[4];
 
-    BotGtkGlDrawingArea *gl_area;
-    GtkTooltips       *tips;
+  BotGtkGlDrawingArea* gl_area;
 
-    GPtrArray         *event_handlers;
-    GPtrArray         *event_handlers_sorted;
+  GPtrArray* event_handlers;
+  GPtrArray* event_handlers_sorted;
 
-    BotEventHandler      *picking_handler;
+  BotEventHandler* picking_handler;
 
-    GPtrArray         *renderers;      
+  GPtrArray* renderers;
 
-    GPtrArray         *renderers_sorted; 
+  GPtrArray* renderers_sorted;
 
-    GPtrArray         *renderers_sorted_with_controls;
+  GPtrArray* renderers_sorted_with_controls;
 
-    BotViewHandler       *view_handler;
-    BotViewHandler       *default_view_handler;
+  BotViewHandler* view_handler;
+  BotViewHandler* default_view_handler;
 
-    GtkWidget         *controls_box;
+  GtkWidget* controls_box;
 #ifdef CONTROLS_BOX_LEFT_ENABLED
-    GtkWidget         *controls_box_left;
+  GtkWidget* controls_box_left;
 #endif
-    GtkWidget         *record_button;
-    GtkWidget         *menu_bar;
+  GtkWidget* record_button;
+  GtkWidget* menu_bar;
 
-    uint8_t           *mov_bgr_buf;
-    GtkWidget         *fps_spin;
+  uint8_t* mov_bgr_buf;
+  GtkWidget* fps_spin;
 
-    char              *movie_path;
-    uint8_t           *movie_buffer;
-    int               movie_width, movie_height, movie_stride;
-    int               movie_draw_pending;
-    int               movie_frames;
-    int64_t           movie_frame_last_utime;
-    double            movie_actual_fps;
-    double            movie_desired_fps;
-    gzFile            *movie_gzf;
+  char* movie_path;
+  uint8_t* movie_buffer;
+  int movie_width, movie_height, movie_stride;
+  int movie_draw_pending;
+  int movie_frames;
+  int64_t movie_frame_last_utime;
+  double movie_actual_fps;
+  double movie_desired_fps;
+  gzFile movie_gzf;
 
-    guint             render_timer_id;
-    int               is_recording;
+  guint render_timer_id;
+  int is_recording;
 
-    GtkWidget         *file_menu;
-    GtkWidget         *renderers_menu;
-    GtkWidget         *event_handlers_menu;
-    GtkWidget         *view_menu;
+  GtkWidget* file_menu;
+  GtkWidget* renderers_menu;
+  GtkWidget* event_handlers_menu;
+  GtkWidget* view_menu;
 
-    int64_t           last_draw_utime;
-    int               redraw_timer_pending;
+  int64_t last_draw_utime;
+  int redraw_timer_pending;
 
-    int               prettier_flag;
+  int prettier_flag;
 
-    GtkWidget         *window;
-    GtkWidget         *status_bar;
-    GtkToolbar         *toolbar;
+  GtkWidget* window;
+  GtkWidget* status_bar;
+  GtkToolbar* toolbar;
 
-    char              *status_bar_message;
+  char* status_bar_message;
 };
 
-struct _BotViewerClass
-{
-    GObjectClass parent_class;
+struct _BotViewerClass {
+  GObjectClass parent_class;
 };
 
-GType bot_viewer_get_type (void);
+GType bot_viewer_get_type(void);
 
-BotViewer *bot_viewer_new (const char *window_title);
-void bot_viewer_unref(BotViewer *viewer);
+BotViewer* bot_viewer_new(const char* window_title);
+void bot_viewer_unref(BotViewer* viewer);
 
-void bot_viewer_set_window_title (BotViewer *viewer, const char *window_name);
+void bot_viewer_set_window_title(BotViewer* viewer, const char* window_name);
 
-void bot_viewer_start_recording (BotViewer *viewer);
-void bot_viewer_stop_recording (BotViewer *viewer);
-
+void bot_viewer_start_recording(BotViewer* viewer);
+void bot_viewer_stop_recording(BotViewer* viewer);
 
 /**
  * bot_viewer_request_redraw:
@@ -401,9 +415,7 @@ void bot_viewer_stop_recording (BotViewer *viewer);
  *
  * Request a redraw (which will occur asynchronously).
  */
-void bot_viewer_request_redraw (BotViewer *viewer);
-
-
+void bot_viewer_request_redraw(BotViewer* viewer);
 
 /**
  * bot_viewer_on_side:
@@ -412,12 +424,11 @@ void bot_viewer_request_redraw (BotViewer *viewer);
  * @priority: The priority to assign the new renderer.
  * @control_box: Which control box to add to 0=left 1=right.
  *
- * Adds a renderer to the viewer.  BotRenderers are called at render time, in the
- * order in which they were added to the viewer.
+ * Adds a renderer to the viewer.  BotRenderers are called at render time, in
+ * the order in which they were added to the viewer.
  */
-void bot_viewer_add_renderer_on_side (BotViewer *viewer, BotRenderer *plugin, int priority, int which_side);
-
-
+void bot_viewer_add_renderer_on_side(BotViewer* viewer, BotRenderer* plugin,
+                                     int priority, int which_side);
 
 /**
  * bot_viewer_add_renderer:
@@ -425,14 +436,12 @@ void bot_viewer_add_renderer_on_side (BotViewer *viewer, BotRenderer *plugin, in
  * @plugin: The renderer to add.
  * @priority: The priority to assign the new renderer.
  *
- * Adds a renderer to the viewer.  BotRenderers are called at render time, in the
- * order in which they were added to the viewer. 
- * Defaults to right hand side (control_box=1) - the default
+ * Adds a renderer to the viewer.  BotRenderers are called at render time, in
+ * the order in which they were added to the viewer. Defaults to right hand side
+ * (control_box=1) - the default
  */
-void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priority);
-
-
-
+void bot_viewer_add_renderer(BotViewer* self, BotRenderer* renderer,
+                             int priority);
 
 /**
  * bot_viewer_remove_renderer:
@@ -442,7 +451,7 @@ void bot_viewer_add_renderer (BotViewer *self, BotRenderer *renderer, int priori
  * Removes a renderer from the viewer.  Once it is removed, it will not be
  * handled anymore.
  */
-void bot_viewer_remove_renderer(BotViewer *viewer, BotRenderer *plugin);
+void bot_viewer_remove_renderer(BotViewer* viewer, BotRenderer* plugin);
 
 /**
  * bot_viewer_set_view_handler:
@@ -452,15 +461,16 @@ void bot_viewer_remove_renderer(BotViewer *viewer, BotRenderer *plugin);
  *
  * Setting the view handler to %NULL activates the default view handler.
  */
-void bot_viewer_set_view_handler(BotViewer *viewer, BotViewHandler *vhandler);
+void bot_viewer_set_view_handler(BotViewer* viewer, BotViewHandler* vhandler);
 
 /**
  * bot_viewer_add_event_handler:
  * If you want key/mouse events, you need to add an event handler.
  */
-void bot_viewer_add_event_handler (BotViewer *viewer, BotEventHandler *ehandler, 
-        int priority);
-void bot_viewer_remove_event_handler(BotViewer *viewer, BotEventHandler *ehandler);
+void bot_viewer_add_event_handler(BotViewer* viewer, BotEventHandler* ehandler,
+                                  int priority);
+void bot_viewer_remove_event_handler(BotViewer* viewer,
+                                     BotEventHandler* ehandler);
 
 /**
  * bot_viewer_event_handler_set_priority:
@@ -472,43 +482,43 @@ void bot_viewer_remove_event_handler(BotViewer *viewer, BotEventHandler *ehandle
  * other event handler). The event handler can thus temporarily
  * increase its priority.
  */
-void bot_viewer_event_handler_set_priority (BotViewer *viewer, BotEventHandler *ehandler, 
-        int priority);
+void bot_viewer_event_handler_set_priority(BotViewer* viewer,
+                                           BotEventHandler* ehandler,
+                                           int priority);
 
-void bot_viewer_set_status_bar_message (BotViewer *viewer, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
+void bot_viewer_set_status_bar_message(BotViewer* viewer, const char* fmt, ...)
+    __attribute__((format(printf, 2, 3)));
 
 /**
  * bot_viewer_picking:
  *
  * Returns: Non-zero if an event handler is currently picking.
  */
-int bot_viewer_picking(BotViewer *viewer);
+int bot_viewer_picking(BotViewer* viewer);
 
 /**
  * bot_viewer_request_pick:
- * If a event handler wants to begin a pick operation, it can request it. 
+ * If a event handler wants to begin a pick operation, it can request it.
  *
  * Returns: Non-zero if the request fails.
  */
-int bot_viewer_request_pick(BotViewer *viewer, BotEventHandler *ehandler);
+int bot_viewer_request_pick(BotViewer* viewer, BotEventHandler* ehandler);
 
-void bot_viewer_load_preferences (BotViewer *viewer, const char *fname);
+void bot_viewer_load_preferences(BotViewer* viewer, const char* fname);
 
-void bot_viewer_save_preferences (BotViewer *viewer, const char *fname);
+void bot_viewer_save_preferences(BotViewer* viewer, const char* fname);
 
-typedef enum {
-    BOT_VIEWER_STOCK_RENDERER_GRID
-} BotViewerStockRendererId;
+typedef enum { BOT_VIEWER_STOCK_RENDERER_GRID } BotViewerStockRendererId;
 
-void bot_viewer_add_stock_renderer(BotViewer* viewer, int stock_renderer_id, int priority);
-
+void bot_viewer_add_stock_renderer(BotViewer* viewer, int stock_renderer_id,
+                                   int priority);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif
+#endif  // BOT2_VIS_BOT_VIS_VIEWER_H_

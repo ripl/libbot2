@@ -1,13 +1,34 @@
-find_package(bot2-vis REQUIRED)
-find_package(GTK2 REQUIRED)
+find_package(bot2-vis CONFIG REQUIRED)
+
+# Use the package PkgConfig to detect GTK+ headers/library files
+find_package(PkgConfig MODULE REQUIRED)
+pkg_check_modules(GDK3 REQUIRED IMPORTED_TARGET gdk-3.0)
+pkg_check_modules(GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0)
 
 add_executable(bot-lcmgl-viewer
     main.c
     udp_util.c
     view_menu.c
     )
-target_link_libraries(bot-lcmgl-viewer bot2-lcmgl-renderer libbot2::bot2-vis libbot2::bot2-core ${GTK2_LIBRARIES})
-target_include_directories(bot-lcmgl-viewer PUBLIC ${GTK2_INCLUDE_DIRS})
-set_property(TARGET bot-lcmgl-viewer PROPERTY C_STANDARD 99)
+if(APPLE)
+  target_compile_definitions(bot-lcmgl-viewer
+    PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
+target_link_libraries(bot-lcmgl-viewer
+ PRIVATE
+   GLib2::glib
+   GLib2::gobject
+   GLUT::GLUT
+   ${LCM_NAMESPACE}lcm
+   PkgConfig::GDK3
+   PkgConfig::GTK3
+   libbot2::bot2-core
+   libbot2::bot2-vis
+   bot2-lcmgl-renderer
+)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-lcmgl-viewer)
+install(TARGETS bot-lcmgl-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

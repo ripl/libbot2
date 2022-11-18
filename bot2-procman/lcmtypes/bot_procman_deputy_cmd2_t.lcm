@@ -1,32 +1,32 @@
-package bot_procman;
-
-/* describes the state of a command managed by the procman sheriff/deputy
+/*
+ * This file is part of bot2-procman.
+ *
+ * bot2-procman is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-procman is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-procman. If not, see <https://www.gnu.org/licenses/>.
  */
 
+package bot_procman;
+
+// Describes the state of a command managed by the procman sheriff/deputy.
+
 struct deputy_cmd2_t {
-
-    // The command to execute.
-    command2_t cmd;
-
-    // If the command is running, then this is the pid if not, then this is
-    // zero.
-    int32_t pid;
-
-    // an ID for the run instance
-    int32_t actual_runid;
-
-    // the last exit code
-    int32_t exit_code;
-
-    // [0, 1]
-    float cpu_usage;
-
-    // total virtual memory used by the process
-    int64_t mem_vsize_bytes;
-
-    // total physical memory used by the process
-    int64_t mem_rss_bytes;
-
-    // assigned by the sheriff, identifies the command
-    int32_t sheriff_id;
+    command2_t cmd;            // Command to execute
+    int32_t  pid;              // If the command is running, then this is the
+                               // pid if not, then this is zero.
+    int32_t  actual_runid;     // ID for the run instance
+    int32_t  exit_code;        // Last exit code
+    float    cpu_usage;        // [0, 1]
+    int64_t  mem_vsize_bytes;  // Total virtual memory used by the process
+    int64_t  mem_rss_bytes;    // Total physical memory used by the process
+    int32_t  sheriff_id;       // Assigned by the sheriff, identifies the command
 }

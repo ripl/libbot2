@@ -1,16 +1,30 @@
-#ifndef __bgl_h__
-#define __bgl_h__
+// -*- mode: c -*-
+// vim: set filetype=c :
+
+/*
+ * This file is part of bot2-vis.
+ *
+ * bot2-vis is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * bot2-vis is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-vis. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef BOT2_VIS_BOT_VIS_BATCH_GL_H_
+#define BOT2_VIS_BOT_VIS_BATCH_GL_H_
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <GLUT/glut.h>
-//#include <GL/freeglut.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-//#include <GL/freeglut.h>
 #endif
 
 #ifdef __cplusplus
@@ -34,60 +48,53 @@ extern "C" {
 
 typedef struct _BotBatchGl BotBatchGl;
 
-BotBatchGl *bot_bgl_new (void);
-void bot_bgl_destroy (BotBatchGl *bgl);
+BotBatchGl* bot_bgl_new(void);
+void bot_bgl_destroy(BotBatchGl* bgl);
 
-void bot_bgl_begin (BotBatchGl *bgl, GLenum mode);
-void bot_bgl_end (BotBatchGl *bgl);
+void bot_bgl_begin(BotBatchGl* bgl, GLenum mode);
+void bot_bgl_end(BotBatchGl* bgl);
 
-void bot_bgl_vertex2d (BotBatchGl *bgl, double v0, double v1);
-void bot_bgl_vertex2dv(BotBatchGl *bgl, const double *v);
-void bot_bgl_vertex2f (BotBatchGl *bgl, float v0, float v1);
-void bot_bgl_vertex2fv(BotBatchGl *bgl, const float *v);
+void bot_bgl_vertex2d(BotBatchGl* bgl, double v0, double v1);
+void bot_bgl_vertex2dv(BotBatchGl* bgl, const double* v);
+void bot_bgl_vertex2f(BotBatchGl* bgl, float v0, float v1);
+void bot_bgl_vertex2fv(BotBatchGl* bgl, const float* v);
 
-void bot_bgl_vertex3d (BotBatchGl *bgl, double v0, double v1, double v2);
-void bot_bgl_vertex3dv(BotBatchGl *bgl, const double *v);
-void bot_bgl_vertex3f (BotBatchGl *bgl, float v0, float v1, float v2);
-void bot_bgl_vertex3fv(BotBatchGl *bgl, const float *v);
+void bot_bgl_vertex3d(BotBatchGl* bgl, double v0, double v1, double v2);
+void bot_bgl_vertex3dv(BotBatchGl* bgl, const double* v);
+void bot_bgl_vertex3f(BotBatchGl* bgl, float v0, float v1, float v2);
+void bot_bgl_vertex3fv(BotBatchGl* bgl, const float* v);
 
-void bot_bgl_color3f (BotBatchGl *bgl, float v0, float v1, float v);
-void bot_bgl_color4f (BotBatchGl *bgl, float v0, float v1, float v2, float v3);
-void bot_bgl_point_size (BotBatchGl *bgl, float v);
-void bot_bgl_line_width (BotBatchGl *bgl, float line_width);
+void bot_bgl_color3f(BotBatchGl* bgl, float v0, float v1, float v);
+void bot_bgl_color4f(BotBatchGl* bgl, float v0, float v1, float v2, float v3);
+void bot_bgl_point_size(BotBatchGl* bgl, float v);
+void bot_bgl_line_width(BotBatchGl* bgl, float line_width);
 
-void bot_bgl_enable (BotBatchGl *bgl, GLenum v);
-void bot_bgl_disable (BotBatchGl *bgl, GLenum v);
+void bot_bgl_enable(BotBatchGl* bgl, GLenum v);
+void bot_bgl_disable(BotBatchGl* bgl, GLenum v);
 
-void bot_bgl_blend_func (BotBatchGl *bgl, GLenum sfactor, GLenum dfactor);
+void bot_bgl_blend_func(BotBatchGl* bgl, GLenum sfactor, GLenum dfactor);
 
-void BotBatchGlranslated (BotBatchGl *bgl, double v0, double v1, double v2);
-void BotBatchGlranslatef (BotBatchGl *bgl, float v0, float v1, float v2);
-void bot_bgl_rotated (BotBatchGl *bgl, double angle, double x, double y, double z);
-void bot_bgl_rotatef (BotBatchGl *bgl, float angle, float x, float y, float z);
-void bot_bgl_push_matrix (BotBatchGl * bgl);
-void bot_bgl_pop_matrix (BotBatchGl * bgl);
-void bot_bgl_load_identity (BotBatchGl *bgl);
+void BotBatchGlranslated(BotBatchGl* bgl, double v0, double v1, double v2);
+void BotBatchGlranslatef(BotBatchGl* bgl, float v0, float v1, float v2);
+void bot_bgl_rotated(BotBatchGl* bgl, double angle, double x, double y,
+                     double z);
+void bot_bgl_rotatef(BotBatchGl* bgl, float angle, float x, float y, float z);
+void bot_bgl_push_matrix(BotBatchGl* bgl);
+void bot_bgl_pop_matrix(BotBatchGl* bgl);
+void bot_bgl_load_identity(BotBatchGl* bgl);
 
-void bot_bgl_mult_matrixd (BotBatchGl *bgl, const double *matrix);
-void bot_bgl_mult_matrixf (BotBatchGl *bgl, const float *matrix);
+void bot_bgl_mult_matrixd(BotBatchGl* bgl, const double* matrix);
+void bot_bgl_mult_matrixf(BotBatchGl* bgl, const float* matrix);
 
-void bot_bgl_render (BotBatchGl *bgl);
-void bot_bgl_switch_buffer (BotBatchGl *bgl);
-
-//void bot_bgl_box_3dv_3fv(BotBatchGl *bgl, double xyz[3], float dim[3]);
-//void bot_bgl_circle(BotBatchGl *bgl, double xyz[3], double radius);
-//void bot_bgl_disk(BotBatchGl *bgl, double xyz[3], double r_in, double r_out);
-//void BotBatchGlext(BotBatchGl *bgl, const double xyz[3], const char *text);
-//void BotBatchGlext_ex(BotBatchGl *bgl, const double xyz[3], const char *text, uint32_t font, uint32_t flags);
-//
-//void bot_bgl_rect(BotBatchGl *bgl, double xyz[3], double size[2], double theta_rad, int filled);
+void bot_bgl_render(BotBatchGl* bgl);
+void bot_bgl_switch_buffer(BotBatchGl* bgl);
 
 /**
  * @}
  */
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
-#endif
+#endif  // BOT2_VIS_BOT_VIS_BATCH_GL_H_

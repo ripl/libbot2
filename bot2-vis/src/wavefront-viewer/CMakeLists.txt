@@ -1,7 +1,22 @@
 add_executable(bot-wavefront-viewer
     main.c
     renderer_wavefront.c)
-target_link_libraries(bot-wavefront-viewer bot2-vis ${GTK2_LIBRARIES} OpenGL::GL ${GLUT_LIBRARIES})
-set_property(TARGET bot-wavefront-viewer PROPERTY C_STANDARD 99)
+if(APPLE)
+  target_compile_definitions(bot-wavefront-viewer
+    PRIVATE GL_SILENCE_DEPRECATION=1
+  )
+endif()
+target_link_libraries(bot-wavefront-viewer
+  PRIVATE
+    GLib2::glib
+    GLib2::gobject
+    GLUT::GLUT
+    OpenGL::GL
+    PkgConfig::GTK3
+    bot2-vis
+)
 
-pods_install_executables(EXPORT ${POD_NAME} bot-wavefront-viewer)
+install(TARGETS bot-wavefront-viewer
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

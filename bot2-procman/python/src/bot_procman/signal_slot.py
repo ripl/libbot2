@@ -1,3 +1,25 @@
+# Copyright 2008 Thiago Marcos P. Santos
+# Copyright 2011 Christopher S. Case, David H. Bronke
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+# TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 """ A signal/slot implementation
 
 File:    signal.py
@@ -7,9 +29,8 @@ Author:  David H. Bronke
 Created: August 28, 2008
 Updated: December 12, 2011
 License: MIT
-
+URL:     https://code.activestate.com/recipes/577980/
 """
-from __future__ import print_function
 import inspect
 from weakref import WeakSet, WeakKeyDictionary
 
@@ -23,9 +44,10 @@ class Signal(object):
     Created: August 28, 2008
     Updated: December 12, 2011
     License: MIT
+    URL:     https://code.activestate.com/recipes/577980/
 
     Sample usage:
-    \code
+    @code
     class Model(object):
         def __init__(self, value):
             self.__value = value
@@ -70,9 +92,8 @@ class Signal(object):
 
     model.changed.connect(bar)
     model.set_value(50)
-    \endcode
+    @endcode
     """
-
     def __init__(self):
         """Initialize a new signal"""
         self._functions = WeakSet()
@@ -90,7 +111,9 @@ class Signal(object):
                 func(obj, *args, **kargs)
 
     def connect(self, slot):
-        """Connects a slot to the signal so that when the signal is emitted, the slot is called."""
+        """Connects a slot to the signal so that when the signal is
+        emitted, the slot is called.
+        """
         if inspect.ismethod(slot):
             if slot.__self__ not in self._methods:
                 self._methods[slot.__self__] = set()

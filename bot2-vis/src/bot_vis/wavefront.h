@@ -1,20 +1,35 @@
-#ifndef __BOT_WAVEFRONT_H_
-#define __BOT_WAVEFRONT_H_
+// -*- mode: c -*-
+// vim: set filetype=c :
+
 /*
- * wavefront.h
+ * This file is part of bot2-vis.
  *
- * Public API for rendering 3D models that are represented in the
- * Wavefront OBJ (geometry) and MTL (material properties) file formats.
+ * bot2-vis is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * The API is largely a wrapper for the GLM library
+ * bot2-vis is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+ * License for more details.
  *
- * Created on: Dec 2, 2010
- *     Author: mwalter
- *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with bot2-vis. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <glib.h>
+#ifndef BOT2_VIS_BOT_VIS_WAVEFRONT_H_
+#define BOT2_VIS_BOT_VIS_WAVEFRONT_H_
 
+// wavefront.h
+//
+// Public API for rendering 3D models that are represented in the
+// Wavefront OBJ (geometry) and MTL (material properties) file formats.
+//
+// The API is largely a wrapper for the GLM library
+//
+// Created on: Dec 2, 2010
+//     Author: mwalter
 
 /**
  * @defgroup BotVisWavefront Wavefront (.obj:geometry; .mtl:material)
@@ -31,10 +46,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
-    
-typedef struct _BotWavefrontModel BotWavefrontModel;    
-    
+
+typedef struct _BotWavefrontModel BotWavefrontModel;
+
 /**
  * bot_wavefront_model_create:
  * @filename: The name of the model's Wavefront .obj file
@@ -44,31 +58,24 @@ typedef struct _BotWavefrontModel BotWavefrontModel;
  * Returns: A pointer to a newly-allocated %BotWavefrontModel
  *          or %NULL on parse error.
  */
-BotWavefrontModel *
-bot_wavefront_model_create (const char *filename);
-
+BotWavefrontModel* bot_wavefront_model_create(const char* filename);
 
 /**
  * bot_wavefront_model_destroy:
  * @model: The %BotWavefrontModel to free
  *
  * Frees the provided %BotWavefrontModel
- *
  */
-void
-bot_wavefront_model_destroy (BotWavefrontModel *model);
-
+void bot_wavefront_model_destroy(BotWavefrontModel* model);
 
 /**
  * bot_wavefront_model_get_extrema:
- * @model: The %BotWavefrontModel 
+ * @model: The %BotWavefrontModel
  *
  * Determins the min/max extrema over vertices
- *
  */
-void
-bot_wavefront_model_get_extrema (BotWavefrontModel *model,
-                                 double minv[3], double maxv[3]);
+void bot_wavefront_model_get_extrema(BotWavefrontModel* model, double minv[3],
+                                     double maxv[3]);
 
 /**
  * bot_wavefront_model_gl_draw:
@@ -76,18 +83,14 @@ bot_wavefront_model_get_extrema (BotWavefrontModel *model,
  *
  * Draws the model using opengl
  */
-void
-bot_wavefront_model_gl_draw (BotWavefrontModel *model);
-
-
-
+void bot_wavefront_model_gl_draw(BotWavefrontModel* model);
 
 #ifdef __cplusplus
-}
+}  // extern "C"
 #endif
 
 /**
  * @}
  */
 
-#endif
+#endif  // BOT2_VIS_BOT_VIS_WAVEFRONT_H_

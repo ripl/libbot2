@@ -1,14 +1,34 @@
-from bot_procman.sheriff_config import ScriptNode, WaitStatusActionNode, WaitMsActionNode, StartStopRestartActionNode, RunScriptActionNode, escape_str
+# This file is part of bot2-procman.
+#
+# bot2-procman is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# bot2-procman is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with bot2-procman. If not, see
+# <https://www.gnu.org/licenses/>.
+
+from bot_procman.sheriff_config import (ScriptNode, WaitStatusActionNode,
+                                        WaitMsActionNode,
+                                        StartStopRestartActionNode,
+                                        RunScriptActionNode, escape_str)
+
 
 class StartStopRestartAction(object):
     """Script action to start, stop, or restart a command or group.
 
-    \ingroup python_api
+    @ingroup python_api
 
     """
     def __init__(self, action_type, ident_type, ident, wait_status):
         assert action_type in ["start", "stop", "restart"]
-        assert ident_type in [ "everything", "group", "cmd" ]
+        assert ident_type in ["everything", "group", "cmd"]
         self.action_type = action_type
         self.ident_type = ident_type
         self.wait_status = wait_status
@@ -19,8 +39,8 @@ class StartStopRestartAction(object):
             assert self.ident is not None
 
     def toScriptNode(self):
-        return StartStopRestartActionNode(self.action_type,
-                self.ident_type, self.ident, self.wait_status)
+        return StartStopRestartActionNode(self.action_type, self.ident_type,
+                                          self.ident, self.wait_status)
 
     def __str__(self):
         if self.ident_type == "everything":
@@ -28,15 +48,16 @@ class StartStopRestartAction(object):
         else:
             ident_str = "%s \"%s\"" % (self.ident_type, escape_str(self.ident))
         if self.wait_status is not None:
-            return "%s %s wait \"%s\";" % (self.action_type,
-                    ident_str, self.wait_status)
+            return "%s %s wait \"%s\";" % (self.action_type, ident_str,
+                                           self.wait_status)
         else:
             return "%s %s;" % (self.action_type, ident_str)
+
 
 class WaitMsAction(object):
     """Script action to wait a fixed number of milliseconds.
 
-    \ingroup python_api
+    @ingroup python_api
 
     """
     def __init__(self, delay_ms):
@@ -49,10 +70,11 @@ class WaitMsAction(object):
     def __str__(self):
         return "wait ms %d;" % self.delay_ms
 
+
 class WaitStatusAction(object):
     """Script action to wait for a command or group to change status.
 
-    \ingroup python_api
+    @ingroup python_api
 
     """
     def __init__(self, ident_type, ident, wait_status):
@@ -62,17 +84,18 @@ class WaitStatusAction(object):
         self.action_type = "wait_status"
 
     def toScriptNode(self):
-        return WaitStatusActionNode(self.ident_type,
-                self.ident, self.wait_status)
+        return WaitStatusActionNode(self.ident_type, self.ident,
+                                    self.wait_status)
 
     def __str__(self):
-        return "wait %s \"%s\" status \"%s\";" % \
-                (self.ident_type, escape_str(self.ident), self.wait_status)
+        return "wait %s \"%s\" status \"%s\";" % (
+            self.ident_type, escape_str(self.ident), self.wait_status)
+
 
 class RunScriptAction(object):
     """Script action to run a subscript.
 
-    \ingroup python_api
+    @ingroup python_api
 
     """
     def __init__(self, script_name):
@@ -85,10 +108,11 @@ class RunScriptAction(object):
     def __str__(self):
         return "run_script \"%s\";" % escape_str(self.script_name)
 
+
 class SheriffScript(object):
     """A simple script that can be executed by the Sheriff.
 
-    \ingroup python_api
+    @ingroup python_api
 
     """
     def __init__(self, name):
@@ -115,21 +139,21 @@ class SheriffScript(object):
     def from_script_node(node):
         script = SheriffScript(node.name)
         for action_node in node.actions:
-            if action_node.action_type in [ "start", "stop", "restart" ]:
+            if action_node.action_type in ["start", "stop", "restart"]:
                 action = StartStopRestartAction(action_node.action_type,
-                        action_node.ident_type,
-                        action_node.ident,
-                        action_node.wait_status)
+                                                action_node.ident_type,
+                                                action_node.ident,
+                                                action_node.wait_status)
             elif action_node.action_type == "wait_ms":
                 action = WaitMsAction(action_node.delay_ms)
             elif action_node.action_type == "wait_status":
                 action = WaitStatusAction(action_node.ident_type,
-                        action_node.ident,
-                        action_node.wait_status)
+                                          action_node.ident,
+                                          action_node.wait_status)
             elif action_node.action_type == "run_script":
                 action = RunScriptAction(action_node.script_name)
             else:
-                raise ValueError("unrecognized action %s" % \
-                        action_node.action_type)
+                raise ValueError("unrecognized action %s" %
+                                 action_node.action_type)
             script.add_action(action)
         return script
