@@ -31,30 +31,6 @@ on:  # yamllint disable-line rule:truthy
     - cron: '0 6 * * *'
 
 jobs:
-  macos:
-    name: macOS Latest
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install prerequisites
-        run: ./scripts/setup/mac/install_prereqs
-        shell: zsh -f {0}
-      - name: Build and install
-        run: |
-          mkdir build
-          pushd build
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_FLAGS=-DGL_SILENCE_DEPRECATION=1 \
-            -DCMAKE_CXX_FLAGS=-DGL_SILENCE_DEPRECATION=1 \
-            -DPYTHON_EXECUTABLE=/usr/local/bin/python3 \
-            -DWITH_BOT_VIS=OFF \
-            ..
-          make install
-          popd
-        shell: zsh -f {0}
-
   ubuntu-1804:
     name: Ubuntu 18.04 Bionic
     runs-on: ubuntu-latest
@@ -62,6 +38,7 @@ jobs:
     steps:
       - name: Install Git
         run: |
+          export DEBIAN_FRONTEND=noninteractive
           apt-get update -qq
           apt-get autoremove -qq
           apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy \
@@ -70,8 +47,6 @@ jobs:
             git
           rm -rf /var/lib/apt/lists/*
         shell: bash
-        env:
-          DEBIAN_FRONTEND: noninteractive
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install prerequisites
@@ -79,43 +54,9 @@ jobs:
           ./scripts/setup/linux/ubuntu/bionic/install_prereqs
           rm -rf /var/lib/apt/lists/*
         shell: bash
-      - name: Download, build, and install LCM
+      - name: Build
         run: |
-          wget -nv https://github.com/lcm-proj/lcm/archive/v1.4.0.tar.gz
-          tar -xf v1.4.0.tar.gz
-          rm -f v1.4.0.tar.gz
-          pushd lcm-1.4.0
-          mkdir build
-          pushd build
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_FLAGS=-w \
-            -DCMAKE_CXX_FLAGS=-w \
-            -DCMAKE_INSTALL_PREFIX=/opt/lcm \
-            -DLCM_ENABLE_EXAMPLES=OFF \
-            -DLCM_ENABLE_GO=OFF \
-            -DLCM_ENABLE_LUA=OFF \
-            -DLCM_ENABLE_TESTS=OFF \
-            -DLCM_INSTALL_M4MACROS=OFF \
-            -DLCM_INSTALL_PKGCONFIG=OFF \
-            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-            ..
-          make install
-          popd
-          popd
-          rm -rf lcm-1.4.0
-        shell: bash
-      - name: Build and install
-        run: |
-          mkdir build
-          pushd build
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_SYSTEM_PREFIX_PATH=/opt/lcm \
-            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-            ..
-          make install
-          popd
+          ./scripts/package/linux/ubuntu/common/build.sh
         shell: bash
 
   ubuntu-2004:
@@ -125,6 +66,7 @@ jobs:
     steps:
       - name: Install Git
         run: |
+          export DEBIAN_FRONTEND=noninteractive
           apt-get update -qq
           apt-get autoremove -qq
           apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy \
@@ -133,8 +75,6 @@ jobs:
             git
           rm -rf /var/lib/apt/lists/*
         shell: bash
-        env:
-          DEBIAN_FRONTEND: noninteractive
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install prerequisites
@@ -142,41 +82,35 @@ jobs:
           ./scripts/setup/linux/ubuntu/focal/install_prereqs
           rm -rf /var/lib/apt/lists/*
         shell: bash
-      - name: Download, build, and install LCM
+      - name: Build
         run: |
-          wget -nv https://github.com/lcm-proj/lcm/archive/v1.4.0.tar.gz
-          tar -xf v1.4.0.tar.gz
-          rm -f v1.4.0.tar.gz
-          pushd lcm-1.4.0
-          mkdir build
-          pushd build
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_C_FLAGS=-w \
-            -DCMAKE_CXX_FLAGS=-w \
-            -DCMAKE_INSTALL_PREFIX=/opt/lcm \
-            -DLCM_ENABLE_EXAMPLES=OFF \
-            -DLCM_ENABLE_GO=OFF \
-            -DLCM_ENABLE_LUA=OFF \
-            -DLCM_ENABLE_TESTS=OFF \
-            -DLCM_INSTALL_M4MACROS=OFF \
-            -DLCM_INSTALL_PKGCONFIG=OFF \
-            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-            ..
-          make install
-          popd
-          popd
-          rm -rf lcm-1.4.0
+          ./scripts/package/linux/ubuntu/common/build.sh
         shell: bash
-      - name: Build and install
+
+  ubuntu-2204:
+    name: Ubuntu 22.04 Jammy
+    runs-on: ubuntu-latest
+    container: ubuntu:22.04
+    steps:
+      - name: Install Git
         run: |
-          mkdir build
-          pushd build
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_SYSTEM_PREFIX_PATH=/opt/lcm \
-            -DPYTHON_EXECUTABLE=/usr/bin/python3 \
-            ..
-          make install
-          popd
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -qq
+          apt-get autoremove -qq
+          apt-get -o Acquire::Retries=4 -o Dpkg::Use-Pty=0 -qy \
+              --no-install-recommends install \
+            ca-certificates \
+            git
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install prerequisites
+        run: |
+          ./scripts/setup/linux/ubuntu/jammy/install_prereqs
+          rm -rf /var/lib/apt/lists/*
+        shell: bash
+      - name: Build
+        run: |
+          ./scripts/package/linux/ubuntu/common/build.sh
         shell: bash

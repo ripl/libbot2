@@ -19,7 +19,7 @@
 
 set -euxo pipefail
 
-if [ -z "$1" ]; then
+if [[ $? -eq 0 ]]; then
   readonly timestamp=$(date -u +%Y%m%d)
 else
   readonly timestamp=$1
@@ -31,7 +31,7 @@ pushd /tmp
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install --no-install-recommends -y devscripts gdebi
-gdebi -n lcm_1.4.0-2_amd64.deb
+gdebi -n lcm_1.4.0-gabdd8a2_amd64.deb
 gdebi -n "libbot2_0.0.1.${timestamp}-1_amd64.deb"
 
 popd
