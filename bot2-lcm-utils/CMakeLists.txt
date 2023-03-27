@@ -245,8 +245,8 @@ add_subdirectory(src/logsplice)
 add_subdirectory(src/who)
 add_subdirectory(src/tunnel)
 
-find_package(PythonInterp 3.6 MODULE)
-if(PYTHONINTERP_FOUND)
+find_package(Python COMPONENTS Interpreter)
+if(Python_Interpreter_FOUND)
   add_subdirectory(python)
 endif()
 

@@ -1,6 +1,5 @@
-find_package(PythonInterp 3.6 MODULE)
-
-if(PYTHONINTERP_FOUND)
+find_package(Python COMPONENTS Interpreter)
+if(Python_Interpreter_FOUND)
   option(GEN_BUILD_PREFIX "Generate build_prefix.py" ON)
 
   if(GEN_BUILD_PREFIX)

@@ -179,10 +179,10 @@ endfunction()
 # Set where headers should be output locally
 set(INCLUDE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_INCLUDEDIR})
 
-find_package(PythonInterp 3.6 MODULE)
-if(PYTHONINTERP_FOUND)
+find_package(Python COMPONENTS Interpreter)
+if(Python_Interpreter_FOUND)
   execute_process(
-    COMMAND "${PYTHON_EXECUTABLE}" -c "from distutils import sysconfig as sc; print(sc.get_python_lib(prefix='', plat_specific=True))"
+    COMMAND "${PYTHON_EXECUTABLE}" -c "from sysconfig import get_path; from os.path import sep; print(get_path('platlib').replace(get_path('data') + sep, ''))"
     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   set(PYTHON_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_DIR}")

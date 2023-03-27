@@ -1,6 +1,5 @@
-find_package(PythonInterp 3.6 MODULE)
-
-if(PYTHONINTERP_FOUND)
+find_package(Python COMPONENTS Interpreter)
+if(Python_Interpreter_FOUND)
   # install all python packages in the src/ directory
   pods_install_python_packages(${CMAKE_CURRENT_SOURCE_DIR}/src)
 

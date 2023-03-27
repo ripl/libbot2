@@ -242,8 +242,8 @@ lcmtypes_build(EXPORT ${PROJECT_NAME})
 
 add_subdirectory(src/deputy)
 
-find_package(PythonInterp 3.6 MODULE)
-if(PYTHONINTERP_FOUND)
+find_package(Python COMPONENTS Interpreter)
+if(Python_Interpreter_FOUND)
   add_subdirectory(python)
 endif()
 
